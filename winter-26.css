@@ -461,42 +461,16 @@
   color: rgba(217, 239, 154, .7);
 }
 
-.object-line-art {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  opacity: .85;
-  transform: translateY(-8%);
-}
-
-.object-line-art span {
-  display: block;
-  width: 64px;
-  height: 260px;
-  border: 1px solid rgba(217, 239, 154, .7);
-  border-radius: 50%;
-  transform: rotate(32deg);
-}
-
-.object-line-art span:nth-child(2) {
-  height: 300px;
-  transform: rotate(-32deg);
-}
-
-.object-line-art span:nth-child(3) {
-  height: 220px;
-  transform: rotate(16deg);
-}
-
 .object-card-dark .object-copy {
   position: absolute;
   bottom: 0;
   left: 0;
   right: 0;
   background: linear-gradient(transparent, rgba(11, 15, 12, .96) 26%);
+}
+
+.object-card-dark .object-image {
+  min-height: 570px;
 }
 
 .winter-process {
@@ -562,8 +536,7 @@
   max-width: 1020px;
   padding: clamp(40px, 7vw, 100px);
   background:
-    linear-gradient(120deg, rgba(33, 57, 39, .95), rgba(13, 19, 14, .9)),
-    url('assets/winter-26-orbit.png') center / cover;
+    linear-gradient(120deg, rgba(33, 57, 39, .98), rgba(13, 19, 14, .94));
   border: 1px solid rgba(217, 239, 154, .24);
   overflow: hidden;
 }
@@ -666,6 +639,10 @@
     min-height: 520px;
   }
 
+  .object-card-dark .object-image {
+    min-height: 520px;
+  }
+
   .process-grid {
     gap: 60px;
   }
@@ -755,22 +732,14 @@
   }
 
   .object-card-wide .object-image,
-  .object-image {
+  .object-image,
+  .object-card-dark .object-image {
     min-height: 310px;
   }
 
   .object-card-wide .object-copy,
   .object-copy {
     padding: 25px 22px 28px;
-  }
-
-  .object-line-art span {
-    width: 48px;
-    height: 210px;
-  }
-
-  .object-line-art span:nth-child(2) {
-    height: 245px;
   }
 
   .process-art,
