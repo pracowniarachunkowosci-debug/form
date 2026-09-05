@@ -521,6 +521,10 @@
   margin-top: 26px;
 }
 
+.secondary-grid-single {
+  grid-template-columns: minmax(0, 1fr);
+}
+
 .secondary-card {
   min-width: 0;
 }
