@@ -231,6 +231,21 @@
   font-size: .42em;
 }
 
+.manifest-mark .manifest-word {
+  display: block;
+  padding: 0;
+  color: var(--winter-lime);
+  font-family: var(--sans);
+  font-size: .22em;
+  letter-spacing: .16em;
+  line-height: 1;
+}
+
+.manifest-mark .manifest-number {
+  display: block;
+  padding-left: .28em;
+}
+
 .manifest-copy {
   max-width: 790px;
 }
@@ -478,6 +493,61 @@
   object-fit: contain;
 }
 
+.secondary-objects-head {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px 10vw;
+  align-items: end;
+  margin-top: 64px;
+  padding-top: 32px;
+  border-top: 1px solid rgba(217, 239, 154, .18);
+}
+
+.secondary-objects-head .eyebrow {
+  margin: 0;
+}
+
+.secondary-objects-head > p:last-child {
+  max-width: 440px;
+  margin: 0;
+  color: rgba(238, 233, 222, .58);
+  line-height: 1.65;
+}
+
+.secondary-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+  margin-top: 26px;
+}
+
+.secondary-card {
+  min-width: 0;
+}
+
+.secondary-card .object-copy {
+  padding: 18px 22px 22px;
+}
+
+.secondary-card .object-copy h3 {
+  margin-top: 10px;
+  font-size: clamp(26px, 2.7vw, 40px);
+}
+
+.secondary-card .object-copy p {
+  margin-top: 9px;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.secondary-card .object-image {
+  aspect-ratio: 16 / 9;
+}
+
+.secondary-card .object-status {
+  margin-top: 14px;
+}
+
 .winter-process {
   padding: clamp(64px, 6vw, 96px) 0;
   background: #d5d8cd;
@@ -706,6 +776,15 @@
     margin-top: 24px;
   }
 
+  .secondary-objects-head {
+    display: block;
+    margin-top: 48px;
+  }
+
+  .secondary-objects-head > p:last-child {
+    margin-top: 18px;
+  }
+
   .object-grid {
     margin-top: 32px;
   }
@@ -718,6 +797,11 @@
 
   .object-card-wide .object-image {
     aspect-ratio: 1122 / 1402;
+  }
+
+  .secondary-grid {
+    grid-template-columns: 1fr;
+    gap: 14px;
   }
 
   .object-card-wide .object-copy,
