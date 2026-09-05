@@ -63,7 +63,7 @@
   gap: clamp(30px, 6vw, 112px);
   align-items: center;
   padding-top: 120px;
-  padding-bottom: 96px;
+  padding-bottom: 64px;
 }
 
 .winter-hero-copy {
@@ -131,7 +131,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 14px 28px;
-  margin-top: 78px;
+  margin-top: 38px;
   color: rgba(238, 233, 222, .46);
 }
 
@@ -142,7 +142,7 @@
 
 .winter-hero-art {
   position: relative;
-  min-height: min(690px, 70vw);
+  aspect-ratio: 1 / 1;
   border: 1px solid rgba(217, 239, 154, .22);
   background: #0d120e;
   overflow: hidden;
@@ -164,7 +164,8 @@
 }
 
 .winter-hero-art img {
-  min-height: min(690px, 70vw);
+  position: absolute;
+  inset: 0;
   object-position: center;
   filter: saturate(.8) contrast(1.05);
 }
@@ -212,8 +213,8 @@
   grid-template-columns: minmax(160px, .7fr) 1.3fr;
   gap: clamp(32px, 8vw, 150px);
   align-items: start;
-  padding-top: clamp(110px, 15vw, 220px);
-  padding-bottom: clamp(110px, 15vw, 220px);
+  padding-top: clamp(64px, 6vw, 96px);
+  padding-bottom: clamp(64px, 6vw, 96px);
 }
 
 .manifest-mark {
@@ -253,7 +254,7 @@
 }
 
 .manifest-lead {
-  margin-top: 44px;
+  margin-top: 28px;
   color: var(--winter-cream) !important;
   font-size: clamp(18px, 1.7vw, 24px);
   line-height: 1.55 !important;
@@ -264,7 +265,7 @@
 }
 
 .winter-direction {
-  padding: clamp(90px, 11vw, 170px) 0;
+  padding: clamp(64px, 6vw, 96px) 0;
   background: var(--winter-cream);
   color: var(--ink);
 }
@@ -297,13 +298,13 @@
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 1px;
-  margin-top: 78px;
+  margin-top: 40px;
   border-top: 1px solid rgba(20, 19, 17, .22);
   border-bottom: 1px solid rgba(20, 19, 17, .22);
 }
 
 .direction-item {
-  min-height: 270px;
+  min-height: 210px;
   padding: 26px 24px 34px 0;
   border-right: 1px solid rgba(20, 19, 17, .22);
 }
@@ -318,7 +319,7 @@
 
 .direction-number {
   display: block;
-  margin-bottom: 62px;
+  margin-bottom: 30px;
   color: #728866;
 }
 
@@ -336,8 +337,8 @@
 }
 
 .winter-objects {
-  padding-top: clamp(100px, 14vw, 220px);
-  padding-bottom: clamp(110px, 14vw, 220px);
+  padding-top: clamp(64px, 6vw, 96px);
+  padding-bottom: clamp(64px, 6vw, 96px);
 }
 
 .objects-intro {
@@ -367,14 +368,14 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 18px;
-  margin-top: 88px;
+  margin-top: 44px;
 }
 
 .object-card {
   position: relative;
-  min-height: 570px;
+  min-height: 0;
   display: grid;
-  grid-template-rows: 1fr auto;
+  grid-template-rows: auto 1fr;
   overflow: hidden;
   background: #131a15;
 }
@@ -383,7 +384,7 @@
   grid-column: span 2;
   grid-template-columns: 1.07fr .93fr;
   grid-template-rows: 1fr;
-  min-height: 600px;
+  min-height: 0;
 }
 
 .object-card-dark {
@@ -396,12 +397,16 @@
 }
 
 .object-image {
-  min-height: 370px;
+  position: relative;
+  min-height: 0;
+  aspect-ratio: 4 / 3;
   overflow: hidden;
   background: #090b09;
 }
 
 .object-image img {
+  position: absolute;
+  inset: 0;
   width: 100%;
   height: 100%;
   display: block;
@@ -423,7 +428,7 @@
 .object-card-wide .object-copy {
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: center;
   padding: clamp(28px, 4vw, 64px);
 }
 
@@ -462,19 +467,19 @@
 }
 
 .object-card-dark .object-copy {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: linear-gradient(transparent, rgba(11, 15, 12, .96) 26%);
+  position: relative;
 }
 
-.object-card-dark .object-image {
-  min-height: 570px;
+.object-card-wide .object-image {
+  aspect-ratio: 6 / 5;
+}
+
+.object-card-wide .object-image img {
+  object-fit: contain;
 }
 
 .winter-process {
-  padding: clamp(100px, 13vw, 210px) 0;
+  padding: clamp(64px, 6vw, 96px) 0;
   background: #d5d8cd;
   color: var(--ink);
 }
@@ -482,7 +487,7 @@
 .process-grid {
   display: grid;
   grid-template-columns: .85fr 1.15fr;
-  gap: clamp(40px, 9vw, 150px);
+  gap: clamp(32px, 5vw, 80px);
   align-items: center;
 }
 
@@ -504,13 +509,14 @@
 
 .process-art {
   position: relative;
-  min-height: 600px;
+  aspect-ratio: 1402 / 1122;
   overflow: hidden;
   background: #0b100d;
 }
 
 .process-art img {
-  min-height: 600px;
+  display: block;
+  object-fit: contain;
   object-position: center;
   filter: saturate(.82);
 }
@@ -527,8 +533,8 @@
 }
 
 .winter-cta {
-  padding-top: clamp(110px, 15vw, 220px);
-  padding-bottom: clamp(120px, 16vw, 240px);
+  padding-top: clamp(64px, 6vw, 96px);
+  padding-bottom: clamp(64px, 6vw, 96px);
 }
 
 .winter-cta-inner {
@@ -591,25 +597,17 @@
   }
 
   .winter-hero-grid {
-    padding-top: 142px;
-    padding-bottom: 110px;
-  }
-
-  .winter-hero-art {
-    min-height: min(640px, 90vw);
-  }
-
-  .winter-hero-art img {
-    min-height: min(640px, 90vw);
+    padding-top: 112px;
+    padding-bottom: 56px;
   }
 
   .winter-hero-footnote {
-    margin-top: 46px;
+    margin-top: 28px;
   }
 
   .winter-manifest {
     grid-template-columns: 1fr;
-    gap: 48px;
+    gap: 32px;
   }
 
   .manifest-mark {
@@ -631,20 +629,12 @@
 
   .object-card-wide {
     grid-template-columns: 1fr;
-    grid-template-rows: 1fr auto;
+    grid-template-rows: auto 1fr;
     min-height: 0;
   }
 
-  .object-card-wide .object-image {
-    min-height: 520px;
-  }
-
-  .object-card-dark .object-image {
-    min-height: 520px;
-  }
-
   .process-grid {
-    gap: 60px;
+    gap: 36px;
   }
 }
 
@@ -667,11 +657,6 @@
     gap: 20px;
   }
 
-  .winter-hero-art,
-  .winter-hero-art img {
-    min-height: 510px;
-  }
-
   .winter-hero-art img {
     object-position: 53% center;
   }
@@ -681,8 +666,8 @@
   }
 
   .winter-manifest {
-    padding-top: 100px;
-    padding-bottom: 100px;
+    padding-top: 64px;
+    padding-bottom: 64px;
   }
 
   .manifest-copy h2,
@@ -710,7 +695,7 @@
   }
 
   .direction-number {
-    margin-bottom: 34px;
+    margin-bottom: 18px;
   }
 
   .objects-intro {
@@ -722,29 +707,22 @@
   }
 
   .object-grid {
-    margin-top: 58px;
+    margin-top: 32px;
   }
 
   .object-card,
   .object-card-wide {
-    min-height: 500px;
+    min-height: 0;
     grid-column: auto;
   }
 
-  .object-card-wide .object-image,
-  .object-image,
-  .object-card-dark .object-image {
-    min-height: 310px;
+  .object-card-wide .object-image {
+    aspect-ratio: 1122 / 1402;
   }
 
   .object-card-wide .object-copy,
   .object-copy {
     padding: 25px 22px 28px;
-  }
-
-  .process-art,
-  .process-art img {
-    min-height: 480px;
   }
 
   .winter-cta-inner {
