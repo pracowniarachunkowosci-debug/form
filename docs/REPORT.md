@@ -2,6 +2,14 @@
 
 Data: 01.11.2026. Baza: `38e0bd9`, branch: `codex/issue-3-winter26-draft`. Wynik: projekt do akceptacji, bez merge, wdrożenia, sprzedaży i płatności.
 
+## Wersja 02 — Warm Minimal
+
+Po akceptacji układu i struktury zmieniono wyłącznie oprawę wizualną oraz zawartość pola hero. Tło paper `#faf8f3`, powierzchnie `#f2eee6`, ciemny tekst `#25231f` i burgund `#632d3b` jako oszczędny akcent. Sekcja zestawów, baner roboczy, stopka i dokumenty są jasne; na stronie głównej rozjaśniono tekstowe sekcje pracowni i procesu. Siatki, kolejność sekcji, fonty i breakpointy pozostały zachowane.
+
+Zdjęcie z bombkami usunięto z hero WINTER 26. Zastępuje je neutralna typograficzna kompozycja HTML/CSS ze światłem na papierze — bez przedstawienia produktu i bez nowych zasobów zewnętrznych. Dotychczasowy plik grafiki pozostaje w historii/zasobach repo, ale nie jest ładowany przez stronę WINTER 26. Nie podmieniono go na niezweryfikowane zdjęcie modelu.
+
+Zaktualizowano screenshoty desktop/mobile i plansze dokumentów. Ponowna kontrola 320/390/768/1440 px nie wykazała przepełnień. Zmiana nie dotyczy treści prawnych, danych produktów ani działania formularzy. PR pozostaje draft; bez publikacji.
+
 ## Co zmieniono
 
 | Wymaganie | Wynik |
@@ -20,11 +28,11 @@ Data: 01.11.2026. Baza: `38e0bd9`, branch: `codex/issue-3-winter26-draft`. Wynik
 | SEO | Tytuły, opisy, canonical, OG; usunięte nieadekwatne schema, bez Product/Offer. `noindex, nofollow` dla draftu; pusty sitemap i osobny kandydat do akceptacji |
 | Technologia | Zachowane statyczne HTML/CSS/JS. Mały generator Python stdlib ujednolica strony; brak zmiany platformy i dodanych zależności runtime |
 
-Hero używa istniejącej, podpisanej wizualizacji archiwalnej. Karty czterech modeli mają neutralne placeholdery. Nie stworzono fikcyjnych zdjęć, cen, kolorów, nakładów ani terminów.
+Hero używa neutralnej kompozycji typograficznej, bez fotografii ani sylwetki produktu. Karty czterech modeli mają neutralne placeholdery. Nie stworzono fikcyjnych zdjęć, cen, kolorów, nakładów ani terminów.
 
 ## Weryfikacja
 
-- `python scripts/check.py --http`: **PASS** — 15 stron, 458 odniesień HTML, zasoby CSS, metadane, CSP, dane produktów; 42 unikalne lokalne strony/zasoby odpowiedziały HTTP 200. Brak uszkodzonych wewnętrznych linków i kotwic.
+- `python scripts/check.py --http`: **PASS** — 15 stron, 457 odniesień HTML, zasoby CSS, metadane, CSP, dane produktów; 41 unikalnych lokalnych adresów stron/zasobów zwróciło HTTP 200. Brak uszkodzonych wewnętrznych linków i kotwic.
 - `node --check script.js`: **PASS**. `git diff --check`: **PASS**. Powtórne generowanie: identyczne pliki wynikowe.
 - [browser-checks.json](browser-checks.json): 8 stron × desktop 1440/mobile 390. Brak przepełnienia całej strony, uszkodzonych obrazów, aktywnych formularzy i zewnętrznych skryptów; widoczny nagłówek i jeden H1.
 - [breakpoint-checks.json](breakpoint-checks.json): 10 stron × 320/768 px. Brak poziomego przepełnienia całej strony. Tabela polityki przewija się we własnym kontenerze.

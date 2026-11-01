@@ -1,4 +1,4 @@
-# Podglądy — 01.11.2026
+# Podglądy — Warm Minimal / wersja 02
 
 Rzeczywiste zrzuty lokalnego podglądu, bez publikowania strony. Desktop: viewport 1440×1000, mobile: 390×844. Pasek przewijania zajmuje 15 px, więc obrazy treści mają 1425 i 375 px szerokości. Pełne strony są dłuższe niż viewport. Dodatkowo sprawdzono układ 320 i 768 px; tabela polityki ma własne przewijanie poziome na małym ekranie.
 
@@ -19,4 +19,4 @@ Rzeczywiste zrzuty lokalnego podglądu, bez publikowania strony. Desktop: viewpo
 
 Porównanie: [zastany WINTER 26 — desktop](previews/before-winter-desktop.jpg). Interakcja: [demo odstąpienia — mobile](previews/withdrawal-demo-mobile.jpg). [Arkusz pełnych układów do kontroli wizualnej](previews/full-layout-review.jpg).
 
-Plansze powstają z powyższych zdjęć przeglądarki przez `scripts/preview_board.py` (opcjonalna zależność Pillow); przedstawiają ich fragmenty i nie dodają elementów do UI. Historyczna wizualizacja w hero ma podpis „inspiracja archiwalna” i nie jest zdjęciem oferowanych czterech modeli.
+Plansze powstają z powyższych zdjęć przeglądarki przez `scripts/preview_board.py` (opcjonalna zależność Pillow); przedstawiają ich fragmenty i nie dodają elementów do UI. Hero jest neutralną kompozycją typograficzną HTML/CSS na papierowym tle, bez przedstawienia produktu. Poprzednie screenshoty są dostępne w historii Git; poniższe pliki przedstawiają wersję Warm Minimal.
