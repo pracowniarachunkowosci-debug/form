@@ -1,0 +1,258 @@
+[
+  {
+    "page": "winter-26",
+    "size": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "brokenImages": [],
+    "clientWidth": 1425,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 1425
+  },
+  {
+    "page": "regulamin-sklepu",
+    "size": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "brokenImages": [],
+    "clientWidth": 1425,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 1425
+  },
+  {
+    "page": "zwroty-i-reklamacje",
+    "size": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "brokenImages": [],
+    "clientWidth": 1425,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 1425
+  },
+  {
+    "page": "dostawa-i-platnosci",
+    "size": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "brokenImages": [],
+    "clientWidth": 1425,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 1425
+  },
+  {
+    "page": "polityka-prywatnosci",
+    "size": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "brokenImages": [],
+    "clientWidth": 1425,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 1425
+  },
+  {
+    "page": "zasady-premiery",
+    "size": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "brokenImages": [],
+    "clientWidth": 1425,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 1425
+  },
+  {
+    "page": "formularz-odstapienia",
+    "size": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "brokenImages": [],
+    "clientWidth": 1425,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 1425
+  },
+  {
+    "page": "index",
+    "size": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "brokenImages": [],
+    "clientWidth": 1425,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": "1",
+    "scrollWidth": 1425
+  },
+  {
+    "page": "winter-26",
+    "size": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 375
+  },
+  {
+    "page": "regulamin-sklepu",
+    "size": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 375
+  },
+  {
+    "page": "zwroty-i-reklamacje",
+    "size": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 375
+  },
+  {
+    "page": "dostawa-i-platnosci",
+    "size": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 375
+  },
+  {
+    "page": "polityka-prywatnosci",
+    "size": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 375
+  },
+  {
+    "page": "zasady-premiery",
+    "size": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 375
+  },
+  {
+    "page": "formularz-odstapienia",
+    "size": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": null,
+    "scrollWidth": 375
+  },
+  {
+    "page": "index",
+    "size": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 844
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "externalScripts": [],
+    "forms": 0,
+    "headerOpacity": "1",
+    "headingCount": 1,
+    "heroOpacity": "1",
+    "scrollWidth": 375
+  }
+]

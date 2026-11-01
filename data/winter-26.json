@@ -1,0 +1,13 @@
+{
+  "collection": "WINTER 26",
+  "reviewOnly": true,
+  "saleEnabled": false,
+  "availabilityLabels": {"in_stock": "Na magazynie", "made_to_order": "Druk na zamówienie", "unavailable": "Niedostępny"},
+  "products": [
+    {"id": "knitted-star", "name": "KNITTED STAR", "family": "KNITTED", "number": "01", "description": "Gwiaździsta forma. Rytm inspirowany splotem.", "photo": null, "photoAlt": null, "material": null, "manufacturer": null, "safety": null, "variants": [{"sku": null, "color": null, "pricePLN": null, "availability": "unavailable", "stock": null, "dispatchDaysInStock": null, "dispatchDaysMadeToOrder": null}]},
+    {"id": "knitted-medallion", "name": "KNITTED MEDALLION", "family": "KNITTED", "number": "02", "description": "Medalion. Spokojna kompozycja i wyrazisty detal.", "photo": null, "photoAlt": null, "material": null, "manufacturer": null, "safety": null, "variants": [{"sku": null, "color": null, "pricePLN": null, "availability": "unavailable", "stock": null, "dispatchDaysInStock": null, "dispatchDaysMadeToOrder": null}]},
+    {"id": "helix", "name": "HELIX", "family": "SCULPTURAL", "number": "03", "description": "Skręt i rytm. Rzeźbiarski kierunek kolekcji.", "photo": null, "photoAlt": null, "material": null, "manufacturer": null, "safety": null, "variants": [{"sku": null, "color": null, "pricePLN": null, "availability": "unavailable", "stock": null, "dispatchDaysInStock": null, "dispatchDaysMadeToOrder": null}]},
+    {"id": "full-soft", "name": "FULL SOFT", "family": "SCULPTURAL", "number": "04", "description": "Pełna forma. Miękki rytm powierzchni.", "photo": null, "photoAlt": null, "material": null, "manufacturer": null, "safety": null, "variants": [{"sku": null, "color": null, "pricePLN": null, "availability": "unavailable", "stock": null, "dispatchDaysInStock": null, "dispatchDaysMadeToOrder": null}]}
+  ],
+  "sets": [{"quantity": 2, "configuration": null, "pricePLN": null}, {"quantity": 4, "configuration": null, "pricePLN": null}]
+}

@@ -1,0 +1,142 @@
+[
+  {
+    "page": "winter-26",
+    "viewportWidth": 320,
+    "clientWidth": 305,
+    "headerOpacity": "1",
+    "scrollWidth": 305
+  },
+  {
+    "page": "index",
+    "viewportWidth": 320,
+    "clientWidth": 305,
+    "headerOpacity": "1",
+    "scrollWidth": 305
+  },
+  {
+    "page": "kontakt",
+    "viewportWidth": 320,
+    "clientWidth": 305,
+    "headerOpacity": "1",
+    "scrollWidth": 305
+  },
+  {
+    "page": "koncepty",
+    "viewportWidth": 320,
+    "clientWidth": 305,
+    "headerOpacity": "1",
+    "scrollWidth": 305
+  },
+  {
+    "page": "regulamin-sklepu",
+    "viewportWidth": 320,
+    "clientWidth": 305,
+    "headerOpacity": "1",
+    "scrollWidth": 305
+  },
+  {
+    "page": "zwroty-i-reklamacje",
+    "viewportWidth": 320,
+    "clientWidth": 305,
+    "headerOpacity": "1",
+    "scrollWidth": 305
+  },
+  {
+    "page": "dostawa-i-platnosci",
+    "viewportWidth": 320,
+    "clientWidth": 305,
+    "headerOpacity": "1",
+    "scrollWidth": 305
+  },
+  {
+    "page": "polityka-prywatnosci",
+    "viewportWidth": 320,
+    "clientWidth": 305,
+    "headerOpacity": "1",
+    "scrollWidth": 305
+  },
+  {
+    "page": "zasady-premiery",
+    "viewportWidth": 320,
+    "clientWidth": 305,
+    "headerOpacity": "1",
+    "scrollWidth": 305
+  },
+  {
+    "page": "formularz-odstapienia",
+    "viewportWidth": 320,
+    "clientWidth": 305,
+    "headerOpacity": "1",
+    "scrollWidth": 305
+  },
+  {
+    "page": "winter-26",
+    "viewportWidth": 768,
+    "clientWidth": 753,
+    "headerOpacity": "1",
+    "scrollWidth": 753
+  },
+  {
+    "page": "index",
+    "viewportWidth": 768,
+    "clientWidth": 753,
+    "headerOpacity": "1",
+    "scrollWidth": 753
+  },
+  {
+    "page": "kontakt",
+    "viewportWidth": 768,
+    "clientWidth": 753,
+    "headerOpacity": "1",
+    "scrollWidth": 753
+  },
+  {
+    "page": "koncepty",
+    "viewportWidth": 768,
+    "clientWidth": 753,
+    "headerOpacity": "1",
+    "scrollWidth": 753
+  },
+  {
+    "page": "regulamin-sklepu",
+    "viewportWidth": 768,
+    "clientWidth": 753,
+    "headerOpacity": "1",
+    "scrollWidth": 753
+  },
+  {
+    "page": "zwroty-i-reklamacje",
+    "viewportWidth": 768,
+    "clientWidth": 753,
+    "headerOpacity": "1",
+    "scrollWidth": 753
+  },
+  {
+    "page": "dostawa-i-platnosci",
+    "viewportWidth": 768,
+    "clientWidth": 753,
+    "headerOpacity": "1",
+    "scrollWidth": 753
+  },
+  {
+    "page": "polityka-prywatnosci",
+    "viewportWidth": 768,
+    "clientWidth": 753,
+    "headerOpacity": "1",
+    "scrollWidth": 753
+  },
+  {
+    "page": "zasady-premiery",
+    "viewportWidth": 768,
+    "clientWidth": 753,
+    "headerOpacity": "1",
+    "scrollWidth": 753
+  },
+  {
+    "page": "formularz-odstapienia",
+    "viewportWidth": 768,
+    "clientWidth": 753,
+    "headerOpacity": "1",
+    "scrollWidth": 753
+  }
+]
