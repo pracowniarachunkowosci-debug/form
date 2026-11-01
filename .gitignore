@@ -1,0 +1,4 @@
+__pycache__/
+.preview-server.log
+.preview-server.err
+.pr-body.md
