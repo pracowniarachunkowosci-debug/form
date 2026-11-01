@@ -7,13 +7,7 @@
 .w26-hero .editorial-button { margin: 12px 0 20px; }
 .w26-hero-copy > .hero-caption { font-size: 10px !important; letter-spacing: .08em; line-height: 2 !important; }
 .w26-hero-art { margin: 0; }
-/* A typographic paper study: no product image or invented silhouette. */
-.editorial-paper { aspect-ratio: 1 / 1; position: relative; overflow: hidden; padding: 7%; display: flex; flex-direction: column; justify-content: space-between; background: linear-gradient(125deg, #eee8dd 0%, #f9f6ee 44%, #fffdf8 44.2%, #f4f0e7 75%, #ece5d9 100%); }
-.paper-edition { font-size: clamp(8px, .75vw, 11px); letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
-.paper-words { font: clamp(38px, 5vw, 76px)/1.05 var(--serif); letter-spacing: -.045em; color: #4a463e; padding-block: 20px; }
-.paper-words em { font-weight: 400; }
-.paper-baseline { display: flex; align-items: end; justify-content: space-between; border-top: 1px solid #cfc6b7; padding-top: 16px; font-size: clamp(8px, .65vw, 10px); letter-spacing: .12em; color: var(--muted); }
-.paper-baseline > span:last-child { color: var(--burgundy); font: italic clamp(27px, 3vw, 44px)/1 var(--serif); letter-spacing: -.03em; }
+.w26-hero-art img { display: block; width: 100%; height: auto; aspect-ratio: 1 / 1; object-fit: cover; object-position: 68% center; }
 .w26-hero-art figcaption { margin-top: 15px; display: flex; justify-content: space-between; gap: 20px; font-size: 10px; line-height: 1.7; color: #655d51; }
 .w26-hero-art figcaption span { max-width: 280px; text-align: right; }
 .collection-nav { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
@@ -68,6 +62,47 @@
 .archive-link { border-top: 1px solid var(--rule); padding-block: 45px 70px; }
 .archive-link h2 { font-size: clamp(30px, 3vw, 44px); }
 .archive-link p, .archive-link a { font-size: 14px; line-height: 1.8; }
+/* R04 — Winter After Dark. Same grids and typography, new seasonal art direction. */
+.winter-page { --midnight: #12110f; --forest: #202a23; --champagne: #d1b889; --night-text: #f3eee5; --night-muted: #cdc6ba; --night-rule: #514a3e; }
+.winter-opening { background: radial-gradient(ellipse at 90% 15%, #29251c 0%, var(--midnight) 65%); color: var(--night-text); }
+.winter-page .site-header { background: var(--midnight); color: var(--night-text); border-color: var(--night-rule); }
+.winter-page .brand-mark { color: var(--champagne); }
+.winter-page .brand-text small { color: var(--night-muted); }
+.winter-page .site-nav a::after { background: var(--champagne); }
+.winter-page .review-banner { background: #1b211c; color: var(--night-muted); box-shadow: inset 0 -1px 0 #353b31; }
+.winter-opening .eyebrow { color: var(--champagne); }
+.w26-hero h1 em { color: var(--champagne); }
+.w26-hero-copy > p:not(.eyebrow), .w26-intro > p:last-child { color: var(--night-muted); }
+.w26-hero .editorial-button { background: var(--champagne); border-color: var(--champagne); color: var(--midnight); }
+.w26-hero .editorial-button:hover { background: #e3cda5; border-color: #e3cda5; }
+.w26-hero-art img { box-shadow: 0 30px 70px #0005; }
+.w26-hero-art figcaption { color: var(--night-muted); }
+.collection-nav { border-color: var(--night-rule); }
+.collection-nav a { color: var(--night-text); }
+.collection-nav a:hover { color: var(--champagne); }
+.w26-intro h2 em { color: var(--champagne); }
+#knitted { padding-top: 72px; }
+.photo-index { color: var(--burgundy); }
+.sets-section { background: var(--forest); color: var(--night-text); }
+.sets-section .family-heading, .sets-grid article { border-color: #697267; }
+.sets-section .eyebrow, .set-number { color: var(--champagne); }
+.sets-section .family-heading > p, .sets-grid p { color: var(--night-muted); }
+.sets-grid .status-pill { color: var(--night-text); border-color: #697267; }
+.winter-page .review-footer { background: var(--midnight); color: var(--night-text); }
+.winter-page .review-footer .footer-wordmark { color: var(--night-text); }
+.winter-page .footer-wordmark span, .winter-page .review-footer .footer-intro p,
+.winter-page .company-details, .winter-page .review-footer .copyright { color: var(--night-muted); }
+.winter-page .review-footer .footer-cols a { color: var(--night-text); }
+.winter-page .review-footer .footer-cols h2 { color: var(--champagne); }
+.winter-page .company-details { border-color: var(--night-rule); }
+.winter-opening :focus-visible, .winter-page .site-header :focus-visible,
+.winter-page .review-footer :focus-visible { outline-color: var(--champagne); }
+@media (max-width: 900px) {
+ .winter-page .site-nav { background: var(--midnight); color: var(--night-text); border-color: var(--night-rule); }
+ .winter-page .menu-toggle { border-color: #8c8170; box-shadow: none; }
+ .winter-page .menu-toggle span { background: var(--night-text); }
+}
+@media (max-width: 600px) { #knitted { padding-top: 48px; } }
 @media (max-width: 900px) {
  .w26-hero { gap: 5%; }
  .w26-hero h1 { font-size: 76px; }

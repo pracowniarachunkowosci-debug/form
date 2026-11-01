@@ -15,6 +15,7 @@ Otwórz lokalnie `http://127.0.0.1:8763/winter-26.html`. Zatrzymaj serwer przez 
 
 Gdy lokalny serwer działa, `python scripts/check.py --http` dodatkowo sprawdza odpowiedzi HTTP wszystkich używanych lokalnych stron i zasobów.
 
+- [R04 WINTER AFTER DARK — podglądy i porównanie z homepage](docs/R04_REVIEW.md)
 - [Raport zmian i weryfikacji](docs/REPORT.md)
 - [Audyt przed zmianami](docs/AUDIT.md)
 - [Podglądy desktop/mobile](docs/PREVIEWS.md)

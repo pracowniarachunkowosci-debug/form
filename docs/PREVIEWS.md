@@ -1,14 +1,24 @@
-# Podglądy — Warm Minimal / wersja 02
+# Podglądy — R04 WINTER AFTER DARK
+
+Aktualny materiał do decyzji: [R04_REVIEW.md](R04_REVIEW.md) — hero, karty i zestawy desktop/mobile, porównanie z aktualnym produkcyjnym homepage, kontrast i wyniki testów.
+
+![R04 desktop/mobile](previews/winter-r04-overview.jpg)
+
+![Homepage obok R04](previews/r04-homepage-comparison-desktop.jpg)
+
+## Dokumenty i historia wcześniejszych wersji
+
+Poniższe pełne zrzuty WINTER i plansza Warm Minimal dokumentują wcześniejszą, niezaakceptowaną paletę. Dokumenty prawne i lokalna strona główna nie były zmieniane w R04, więc ich zrzuty pozostają aktualne. Pełny zrzut R04 nie został zastąpiony starszą wersją; R04 ma osobne ujęcia sekcji w raporcie powyżej.
 
 Rzeczywiste zrzuty lokalnego podglądu, bez publikowania strony. Desktop: viewport 1440×1000, mobile: 390×844. Pasek przewijania zajmuje 15 px, więc obrazy treści mają 1425 i 375 px szerokości. Pełne strony są dłuższe niż viewport. Dodatkowo sprawdzono układ 320 i 768 px; tabela polityki ma własne przewijanie poziome na małym ekranie.
 
-![WINTER 26 — desktop/mobile](previews/winter-overview.jpg)
+![Historia: Warm Minimal — desktop/mobile](previews/winter-overview.jpg)
 
 ![Dokumenty — desktop/mobile](previews/documents-overview.jpg)
 
 | Strona | Pełny desktop | Pełny mobile |
 | --- | --- | --- |
-| WINTER 26 | [Desktop](previews/winter-26-desktop.jpg) | [Mobile](previews/winter-26-mobile.jpg) |
+| WINTER 26 — historia Warm Minimal | [Desktop](previews/winter-26-desktop.jpg) | [Mobile](previews/winter-26-mobile.jpg) |
 | Regulamin | [Desktop](previews/regulamin-sklepu-desktop.jpg) | [Mobile](previews/regulamin-sklepu-mobile.jpg) |
 | Zwroty i reklamacje | [Desktop](previews/zwroty-i-reklamacje-desktop.jpg) | [Mobile](previews/zwroty-i-reklamacje-mobile.jpg) |
 | Dostawa i płatności | [Desktop](previews/dostawa-i-platnosci-desktop.jpg) | [Mobile](previews/dostawa-i-platnosci-mobile.jpg) |

@@ -1,0 +1,166 @@
+[
+  {
+    "size": "desktop",
+    "viewport": {
+      "width": 1440,
+      "height": 1000
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "colors": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 238, 229)",
+        "selector": ".w26-hero h1"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(205, 198, 186)",
+        "selector": ".w26-hero-copy > p:not(.eyebrow)"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(209, 184, 137)",
+        "selector": ".w26-hero .eyebrow"
+      },
+      {
+        "background": "rgb(209, 184, 137)",
+        "color": "rgb(18, 17, 15)",
+        "selector": ".w26-hero .editorial-button"
+      }
+    ],
+    "forms": 0,
+    "headingCount": 1,
+    "heroImage": "assets/winter-after-dark-r04.png",
+    "products": [
+      "KNITTED STAR",
+      "KNITTED MEDALLION",
+      "HELIX",
+      "FULL SOFT"
+    ],
+    "scrollWidth": 375
+  },
+  {
+    "size": "mobile",
+    "viewport": {
+      "width": 390,
+      "height": 1280
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "colors": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 238, 229)",
+        "selector": ".w26-hero h1"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(205, 198, 186)",
+        "selector": ".w26-hero-copy > p:not(.eyebrow)"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(209, 184, 137)",
+        "selector": ".w26-hero .eyebrow"
+      },
+      {
+        "background": "rgb(209, 184, 137)",
+        "color": "rgb(18, 17, 15)",
+        "selector": ".w26-hero .editorial-button"
+      }
+    ],
+    "forms": 0,
+    "headingCount": 1,
+    "heroImage": "assets/winter-after-dark-r04.png",
+    "products": [
+      "KNITTED STAR",
+      "KNITTED MEDALLION",
+      "HELIX",
+      "FULL SOFT"
+    ],
+    "scrollWidth": 375
+  },
+  {
+    "size": "small",
+    "viewport": {
+      "width": 320,
+      "height": 900
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "colors": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 238, 229)",
+        "selector": ".w26-hero h1"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(205, 198, 186)",
+        "selector": ".w26-hero-copy > p:not(.eyebrow)"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(209, 184, 137)",
+        "selector": ".w26-hero .eyebrow"
+      },
+      {
+        "background": "rgb(209, 184, 137)",
+        "color": "rgb(18, 17, 15)",
+        "selector": ".w26-hero .editorial-button"
+      }
+    ],
+    "forms": 0,
+    "headingCount": 1,
+    "heroImage": "assets/winter-after-dark-r04.png",
+    "products": [
+      "KNITTED STAR",
+      "KNITTED MEDALLION",
+      "HELIX",
+      "FULL SOFT"
+    ],
+    "scrollWidth": 375
+  },
+  {
+    "size": "tablet",
+    "viewport": {
+      "width": 768,
+      "height": 900
+    },
+    "brokenImages": [],
+    "clientWidth": 375,
+    "colors": [
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(243, 238, 229)",
+        "selector": ".w26-hero h1"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(205, 198, 186)",
+        "selector": ".w26-hero-copy > p:not(.eyebrow)"
+      },
+      {
+        "background": "rgba(0, 0, 0, 0)",
+        "color": "rgb(209, 184, 137)",
+        "selector": ".w26-hero .eyebrow"
+      },
+      {
+        "background": "rgb(209, 184, 137)",
+        "color": "rgb(18, 17, 15)",
+        "selector": ".w26-hero .editorial-button"
+      }
+    ],
+    "forms": 0,
+    "headingCount": 1,
+    "heroImage": "assets/winter-after-dark-r04.png",
+    "products": [
+      "KNITTED STAR",
+      "KNITTED MEDALLION",
+      "HELIX",
+      "FULL SOFT"
+    ],
+    "scrollWidth": 375
+  }
+]

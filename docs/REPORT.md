@@ -2,7 +2,13 @@
 
 Data: 01.11.2026. Baza: `38e0bd9`, branch: `codex/issue-3-winter26-draft`. Wynik: projekt do akceptacji, bez merge, wdrożenia, sprzedaży i płatności.
 
-## Wersja 02 — Warm Minimal
+## Aktualnie: R04 — WINTER AFTER DARK
+
+Nowy feedback właściciela zastępuje kierunek Warm Minimal. Zachowano architekturę i zakres, a WINTER otrzymał ciemne otwarcie, światło champagne, editorial AI bez produktów i dark forest w zestawach. Jasne karty produktów kontrastują z częścią narracyjną. [Raport R04, kontrast, porównanie z produkcyjnym homepage i granice przyszłych PR-ów](R04_REVIEW.md).
+
+Nowe screenshoty: desktop 1440 i mobile 390; dodatkowa kontrola 320/768. Nie zmieniono produkcyjnej strony głównej, dokumentów prawnych ani danych produktów w tej rewizji. Asset i prompt: [IMAGE_R04.md](IMAGE_R04.md).
+
+## Historia: wersja 02 — Warm Minimal (niezaakceptowana wizualnie)
 
 Po akceptacji układu i struktury zmieniono wyłącznie oprawę wizualną oraz zawartość pola hero. Tło paper `#faf8f3`, powierzchnie `#f2eee6`, ciemny tekst `#25231f` i burgund `#632d3b` jako oszczędny akcent. Sekcja zestawów, baner roboczy, stopka i dokumenty są jasne; na stronie głównej rozjaśniono tekstowe sekcje pracowni i procesu. Siatki, kolejność sekcji, fonty i breakpointy pozostały zachowane.
 
@@ -28,13 +34,13 @@ Zaktualizowano screenshoty desktop/mobile i plansze dokumentów. Ponowna kontrol
 | SEO | Tytuły, opisy, canonical, OG; usunięte nieadekwatne schema, bez Product/Offer. `noindex, nofollow` dla draftu; pusty sitemap i osobny kandydat do akceptacji |
 | Technologia | Zachowane statyczne HTML/CSS/JS. Mały generator Python stdlib ujednolica strony; brak zmiany platformy i dodanych zależności runtime |
 
-Hero używa neutralnej kompozycji typograficznej, bez fotografii ani sylwetki produktu. Karty czterech modeli mają neutralne placeholdery. Nie stworzono fikcyjnych zdjęć, cen, kolorów, nakładów ani terminów.
+Hero R04 używa atmosferycznej kompozycji editorial AI z igliwiem, kamieniem i wstążką, bez produktów. Karty czterech modeli mają neutralne placeholdery. Nie stworzono fikcyjnych zdjęć, cen, kolorów, nakładów ani terminów.
 
 ## Weryfikacja
 
-- `python scripts/check.py --http`: **PASS** — 15 stron, 457 odniesień HTML, zasoby CSS, metadane, CSP, dane produktów; 41 unikalnych lokalnych adresów stron/zasobów zwróciło HTTP 200. Brak uszkodzonych wewnętrznych linków i kotwic.
+- `python scripts/check.py --http`: **PASS** — 15 stron, 458 odniesień HTML, zasoby CSS, metadane, CSP, dane produktów; 42 unikalne lokalne adresy stron/zasobów zwróciły HTTP 200. Brak uszkodzonych wewnętrznych linków i kotwic.
 - `node --check script.js`: **PASS**. `git diff --check`: **PASS**. Powtórne generowanie: identyczne pliki wynikowe.
-- [browser-checks.json](browser-checks.json): 8 stron × desktop 1440/mobile 390. Brak przepełnienia całej strony, uszkodzonych obrazów, aktywnych formularzy i zewnętrznych skryptów; widoczny nagłówek i jeden H1.
+- Pierwotny odbiór wspólnego układu (przed R04): [browser-checks.json](browser-checks.json): 8 stron × desktop 1440/mobile 390. Brak przepełnienia całej strony, uszkodzonych obrazów, aktywnych formularzy i zewnętrznych skryptów; widoczny nagłówek i jeden H1.
 - [breakpoint-checks.json](breakpoint-checks.json): 10 stron × 320/768 px. Brak poziomego przepełnienia całej strony. Tabela polityki przewija się we własnym kontenerze.
 - Przegląd wizualny zapisanych pełnych układów i fragmentów desktop/mobile. Poprawiono hero 320 px i konflikt starego cyklu preload z widocznością nagłówka/hero.
 - Interakcje: menu mobile, zamknięcie Escape, akordeon danych produktu; demo odstąpienia — walidacja pustych danych, wypełnienie testowe, podsumowanie, powrót do korekty, końcowy komunikat „nic nie wysłano” i reset. Brak błędów/ostrzeżeń konsoli w końcowym przebiegu demo.
