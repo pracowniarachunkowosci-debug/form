@@ -1,0 +1,62 @@
+{
+  "source": "winter-after-dark-r04.png",
+  "source_bytes": 2128258,
+  "source_sha256": "216813d2d536ee70a7f7cda49b2b0f3c6c7632d4885d318b31d4e3292d5b5f66",
+  "pillow": "12.3.0",
+  "outputs": [
+    {
+      "file": "assets/winter-r04-480.avif",
+      "width": 480,
+      "height": 320,
+      "bytes": 11776
+    },
+    {
+      "file": "assets/winter-r04-480.webp",
+      "width": 480,
+      "height": 320,
+      "bytes": 19912
+    },
+    {
+      "file": "assets/winter-r04-768.avif",
+      "width": 768,
+      "height": 512,
+      "bytes": 24798
+    },
+    {
+      "file": "assets/winter-r04-768.webp",
+      "width": 768,
+      "height": 512,
+      "bytes": 43390
+    },
+    {
+      "file": "assets/winter-r04-1024.avif",
+      "width": 1024,
+      "height": 683,
+      "bytes": 39536
+    },
+    {
+      "file": "assets/winter-r04-1024.webp",
+      "width": 1024,
+      "height": 683,
+      "bytes": 68020
+    },
+    {
+      "file": "assets/winter-r04-1536.avif",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 69746
+    },
+    {
+      "file": "assets/winter-r04-1536.webp",
+      "width": 1536,
+      "height": 1024,
+      "bytes": 123402
+    },
+    {
+      "file": "assets/winter-r04-social.jpg",
+      "width": 1200,
+      "height": 800,
+      "bytes": 136804
+    }
+  ]
+}
