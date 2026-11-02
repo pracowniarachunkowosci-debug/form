@@ -4,9 +4,9 @@
 
 ## 1. Rekomendacja dla tej firmy
 
-**Na pierwszą sprzedaż rekomenduję B: WooCommerce + własny motyw R04 + Przelewy24 + oficjalny InPost PL.** Wariant kosztowy opieram na **nowym OVH Pro**, z bazą MySQL, pocztą transakcyjną Brevo oraz uzupełnieniem harmonogramu zadań opisanym niżej. Zachować statyczne strony marki, a sklep uruchomić pod `/sklep/` na tym samym hostingu. Nie trzeba przenosić całej strony do WordPressa.
+**Na pierwszą sprzedaż rekomenduję B: WooCommerce + własny motyw R04 + Przelewy24 + oficjalny InPost PL.** Bazowy punkt odniesienia cenowego to **nowy OVH Pro**, MySQL i Brevo. **Hosting i architektura schedulera pozostają do wyraźnego zatwierdzenia właściciela** po przeglądzie bezpieczeństwa i niezawodności; preferowany jest natywny cron co 1–5 min. OVH Pro z zewnętrznym triggerem nie jest zatwierdzonym wyborem. Zachować statyczne strony marki, a sklep uruchomić pod `/sklep/` na tym samym hostingu. Nie trzeba przenosić całej strony do WordPressa. [Aneks po recenzji](#12-aneks-po-recenzji--symetryczne-p24-wydatki-i-hosting) pokazuje także Next + bezpośrednie P24, mniejsze zużycie Neon i droższy hosting Woo.
 
-Powody wynikają z zakresu i audytu: cztery modele, mały magazyn, krajowa sprzedaż z BLIK, potrzebny panel zamówień i brak gotowego backendu magazynowego w `dietologicznie`. Przy koszyku 78 zł i 100 zamówieniach/mies. technologia oraz prowizje kosztują w modelu **4 748,40 zł dla A vs 2 262,08 zł dla B w 12 miesięcy**. Z referencyjnym nakładem pracy i utrzymaniem: **49 748,40 vs 26 262,08 zł**, a w 36 miesięcy **73 645,20 vs 41 468,24 zł**. To model ekonomiczny, nie oferta wykonania ani wycena pracy Codexa. Pełne założenia, nieznane koszty i wszystkie scenariusze są poniżej.
+Powody wynikają z zakresu i audytu: cztery modele, mały magazyn, krajowa sprzedaż z BLIK, potrzebny panel zamówień i brak gotowego backendu magazynowego w `dietologicznie`. Przy koszyku 78 zł i 100 zamówieniach/mies. technologia oraz prowizje kosztują w modelu **4 748,40 zł dla A vs 2 262,08 zł dla B w 12 miesięcy**. Z referencyjnym nakładem pracy i utrzymaniem: **49 748,40 vs 26 262,08 zł**, a w 36 miesięcy **73 645,20 vs 41 468,24 zł**. To model ekonomiczny, nie oferta wykonania ani wycena pracy Codexa. **Kwoty z wyceną pracy nie są wymaganą wpłatą z góry ani prognozą faktur przy pracy własnej z AI.** Pełne założenia, nieznane koszty i wszystkie scenariusze są poniżej.
 
 **A pozostaje uzasadnione**, jeśli firma zapewni stałego opiekuna TypeScript i potrzebuje własnego konfiguratora/automatyzacji dającej zmierzone oszczędności albo wspólny, rzeczywiście kompletny backend dla kilku marek. Sam wzrost do 300 zamówień miesięcznie oraz sam wygląd R04 nie uzasadniają zmiany na A. Oba rozwiązania mogą zachować design i obsłużyć CZ/ES. W tej parze także operator płatności wpływa na wynik: Next.js nie wymusza Stripe, a Woo nie wyklucza Stripe.
 
@@ -53,7 +53,7 @@ Nowy OVH Pro: PHP/MySQL, własny lekki motyw bez abonamentowego page buildera. W
 
 Kandydat OVH Pro ma 1 vCore, 2 GB RAM i bazy po 2 GB. Dokumentacja OVH opisuje PHP-FPM z limitem pamięci 512 MB; Woo zaleca m.in. MySQL ≥8.0/MariaDB ≥10.6 i pamięć WordPress ≥256 MB. **To weryfikacja dokumentacji, nie test niezakupionego serwera:** przed zakupem potwierdzić bieżącą wersję bazy/PHP w nowej ofercie i przed uruchomieniem sprawdzić raport systemowy Woo, limity połączeń, obciążenie checkoutu oraz odtwarzanie. Wersji wbudowanej bazy OVH nie można dowolnie zmienić. Nie wystarczy stwierdzenie „hosting ma instalator WordPress”. [OVH — parametry][S5], [Woo — wymagania][S6].
 
-**Ograniczenie OVH:** jego panelowy cron wykonuje zadanie najwyżej raz na godzinę. WP-Cron zależny od wejść na stronę również nie gwarantuje punktualności przy 20 zamówieniach miesięcznie. W modelu B przewidziano bezpłatny zewnętrzny trigger `cron-job.org` co 5 min, uruchamiający wyłącznie standardowy endpoint kolejki, oraz godzinowy fallback OVH. Nie przekazywać mu danych zamówień, odpowiedzi z PII, tokenów Stripe/ShipX ani uprawnień administracyjnych. Kolejka musi mieć blokadę równoległego wykonania, krótkie partie i alarm zaległości; znacznik wygaśnięcia rezerwacji sprawdzać także przed potwierdzeniem zamówienia. Darmowy scheduler nie ma gwarancji punktualności i ma timeout; jego FAQ wskazuje również brak walidacji certyfikatu TLS wywoływanego serwera, dlatego ten trigger nie może otrzymywać sekretów ani wykonywać uprzywilejowanych operacji; test awarii jest warunkiem odbioru. Jeśli taki dodatkowy dostawca nie jest akceptowalny, wybrać hosting z natywnym cron 1–5 min i przeliczyć koszt. Nie zakładam, że droższy plan OVH automatycznie usuwa to ograniczenie. [OVH cron][S7], [Woo Scheduled Actions][S10], [cron-job.org][S11].
+**Ograniczenie OVH:** jego panelowy cron wykonuje zadanie najwyżej raz na godzinę. WP-Cron zależny od wejść na stronę również nie gwarantuje punktualności przy 20 zamówieniach miesięcznie. Pierwotny model cenowy B zakładał bezpłatny trigger `cron-job.org` co 5 min i godzinowy fallback OVH. **Po recenzji to wyłącznie opcja wymagająca przeglądu, nie zatwierdzona architektura obsługi zamówień.** FAQ schedulera wskazuje brak walidacji certyfikatów TLS, timeout i brak gwarancji punktualności. Nie przekazywać mu PII, sekretów ani uprawnień administracyjnych. Nawet wywołanie publicznego WP-Cron może uruchomić wrażliwe zadania serwerowe: brak sekretu w URL nie jest dowodem bezpieczeństwa całej ścieżki. Preferować hosting z natywnym cron 1–5 min; jeśli pozostajemy przy OVH, przed zakupem potwierdzić bezpieczny scheduler, idempotencję, limity wykonania i testy bez ruchu. Szczegółowe warunki oraz wpływ droższego hostingu na TCO zawiera aneks. Nie zakładam, że droższy plan OVH automatycznie usuwa ograniczenie. [OVH cron][S7], [Woo Scheduled Actions][S10], [cron-job.org][S11].
 
 Oficjalne moduły P24 i InPost są bezpłatne; integracja i testowanie wymagają pracy. Moduł P24 deklaruje obsługę Woo 9–11, co nie zwalnia ze sprawdzenia konkretnej wersji i checkoutu. InPost PL obejmuje ShipX i etykiety. [P24][S12], [InPost][S13]. Faktury/KSeF realizuje uzgodniony system księgowy, nie sam dokument PDF z dowolnej wtyczki.
 
@@ -267,14 +267,14 @@ Dla sprzedaży unijnej ustalić zasady VAT/OSS z księgowością; unijny próg 1
 - **Istniejący płatny Vercel:** nie potwierdzono planu `dietologicznie`. Jeśli odpowiedni Pro, miejsce i limity są już opłacone i współdzielenie jest dopuszczalne, przyrostowy koszt A może spaść o 80 zł/mies. = 960/2 880 zł. To alokacja wspólnej usługi, nie darmowa infrastruktura. Nie przenosić klientów ani kluczy między markami.
 - **Baza i kurs:** +/−10% USD/PLN zmienia budżet A o +/−16 zł/mies. (192/576 zł), przy pozostałych założeniach bez zmian. Każde dodatkowe 10 USD/mies. zużycia to +480/+1 440 zł. Tańsza uśpiona baza może obniżyć rachunek; nie wolno oszczędzić poprzez pominięcie trwałości i odzyskiwania.
 - **Koszt Woo:** potrzebne dodatkowe moduły/maintenance mogą zniwelować przewagę. Każde dodatkowe 1 h/mies. w B to +1 800/+5 400 zł. Same Core/P24/InPost nie wymagają płatnych licencji; dodatkowe abonamenty mają wynikać z konkretnej funkcji.
-- **Wyższy wolumen:** we wszystkich zbadanych 20/100/300 zam./mies. B wygrywa kosztowo przy tym miksie. Różnica prowizji rośnie z liczbą transakcji. A staje się ekonomicznie uzasadnione, jeśli daje dodatkową korzyść biznesową: przy 300 zam./mies. i koszyku 78 zł potrzeba ok. **4,33 min oszczędności na zamówieniu**, wycenionej na 50 zł/h, aby odzyskać referencyjną różnicę w 36 miesięcy. Nie stwierdzono dziś takiej przewagi; podobna automatyzacja w Woo może być tańsza.
+- **Wyższy wolumen:** w modelu bazowym dla 20/100/300 zam./mies. B wygrywa kosztowo przy tym miksie i tych kosztach hostingu; aneks pokazuje zmiany przy innych kosztach. Różnica prowizji rośnie z liczbą transakcji. A staje się ekonomicznie uzasadnione, jeśli daje dodatkową korzyść biznesową: przy 300 zam./mies. i koszyku 78 zł potrzeba ok. **4,33 min oszczędności na zamówieniu**, wycenionej na 50 zł/h, aby odzyskać referencyjną różnicę w 36 miesięcy. Nie stwierdzono dziś takiej przewagi; podobna automatyzacja w Woo może być tańsza.
 - **Inny operator / zagranica:** można dołączyć Stripe do Woo lub P24 do Next. Zrównanie prowizji nie usuwa kosztu napisania panelu i magazynu w A, lecz musi być uwzględnione przy nowej umowie/ekspansji. Wybór platformy oraz operatora należy rozpatrywać oddzielnie.
 
 Krótka alternatywa: Payment Links + ręczna obsługa mogą obniżyć pracę przy bardzo małym pilotażu. Nie spełniają jednak same pełnych wymagań Issue #6 dotyczących wspólnych stanów zestawów, automatycznej rezerwacji i limitu produkcji. To inny zakres, nie „tańszy gotowy odpowiednik” A/B. Headless Woo i dodatkowy ERP nie są potrzebne na start.
 
 ## 10. Plan wdrożenia rekomendowanego B — dopiero po zatwierdzeniu
 
-1. **Decyzje i specyfikacja odbioru.** Potwierdzić hosting, cron, opiekuna, rzeczywiste warianty i sposób zestawów. Ustalić księgowość i dokumenty; zebrać dane spółki/producenta. Cena hostingu zatwierdzana osobno, PR #5 niezależnie. Wynik: zakres i budżet, bez uruchomienia sprzedaży.
+1. **Decyzje i specyfikacja odbioru.** Przed zakupem potwierdzić hosting z natywnym cron 1–5 min albo uzyskać pozytywny przegląd alternatywnego schedulera OVH; warunki i wrażliwość kosztów w aneksie. Potwierdzić opiekuna, rzeczywiste warianty i sposób zestawów. Ustalić księgowość i dokumenty; zebrać dane spółki/producenta. Właściciel zatwierdza hosting i architekturę wyraźnie, PR #5 niezależnie. Wynik: zakres i budżet, bez uruchomienia sprzedaży.
 2. **Chroniony staging.** Po zgodzie na zakup: nowy hosting, osobna baza i dane syntetyczne, aktualny zgodny WP/Woo, własny motyw, MFA i kopie. Test rzeczywistych wersji PHP/MySQL, pamięci, cron, eksportu i restore. Żadne produkcyjne klucze w preview; sama instalacja na testach nie upoważnia do publikacji.
 3. **R04 i katalog.** Zachować zatwierdzone statyczne strony oraz AVIF/WebP, przygotować `/sklep/` i koszyk/checkout w tym samym języku wizualnym. Po próbach wpisać 4 modele, SKU, zdjęcia, ceny, masy/gabaryty, stany i bezpieczeństwo. Zestawy muszą korzystać z poprawnego magazynu. Porównanie desktop/mobile 320–1440 z podglądami PR #5.
 4. **Integracje i operacje.** Sandbox P24 i InPost, konfiguracja Brevo i testy dostarczalności, eksport księgowy, zwrot częściowy, role pracowni, instrukcja przyjęcia partii, realizacji i reklamacji. Harmonogram i alarmy testowane również bez ruchu na stronie. Dokumentacja odpowiedzialności, SLA obsługi i procedury awarii.
@@ -294,7 +294,7 @@ Nakład MVP 92–156 h jest sumą z rozdziału 5, a nie dodatkowym kosztem tych 
 
 ## 11. Źródła i kontrola kompletności
 
-**Weryfikacja wykonana w tym PR:** `python scripts/store_tco.py --check` sprawdza 36 scenariuszy, zaokrąglenia prowizji, sumowanie składników, jednorazowość wdrożenia/aktywacji i zgodność tabel w raporcie z JSON. Sprawdzono też odnośniki lokalne i definicje źródeł, sumy godzin oraz niezmienność plików strony względem bazy. Audyt `dietologicznie` był tylko odczytem. Testy sklepowe opisane w planie są **kryteriami przyszłego odbioru**, nie wykonanymi testami działającego sklepu. GitHub Pages wskazuje `main`; PR nie dodaje automatyzacji publikacji.
+**Weryfikacja wykonana w tym PR:** `python scripts/store_tco.py --check` sprawdza 36 scenariuszy bazowych i 16 wyników aneksu, symetryczną aktywację P24, zaokrąglenia prowizji, sumowanie składników, jednorazowość wdrożenia/aktywacji i zgodność tabel w raporcie z JSON. Sprawdzono też odnośniki lokalne i definicje źródeł, sumy godzin oraz niezmienność plików strony względem bazy. Audyt `dietologicznie` był tylko odczytem. Testy sklepowe opisane w planie są **kryteriami przyszłego odbioru**, nie wykonanymi testami działającego sklepu. GitHub Pages wskazuje `main`; PR nie dodaje automatyzacji publikacji.
 
 Linki poniżej prowadzą do źródeł pierwotnych, sprawdzonych 02.11.2026. Publiczny cennik nie zastępuje zamówienia ani umowy. Nie zamrażamy cen na 36 miesięcy; model zakłada ich niezmienność dla porównania.
 
@@ -303,6 +303,7 @@ Linki poniżej prowadzą do źródeł pierwotnych, sprawdzonych 02.11.2026. Publ
 - S8–S11: [Stripe fulfillment][S8], [Stripe wygląd Checkout][S9], [Woo kolejki][S10], [cron-job.org][S11].
 - S12–S18: [P24 Woo][S12], [InPost PL][S13], [Woo core][S14], [P24 opłaty][S15], [Product Bundles][S16], [InPost cenniki][S17], [Resend][S18].
 - S19–S22: [Stripe Polska][S19], [Stripe zwroty][S20], [Woo zwroty][S21], [Woo magazyn][S22].
+- S31–S32: [P24 REST][S31], [Neon scale to zero][S32].
 - S23–S30: [UODO][S23], [GPSR][S24], [Your Europe — e-commerce][S25], [PARP — odstąpienie online][S26], [MF KSeF][S27], [GitHub Pages][S28], [Stripe BLIK][S29], [VAT UE][S30].
 
 | Wymaganie Issue #6 | Miejsce odpowiedzi |
@@ -316,6 +317,63 @@ Linki poniżej prowadzą do źródeł pierwotnych, sprawdzonych 02.11.2026. Publ
 | Lock-in, CZ/ES, księgowość i produkcja | 7–9 |
 | Jednoznaczna decyzja i warunki jej zmiany, maks. 5 wyborów | 1, 9, 10 |
 | Osobny draft, PR #5 bez zmian, bez publikacji | Zakres PR i kontrola Git; żadne pliki strony nie są zmieniane |
+
+## 12. Aneks po recenzji — symetryczne P24, wydatki i hosting
+
+Uzupełnienie do [recenzji właściciela z 02.11.2026](https://github.com/pracowniarachunkowosci-debug/form/pull/7#pullrequestreview-5738329718). Bazowe 36 scenariuszy pozostaje bez zmian; poniżej 16 dodatkowych wyników przy **100 opłaconych zamówieniach/mies., pełnym koszyku 78 zł**, tym samym miksie i kursie. Założenia są w `review_annex` w JSON; kalkulator sprawdza obie części raportu.
+
+### 12.1. Ta sama bramka w A i B
+
+**A + bezpośrednie P24** używa tej samej tabeli prowizji co B, bez pośrednictwa Stripe. Roczne prowizje wynoszą 1 572 zł. Przy niezmienionej infrastrukturze A: `12 × 170 + 1 572 = 3 612 zł`, zgodnie z recenzją. To kwota **przed aktywacją**. Dla symetrii model dolicza 59 zł w obu wariantach P24: **A 3 671 zł vs B 2 262,08 zł**. Jeśli warunek zwrotu aktywacji zostanie spełniony, odjąć 59 zł od obu: 3 612 zł vs 2 203,08 zł. Koszt operatora nie jest różnicą technologii. [P24][S15].
+
+Do A zakładamy **dodatkowe 16–32 h netto, referencja 24 h**, ponad pierwotne wdrożenie: zastąpienie adaptera Stripe bezpośrednią integracją P24, rejestracja i serwerowa weryfikacja transakcji, ponowienia/podpisy powiadomień, mapowanie stanów, zwroty częściowe oraz testy sandbox/E2E. To przyrost po zastąpieniu prac nad Stripe, nie drugi pełny koszyk. Ogólna suma A+P24: **204–348 h, referencja 276 h**; przy 150 zł/h przyrost 2 400–4 800 zł, referencja 3 600 zł. To szacunek do potwierdzenia po prototypie, nie cena od P24. Ponowne użycie koszyka/Geowidget pozostaje możliwe, adapter Stripe nie realizuje P24 REST. Utrzymanie referencyjnie nadal 4 h/mies. (widełki 2–6); dodatkowe potrzeby aktualizują ten budżet. [Dokumentacja P24][S31].
+
+### 12.2. Neon 5 USD i brak potwierdzonego Pro
+
+**20 USD nie jest minimum Neon.** Wariant 5 USD to warunkowy budżet małego zużycia Launch, z tą samą docelową retencją do 7 dni i osobną rezerwą 10 zł na kopie. Przykład: 40 CU-h × 0,106 + 1 GB × 0,35 + 1 GB historii × 0,20 = **4,79 USD/mies.**, bez dodatkowych zasobów. To około 160 h aktywności przy 0,25 CU, nie baza działająca stale. Obniża A o **60 zł/mies., 720/2 160 zł w 12/36 mies.** [Neon][S3].
+
+Warunek: pomiar realnego ruchu, zadań i wybudzeń, ustawienie okna odzyskiwania i udany restore. Częste odpytywanie bazy przez scheduler może wykluczyć założenie 5 USD; nie wydłużać rezerwacji ani wyłączać kontroli płatności, by dopasować rachunek. Testować cold start i ponowienia webhooków. Alert kosztów nie zatrzymuje naliczania; limit powodujący zawieszenie bazy nie może bez planu przerwać obsługi opłaconych zamówień. [Scale to zero][S32], [Neon][S3].
+
+Recenzja podaje zespół `pracownia-growthos` na **Hobby**; nie potwierdza Pro dla DietoLogicznie. Odczyt zespołów przez dostępny konektor w tej sesji nie powiódł się, więc nie przedstawiam tego jako własnej weryfikacji konta. **Żaden wynik aneksu nie odejmuje opłaty Pro.** Wcześniejsza oszczędność 80 zł/mies. pozostaje wyłącznie hipotezą wymagającą potwierdzenia konta, płatnego miejsca, limitów i zasad współdzielenia. Hobby nie zastępuje komercyjnego Pro.
+
+<!-- BEGIN REVIEW ANNEX TCO -->
+
+| Wariant; 100 zam./mies. × 78 zł | Technologia 12 mies. | Technologia 36 mies. | Z wyceną pracy 12 mies. | Z wyceną pracy 36 mies. |
+| --- | ---: | ---: | ---: | ---: |
+| A: Stripe, Neon 20 USD | 4 748,40 | 14 245,20 | 49 748,40 | 73 645,20 |
+| B: P24, OVH baza | 2 262,08 | 6 668,24 | 26 262,08 | 41 468,24 |
+| A: bezpośrednie P24, Neon 20 USD | 3 671,00 | 10 895,00 | 52 271,00 | 73 895,00 |
+| A: Stripe, Neon 5 USD | 4 028,40 | 12 085,20 | 49 028,40 | 71 485,20 |
+| A: bezpośrednie P24, Neon 5 USD | 2 951,00 | 8 735,00 | 51 551,00 | 71 735,00 |
+| B: hosting 75,00 zł/mies. (budżet) | 2 651,00 | 7 835,00 | 26 651,00 | 42 635,00 |
+| B: hosting 100,00 zł/mies. (budżet) | 2 951,00 | 8 735,00 | 26 951,00 | 43 535,00 |
+| B: hosting 150,00 zł/mies. (budżet) | 3 551,00 | 10 535,00 | 27 551,00 | 45 335,00 |
+
+<!-- END REVIEW ANNEX TCO -->
+
+Technologia obejmuje aktywację i rezerwę kopii; kolumny z pracą używają 150 zł/h, a A+P24 dodatkowych 24 h. Budżety hostingu B 75/100/150 zł netto/mies. **nie są ofertami dostawców ani potwierdzeniem parametrów**. Pozostałe założenia, nieznane koszty `U`, VAT i wyłączenia jak w rozdziałach 4–6.
+
+### 12.3. Zewnętrzne faktury, własny czas, ryzyka
+
+| Kategoria | Właściciel pracuje z Codexem | Zlecenie wykonawcy |
+| --- | --- | --- |
+| Wydatki zewnętrzne | Opłaty za usługi i prowizje z kolumn „Technologia” + faktyczny koszt narzędzi AI, zakupionych modułów i usług `U`. Rezerwy Neon/kopii zastąpić rachunkami | To samo + uzgodnione faktury za wykonanie i utrzymanie; stawka 150 zł/h jest tylko modelem |
+| Własny czas | Referencja nakładu projektu, nie pomiar czasu właściciela z AI. Bazowo A: 252 h wdrożenia + 4 h/mies.; B: 124 h + 3 h/mies. Razem 300/160 h w 12 mies., 396/232 h w 36 mies. Przy P24 w A dodatkowo referencyjne 24 h | Nadal potrzebne decyzje, dane produktów, odbiór i obsługa zamówień; nie znikają po zleceniu |
+| Ryzyka i praca do potwierdzenia | AI może skrócić pisanie kodu, ale **nie stanowi darmowego, niezależnego odbioru bezpieczeństwa**. Budżet przeglądu płatności/rezerwacji, testów awarii i restore ustalić z odpowiedzialnym opiekunem | Zakres odpowiedzialności, testy i reakcję na awarie uzgodnić w ofercie; bez domniemanej gwarancji SLA |
+
+Nie znamy rzeczywistej produktywności właściciela z Codexem, jego planu/limitów ani kosztu dodatkowego użycia AI. Nie mnożymy „godzin asystenta” przez 150 zł i nie obiecujemy określonej redukcji godzin. **49 748/26 262 zł to wycena zasobów projektu w czasie, nie wymagany przelew na start.** Faktyczny cash-out = opłaty usług/prowizje + rzeczywiście zlecone prace + narzędzia/dodatki; własny czas wykazywać osobno. Nie liczyć godzin odbioru dwa razy, jeżeli są już w ofercie lub bazowym nakładzie.
+
+### 12.4. Hosting: warunek decyzji i wpływ na rekomendację
+
+Preferencja przed zakupem: hosting PHP/MySQL z **natywnym cron 1–5 min**, znanymi limitami i procedurą restore. Jeżeli rozważamy OVH Pro z innym schedulerem, najpierw przegląd całej ścieżki Woo/Action Scheduler: uwierzytelnienie i poprawna walidacja TLS tam, gdzie przekazywane są uprawnienia; brak PII/sekretów w odpowiedzi i URL; blokady, idempotencja, ograniczenie wywołań oraz alarm zaległości. Sam trigger nie może autoryzować płatności lub zwrotów — rozstrzygają zweryfikowane zdarzenia i stan serwerowy. Nie opierać wrażliwych operacji na `cron-job.org` bez potwierdzenia tej architektury.
+
+Przed zakupem przegląd dokumentacji/projektu; przed sprzedażą test na stagingu: **24 h bez wejść klientów**, terminowe zwalnianie rezerwacji i realizacja kolejki, 30 min niedostępności schedulera oraz odzyskanie pracy bez duplikatów, spóźniona płatność, timeout i równoległe uruchomienia. Wyniki i docelowe opóźnienia zatwierdza opiekun i właściciel. Nie wykonano tych testów w tym analitycznym PR.
+
+Wpływ ceny hostingu: `ΔTCO_B = (nowa cena netto/mies. − 42,59) × 12 lub 36`, przy niezmienionej pracy. Każde dodatkowe 25 zł/mies. to +300/+900 zł. Zmiana zakresu obsługi hostingu może zmienić również godziny utrzymania — wymagane osobne potwierdzenie.
+
+**Woo nadal rekomenduję jako praktyczne MVP ze względu na gotowy panel i procesy**, a nie bezwarunkowo najniższą opłatę za infrastrukturę. Przy hostingu B za **100 zł netto/mies.** technologia B kosztuje tyle samo co **A+P24 z Neon 5 USD**, ponieważ oba mają 110 zł/mies. stałych kosztów i te same prowizje/aktywację. Powyżej tego progu A w tym wariancie jest tańsze w samych opłatach; z referencyjną wyceną pracy B pozostaje tańsze w pokazanych scenariuszach. Progi obowiązują tylko przy osiągalnym niskim zużyciu Neon i podanym zakresie.
+
+Zachowujemy cztery modele z SKU rzeczywistych wariantów, mały magazyn i późniejszy limitowany druk. Audyt DietoLogicznie nadal nie wykazał kompletnego sklepu fizycznego. **Wybór hostingu, architektury i budżetu wymaga wyraźnego zatwierdzenia właściciela; rekomendacja nie jest zgodą na zakup ani gwarancją SLA.** PR #5, kod sklepu i DNS pozostają bez zmian.
 
 [S1]: https://vercel.com/pricing
 [S2]: https://vercel.com/docs/plans/hobby
@@ -348,3 +406,5 @@ Linki poniżej prowadzą do źródeł pierwotnych, sprawdzonych 02.11.2026. Publ
 [S28]: https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits
 [S29]: https://docs.stripe.com/payments/blik
 [S30]: https://europa.eu/youreurope/business/finance-and-tax/vat/cross-border-vat/
+[S31]: https://developers.przelewy24.pl/
+[S32]: https://neon.com/docs/introduction/scale-to-zero

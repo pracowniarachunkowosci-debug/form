@@ -49,5 +49,16 @@
   },
   "optional_mto_start_month": 7,
   "optional_mto_extra_maintenance_hours_monthly": "0.5",
+  "review_annex": {
+    "orders_monthly": 100,
+    "charged_basket_pln": 78,
+    "neon_low_usage_usd_monthly_budget": "5.00",
+    "direct_p24_extra_implementation_hours_low": 16,
+    "direct_p24_extra_implementation_hours_reference": 24,
+    "direct_p24_extra_implementation_hours_high": 32,
+    "alternative_b_hosting_net_monthly_budgets": ["75.00", "100.00", "150.00"],
+    "confirmed_existing_vercel_pro": false,
+    "note": "Sensitivity assumptions, not supplier quotes or confirmed consumption. P24 activation is included symmetrically. No existing Pro discount. Extra P24 hours are net of replacing the Stripe integration work."
+  },
   "note": "Planning model, not a quote. Renewal rates throughout. Gross charged baskets, net service/labour costs where VAT deductible, fees as published. Shipping/production and unquoted common costs are excluded and described in the report."
 }

@@ -42,6 +42,56 @@ def scenario(stack, n, basket, months, level='reference', rate=None):
             'payments':payments,'fixed':fixed(stack)*months,'activation':D(p['activation_budget']),
             'technology':tech,'build':build,'maintenance':maintenance,'tco':tech+build+maintenance}
 
+def review_annex():
+    """Controlled one-variable and combined sensitivities; baseline stays unchanged."""
+    a=M['review_annex']; fx=D(M['usd_pln_planning_rate'])
+    assert a['confirmed_existing_vercel_pro'] is False  # No evidence for a Pro discount.
+    low_neon_delta=(D(a['neon_low_usage_usd_monthly_budget'])-D(M['A']['neon_usd_monthly_budget']))*fx
+    extra=D(a['direct_p24_extra_implementation_hours_reference'])
+    variants=[
+        ('A_base','A: Stripe, Neon 20 USD','A','A',D(0),D(0)),
+        ('B_base','B: P24, OVH baza','B','B',D(0),D(0)),
+        ('A_P24','A: bezpośrednie P24, Neon 20 USD','A','B',D(0),extra),
+        ('A_low_neon','A: Stripe, Neon 5 USD','A','A',low_neon_delta,D(0)),
+        ('A_P24_low_neon','A: bezpośrednie P24, Neon 5 USD','A','B',low_neon_delta,extra),
+    ]
+    for budget in a['alternative_b_hosting_net_monthly_budgets']:
+        delta=D(budget)-D(M['B']['ovh_pro_renewal_net_monthly_equivalent'])
+        variants.append((f'B_host_{int(D(budget))}',f'B: hosting {fmt(budget)} zł/mies. (budżet)','B','B',delta,D(0)))
+    rows=[]
+    lines=['| Wariant; 100 zam./mies. × 78 zł | Technologia 12 mies. | Technologia 36 mies. | Z wyceną pracy 12 mies. | Z wyceną pracy 36 mies. |',
+           '| --- | ---: | ---: | ---: | ---: |']
+    for key,label,stack,gateway,delta,extra_hours in variants:
+        pair=[]
+        for months in M['horizons_months']:
+            row=scenario(stack,a['orders_monthly'],a['charged_basket_pln'],months)
+            row.update(variant=key,payment_fee_schedule=gateway)
+            row['fixed']+=delta*months
+            row['activation']=D(M['B']['activation_budget']) if gateway=='B' else D(0)
+            row['payments']=mixed_fee(gateway,a['charged_basket_pln'])*a['orders_monthly']*months
+            row['extra_implementation_hours']=extra_hours
+            row['build']+=extra_hours*D(M['hourly_rate_assumption'])
+            row['technology_before_activation']=row['fixed']+row['payments']
+            row['technology']=row['technology_before_activation']+row['activation']
+            row['tco']=row['technology']+row['build']+row['maintenance']
+            assert row['tco']==sum(row[k] for k in ('fixed','activation','payments','build','maintenance'))
+            rows.append(row);pair.append(row)
+        lines.append('| '+label+' | '+' | '.join(fmt(r[k]) for k in ('technology','tco') for r in pair)+' |')
+    by_key={(r['variant'],r['months']):r for r in rows}
+    assert by_key['A_P24',12]['technology_before_activation']==D('3612.00')
+    assert by_key['A_P24',12]['technology']==D('3671.00')
+    assert by_key['B_base',12]['technology']==D('2262.08')
+    for months in M['horizons_months']:
+        for stack in ('A','B'):
+            ref=scenario(stack,100,78,months)
+            assert all(by_key[f'{stack}_base',months][k]==v for k,v in ref.items())
+        assert by_key['A_base',months]['technology']-by_key['A_low_neon',months]['technology']==D(60)*months
+        assert by_key['A_P24_low_neon',months]['technology']==by_key['B_host_100',months]['technology']
+    for key,*_ in variants:
+        first=by_key[key,12];last=by_key[key,36]
+        assert last['tco']==3*first['tco']-2*(first['activation']+first['build'])
+    return '\n'.join(lines),rows
+
 def generate():
     assert sum(map(D,M['payment_mix'].values()))==1
     assert fee('A','blik',78)==D('2.25')
@@ -104,11 +154,12 @@ def generate():
     for v in ('A','B'):
         a=scenario(v,100,78,12);b=scenario(v,100,78,36)
         assert b['tco']==3*a['tco']-2*(a['build']+a['activation'])
-    payload=json.dumps({'model_date':M['as_of'],'scenarios':rows},ensure_ascii=False,indent=2,default=str)+'\n'
-    return '\n'.join(lines)+'\n',payload
+    annex,review_rows=review_annex()
+    payload=json.dumps({'model_date':M['as_of'],'scenarios':rows,'review_annex_scenarios':review_rows},ensure_ascii=False,indent=2,default=str)+'\n'
+    return '\n'.join(lines)+'\n',payload,annex
 
 if __name__=='__main__':
-    md,payload=generate()
+    md,payload,annex=generate()
     report=ROOT/'docs/STORE_TCO_NEXT_VS_WOO.md'
     current=report.read_text(encoding='utf-8')
     start='<!-- BEGIN GENERATED TCO -->'
@@ -119,9 +170,15 @@ if __name__=='__main__':
     embedded=md[md.index('## Prowizja'):]
     embedded='\n'.join('#'+line if line.startswith('## ') else line for line in embedded.splitlines())
     updated=prefix+start+'\n\n'+embedded+'\n\n'+end+suffix
+    start='<!-- BEGIN REVIEW ANNEX TCO -->'
+    end='<!-- END REVIEW ANNEX TCO -->'
+    assert updated.count(start)==updated.count(end)==1
+    prefix,rest=updated.split(start)
+    _,suffix=rest.split(end)
+    updated=prefix+start+'\n\n'+annex+'\n\n'+end+suffix
     for target,content in [(OUT/'tables.md',md),(OUT/'results.json',payload),(report,updated)]:
         if '--check' in sys.argv:
             assert target.read_text(encoding='utf-8')==content, f'Regenerate {target}'
         else:
             target.write_text(content,encoding='utf-8')
-    print('PASS: 36 scenarios (2 stacks x 3 volumes x 3 baskets x 2 horizons), fee rounding, accounting identities, sensitivity and deterministic outputs.')
+    print('PASS: 36 baseline + 16 review scenarios; fee rounding, symmetric P24 activation, low usage/hosting sensitivity, accounting identities and deterministic report/JSON outputs.')
