@@ -1,0 +1,36 @@
+{
+  "seed": {
+    "product": 11,
+    "variants": {
+      "A": 12,
+      "B": 13
+    },
+    "wordpress": "7.1.4",
+    "woocommerce": "11.2.1",
+    "php": "8.3.36"
+  },
+  "checks": {
+    "passed": true,
+    "product": {
+      "parent": 11,
+      "variants": {
+        "A": 12,
+        "B": 13
+      }
+    },
+    "stock_write_read_restored": true,
+    "orders": 0,
+    "purchase_blocked": true,
+    "mail_blocked": true,
+    "outbound_blocked": true,
+    "queue_probe": {
+      "id": 12,
+      "executed": true,
+      "status": "complete"
+    },
+    "database": "SQLite; not MySQL qualification"
+  },
+  "loopback": true,
+  "homepage": 200,
+  "storeCheckout": 403
+}
