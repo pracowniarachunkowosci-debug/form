@@ -7,6 +7,7 @@
   "charged_baskets_pln": [39, 78, 156],
   "horizons_months": [12, 36],
   "payment_mix": {"blik": "0.70", "eea_standard_card": "0.20", "online_transfer": "0.10"},
+  "payment_rounding": {"A": "half_up_total", "B": "percentage_ceiling_then_flat"},
   "payment_fees": {
     "A": {
       "blik": ["0.016", "1.00"],
@@ -58,7 +59,7 @@
     "direct_p24_extra_implementation_hours_high": 32,
     "alternative_b_hosting_net_monthly_budgets": ["75.00", "100.00", "150.00"],
     "confirmed_existing_vercel_pro": false,
-    "note": "Sensitivity assumptions, not supplier quotes or confirmed consumption. P24 activation is included symmetrically. No existing Pro discount. Extra P24 hours are net of replacing the Stripe integration work."
+    "note": "Sensitivity assumptions, not supplier quotes or confirmed consumption. Direct P24 on Vercel assumes an officially accepted dynamic-egress configuration, not yet confirmed; otherwise add network infrastructure cost (see PAYMENTS_VERCEL_COMPARISON.md). P24 activation is included symmetrically. No existing Pro discount. Extra P24 hours are net of replacing the Stripe integration work."
   },
   "note": "Planning model, not a quote. Renewal rates throughout. Gross charged baskets, net service/labour costs where VAT deductible, fees as published. Shipping/production and unquoted common costs are excluded and described in the report."
 }

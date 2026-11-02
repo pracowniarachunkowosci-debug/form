@@ -19,13 +19,13 @@
       "orders_monthly": 20,
       "basket": 39,
       "months": 12,
-      "payments": "192.0000",
+      "payments": "194.4000",
       "fixed": "631.08",
       "activation": "59.00",
-      "technology": "882.0800",
+      "technology": "884.4800",
       "build": "18600.00",
       "maintenance": "5400.00",
-      "tco": "24882.0800"
+      "tco": "24884.4800"
     },
     {
       "stack": "A",
@@ -71,13 +71,13 @@
       "orders_monthly": 20,
       "basket": 156,
       "months": 12,
-      "payments": "554.4000",
+      "payments": "556.8000",
       "fixed": "631.08",
       "activation": "59.00",
-      "technology": "1244.4800",
+      "technology": "1246.8800",
       "build": "18600.00",
       "maintenance": "5400.00",
-      "tco": "25244.4800"
+      "tco": "25246.8800"
     },
     {
       "stack": "A",
@@ -97,13 +97,13 @@
       "orders_monthly": 100,
       "basket": 39,
       "months": 12,
-      "payments": "960.0000",
+      "payments": "972.0000",
       "fixed": "631.08",
       "activation": "59.00",
-      "technology": "1650.0800",
+      "technology": "1662.0800",
       "build": "18600.00",
       "maintenance": "5400.00",
-      "tco": "25650.0800"
+      "tco": "25662.0800"
     },
     {
       "stack": "A",
@@ -149,13 +149,13 @@
       "orders_monthly": 100,
       "basket": 156,
       "months": 12,
-      "payments": "2772.0000",
+      "payments": "2784.0000",
       "fixed": "631.08",
       "activation": "59.00",
-      "technology": "3462.0800",
+      "technology": "3474.0800",
       "build": "18600.00",
       "maintenance": "5400.00",
-      "tco": "27462.0800"
+      "tco": "27474.0800"
     },
     {
       "stack": "A",
@@ -175,13 +175,13 @@
       "orders_monthly": 300,
       "basket": 39,
       "months": 12,
-      "payments": "2880.0000",
+      "payments": "2916.0000",
       "fixed": "631.08",
       "activation": "59.00",
-      "technology": "3570.0800",
+      "technology": "3606.0800",
       "build": "18600.00",
       "maintenance": "5400.00",
-      "tco": "27570.0800"
+      "tco": "27606.0800"
     },
     {
       "stack": "A",
@@ -227,13 +227,13 @@
       "orders_monthly": 300,
       "basket": 156,
       "months": 12,
-      "payments": "8316.0000",
+      "payments": "8352.0000",
       "fixed": "631.08",
       "activation": "59.00",
-      "technology": "9006.0800",
+      "technology": "9042.0800",
       "build": "18600.00",
       "maintenance": "5400.00",
-      "tco": "33006.0800"
+      "tco": "33042.0800"
     },
     {
       "stack": "A",
@@ -253,13 +253,13 @@
       "orders_monthly": 20,
       "basket": 39,
       "months": 36,
-      "payments": "576.0000",
+      "payments": "583.2000",
       "fixed": "1893.24",
       "activation": "59.00",
-      "technology": "2528.2400",
+      "technology": "2535.4400",
       "build": "18600.00",
       "maintenance": "16200.00",
-      "tco": "37328.2400"
+      "tco": "37335.4400"
     },
     {
       "stack": "A",
@@ -305,13 +305,13 @@
       "orders_monthly": 20,
       "basket": 156,
       "months": 36,
-      "payments": "1663.2000",
+      "payments": "1670.4000",
       "fixed": "1893.24",
       "activation": "59.00",
-      "technology": "3615.4400",
+      "technology": "3622.6400",
       "build": "18600.00",
       "maintenance": "16200.00",
-      "tco": "38415.4400"
+      "tco": "38422.6400"
     },
     {
       "stack": "A",
@@ -331,13 +331,13 @@
       "orders_monthly": 100,
       "basket": 39,
       "months": 36,
-      "payments": "2880.0000",
+      "payments": "2916.0000",
       "fixed": "1893.24",
       "activation": "59.00",
-      "technology": "4832.2400",
+      "technology": "4868.2400",
       "build": "18600.00",
       "maintenance": "16200.00",
-      "tco": "39632.2400"
+      "tco": "39668.2400"
     },
     {
       "stack": "A",
@@ -383,13 +383,13 @@
       "orders_monthly": 100,
       "basket": 156,
       "months": 36,
-      "payments": "8316.0000",
+      "payments": "8352.0000",
       "fixed": "1893.24",
       "activation": "59.00",
-      "technology": "10268.2400",
+      "technology": "10304.2400",
       "build": "18600.00",
       "maintenance": "16200.00",
-      "tco": "45068.2400"
+      "tco": "45104.2400"
     },
     {
       "stack": "A",
@@ -409,13 +409,13 @@
       "orders_monthly": 300,
       "basket": 39,
       "months": 36,
-      "payments": "8640.0000",
+      "payments": "8748.0000",
       "fixed": "1893.24",
       "activation": "59.00",
-      "technology": "10592.2400",
+      "technology": "10700.2400",
       "build": "18600.00",
       "maintenance": "16200.00",
-      "tco": "45392.2400"
+      "tco": "45500.2400"
     },
     {
       "stack": "A",
@@ -461,13 +461,13 @@
       "orders_monthly": 300,
       "basket": 156,
       "months": 36,
-      "payments": "24948.0000",
+      "payments": "25056.0000",
       "fixed": "1893.24",
       "activation": "59.00",
-      "technology": "26900.2400",
+      "technology": "27008.2400",
       "build": "18600.00",
       "maintenance": "16200.00",
-      "tco": "61700.2400"
+      "tco": "61808.2400"
     }
   ],
   "review_annex_scenarios": [

@@ -6,6 +6,8 @@ Po [recenzji odbiorowej](https://github.com/pracowniarachunkowosci-debug/form/pu
 
 ## 1. Rekomendacja dla tej firmy
 
+**Uzupełnienie o płatnościach na Vercelu:** [Autopay / P24 / Stripe](PAYMENTS_VERCEL_COMPARISON.md) porównuje integrację, IP, zwroty i koszty. Dla samego wariantu Next.js rekomenduje Stripe ze względu na priorytet utrzymania; nie zmienia poniższej rekomendacji platformy. Kwoty A+P24 bez dodatku sieciowego w aneksie są **warunkowe**: wymagają oficjalnego potwierdzenia dostępu ze zmiennych IP. Alternatywa Vercel Static IPs dodaje 4 800/14 400 zł w 12/36 miesięcy przy kursie modelu, plus transfer. Skorygowano zaokrąglenia P24 dla koszyków 39/156 zł zgodnie ze wzorem umowy; koszyk 78 zł pozostaje bez zmian.
+
 **Na pierwszą sprzedaż rekomenduję B: WooCommerce + własny motyw R04 + Przelewy24 + oficjalny InPost PL.** Bazowy punkt odniesienia cenowego to **nowy OVH Pro**, MySQL i Brevo. **Hosting i architektura schedulera pozostają do wyraźnego zatwierdzenia właściciela** po przeglądzie bezpieczeństwa i niezawodności; preferowany jest natywny cron co 1–5 min. OVH Pro z zewnętrznym triggerem nie jest zatwierdzonym wyborem. Zachować statyczne strony marki, a sklep uruchomić pod `/sklep/` na tym samym hostingu. Nie trzeba przenosić całej strony do WordPressa. [Aneks po recenzji](#12-aneks-po-recenzji--symetryczne-p24-wydatki-i-hosting) pokazuje także Next + bezpośrednie P24, mniejsze zużycie Neon i droższy hosting Woo.
 
 Powody wynikają z zakresu i audytu: cztery modele, mały magazyn, krajowa sprzedaż z BLIK, potrzebny panel zamówień i brak gotowego backendu magazynowego w `dietologicznie`. Przy koszyku 78 zł i 100 zamówieniach/mies. technologia oraz prowizje kosztują w modelu **4 748,40 zł dla A vs 2 262,08 zł dla B w 12 miesięcy**. Z referencyjnym nakładem pracy i utrzymaniem: **49 748,40 vs 26 262,08 zł**, a w 36 miesięcy **73 645,20 vs 41 468,24 zł**. To model ekonomiczny, nie oferta wykonania ani wycena pracy Codexa. **Kwoty z wyceną pracy nie są wymaganą wpłatą z góry ani prognozą faktur przy pracy własnej z AI.** Pełne założenia, nieznane koszty i wszystkie scenariusze są poniżej.
@@ -139,39 +141,39 @@ Poniższe liczby generuje [kalkulator](../scripts/store_tco.py) z [jawnych zało
 
 | Koszyk brutto | A: BLIK | A: karta EOG standard | A: przelew P24 przez Stripe | B: BLIK/karta 3DS/przelew | A: średnia miksu* | B: średnia miksu |
 | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| 39,00 | 1,62 | 1,59 | 1,74 | 0,80 | 1,6260 | 0,8000 |
+| 39,00 | 1,62 | 1,59 | 1,74 | 0,81 | 1,6260 | 0,8100 |
 | 78,00 | 2,25 | 2,17 | 2,48 | 1,31 | 2,2570 | 1,3100 |
-| 156,00 | 3,50 | 3,34 | 3,96 | 2,31 | 3,5140 | 2,3100 |
+| 156,00 | 3,50 | 3,34 | 3,96 | 2,32 | 3,5140 | 2,3200 |
 
-*Średnia ważona 70% BLIK / 20% standardowych kart EOG / 10% przelewów; nie zaokrąglamy średniej przed mnożeniem przez liczbę transakcji. Każda pojedyncza prowizja zaokrąglana do grosza HALF_UP jako jawne założenie modelu.
+*Średnia ważona 70% BLIK / 20% standardowych kart EOG / 10% przelewów; nie zaokrąglamy średniej przed mnożeniem przez liczbę transakcji. Stripe: HALF_UP do grosza jako założenie. P24: część procentowa w górę do grosza, potem opłata stała; dla kart przyjęto tę samą zasadę do potwierdzenia. Źródło i korekta: [porównanie operatorów](PAYMENTS_VERCEL_COMPARISON.md#3-koszty-bez-promocji).
 
 ### 12 miesięcy
 
 | Zam./mies. | Koszyk brutto | A: technologia + prowizje | B: technologia + prowizje | A: z pracą i utrzymaniem | B: z pracą i utrzymaniem |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 20 | 39,00 | 2 430,24 | 882,08 | 47 430,24 | 24 882,08 |
+| 20 | 39,00 | 2 430,24 | 884,48 | 47 430,24 | 24 884,48 |
 | 20 | 78,00 | 2 581,68 | 1 004,48 | 47 581,68 | 25 004,48 |
-| 20 | 156,00 | 2 883,36 | 1 244,48 | 47 883,36 | 25 244,48 |
-| 100 | 39,00 | 3 991,20 | 1 650,08 | 48 991,20 | 25 650,08 |
+| 20 | 156,00 | 2 883,36 | 1 246,88 | 47 883,36 | 25 246,88 |
+| 100 | 39,00 | 3 991,20 | 1 662,08 | 48 991,20 | 25 662,08 |
 | 100 | 78,00 | 4 748,40 | 2 262,08 | 49 748,40 | 26 262,08 |
-| 100 | 156,00 | 6 256,80 | 3 462,08 | 51 256,80 | 27 462,08 |
-| 300 | 39,00 | 7 893,60 | 3 570,08 | 52 893,60 | 27 570,08 |
+| 100 | 156,00 | 6 256,80 | 3 474,08 | 51 256,80 | 27 474,08 |
+| 300 | 39,00 | 7 893,60 | 3 606,08 | 52 893,60 | 27 606,08 |
 | 300 | 78,00 | 10 165,20 | 5 406,08 | 55 165,20 | 29 406,08 |
-| 300 | 156,00 | 14 690,40 | 9 006,08 | 59 690,40 | 33 006,08 |
+| 300 | 156,00 | 14 690,40 | 9 042,08 | 59 690,40 | 33 042,08 |
 
 ### 36 miesięcy
 
 | Zam./mies. | Koszyk brutto | A: technologia + prowizje | B: technologia + prowizje | A: z pracą i utrzymaniem | B: z pracą i utrzymaniem |
 | ---: | ---: | ---: | ---: | ---: | ---: |
-| 20 | 39,00 | 7 290,72 | 2 528,24 | 66 690,72 | 37 328,24 |
+| 20 | 39,00 | 7 290,72 | 2 535,44 | 66 690,72 | 37 335,44 |
 | 20 | 78,00 | 7 745,04 | 2 895,44 | 67 145,04 | 37 695,44 |
-| 20 | 156,00 | 8 650,08 | 3 615,44 | 68 050,08 | 38 415,44 |
-| 100 | 39,00 | 11 973,60 | 4 832,24 | 71 373,60 | 39 632,24 |
+| 20 | 156,00 | 8 650,08 | 3 622,64 | 68 050,08 | 38 422,64 |
+| 100 | 39,00 | 11 973,60 | 4 868,24 | 71 373,60 | 39 668,24 |
 | 100 | 78,00 | 14 245,20 | 6 668,24 | 73 645,20 | 41 468,24 |
-| 100 | 156,00 | 18 770,40 | 10 268,24 | 78 170,40 | 45 068,24 |
-| 300 | 39,00 | 23 680,80 | 10 592,24 | 83 080,80 | 45 392,24 |
+| 100 | 156,00 | 18 770,40 | 10 304,24 | 78 170,40 | 45 104,24 |
+| 300 | 39,00 | 23 680,80 | 10 700,24 | 83 080,80 | 45 500,24 |
 | 300 | 78,00 | 30 495,60 | 16 100,24 | 89 895,60 | 50 900,24 |
-| 300 | 156,00 | 44 071,20 | 26 900,24 | 103 471,20 | 61 700,24 |
+| 300 | 156,00 | 44 071,20 | 27 008,24 | 103 471,20 | 61 808,24 |
 
 ### Zakres nakładu pracy — koszyk 78 zł, stawka nadal 150 zł/h
 
@@ -322,7 +324,9 @@ Linki poniżej prowadzą do źródeł pierwotnych, sprawdzonych 02.11.2026. Publ
 
 ## 12. Aneks po recenzji — symetryczne P24, wydatki i hosting
 
-Uzupełnienie do [recenzji właściciela z 02.11.2026](https://github.com/pracowniarachunkowosci-debug/form/pull/7#pullrequestreview-5738329718). Bazowe 36 scenariuszy pozostaje bez zmian; poniżej 16 dodatkowych wyników przy **100 opłaconych zamówieniach/mies., pełnym koszyku 78 zł**, tym samym miksie i kursie. Założenia są w `review_annex` w JSON; kalkulator sprawdza obie części raportu.
+Uzupełnienie do [recenzji właściciela z 02.11.2026](https://github.com/pracowniarachunkowosci-debug/form/pull/7#pullrequestreview-5738329718). Poniżej 16 dodatkowych wyników przy **100 opłaconych zamówieniach/mies., pełnym koszyku 78 zł**, tym samym miksie i kursie. Założenia są w `review_annex` w JSON; kalkulator sprawdza obie części raportu. Późniejsza korekta zasad zaokrągleń P24 aktualizuje bazowe scenariusze 39/156 zł, ale nie zmienia liczb tego aneksu.
+
+**Warunek sieciowy A+P24:** tabele nie zawierają stałego IP ani proxy. Do czasu odpowiedzi P24 są analizą wrażliwości, nie gotową do zakupu architekturą Vercela. Koszty i ograniczenia: [nowe porównanie operatorów](PAYMENTS_VERCEL_COMPARISON.md#ip-najważniejsza-niewiadoma-dla-vercela). Wszystkie progi opłacalności A+P24 poniżej wymagają spełnienia tego warunku.
 
 ### 12.1. Ta sama bramka w A i B
 

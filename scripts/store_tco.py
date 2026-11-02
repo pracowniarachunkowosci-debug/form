@@ -3,7 +3,7 @@
 python scripts/store_tco.py           # writes tables, report section and JSON results
 python scripts/store_tco.py --check   # verifies math and committed output consistency
 """
-from decimal import Decimal as D, ROUND_HALF_UP
+from decimal import Decimal as D, ROUND_HALF_UP, ROUND_CEILING
 from pathlib import Path
 import json
 import sys
@@ -21,6 +21,8 @@ def fmt(value):
 
 def fee(stack, method, basket):
     rate, flat = map(D, M['payment_fees'][stack][method])
+    if M['payment_rounding'][stack] == 'percentage_ceiling_then_flat':
+        return (D(basket)*rate).quantize(CENT, rounding=ROUND_CEILING)+flat
     return money(D(basket)*rate+flat)
 
 def mixed_fee(stack, basket):
@@ -96,6 +98,8 @@ def generate():
     assert sum(map(D,M['payment_mix'].values()))==1
     assert fee('A','blik',78)==D('2.25')
     assert fee('B','blik',78)==D('1.31')
+    assert fee('B','blik',39)==D('0.81')
+    assert fee('B','online_transfer',156)==D('2.32')
     assert mixed_fee('A',78)==D('2.257')
     assert mixed_fee('B',78)==D('1.31')
     assert fixed('A')==170 and fixed('B')==D('52.59')
@@ -109,7 +113,7 @@ def generate():
            '| ---: | ---: | ---: | ---: | ---: | ---: | ---: |']
     for s in M['charged_baskets_pln']:
         lines.append('| '+' | '.join([fmt(s),fmt(fee('A','blik',s)),fmt(fee('A','eea_standard_card',s)),fmt(fee('A','online_transfer',s)),fmt(fee('B','blik',s)),str(mixed_fee('A',s)).replace('.',','),str(mixed_fee('B',s)).replace('.',',')])+' |')
-    lines+=['','*Średnia ważona 70% BLIK / 20% standardowych kart EOG / 10% przelewów; nie zaokrąglamy średniej przed mnożeniem przez liczbę transakcji. Każda pojedyncza prowizja zaokrąglana do grosza HALF_UP jako jawne założenie modelu.','']
+    lines+=['','*Średnia ważona 70% BLIK / 20% standardowych kart EOG / 10% przelewów; nie zaokrąglamy średniej przed mnożeniem przez liczbę transakcji. Stripe: HALF_UP do grosza jako założenie. P24: część procentowa w górę do grosza, potem opłata stała; dla kart przyjęto tę samą zasadę do potwierdzenia. Źródło i korekta: [porównanie operatorów](../PAYMENTS_VERCEL_COMPARISON.md#3-koszty-bez-promocji).','']
     for months in M['horizons_months']:
         lines += [f'## {months} miesięcy','',
                   '| Zam./mies. | Koszyk brutto | A: technologia + prowizje | B: technologia + prowizje | A: z pracą i utrzymaniem | B: z pracą i utrzymaniem |',
@@ -169,6 +173,7 @@ if __name__=='__main__':
     _,suffix=rest.split(end)
     embedded=md[md.index('## Prowizja'):]
     embedded='\n'.join('#'+line if line.startswith('## ') else line for line in embedded.splitlines())
+    embedded=embedded.replace('(../PAYMENTS_VERCEL_COMPARISON.md', '(PAYMENTS_VERCEL_COMPARISON.md')
     updated=prefix+start+'\n\n'+embedded+'\n\n'+end+suffix
     start='<!-- BEGIN REVIEW ANNEX TCO -->'
     end='<!-- END REVIEW ANNEX TCO -->'
