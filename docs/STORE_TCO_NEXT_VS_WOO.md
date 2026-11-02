@@ -1,6 +1,8 @@
 # Pracownia Form: Next.js / Vercel / Stripe vs WordPress / WooCommerce / Przelewy24
 
-**Raport do Issue #6 · data sprawdzenia źródeł: 2 listopada 2026 · status: do zatwierdzenia.**
+**Raport do Issue #6 · data sprawdzenia źródeł: 2 listopada 2026 · analiza odebrana w recenzji; hosting i wdrożenie wymagają osobnej decyzji.**
+
+Po [recenzji odbiorowej](https://github.com/pracowniarachunkowosci-debug/form/pull/7#pullrequestreview-5738562410) dodano [shortlistę LH.pl Apple / MyDevil MD2](WOO_HOSTING_SHORTLIST.md), ceny odnowienia oraz brakujące potwierdzenia Action Scheduler. Nie zmienia ona bazowych założeń kalkulatora ani nie zatwierdza zakupu usług.
 
 ## 1. Rekomendacja dla tej firmy
 
