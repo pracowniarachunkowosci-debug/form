@@ -1,0 +1,65 @@
+{
+  "as_of": "2026-11-02",
+  "currency": "PLN",
+  "usd_pln_planning_rate": "4.00",
+  "hourly_rate_assumption": "150.00",
+  "order_volumes_monthly": [20, 100, 300],
+  "charged_baskets_pln": [39, 78, 156],
+  "horizons_months": [12, 36],
+  "payment_mix": {"blik": "0.70", "eea_standard_card": "0.20", "online_transfer": "0.10"},
+  "payment_rounding": {"A": "half_up_total", "B": "percentage_ceiling_then_flat"},
+  "payment_fees": {
+    "A": {
+      "blik": ["0.016", "1.00"],
+      "eea_standard_card": ["0.015", "1.00"],
+      "online_transfer": ["0.019", "1.00"]
+    },
+    "B": {
+      "blik": ["0.0129", "0.30"],
+      "eea_standard_card": ["0.0129", "0.30"],
+      "online_transfer": ["0.0129", "0.30"]
+    }
+  },
+  "A": {
+    "vercel_usd_monthly": "20.00",
+    "neon_usd_monthly_budget": "20.00",
+    "email_monthly_base": "0.00",
+    "offsite_backup_monthly_budget": "10.00",
+    "activation_budget": "0.00",
+    "implementation_hours_low": 188,
+    "implementation_hours_reference": 252,
+    "implementation_hours_high": 316,
+    "maintenance_hours_low": 2,
+    "maintenance_hours_reference": 4,
+    "maintenance_hours_high": 6,
+    "mto_hours_reference": 44
+  },
+  "B": {
+    "ovh_pro_renewal_net_monthly_equivalent": "42.59",
+    "ovh_pro_promotional_first_year_net": "101.88",
+    "email_monthly_base": "0.00",
+    "offsite_backup_monthly_budget": "10.00",
+    "activation_budget": "59.00",
+    "implementation_hours_low": 92,
+    "implementation_hours_reference": 124,
+    "implementation_hours_high": 156,
+    "maintenance_hours_low": 2,
+    "maintenance_hours_reference": 3,
+    "maintenance_hours_high": 5,
+    "mto_hours_reference": 36
+  },
+  "optional_mto_start_month": 7,
+  "optional_mto_extra_maintenance_hours_monthly": "0.5",
+  "review_annex": {
+    "orders_monthly": 100,
+    "charged_basket_pln": 78,
+    "neon_low_usage_usd_monthly_budget": "5.00",
+    "direct_p24_extra_implementation_hours_low": 16,
+    "direct_p24_extra_implementation_hours_reference": 24,
+    "direct_p24_extra_implementation_hours_high": 32,
+    "alternative_b_hosting_net_monthly_budgets": ["75.00", "100.00", "150.00"],
+    "confirmed_existing_vercel_pro": false,
+    "note": "Sensitivity assumptions, not supplier quotes or confirmed consumption. Direct P24 on Vercel assumes an officially accepted dynamic-egress configuration, not yet confirmed; otherwise add network infrastructure cost (see PAYMENTS_VERCEL_COMPARISON.md). P24 activation is included symmetrically. No existing Pro discount. Extra P24 hours are net of replacing the Stripe integration work."
+  },
+  "note": "Planning model, not a quote. Renewal rates throughout. Gross charged baskets, net service/labour costs where VAT deductible, fees as published. Shipping/production and unquoted common costs are excluded and described in the report."
+}
