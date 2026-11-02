@@ -1,0 +1,15 @@
+{
+  "name": "pracownia-form-woo-local-prototype",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node start.mjs",
+    "test": "node start.mjs --test"
+  },
+  "devDependencies": {
+    "@wp-playground/cli": "3.1.62"
+  },
+  "engines": {
+    "node": ">=24.18.0"
+  }
+}
