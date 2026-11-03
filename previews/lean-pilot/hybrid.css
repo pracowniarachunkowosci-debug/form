@@ -1,0 +1,35 @@
+/* Approved hybrid: unchanged R04 opening; neutral light product sections.
+   Scope overrides so the seasonal header, hero, sets and footer retain R04. */
+.winter-page.hybrid-pilot { --paper: #f7f6f2; --cream: #f7f6f2; }
+.hybrid-pilot .family,
+.hybrid-pilot .fulfilment,
+.hybrid-pilot .pilot-info,
+.hybrid-pilot .premiere-section,
+.hybrid-pilot .archive-link {
+  --ink: #272725;
+  --muted: #5b5b56;
+  --rule: #ccc8c0;
+  --burgundy: #272725;
+  color: var(--ink);
+}
+.hybrid-pilot .family .family-heading > p,
+.hybrid-pilot .product-description,
+.hybrid-pilot .product-details p,
+.hybrid-pilot .photo-placeholder,
+.hybrid-pilot .photo-index,
+.hybrid-pilot .fulfilment p { color: var(--muted); }
+.hybrid-pilot .family .product-photo { background: #e8e4dd; }
+.hybrid-pilot .placeholder-mark { color: #b7a58b; } /* aria-hidden decoration */
+.hybrid-pilot .family .editorial-button,
+.hybrid-pilot .premiere-section .editorial-button {
+  background: var(--ink); border-color: var(--ink); color: var(--paper);
+}
+.hybrid-pilot .family .editorial-button:hover,
+.hybrid-pilot .premiere-section .editorial-button:hover {
+  background: #41413d; border-color: #41413d;
+}
+.hybrid-pilot .family :focus-visible,
+.hybrid-pilot .fulfilment :focus-visible,
+.hybrid-pilot .pilot-info :focus-visible,
+.hybrid-pilot .premiere-section :focus-visible,
+.hybrid-pilot .archive-link :focus-visible { outline-color: var(--ink); }
