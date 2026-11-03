@@ -1,5 +1,7 @@
 # PR #11 — uzupełnienie fazy A, 3 listopada 2026
 
+**Aktualizacja po korekcie priorytetu:** tymczasowe hero z otwartą bombką jest już widoczne w podglądzie, oznaczone jako wizualizacja AI. [Wynik, porównania i ograniczenie rozdzielczości](HERO_CONCEPT_PREVIEW.md). Oczekiwanie na zdjęcia poniżej dotyczy finalnej fotografii, nie bieżącego preview.
+
 Realizuje [recenzję](https://github.com/pracowniarachunkowosci-debug/form/pull/11#issuecomment-6608120252) i [decyzję o przyszłym hero](https://github.com/pracowniarachunkowosci-debug/form/pull/11#issuecomment-6615915478). To przygotowanie do odbioru, **NO-GO dla publikacji**. Pozostałe PR pozostają nietknięte.
 
 ## Wykonane teraz

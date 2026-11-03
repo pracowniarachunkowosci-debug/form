@@ -3,6 +3,7 @@
 Statyczna strona HTML/CSS/JS. Gałąź publikacyjna LH zawiera zatwierdzony hybrydowy WINTER AFTER DARK R04; pozostaje draftem bez zgody na wdrożenie.
 
 - [Raport zmian i podglądy](docs/PUBLICATION_REPORT.md)
+- [Aktualny hero z otwartą bombką — porównanie desktop/mobile](docs/HERO_CONCEPT_PREVIEW.md)
 - [Audyt LH/DNS, plan migracji, rollback i checklista](docs/LH_ORANGE_MIGRATION.md)
 - [Odpowiedź na recenzję PR #11 i testy cookies](docs/PR11_REVIEW_RESPONSE.md)
 - [Bramki GO/NO-GO i pytania do dostawców](docs/RELEASE_READINESS.md)

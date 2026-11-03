@@ -29,11 +29,13 @@ for path in ('robots.txt', 'sitemap.xml'):
 html = (ROOT/'winter-26.html').read_text(encoding='utf-8')
 ga = lambda s: next(x for x in re.findall(r'<script>.*?</script>', s, re.S) if 'PF_GA_MEASUREMENT_ID' in x)
 assert ga(html) == ga(baseline('winter-26.html')), 'GA initialization changed'
-# Consent changes are permitted; WINTER main/header stay frozen pending real photos.
+# Owner approved a temporary concept image; all content outside its figure stays frozen.
 approved = subprocess.check_output(['git', 'show', 'e054e60:winter-26.html'], cwd=ROOT).decode().replace('\r\n', '\n')
 for element in ('main', 'header'):
     block = lambda s: re.search(r'<' + element + r'\b.*?</' + element + '>', s, re.S).group()
-    assert block(html) == block(approved), f'Approved {element} changed before real photos arrive'
+    without_hero = lambda s: re.sub(r'<figure class="w26-hero-art">.*?</figure>', '', s, flags=re.S)
+    assert without_hero(block(html)) == without_hero(block(approved)), f'Approved {element} changed outside hero figure'
+assert 'Wizualizacja koncepcyjna AI na podstawie modelu Pracowni Form.' in html
 script = (ROOT/'script.js').read_text(encoding='utf-8')
 original_script = baseline('script.js')
 assert script.split('// Cookie consent + GA4')[0] == original_script.split('// Cookie consent + GA4')[0]
@@ -82,7 +84,7 @@ for p in ROOT.glob('*.css'):
 hero = next(a for t, a in pages['winter-26.html'].tags if t == 'img')
 assert all(hero.get(k) for k in ('width', 'height', 'sizes', 'srcset', 'alt'))
 assert hero.get('fetchpriority') == 'high' and hero.get('loading') != 'lazy'
-for image in ROOT.glob('assets/winter-r04-*'):
+for image in [*ROOT.glob('assets/winter-r04-*'), *ROOT.glob('assets/winter-open-concept-*')]:
     assert image.stat().st_size < 150000, image.name
 for name in ('polityka-prywatnosci.html', 'zasady-premiery.html'):
     legal = (ROOT/name).read_text(encoding='utf-8')

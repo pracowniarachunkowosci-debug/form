@@ -1,10 +1,10 @@
 # WINTER 26 — przyjęcie rzeczywistych fotografii
 
-Status 03.11.2026: **oczekujemy na zdjęcia właściciela**. Załączony zrzut jest kierunkiem kompozycji, nie zdjęciem produktu ani zatwierdzonym assetem. Nie kopiujemy go do hero, nie generujemy zastępczej geometrii.
+Status po korekcie priorytetu 03.11.2026: **tymczasowy hero z otwartą bombką już działa**. Wycięto samą scenę z dostarczonego screenshotu i oznaczono ją jako wizualizację koncepcyjną AI. [Porównanie przed/po, źródło i eksporty](HERO_CONCEPT_PREVIEW.md). Na rzeczywiste zdjęcia oczekuje wyłącznie kolejny etap finalnej fotografii, nie lokalny preview. Nie generowano nowej geometrii.
 
 Decyzja: otwarta rzeźbiarska bombka z szerokich przecinających się wstęg, jasna matowa lekko nakrapiana powierzchnia i rzeczywista istniejąca ozdobna zawieszka. Nie zamknięta spirala, nie relief swetra. Nie przypisujemy jej automatycznie do modelu HELIX ani konkretnego SKU bez potwierdzenia właściciela.
 
-Do tego czasu zachowane: cała treść, CTA, nagłówek, nawigacja, paleta R04 i cztery neutralne placeholdery. Aktualny podpis „Kompozycja editorial AI, bez produktów. Fotografie kolekcji w przygotowaniu.” opisuje obecną grafikę bez bombki zgodnie z prawdą.
+Zachowane: treść poza podpisem/alt hero, CTA, nagłówek, nawigacja, paleta R04 i cztery neutralne placeholdery. Aktualny podpis: „Wizualizacja koncepcyjna AI na podstawie modelu Pracowni Form. Fotografia produktu w przygotowaniu.” Nie przedstawia obrazu jako rzeczywistej fotografii.
 
 Po otrzymaniu zdjęć:
 

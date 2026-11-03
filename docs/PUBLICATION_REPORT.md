@@ -1,5 +1,7 @@
 # Raport przygotowania publikacji — hybrydowy R04 / LH Orange
 
+**Nowsza iteracja hero:** [wizualizacja otwartej bombki, źródło i porównanie desktop/mobile](HERO_CONCEPT_PREVIEW.md). Jest już podłączona lokalnie. Opis i podglądy editorialu bez produktu poniżej dokumentują poprzedni etap. Po tej zmianie historyczna paczka e3eba15 nie jest bieżącym kandydatem do wdrożenia.
+
 3 listopada 2026. **Draft do przeglądu, bez wdrożenia.** Realizacja fazy A z [PR #10](https://github.com/pracowniarachunkowosci-debug/form/pull/10#issuecomment-6606701517). [Audyt DNS/LH, migracja, rollback i warunki wdrożenia](LH_ORANGE_MIGRATION.md).
 
 Aktualizacja po obu recenzjach PR #11: [odpowiedź na uwagi i nowe testy](PR11_REVIEW_RESPONSE.md), [warunki GO/NO-GO](RELEASE_READINESS.md), [plan kontrolowanego testu Brevo](BREVO_ACCEPTANCE_PLAN.md), [oczekiwanie na zdjęcia](PRODUCT_PHOTO_HANDOFF.md). To dokumenty bieżącego stanu; wcześniejszy audyt panelu pozostaje odczytem historycznym.

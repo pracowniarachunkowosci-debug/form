@@ -12,7 +12,7 @@ Stan: 03.11.2026, **NO-GO / faza A**. Nie przeprowadzono uploadu, dodawania dome
 | G4 | Pełny eksport DNS, znane DKIM i zależności, zatwierdzony minimalny diff WWW | Eksport OVH niepozyskany; właściciel/operator DNS |
 | G5 | Odpowiedź LH o poczcie zewnętrznej i Multipoczcie dla serwera | Niepotwierdzone; potrzebna odpowiedź LH, bez zgadywania checkboxa |
 | G6 | Potwierdzony certyfikat przed zmianą lub zaakceptowane okno ryzyka | Niepotwierdzone; LH + właściciel. Bez tego brak zmiany DNS |
-| G7 | Czysty commit, ZIP, manifest i zgodny SHA-256 | Lokalny kandydat do wglądu; identyfikatory w `RELEASE_CANDIDATE.md`; każda zmiana pliku WWW unieważnia odbiór paczki |
+| G7 | Czysty commit, ZIP, manifest i zgodny SHA-256 | Poprzednia paczka w `RELEASE_CANDIDATE.md` jest archiwalna po podmianie hero; przed wdrożeniem zbudować i odebrać nową z zatwierdzoną grafiką i dokumentami |
 | G8 | Osobna zgoda fazy B, termin, operator i osoba decydująca o rollback | Brak; akceptacja PR/zdjęcia nie zastępuje zgody na hosting/DNS |
 
 Wszystkie G1–G8 muszą być zamknięte. Obecna paczka jest kandydatem do przeglądu, nie do wgrania. Zatwierdzenie zapowiedzi nie uruchamia sprzedaży. Fotografie/parametry/SKU/GPSR/płatności mają odrębny odbiór przed sprzedażą.
