@@ -3071,4 +3071,17 @@ html.js body.is-ready .hero-content.visible {
   .newsletter-form-col h2 {
     font-size: clamp(48px, 15vw, 72px);
   }
+}/* Re-openable consent controls; existing R04 page layout stays unchanged. */
+.cookie-settings-link, .cookie-close {
+  font: inherit; color: inherit; background: transparent; border: 0;
+  text-decoration: underline; text-underline-offset: 4px; cursor: pointer;
+  min-height: 44px; padding: 10px 0;
 }
+.cookie-settings-link { display: block; margin: 16px auto 0; }
+.cookie-banner { max-height: calc(100dvh - 36px); overflow-y: auto; }
+.cookie-banner[hidden] { display: none !important; }
+.cookie-banner .cookie-close { color: #f7efe4; }
+.cookie-banner .cookie-copy a { color: #f7efe4; text-decoration: underline; }
+.cookie-banner [data-cookie-status] { font-size: 14px; }
+.cookie-settings-link:focus-visible, .cookie-banner button:focus-visible,
+.cookie-banner a:focus-visible { outline: 3px solid #cfb989; outline-offset: 4px; }

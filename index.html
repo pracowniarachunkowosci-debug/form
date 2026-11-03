@@ -40,8 +40,6 @@
   />
   <meta name="twitter:image" content="https://pracowniaform.com/assets/hero-form.webp" />
 <link rel="icon" href="favicon.svg" type="image/svg+xml" />
-<link rel="alternate icon" href="favicon.ico" />
-<link rel="apple-touch-icon" href="apple-touch-icon.png" />
 <meta name="theme-color" content="#0b0b0a" />
   <link rel="stylesheet" href="styles.css" />
   <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css" />
@@ -268,7 +266,7 @@
       </h2>
 
       <p class="intro-copy">
-        Nie projektujemy sezonowych dekoracji. Tworzymy formy, które mają zostać z Tobą na lata:
+        Projektujemy obiekty codzienne i kolekcje sezonowe. Tworzymy formy, które mają zostać z Tobą na lata:
         spokojne, funkcjonalne i dopracowane w każdym detalu.
       </p>
     </section>
@@ -546,9 +544,9 @@
           <h2>Dołącz do pierwszej premiery Pracowni Form.</h2>
 
           <p>
-            Pierwsze kolekcje - Nord, Stone i Kintsugi - zostaną udostępnione
-            w ograniczonej premierze. Osoby zapisane na listę otrzymają wcześniejszy
-            dostęp do informacji o dostępności, wykończeniach i pre-orderze.
+            Kolekcje Pracowni Form, w tym WINTER 26, są w przygotowaniu.
+            Osoby zapisane na listę otrzymają informacje o potwierdzonych modelach
+            i terminach premier. Zapis nie jest zamówieniem ani zobowiązaniem do zakupu.
           </p>
 
           <div class="brevo-form-wrap">
@@ -662,6 +660,7 @@
 
           <p class="form-note">
             Bez przypadkowych wiadomości. Tylko premiery, kolekcje i inspiracje.
+            <a href="polityka-prywatnosci.html">Przeczytaj politykę prywatności</a>.
           </p>
         </div>
 
@@ -841,30 +840,10 @@
       © 2026 Pracownia Form. Projektowane i wykonywane w Polsce.
       Inspirowane światem. Tworzone z uważnością.
     </p>
+    <button type="button" class="cookie-settings-link" data-cookie-settings aria-controls="cookie-settings" aria-expanded="false">Ustawienia cookies</button>
   </footer>
 
-  <div class="cookie-banner" data-cookie-banner hidden>
-    <div class="cookie-copy">
-      <p class="eyebrow">Prywatność</p>
 
-      <h3>Używamy cookies analitycznych.</h3>
-
-      <p>
-        Korzystamy z Google Analytics, aby sprawdzać, które treści i kolekcje są
-        najbardziej pomocne. Analityka zostanie uruchomiona tylko po Twojej zgodzie.
-      </p>
-    </div>
-
-    <div class="cookie-actions">
-      <button type="button" class="btn btn-secondary" data-cookie-reject>
-        Odrzuć
-      </button>
-
-      <button type="button" class="btn btn-primary" data-cookie-accept>
-        Akceptuję
-      </button>
-    </div>
-  </div>
 
   <script>
     window.REQUIRED_CODE_ERROR_MESSAGE = 'Wybierz kod kraju';
@@ -896,6 +875,20 @@
   </script>
 
   <script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
-  <script src="script.js"></script>
+  <div class="cookie-banner" id="cookie-settings" data-cookie-banner role="region" aria-label="Ustawienia cookies" hidden>
+  <div class="cookie-copy">
+    <p class="eyebrow">Prywatność</p>
+    <h3>Ustawienia cookies</h3>
+    <p>Analityka Google Analytics działa tylko za Twoją zgodą. Możesz ją zmienić lub wycofać przyciskiem „Ustawienia cookies” w stopce. Odmowa nie blokuje strony ani listy premierowej.</p>
+    <p><a href="polityka-prywatnosci.html#cookies">Więcej o prywatności i cookies</a></p>
+    <p data-cookie-status role="status" aria-live="polite"></p>
+  </div>
+  <div class="cookie-actions">
+    <button type="button" class="btn btn-secondary" data-cookie-reject>Odrzuć / wycofaj zgodę</button>
+    <button type="button" class="btn btn-primary" data-cookie-accept>Akceptuję analitykę</button>
+    <button type="button" class="cookie-close" data-cookie-close>Zamknij bez zmian</button>
+  </div>
+</div>
+<script src="script.js"></script>
 </body>
 </html>

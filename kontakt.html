@@ -10,6 +10,8 @@
     content="Skontaktuj się z Pracownią Form. Tworzymy ponadczasowe obiekty do domu i ogrodu inspirowane śródziemnomorskim stylem życia."
   />
 
+  <link rel="canonical" href="https://pracowniaform.com/kontakt.html" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -27,15 +29,15 @@
       </span>
     </a>
 
-    <nav class="site-nav" aria-label="Nawigacja główna">
+    <nav class="site-nav" id="siteNav" aria-label="Nawigacja główna">
       <a href="index.html#kolekcje">Kolekcje</a>
-      <a href="index.html#manifest">Manifest</a>
-      <a href="index.html#wykonczenia">Wykończenia</a>
+      <a href="index.html#pracownia">Manifest</a>
+      <a href="index.html#materialy">Wykończenia</a>
       <a href="index.html#faq">FAQ</a>
       <a href="index.html#preorder">Lista premierowa</a>
     </nav>
 
-    <button class="menu-toggle" aria-label="Otwórz menu" type="button">
+    <button class="menu-toggle" id="menuBtn" aria-expanded="false" aria-controls="siteNav" aria-label="Otwórz menu" type="button">
       <span></span>
       <span></span>
     </button>
@@ -76,7 +78,7 @@
 
           <div>
             <span>Instagram</span>
-            <a href="#" target="_blank" rel="noopener">Wkrótce</a>
+            <span>Wkrótce</span>
           </div>
 
           <div>
@@ -125,8 +127,8 @@
 
       <div>
         <h4>Marka</h4>
-        <a href="index.html#manifest">Manifest</a>
-        <a href="index.html#wykonczenia">Wykończenia</a>
+        <a href="index.html#pracownia">Manifest</a>
+        <a href="index.html#materialy">Wykończenia</a>
         <a href="kontakt.html">Kontakt</a>
       </div>
 
@@ -138,10 +140,25 @@
     </div>
 
     <p class="copyright">
-      © 2025 Pracownia Form. Wszystkie prawa zastrzeżone.
+      © 2026 Pracownia Form. Wszystkie prawa zastrzeżone.
     </p>
+    <button type="button" class="cookie-settings-link" data-cookie-settings aria-controls="cookie-settings" aria-expanded="false">Ustawienia cookies</button>
   </footer>
 
-  <script src="script.js"></script>
+  <div class="cookie-banner" id="cookie-settings" data-cookie-banner role="region" aria-label="Ustawienia cookies" hidden>
+  <div class="cookie-copy">
+    <p class="eyebrow">Prywatność</p>
+    <h3>Ustawienia cookies</h3>
+    <p>Analityka Google Analytics działa tylko za Twoją zgodą. Możesz ją zmienić lub wycofać przyciskiem „Ustawienia cookies” w stopce. Odmowa nie blokuje strony ani listy premierowej.</p>
+    <p><a href="polityka-prywatnosci.html#cookies">Więcej o prywatności i cookies</a></p>
+    <p data-cookie-status role="status" aria-live="polite"></p>
+  </div>
+  <div class="cookie-actions">
+    <button type="button" class="btn btn-secondary" data-cookie-reject>Odrzuć / wycofaj zgodę</button>
+    <button type="button" class="btn btn-primary" data-cookie-accept>Akceptuję analitykę</button>
+    <button type="button" class="cookie-close" data-cookie-close>Zamknij bez zmian</button>
+  </div>
+</div>
+<script src="script.js"></script>
 </body>
 </html>

@@ -10,6 +10,8 @@
     content="Polityka prywatności Pracowni Form. Informacje o przetwarzaniu danych osobowych, kontakcie i liście premierowej."
   />
 
+  <link rel="canonical" href="https://pracowniaform.com/polityka-prywatnosci.html" />
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
   <link rel="stylesheet" href="styles.css" />
 </head>
 
@@ -27,15 +29,15 @@
       </span>
     </a>
 
-    <nav class="site-nav" aria-label="Nawigacja główna">
+    <nav class="site-nav" id="siteNav" aria-label="Nawigacja główna">
       <a href="index.html#kolekcje">Kolekcje</a>
-      <a href="index.html#manifest">Manifest</a>
-      <a href="index.html#wykonczenia">Wykończenia</a>
+      <a href="index.html#pracownia">Manifest</a>
+      <a href="index.html#materialy">Wykończenia</a>
       <a href="index.html#faq">FAQ</a>
       <a href="kontakt.html">Kontakt</a>
     </nav>
 
-    <button class="menu-toggle" aria-label="Otwórz menu" type="button">
+    <button class="menu-toggle" id="menuBtn" aria-expanded="false" aria-controls="siteNav" aria-label="Otwórz menu" type="button">
       <span></span>
       <span></span>
     </button>
@@ -66,13 +68,14 @@
           <a href="#czas">Czas przechowywania</a>
           <a href="#prawa">Prawa użytkownika</a>
           <a href="#cookies">Cookies</a>
+          <a href="#odbiorcy">Odbiorcy</a>
+          <a href="#transfery">Transfery danych</a>
           <a href="#kontakt">Kontakt</a>
         </aside>
 
         <article class="legal-content">
-          <p class="legal-updated">
-            Data ostatniej aktualizacji: <strong>[uzupełnij datę]</strong>
-          </p>
+          <p class="legal-updated">Projekt z <time datetime="2026-11-03">3 listopada 2026 r.</time> do merytorycznej akceptacji właściciela. Data zatwierdzenia i wejścia w życie nie została ustalona.</p>
+          <div class="legal-callout"><p>Projekt opisuje listę premierową i stronę informacyjną. Przed publikacją wymagane jest potwierdzenie ustawień retencji, umów z dostawcami i obsługi zgłoszeń. Sprzedaż i płatności nie są uruchomione.</p></div>
 
           <section id="administrator">
             <h2>1. Administrator danych</h2>
@@ -81,10 +84,11 @@
             </p>
 
             <p>
-              <strong>[pełna nazwa firmy / imię i nazwisko]</strong><br />
-              [adres działalności]<br />
-              NIP: [uzupełnij]<br />
-              E-mail: <a href="mailto:kontakt@pracowniaform.pl">kontakt@pracowniaform.pl</a>
+              <strong>PRACOWNIA RACHUNKOWOŚCI sp. z o.o.</strong><br />
+              ul. Trawowa 19/1, 54-614 Wrocław<br />
+              NIP: 8943197084<br />
+              KRS: 0000997294<br />
+              E-mail: <a href="mailto:kontakt@pracowniaform.com">kontakt@pracowniaform.com</a>
             </p>
 
             <p>
@@ -100,32 +104,18 @@
 
             <ul>
               <li>adres e-mail podany przy zapisie na listę premierową,</li>
-              <li>imię, jeśli zostało dobrowolnie podane,</li>
+              <li>imię i zainteresowanie kolekcjami, jeśli zostały dobrowolnie podane,</li>
+              <li>dane potwierdzające zgodę lub jej wycofanie oraz obsługę zapisu,</li>
               <li>dane podane w korespondencji e-mail,</li>
               <li>podstawowe dane techniczne związane z korzystaniem ze strony, takie jak adres IP, typ przeglądarki lub informacje o urządzeniu.</li>
             </ul>
           </section>
 
-          <section id="cele">
-            <h2>3. Cele i podstawy przetwarzania danych</h2>
-            <p>
-              Dane osobowe mogą być przetwarzane w następujących celach:
-            </p>
-
-            <ul>
-              <li>
-                obsługa korespondencji i odpowiedzi na zapytania — na podstawie prawnie uzasadnionego interesu Administratora,
-              </li>
-              <li>
-                prowadzenie listy premierowej i wysyłka informacji o kolekcjach, premierach oraz pre-orderze — na podstawie zgody osoby zapisującej się,
-              </li>
-              <li>
-                zabezpieczenie strony i przeciwdziałanie nadużyciom — na podstawie prawnie uzasadnionego interesu Administratora,
-              </li>
-              <li>
-                dochodzenie lub obrona przed roszczeniami — na podstawie prawnie uzasadnionego interesu Administratora.
-              </li>
-            </ul>
+          <section id="cele"><h2>3. Cele i podstawy przetwarzania</h2>
+            <ul><li>Lista premierowa i wiadomości o kolekcjach — dobrowolna zgoda (art. 6 ust. 1 lit. a RODO), z możliwością wycofania w każdej chwili.</li>
+            <li>Analityka odwiedzin Google Analytics — zgoda (art. 6 ust. 1 lit. a RODO), odrębna od zgody na wiadomości. Bez akceptacji analityka nie jest uruchamiana.</li>
+            <li>Odpowiedzi na korespondencję, bezpieczeństwo strony, dokumentowanie obsługi zgód oraz dochodzenie lub obrona roszczeń — prawnie uzasadniony interes administratora (art. 6 ust. 1 lit. f RODO), ograniczony do danych potrzebnych w danej sprawie.</li></ul>
+            <p>Podanie e-maila i zgody na wiadomości jest dobrowolne, ale konieczne do zapisu. Odmowa analityki nie wpływa na możliwość korzystania ze strony i listy.</p>
           </section>
 
           <section id="newsletter">
@@ -133,36 +123,31 @@
             <p>
               Zapis na listę premierową jest dobrowolny. Podanie adresu e-mail
               jest niezbędne, aby otrzymywać informacje o pierwszych kolekcjach,
-              dostępności, limitowanych wykończeniach i pre-orderze Pracowni Form.
+              potwierdzonych wariantach i premierach Pracowni Form.
             </p>
 
             <p>
               Zgodę na otrzymywanie wiadomości można wycofać w każdej chwili,
-              kontaktując się z nami pod adresem
-              <a href="mailto:kontakt@pracowniaform.pl">kontakt@pracowniaform.pl</a>.
+              korzystając z odnośnika wypisania w wiadomości albo kontaktując się z nami pod adresem
+              <a href="mailto:kontakt@pracowniaform.com">kontakt@pracowniaform.com</a>.
               Wycofanie zgody nie wpływa na zgodność z prawem przetwarzania,
               którego dokonano przed jej wycofaniem.
             </p>
 
             <p>
-              Po podłączeniu zewnętrznego systemu mailingowego, takiego jak Brevo,
-              niniejsza polityka zostanie uzupełniona o informacje dotyczące tego
-              dostawcy.
+              Formularz listy premierowej korzysta z systemu Brevo. Dane podane
+              w formularzu są przekazywane do tego systemu w celu obsługi zapisu
+              i wysyłki wiadomości dotyczących premier.
             </p>
           </section>
 
-          <section id="czas">
-            <h2>5. Jak długo przechowujemy dane?</h2>
-            <p>
-              Dane przechowujemy przez okres niezbędny do realizacji celu, w którym
-              zostały zebrane:
-            </p>
-
-            <ul>
-              <li>dane z korespondencji — przez czas potrzebny do obsługi sprawy, a następnie przez okres zabezpieczenia ewentualnych roszczeń,</li>
-              <li>dane z listy premierowej — do momentu wycofania zgody lub zakończenia prowadzenia listy,</li>
-              <li>dane techniczne — przez okres potrzebny do zapewnienia bezpieczeństwa i prawidłowego działania strony.</li>
-            </ul>
+          <section id="czas"><h2>5. Okresy przechowywania</h2>
+            <ul><li>Dane listy premierowej — do wycofania zgody lub zakończenia listy. Po wypisaniu adres może pozostać w ograniczonej liście blokującej kolejne wysyłki oraz w dokumentacji zgody, w zakresie potrzebnym do respektowania rezygnacji i obrony roszczeń.</li>
+            <li>Korespondencja — do zakończenia sprawy, a później tylko gdy dalsze przechowywanie jest potrzebne ze względu na roszczenia lub obowiązek prawny.</li>
+            <li>Logi hostingu i kopie zapasowe — w cyklach retencji operatora; konkretny okres logów i sposób usuwania kopii wymagają potwierdzenia przed publikacją tego projektu.</li>
+            <li>Dane analityczne — zgodnie z ustawieniem usługi Google Analytics. Obecnego ustawienia konta nie zweryfikowano; okres musi zostać potwierdzony przed publikacją.</li>
+            <li>Wybór cookies — zapamiętywany w tej przeglądarce do zmiany wyboru lub usunięcia danych witryny. Wycofanie zgody usuwa dostępne cookies analityczne tej witryny i wyłącza dalszy pomiar; nie usuwa automatycznie danych wcześniej zebranych przez Google.</li></ul>
+            <p>Ostateczne terminy oraz harmonogram usuwania danych wymagają zatwierdzenia administratora. Projekt nie potwierdza ustawień kont dostawców.</p>
           </section>
 
           <section id="prawa">
@@ -183,27 +168,31 @@
             </ul>
           </section>
 
-          <section id="cookies">
-            <h2>7. Pliki cookies</h2>
-            <p>
-              Strona może korzystać z niezbędnych plików cookies lub podobnych
-              technologii potrzebnych do jej prawidłowego działania.
-            </p>
-
-            <p>
-              Na obecnym etapie strona nie korzysta z cookies marketingowych,
-              narzędzi reklamowych ani rozbudowanej analityki użytkowników.
-              Jeśli takie narzędzia zostaną wdrożone, polityka prywatności
-              zostanie odpowiednio zaktualizowana.
-            </p>
+          <section id="cookies"><h2>7. Cookies i zmiana zgody</h2>
+            <p>Google Analytics jest uruchamiane dopiero po wybraniu „Akceptuję analitykę”. Zamknięcie okna bez wyboru nie oznacza zgody. Zgoda na listę premierową jest niezależna od cookies.</p>
+            <p>Aby zmienić decyzję, wybierz <button type="button" class="cookie-settings-link" data-cookie-settings aria-controls="cookie-settings" aria-expanded="false">Ustawienia cookies</button> lub ten sam przycisk w stopce każdej strony, a następnie „Odrzuć / wycofaj zgodę” albo „Akceptuję analitykę”. Wycofanie zatrzymuje dalszy pomiar i usuwa dostępne cookies GA; nie wymaga wypisania z listy premierowej.</p>
+            <p>Ustawienie dotyczy tej przeglądarki i tego adresu witryny. Na innym urządzeniu lub pod adresem www może być potrzebny odrębny wybór. Możesz również usunąć dane witryny w ustawieniach przeglądarki. Jeśli zapis preferencji jest zablokowany, pokażemy komunikat i nie uruchomimy analityki po nowej akceptacji.</p>
           </section>
 
+          <section id="odbiorcy"><h2>8. Odbiorcy danych i dostawcy</h2>
+            <p>Dane udostępniamy dostawcom wyłącznie w zakresie potrzebnym do realizacji usług oraz uprawnionym organom, jeżeli wymaga tego prawo.</p>
+            <ul><li>Brevo — formularz, lista premierowa, obsługa zgód i wiadomości; obejmuje adres e-mail, opcjonalne dane formularza i dane obsługi wysyłki.</li>
+            <li>LH.pl — planowany hosting strony po zatwierdzonej migracji, w tym techniczne logi i kopie. W chwili przygotowania projektu strona publiczna nadal korzysta z GitHub Pages. Nie deklarujemy, że migracja już nastąpiła.</li>
+            <li>OVHcloud — obecna obsługa poczty domenowej i DNS; korespondencja oraz dane techniczne związane z usługą.</li>
+            <li>Google — Google Analytics wyłącznie po zgodzie; dane o korzystaniu ze strony i identyfikatory analityczne.</li></ul>
+            <p>Przed publikacją administrator potwierdzi podmioty umowne, umowy powierzenia i ustawienia usług. Dane nie są sprzedawane; projekt nie przewiduje płatności ani profilowania wywołującego skutki prawne.</p>
+          </section>
+          <section id="transfery"><h2>9. Przekazywanie danych poza EOG</h2>
+            <p>Korzystanie z usług globalnych dostawców, w szczególności Google i podwykonawców Brevo, może wiązać się z przetwarzaniem poza Europejskim Obszarem Gospodarczym. Nie zakładamy, że wszystkie dane pozostają w Polsce lub UE.</p>
+            <p>Dostawcy mogą stosować decyzje stwierdzające odpowiedni poziom ochrony lub standardowe klauzule umowne. Google opisuje m.in. EU–US Data Privacy Framework i standardowe klauzule. Właściwy mechanizm dla używanych usług i umów, lista podwykonawców oraz wymagane zabezpieczenia muszą zostać potwierdzone przed zatwierdzeniem dokumentu.</p>
+            <p>Informacje o zabezpieczeniach i sposobie uzyskania ich kopii można uzyskać, kontaktując się z administratorem. Zobacz <a href="https://www.brevo.com/legal/privacypolicy/">informacje Brevo</a> i <a href="https://policies.google.com/privacy/frameworks">zasady transferów Google</a>.</p>
+          </section>
           <section id="kontakt">
-            <h2>8. Kontakt w sprawie danych</h2>
+            <h2>10. Kontakt w sprawie danych</h2>
             <p>
               W sprawach związanych z ochroną danych osobowych można skontaktować się
               z nami pod adresem:
-              <a href="mailto:kontakt@pracowniaform.pl">kontakt@pracowniaform.pl</a>.
+              <a href="mailto:kontakt@pracowniaform.com">kontakt@pracowniaform.com</a>.
             </p>
           </section>
         </article>
@@ -234,8 +223,8 @@
 
       <div>
         <h4>Marka</h4>
-        <a href="index.html#manifest">Manifest</a>
-        <a href="index.html#wykonczenia">Wykończenia</a>
+        <a href="index.html#pracownia">Manifest</a>
+        <a href="index.html#materialy">Wykończenia</a>
         <a href="kontakt.html">Kontakt</a>
       </div>
 
@@ -247,10 +236,25 @@
     </div>
 
     <p class="copyright">
-      © 2025 Pracownia Form. Wszystkie prawa zastrzeżone.
+      © 2026 Pracownia Form. Wszystkie prawa zastrzeżone.
     </p>
+    <button type="button" class="cookie-settings-link" data-cookie-settings aria-controls="cookie-settings" aria-expanded="false">Ustawienia cookies</button>
   </footer>
 
-  <script src="script.js"></script>
+  <div class="cookie-banner" id="cookie-settings" data-cookie-banner role="region" aria-label="Ustawienia cookies" hidden>
+  <div class="cookie-copy">
+    <p class="eyebrow">Prywatność</p>
+    <h3>Ustawienia cookies</h3>
+    <p>Analityka Google Analytics działa tylko za Twoją zgodą. Możesz ją zmienić lub wycofać przyciskiem „Ustawienia cookies” w stopce. Odmowa nie blokuje strony ani listy premierowej.</p>
+    <p><a href="polityka-prywatnosci.html#cookies">Więcej o prywatności i cookies</a></p>
+    <p data-cookie-status role="status" aria-live="polite"></p>
+  </div>
+  <div class="cookie-actions">
+    <button type="button" class="btn btn-secondary" data-cookie-reject>Odrzuć / wycofaj zgodę</button>
+    <button type="button" class="btn btn-primary" data-cookie-accept>Akceptuję analitykę</button>
+    <button type="button" class="cookie-close" data-cookie-close>Zamknij bez zmian</button>
+  </div>
+</div>
+<script src="script.js"></script>
 </body>
-</html>kontakt@pracowniaform.com
+</html>
