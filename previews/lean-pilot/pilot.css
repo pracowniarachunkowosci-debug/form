@@ -1,10 +1,14 @@
-/* Purchase placeholders only; approved R04 composition and palette are unchanged. */
-.purchase-panel { padding: 24px 0; border-bottom: 1px solid var(--rule); }
-.purchase-panel label { display: block; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; margin-bottom: 10px; }
-.purchase-panel select { width: 100%; padding: 13px; background: var(--paper); color: var(--muted); border: 1px solid var(--rule); border-radius: 0; font: inherit; font-size: 13px; opacity: 1; }
-.purchase-quantity, .purchase-note { font-size: 12px; line-height: 1.7; color: var(--muted); }
-.purchase-button { width: 100%; justify-content: space-between; background: var(--surface); color: var(--muted); border: 1px solid var(--rule); cursor: not-allowed; opacity: 1; font-family: var(--sans); }
-.purchase-panel .text-link { font-size: 12px; }
+/* Preview UX refinement only; approved R04 composition and palette stay intact. */
+.product-card .status-pill { font-size: 13px; line-height: 1.5; padding: 8px 12px; }
+.product-card .product-description { font-size: 14px; }
+.product-card .photo-index { font-size: 12px; }
+.product-card .photo-placeholder small { font-size: 13px; }
+.premiere-action { padding: 8px 0 24px; }
+.purchase-quantity, .purchase-note { font-size: 14px; line-height: 1.7; color: var(--muted); margin: 0 0 12px; }
+.premiere-action .editorial-button { width: 100%; min-height: 48px; font-size: 14px; gap: 16px; margin-top: 8px; }
+.product-card .product-details summary { font-size: 14px; line-height: 1.6; min-height: 48px; padding: 16px 0; }
+.product-card .product-details p { font-size: 14px; line-height: 1.8; }
+.product-card a:focus-visible, .product-card summary:focus-visible { outline: 3px solid var(--burgundy); outline-offset: 4px; }
 .pilot-info { padding-block: 20px 80px; scroll-margin-top: 110px; }
 .pilot-info h2 { font-size: clamp(32px, 4vw, 50px); }
 .pilot-info-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 30px 60px; margin-top: 30px; }
