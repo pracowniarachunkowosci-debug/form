@@ -1,0 +1,56 @@
+{
+  "date": "2026-11-03",
+  "baseline": "d60640f",
+  "desktop": {
+    "width": 1440,
+    "sameText": true,
+    "sameGeometry": true,
+    "sameDarkStyles": true,
+    "overflow": false
+  },
+  "mobile": {
+    "width": 390,
+    "sameText": true,
+    "sameGeometry": true,
+    "sameDarkStyles": true,
+    "overflow": false
+  },
+  "cards": [
+    {
+      "cta": "../../index.html#preorder",
+      "statuses": 1
+    },
+    {
+      "cta": "../../index.html#preorder",
+      "statuses": 1
+    },
+    {
+      "cta": "../../index.html#preorder",
+      "statuses": 1
+    },
+    {
+      "cta": "../../index.html#preorder",
+      "statuses": 1
+    }
+  ],
+  "forms": 0,
+  "lightScan": {
+    "below45": 0,
+    "count": 78,
+    "min": 5.3883452776140555
+  },
+  "menuCheck": {
+    "expanded": "true",
+    "outline": "rgb(209, 184, 137)",
+    "width": "3px"
+  },
+  "detailsCheck": {
+    "ctaHeight": 55,
+    "open": true,
+    "outline": "rgb(39, 39, 37)",
+    "summaryHeight": 54.390625,
+    "text": "rgb(91, 91, 86)",
+    "width": "3px"
+  },
+  "consoleErrors": []
+}

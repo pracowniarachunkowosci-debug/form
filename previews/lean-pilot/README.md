@@ -3,11 +3,14 @@
 Uruchom w katalogu repo: `python -m http.server 8766 --bind 127.0.0.1`.
 Otwórz porównanie: `http://127.0.0.1:8766/previews/lean-pilot/comparison.html`.
 
-- `winter-26.html`: nowy neutralny wariant do decyzji projektowej.
+- `winter-26.html`: zatwierdzona hybryda — ciemne otwarcie R04 i neutralne karty; osobny `hybrid.css`.
+- `winter-26-neutral.html`: archiwum neutralnego wariantu z porównania e230d9a.
 - `winter-26-r04.html`: kopia podglądu R04 z `d60640f` (treść identyczna po normalizacji końców linii).
 - [Raport palety i kontroli kontrastu](../../docs/PILOT_PALETTE_REVIEW.md) — odpowiedź na komentarz z 03.11.2026, 10:58 UTC; porównanie desktop 1440 i mobile 390, zrzuty obu wariantów.
 
-Wariant neutralny używa osobnego `neutral.css`: porcelain/stone/charcoal, champagne wyłącznie dekoracyjnie; zdjęcie hero wyświetlane w skali szarości. Poniższy opis bazowego R04 i jego wcześniejsza kontrola pozostają punktem odniesienia, nie opisem nowej palety.
+Aktualna decyzja: [hybryda, 03.11.2026 11:26 UTC](https://github.com/pracowniarachunkowosci-debug/form/pull/10#issuecomment-6602576344). Zatwierdzenie dotyczy kierunku wizualnego, nie publikacji. Raport zawiera aktualną kontrolę i sześć zrzutów hybrydy.
+
+Archiwalny wariant neutralny używa osobnego `neutral.css`: porcelain/stone/charcoal, champagne wyłącznie dekoracyjnie; zdjęcie hero wyświetlane w skali szarości. Poniższy opis bazowego R04 i jego wcześniejsza kontrola pozostają punktem odniesienia, nie opisem nowej palety.
 
 R04 (HTML jako punkt wyjścia, CSS i zoptymalizowane AVIF/WebP bez zmian) pochodzi z PR #5, commit `f97fcd65f2625dcc4f18aabf65c3a8e467a5a947`. Wspólne style i skrypt są odczytywane z root repo. Dodatki dotyczą wyłącznie pilota: cztery karty zapowiedzi z jednym statusem i zapisem na premierę, bez pustych pól, selektorów i przycisków Kup; kurier i informacje przed zakupem. Hero pozostaje neutralnym editorialem bez produktu.
 

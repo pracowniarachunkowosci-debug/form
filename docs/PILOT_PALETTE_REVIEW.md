@@ -1,4 +1,51 @@
-# PR #10 — neutralna paleta do decyzji projektowej
+# PR #10 — zatwierdzona hybryda R04 + neutralne karty
+
+## Aktualna decyzja i wykonanie — 03.11.2026
+
+[Decyzja właściciela, 11:26 UTC](https://github.com/pracowniarachunkowosci-debug/form/pull/10#issuecomment-6602576344): **zatwierdzony kierunek wizualny to ciemne otwarcie R04 i neutralne karty zapowiedzi**. Nie jest to zgoda na publikację ani uruchomienie sprzedaży. Podgląd aktualny: `previews/lean-pilot/winter-26.html`; `hybrid.css` jest jedyną nową warstwą stylów. Wcześniejsze R04 i pełny wariant neutralny zachowano jako archiwum porównania.
+
+- Nagłówek, pasek pilota, całe otwarcie (hero, nawigacja kolekcji, intro), zestawy i stopka zachowują paletę R04. Hero odzyskuje oryginalny kolor, gradient i cień; pliki AVIF/WebP, kadr i alt są niezmienione.
+- KNITTED i SCULPTURAL: porcelain `#F7F6F2`, placeholder stone `#E8E4DD`, charcoal `#272725` dla tekstów i CTA; tekst pomocniczy `#5B5B56`. Champagne `#B7A58B` wyłącznie w dekoracyjnym znaku PF.
+- Jasne sekcje realizacji, informacji przed zakupem, premiery i archiwum mają tę samą neutralną typografię kolorystyczną. CTA końcowego zapisu jest grafitowe. To dopasowanie kolorów, bez nowych sekcji, układu, odstępów i treści.
+- Cztery modele nadal mają pojedynczy status „W przygotowaniu” oraz „Zapisz się na premierę”. Brak zakupu, cen, wariantów i formularza zamówienia. Model kosztów i plan lean MVP bez zmian.
+
+### Podglądy aktualnej hybrydy
+
+[Galeria: hybryda oraz archiwum porównania](../previews/lean-pilot/comparison.html). Kadry przejścia pokazują granicę ciemnego otwarcia i jasnej sekcji KNITTED; osobne kadry hero i kart pokazują skrajne części tej sekwencji bez zmiany długości strony.
+
+| Kadr | Desktop 1440 | Mobile 390 |
+|---|---|---|
+| Hero R04 | [Zrzut](previews/hybrid-desktop-hero.jpg) | [Zrzut](previews/hybrid-mobile-hero.jpg) |
+| Przejście do kart | [Zrzut](previews/hybrid-desktop-transition.jpg) | [Zrzut](previews/hybrid-mobile-transition.jpg) |
+| Karty i CTA | [Zrzut](previews/hybrid-desktop-cards.jpg) | [Zrzut](previews/hybrid-mobile-card.jpg) |
+
+### Walidacja hybrydy
+
+Kontrola DOM porównuje podgląd z R04/d60640f przy 1440 i 390 px. Treści i geometria sekcji/kart pozostają identyczne; brak poziomego overflow. Porównanie wynikowych kolorów, teł, gradientów, obramowań, filtrów i cieni ciemnych sekcji potwierdza zgodność z R04. HTML po odjęciu klasy `hybrid-pilot` i linku do `hybrid.css` jest identyczny z d60640f (normalizacja końców linii).
+
+| Para kolorów hybrydy | Kontrast |
+|---|---:|
+| Tekst / CTA charcoal–porcelain | 13,84:1 |
+| Tekst pomocniczy / porcelain | 6,31:1 |
+| Tekst pomocniczy / stone | 5,39:1 |
+| Porcelain / hover grafitowego CTA | 9,48:1 |
+| Fokus charcoal / porcelain | 13,84:1 |
+| Tekst pomocniczy R04 `#CDC6BA` / najjaśniejszy punkt gradientu `#29251C` | 9,00:1 |
+| Akcent tekstowy i fokus R04 `#D1B889` / ten sam punkt gradientu | 7,94:1 |
+| Ciemny tekst / champagne CTA w hero | 9,82:1 |
+| Tekst pomocniczy zestawów / forest | 8,74:1 |
+
+W jasnych sekcjach sprawdzono 78 renderowanych elementów z tekstem: minimum 5,39:1, zero wyników poniżej 4,5:1. Dekoracyjne PF wyłączono; zamkniętych treści details nie zaliczono do tego skanu. Kontrast akapitu po otwarciu szczegółów to 6,31:1 (ta sama para pomocniczego tekstu i porcelain). Gradient R04 oceniono konserwatywnie względem jego najjaśniejszego koloru, bez pomiaru tekstu na fotografii — fotografia nie ma nakładki tekstowej. Progi WCAG i źródła znajdują się w archiwalnej części poniżej.
+
+Sprawdzono klawiaturą menu oraz otwieranie/zamykanie szczegółów produktu. Fokus w ciemnym menu pozostaje champagne, w jasnej karcie charcoal (3 px). Wysokość CTA mobile: 55 px, summary: 54,39 px. Hero jest załadowany bez filtra grayscale. Brak błędów/ostrzeżeń konsoli w sprawdzonym przebiegu. Lokalne linki zweryfikowane. [Skrócony zapis wyników](previews/hybrid-checks.json).
+
+To kontrola kontrastu i regresji podglądu, nie pełny audyt WCAG. Wyłącznie draft PR #10; pozostałe PR-y, main i pliki produkcyjne bez zmian. Bez merge, publikacji, zakupu usług, zmian DNS i aktywacji płatności. Blokady preview nie są ustawieniami do przyszłej produkcji.
+
+---
+
+# Archiwum — pełny neutralny wariant z e230d9a
+
+Poniższa część dokumentuje porównanie poprzedzające decyzję hybrydową. Opis pełnej neutralizacji i monochromatycznego hero dotyczy teraz wyłącznie `winter-26-neutral.html`, nie aktualnej strony `winter-26.html`.
 
 03.11.2026. Odpowiedź na [komentarz projektowy właściciela](https://github.com/pracowniarachunkowosci-debug/form/pull/10#issuecomment-6601928883). Punkt odniesienia: `d60640fd8d9e9754de08d22548bea62251e3682f`. To wariant do oceny, nie nowy zatwierdzony brandbook ani zgoda na publikację.
 
