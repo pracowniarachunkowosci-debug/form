@@ -24,13 +24,20 @@ pages = {p.name: Page(p.read_text(encoding='utf-8')) for p in ROOT.glob('*.html'
 home = (ROOT/'index.html').read_text(encoding='utf-8')
 form = lambda s: re.search(r'<form\b.*?</form>', s, re.S).group()
 assert form(home) == form(baseline('index.html')), 'Brevo form changed'
-for path in ('script.js', 'styles.css', 'robots.txt', 'sitemap.xml'):
+for path in ('robots.txt', 'sitemap.xml'):
     assert (ROOT/path).read_text(encoding='utf-8') == baseline(path), path
 html = (ROOT/'winter-26.html').read_text(encoding='utf-8')
 ga = lambda s: next(x for x in re.findall(r'<script>.*?</script>', s, re.S) if 'PF_GA_MEASUREMENT_ID' in x)
 assert ga(html) == ga(baseline('winter-26.html')), 'GA initialization changed'
-cookie = lambda s: re.search(r'<div class="cookie-banner".*?(?=\s*<script src="script.js")', s, re.S).group().strip()
-assert cookie(html) == cookie(baseline('winter-26.html')), 'Consent UI changed'
+# Consent changes are permitted; WINTER main/header stay frozen pending real photos.
+approved = subprocess.check_output(['git', 'show', 'e054e60:winter-26.html'], cwd=ROOT).decode().replace('\r\n', '\n')
+for element in ('main', 'header'):
+    block = lambda s: re.search(r'<' + element + r'\b.*?</' + element + '>', s, re.S).group()
+    assert block(html) == block(approved), f'Approved {element} changed before real photos arrive'
+script = (ROOT/'script.js').read_text(encoding='utf-8')
+original_script = baseline('script.js')
+assert script.split('// Cookie consent + GA4')[0] == original_script.split('// Cookie consent + GA4')[0]
+assert script.split('// Interaktywne badanie')[1] == original_script.split('// Interaktywne badanie')[1]
 for forbidden in ('noindex', 'nofollow', 'Content-Security-Policy', 'form-action', 'previews/', 'buy.stripe.com', 'js.stripe.com', 'checkout.stripe.com'):
     assert forbidden not in html, forbidden
 assert html.count('class="product-card"') == 4
@@ -41,6 +48,10 @@ assert 'https://pracowniaform.com/winter-26.html' in html
 assert not any(t == 'form' for t, a in pages['winter-26.html'].tags)
 refs = 0
 for name, page in pages.items():
+    assert any('data-cookie-settings' in a for _, a in page.tags), f'No settings entry: {name}'
+    assert len([1 for _, a in page.tags if 'data-cookie-banner' in a]) == 1, name
+    for control in ('accept', 'reject', 'close'):
+        assert any(t == 'button' and 'data-cookie-' + control in a for t, a in page.tags), name
     ids = [a['id'] for _, a in page.tags if 'id' in a]
     assert len(ids) == len(set(ids)), f'Duplicate ID: {name}'
     assert len([1 for t, a in page.tags if t == 'h1']) == 1, name
@@ -73,4 +84,8 @@ assert all(hero.get(k) for k in ('width', 'height', 'sizes', 'srcset', 'alt'))
 assert hero.get('fetchpriority') == 'high' and hero.get('loading') != 'lazy'
 for image in ROOT.glob('assets/winter-r04-*'):
     assert image.stat().st_size < 150000, image.name
-print(f'PASS: {len(pages)} pages, {refs} local references; unchanged Brevo form/runtime/consent; indexable WINTER; responsive hero <150 KB per asset.')
+for name in ('polityka-prywatnosci.html', 'zasady-premiery.html'):
+    legal = (ROOT/name).read_text(encoding='utf-8')
+    assert '[uzupełnij datę]' not in legal and '2026-11-03' in legal
+    assert 'Data zatwierdzenia' in legal
+print(f'PASS: {len(pages)} pages, {refs} local references; unchanged Brevo form and WINTER layout; cookie settings on every page; draft dates; responsive hero <150 KB per asset.')

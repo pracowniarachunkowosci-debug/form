@@ -4,6 +4,11 @@ Statyczna strona HTML/CSS/JS. Gałąź publikacyjna LH zawiera zatwierdzony hybr
 
 - [Raport zmian i podglądy](docs/PUBLICATION_REPORT.md)
 - [Audyt LH/DNS, plan migracji, rollback i checklista](docs/LH_ORANGE_MIGRATION.md)
+- [Odpowiedź na recenzję PR #11 i testy cookies](docs/PR11_REVIEW_RESPONSE.md)
+- [Bramki GO/NO-GO i pytania do dostawców](docs/RELEASE_READINESS.md)
+- [Plan kontrolowanego testu Brevo — niewykonany](docs/BREVO_ACCEPTANCE_PLAN.md)
+- [Zdjęcia produktów — oczekiwanie i plan podmiany](docs/PRODUCT_PHOTO_HANDOFF.md)
+- [Commit, ZIP i hash lokalnego kandydata](docs/RELEASE_CANDIDATE.md)
 
 Lokalny podgląd (z katalogu repozytorium):
 
@@ -21,4 +26,4 @@ node scripts/check_consent.cjs
 python scripts/build_release.py
 ```
 
-Wynik paczki: `.artifacts/pracownia-form-lh.zip` i `manifest.json`. Nie zawiera dokumentacji, podglądów, Git ani ustawień DNS/serwera. Publikacja wymaga osobnego zatwierdzenia fazy B. Merge do `main` może uruchomić istniejące GitHub Pages.
+Wynik paczki: `.artifacts/pracownia-form-lh.zip`, `manifest.json` i `release.json` z identyfikacją commitu i SHA-256. Nie zawiera dokumentacji, podglądów, Git ani ustawień DNS/serwera. Publikacja wymaga osobnego zatwierdzenia fazy B. Merge do `main` może uruchomić istniejące GitHub Pages.

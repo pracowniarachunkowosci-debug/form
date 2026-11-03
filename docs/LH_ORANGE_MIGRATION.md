@@ -6,6 +6,8 @@ Gałąź publikacyjna powstała z `main` / `38e0bd9bc8296b70ac68d92753d63f447d70
 
 ## Wniosek
 
+Uzupełnienie po recenzji PR #11: [operacyjne bramki GO/NO-GO, pytania do LH, eksport OVH i warianty SSL](RELEASE_READINESS.md) oraz [plan testów Brevo](BREVO_ACCEPTANCE_PLAN.md). Poniższy audyt dokumentuje odczyt; nie stanowi potwierdzenia konfiguracji, której jeszcze nie wdrożono.
+
 Obecna statyczna strona mieści się w modelu hostingu Orange. Nie wymaga WordPressa, Node.js, bazy danych ani nowego abonamentu. Rekomendowana metoda późniejszego transferu: **FTPS explicit TLS**, ponieważ panel Orange nie udostępnia SSH. Nie wykonano logowania FTP, uploadu, dodania domeny, wystawienia certyfikatu, zmian DNS ani publikacji.
 
 Pozostają warunki przed wdrożeniem: pełny eksport strefy i selektory DKIM, potwierdzenie zewnętrznej obsługi poczty przy podpinaniu domeny do LH, ustalenie sposobu zapewnienia SSL podczas przełączenia oraz zatwierdzenie dokumentów i test double opt-in. Publiczne DNS nie pozwalają wykluczyć wszystkich dodatkowych subdomen/usług.
@@ -104,8 +106,10 @@ Rollback DNS też podlega TTL i nie jest natychmiastowy. W mieszanym okresie obi
 
 - [x] Osobna gałąź, brak checkoutu i płatności; jawne placeholdery; zachowany hybrydowy R04.
 - [x] Administrator wskazany przez właściciela: PRACOWNIA RACHUNKOWOŚCI sp. z o.o., ul. Trawowa 19/1, 54-614 Wrocław, NIP 8943197084, KRS 0000997294. [ALEO wskazane przez właściciela](https://aleo.com/pl/firma/pracownia-rachunkowosci-spolka-z-ograniczona-odpowiedzialnoscia-wroclaw); nazwa, adres i NIP potwierdzone 03.11.2026 w [aktualnym odpisie API KRS](https://api-krs.ms.gov.pl/api/krs/OdpisAktualny/0000997294?rejestr=P&format=json). Adres siedziby nie oznacza automatycznie adresu zwrotów.
-- [ ] Właściciel zatwierdza politykę prywatności i wpisuje datę obowiązywania. Sprawdzić odbiorców danych, retencję, transfery, podstawy analityki, umowy Brevo/LH/Google i łatwy sposób wycofania zgody na cookies. Obecny mechanizm akceptacji/odrzucenia zachowany, brak nowego interfejsu zmiany wcześniejszego wyboru.
-- [ ] Zatwierdzenie treści starej strony głównej i zasad premiery (m.in. komunikaty o pre-orderze pozostałych kolekcji); nie traktować ich jako gotowego regulaminu sprzedaży WINTER.
+- [x] Ustawienia cookies w stopce każdej strony i w polityce: ponowny wybór, wycofanie, odmowa po odświeżeniu; testy lokalne opisane w PR11_REVIEW_RESPONSE.
+- [ ] Właściciel zatwierdza projekt polityki z 03.11.2026 i ustala datę obowiązywania. Do potwierdzenia rzeczywiste retencje, umowy, odbiorcy, transfery i obsługa kontaktu; test kodu nie potwierdza kompletności prawnej.
+- [x] Projekt zasad premiery przepisany na listę WINTER 26, bez przyjmowania zamówień i pre-orderu; stopki 2026.
+- [ ] Merytoryczna akceptacja zasad i treści strony; nie traktować ich jako gotowego regulaminu sprzedaży WINTER.
 - [ ] Kontrolowany test zapisu, double opt-in, wypisania i dostarczalności Brevo na docelowym origin. GET i walidacja formularza już sprawdzone, wysyłki nie wykonano.
 - [ ] Pełny eksport DNS, DKIM, usługi subdomen, zewnętrzna poczta LH, plan SSL i rollback potwierdzone.
 - [ ] Osobna zgoda na fazę B, dokładny commit i termin. Jawne placeholdery pozostają wyłącznie zapowiedzią, bez możliwości zakupu.
