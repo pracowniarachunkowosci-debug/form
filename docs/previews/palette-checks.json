@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-03",
+  "baseline": "d60640f",
+  "desktop": {
+    "width": 1440,
+    "sameText": true,
+    "sameGeometry": true,
+    "overflow": false
+  },
+  "mobile": {
+    "width": 390,
+    "sameText": true,
+    "sameMainGeometry": true,
+    "overflow": false
+  },
+  "neutral": {
+    "forms": 0,
+    "image": {
+      "filter": "grayscale(1)",
+      "loaded": true
+    },
+    "gradients": []
+  },
+  "contrastScan": {
+    "below45": [],
+    "count": 134,
+    "min": 5.39
+  }
+}
