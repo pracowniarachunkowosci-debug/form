@@ -1,0 +1,128 @@
+{
+  "star": {
+    "source": "Obraz ChatGPT 4 lis 2026, 16_22_38-4.png",
+    "sha256": "57410af06eac38284f1d529bf3b109cacac6c8ace653ea7194959211feb43352",
+    "crop": null,
+    "width": 1122,
+    "height": 1402,
+    "widths": [
+      360,
+      680,
+      1120
+    ]
+  },
+  "star-loop": {
+    "source": "294daed2-49d0-4179-a336-a5f96c2f108e.png",
+    "sha256": "b94e0a8a435076338068cf1f8c260ab1118eae294e6d5d7e34a974131e5f959a",
+    "crop": [
+      873,
+      0,
+      1199,
+      411
+    ],
+    "width": 326,
+    "height": 411,
+    "widths": [
+      326
+    ]
+  },
+  "medallion-loop": {
+    "source": "294daed2-49d0-4179-a336-a5f96c2f108e.png",
+    "sha256": "b94e0a8a435076338068cf1f8c260ab1118eae294e6d5d7e34a974131e5f959a",
+    "crop": [
+      609,
+      0,
+      873,
+      411
+    ],
+    "width": 264,
+    "height": 411,
+    "widths": [
+      264
+    ]
+  },
+  "medallion-detail": {
+    "source": "Obraz ChatGPT 4 lis 2026, 16_22_37-3.png",
+    "sha256": "b0e38fdc7038185153c126c86d8035fe6d72fd4c00e191052edff426913ad422",
+    "crop": null,
+    "width": 1122,
+    "height": 1402,
+    "widths": [
+      360,
+      680,
+      1120
+    ]
+  },
+  "helix": {
+    "source": "Obraz ChatGPT 4 lis 2026, 16_22_35-2.png",
+    "sha256": "3cb8255996156b59eed6c97f39c1229a13fa9f73166c9399055acd49e8ed0dbc",
+    "crop": null,
+    "width": 1122,
+    "height": 1402,
+    "widths": [
+      360,
+      680,
+      1120
+    ]
+  },
+  "helix-detail": {
+    "source": "294daed2-49d0-4179-a336-a5f96c2f108e.png",
+    "sha256": "b94e0a8a435076338068cf1f8c260ab1118eae294e6d5d7e34a974131e5f959a",
+    "crop": [
+      681,
+      770,
+      1199,
+      1312
+    ],
+    "width": 518,
+    "height": 542,
+    "widths": [
+      360,
+      518
+    ]
+  },
+  "full-soft": {
+    "source": "Obraz ChatGPT 4 lis 2026, 16_22_39-5.png",
+    "sha256": "866cd8191baeb0e8dfa24b09b3505373a00f3c7bbcd3c154082b903c0948f00c",
+    "crop": null,
+    "width": 1122,
+    "height": 1402,
+    "widths": [
+      360,
+      680,
+      1120
+    ]
+  },
+  "full-soft-side": {
+    "source": "294daed2-49d0-4179-a336-a5f96c2f108e.png",
+    "sha256": "b94e0a8a435076338068cf1f8c260ab1118eae294e6d5d7e34a974131e5f959a",
+    "crop": [
+      306,
+      419,
+      598,
+      762
+    ],
+    "width": 292,
+    "height": 343,
+    "widths": [
+      292
+    ]
+  },
+  "four": {
+    "source": "294daed2-49d0-4179-a336-a5f96c2f108e.png",
+    "sha256": "b94e0a8a435076338068cf1f8c260ab1118eae294e6d5d7e34a974131e5f959a",
+    "crop": [
+      0,
+      0,
+      1199,
+      411
+    ],
+    "width": 1199,
+    "height": 411,
+    "widths": [
+      360,
+      680,
+      1120
+    ]
+  }
+}

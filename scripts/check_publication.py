@@ -24,18 +24,24 @@ pages = {p.name: Page(p.read_text(encoding='utf-8')) for p in ROOT.glob('*.html'
 home = (ROOT/'index.html').read_text(encoding='utf-8')
 form = lambda s: re.search(r'<form\b.*?</form>', s, re.S).group()
 assert form(home) == form(baseline('index.html')), 'Brevo form changed'
-for path in ('robots.txt', 'sitemap.xml'):
+for path in ('robots.txt',):
     assert (ROOT/path).read_text(encoding='utf-8') == baseline(path), path
 html = (ROOT/'winter-26.html').read_text(encoding='utf-8')
 ga = lambda s: next(x for x in re.findall(r'<script>.*?</script>', s, re.S) if 'PF_GA_MEASUREMENT_ID' in x)
 assert ga(html) == ga(baseline('winter-26.html')), 'GA initialization changed'
-# Owner approved a temporary concept image; all content outside its figure stays frozen.
-approved = subprocess.check_output(['git', 'show', 'e054e60:winter-26.html'], cwd=ROOT).decode().replace('\r\n', '\n')
-for element in ('main', 'header'):
-    block = lambda s: re.search(r'<' + element + r'\b.*?</' + element + '>', s, re.S).group()
-    without_hero = lambda s: re.sub(r'<figure class="w26-hero-art">.*?</figure>', '', s, flags=re.S)
-    assert without_hero(block(html)) == without_hero(block(approved)), f'Approved {element} changed outside hero figure'
-assert 'Wizualizacja koncepcyjna AI na podstawie modelu Pracowni Form.' in html
+# The hero, header and all content outside the catalog cards / sets are frozen at PR11.
+approved = subprocess.check_output(['git','show','6d8e07b:winter-26.html'],cwd=ROOT).decode().replace('\\r\\n','\\n')
+def stable_main(text):
+    main=re.search(r'<main\b.*?</main>',text,re.S).group()
+    main=re.sub(r'<article class="product-card".*?</article>', '<card>',main,flags=re.S)
+    return re.sub(r'(?:<figure class="set-scene">.*?</figure>)?<div class="sets-grid">.*?</article></div>', '<sets>',main,flags=re.S)
+assert stable_main(html)==stable_main(approved)
+assert re.search(r'<header.*?</header>',html,re.S).group()==re.search(r'<header.*?</header>',approved,re.S).group()
+registry=json.loads((ROOT/'data/winter26-products.json').read_text(encoding='utf8'))
+from xml.etree import ElementTree as ET
+def urls(s): return {x.text for x in ET.fromstring(s).findall('.//{*}loc')}
+expected={f'https://pracowniaform.com/winter-{p["slug"]}.html' for p in registry['products']}
+assert urls((ROOT/'sitemap.xml').read_text()) == urls(baseline('sitemap.xml')) | expected
 script = (ROOT/'script.js').read_text(encoding='utf-8')
 original_script = baseline('script.js')
 assert script.split('// Cookie consent + GA4')[0] == original_script.split('// Cookie consent + GA4')[0]
@@ -45,7 +51,16 @@ for forbidden in ('noindex', 'nofollow', 'Content-Security-Policy', 'form-action
 assert html.count('class="product-card"') == 4
 cards = re.findall(r'<article class="product-card".*?</article>', html, re.S)
 assert all(card.count('class="status-pill"') == 1 for card in cards)
-assert html.count('Miejsce na fotografię produktu') == 4
+for card, product in zip(cards, (p for p in registry['products'] if p['type']=='pojedynczy'), strict=True):
+    assert 'class="store-cover"' in card and f'href="winter-{product["slug"]}.html"' in card
+    assert ('<picture>' in card) == bool(product['photos']), product['slug']
+for product in registry['products']:
+    name=f'winter-{product["slug"]}.html'
+    detail=(ROOT/name).read_text(encoding='utf8')
+    assert ga(detail)==ga(html) and f'href="https://pracowniaform.com/{name}"' in detail
+    assert detail.count('<figure data-frame>')==len(product['photos'])
+    if not registry['release']['salesApproved']:
+        assert 'buy.stripe.com' not in detail and 'href="index.html#preorder"' in detail
 assert 'https://pracowniaform.com/winter-26.html' in html
 assert not any(t == 'form' for t, a in pages['winter-26.html'].tags)
 refs = 0
