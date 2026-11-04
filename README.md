@@ -1,5 +1,7 @@
 # Pracownia Form
 
+**WINTER 26 / Issue #12:** [katalog, konfiguracja produktów, podglądy i warunki aktywacji](docs/WINTER26_STOREFRONT_HANDOFF.md). Ta gałąź jest draftem sklepu na bazie PR #11. Lokalny podgląd sklepu: port 8772; port 8771 poniżej należy do bazowego PR #11.
+
 Statyczna strona HTML/CSS/JS. Gałąź publikacyjna LH zawiera zatwierdzony hybrydowy WINTER AFTER DARK R04; pozostaje draftem bez zgody na wdrożenie.
 
 - [Raport zmian i podglądy](docs/PUBLICATION_REPORT.md)

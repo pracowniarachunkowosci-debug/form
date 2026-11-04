@@ -1,0 +1,274 @@
+{
+  "release": {
+    "salesApproved": false,
+    "sandboxPassed": false,
+    "sellerApproved": false,
+    "legalApproved": false,
+    "termsPage": null,
+    "returnsPage": null,
+    "returnsSummary": null,
+    "complaintsSummary": null,
+    "privacyPage": "polityka-prywatnosci.html",
+    "delivery": "Kurier na terenie Polski",
+    "shippingPLN": null
+  },
+  "products": [
+    {
+      "id": "knitted-star",
+      "slug": "knitted-star",
+      "name": "KNITTED STAR",
+      "type": "pojedynczy",
+      "model": "KNITTED STAR",
+      "description": "Pięć ażurowych ramion z reliefem splotu. Złoty sznurek przechodzi przez otwór w jednym z ramion.",
+      "sku": null,
+      "material": null,
+      "color": null,
+      "dimensions": null,
+      "grossPLN": null,
+      "stock": null,
+      "status": "draft",
+      "dispatch": null,
+      "quantity": 1,
+      "gpsr": {
+        "producer": null,
+        "address": null,
+        "email": null,
+        "identifier": null,
+        "warnings": null
+      },
+      "photos": [
+        {
+          "asset": "star",
+          "label": "Gwiazda i złota pętla",
+          "alt": "Płaska pięcioramienna gwiazda z reliefem splotu i złotym sznurkiem w otworze.",
+          "kind": "wizualizacja"
+        },
+        {
+          "asset": "star-loop",
+          "label": "Na gałązce",
+          "alt": "Gwiazdę podtrzymuje złoty sznurek; nie ma metalowego kapturka.",
+          "kind": "wizualizacja"
+        }
+      ],
+      "photosApproved": false,
+      "setContents": null,
+      "separateSetStock": false,
+      "stripePaymentLink": null,
+      "family": "KNITTED",
+      "verifiedCheckout": null
+    },
+    {
+      "id": "knitted-medallion",
+      "slug": "knitted-medallion",
+      "name": "KNITTED MEDALLION",
+      "type": "pojedynczy",
+      "model": "KNITTED MEDALLION",
+      "description": "Okrąg zamyka delikatny, ażurowy splot. Złoty sznurek przechodzi bezpośrednio przez otwór medalionu.",
+      "sku": null,
+      "material": null,
+      "color": null,
+      "dimensions": null,
+      "grossPLN": null,
+      "stock": null,
+      "status": "draft",
+      "dispatch": null,
+      "quantity": 1,
+      "gpsr": {
+        "producer": null,
+        "address": null,
+        "email": null,
+        "identifier": null,
+        "warnings": null
+      },
+      "photos": [
+        {
+          "asset": "medallion-detail",
+          "label": "Relief z bliska",
+          "alt": "Medalion bez sznurka, z widocznym otworem i reliefem na obwodzie.",
+          "kind": "wizualizacja"
+        },
+        {
+          "asset": "medallion-loop",
+          "label": "Na złotym sznurku",
+          "alt": "Okrągły medalion zawieszony na złotym sznurku przez otwór, bez kapturka.",
+          "kind": "wizualizacja"
+        }
+      ],
+      "photosApproved": false,
+      "setContents": null,
+      "separateSetStock": false,
+      "stripePaymentLink": null,
+      "family": "KNITTED",
+      "verifiedCheckout": null
+    },
+    {
+      "id": "helix",
+      "slug": "helix",
+      "name": "HELIX",
+      "type": "pojedynczy",
+      "model": "HELIX",
+      "description": "Szerokie wstęgi przecinają się wokół pustej przestrzeni. Światło przechodzi przez otwartą kulę.",
+      "sku": null,
+      "material": null,
+      "color": null,
+      "dimensions": null,
+      "grossPLN": null,
+      "stock": null,
+      "status": "draft",
+      "dispatch": null,
+      "quantity": 1,
+      "gpsr": {
+        "producer": null,
+        "address": null,
+        "email": null,
+        "identifier": null,
+        "warnings": null
+      },
+      "photos": [
+        {
+          "asset": "helix",
+          "label": "Otwarta forma",
+          "alt": "Otwarta kula z szerokich wstęg, ze złotym kapturkiem i oczkiem.",
+          "kind": "wizualizacja"
+        },
+        {
+          "asset": "helix-detail",
+          "label": "Detal wstęgi",
+          "alt": "Zbliżenie jasnej, nakrapianej powierzchni szerokiej wstęgi.",
+          "kind": "wizualizacja"
+        },
+        {
+          "asset": "box",
+          "label": "Koncepcja opakowania",
+          "alt": "Wizualizacja: pojedyncza bombka w czarnym pudełku z okienkiem i bordową wstążką.",
+          "kind": "wizualizacja"
+        }
+      ],
+      "photosApproved": false,
+      "setContents": null,
+      "separateSetStock": false,
+      "stripePaymentLink": null,
+      "family": "SCULPTURAL",
+      "verifiedCheckout": null
+    },
+    {
+      "id": "full-soft",
+      "slug": "full-soft",
+      "name": "FULL SOFT",
+      "type": "pojedynczy",
+      "model": "FULL SOFT",
+      "description": "Pełna kula o miękkim, spiralnym rytmie. Wypukłe pasma łagodnie prowadzą światło wokół bryły.",
+      "sku": null,
+      "material": null,
+      "color": null,
+      "dimensions": null,
+      "grossPLN": null,
+      "stock": null,
+      "status": "draft",
+      "dispatch": null,
+      "quantity": 1,
+      "gpsr": {
+        "producer": null,
+        "address": null,
+        "email": null,
+        "identifier": null,
+        "warnings": null
+      },
+      "photos": [
+        {
+          "asset": "full-soft",
+          "label": "Pełna spirala",
+          "alt": "Pełna spiralna bombka ze złotym metalowym kapturkiem i oczkiem.",
+          "kind": "wizualizacja"
+        },
+        {
+          "asset": "full-soft-side",
+          "label": "Rytm powierzchni",
+          "alt": "Widok pełnej spiralnej bombki na kamiennym podłożu.",
+          "kind": "wizualizacja"
+        }
+      ],
+      "photosApproved": false,
+      "setContents": null,
+      "separateSetStock": false,
+      "stripePaymentLink": null,
+      "family": "SCULPTURAL",
+      "verifiedCheckout": null
+    },
+    {
+      "id": "zestaw-2",
+      "slug": "zestaw-2",
+      "name": "Duet",
+      "type": "zestaw",
+      "model": "Duet",
+      "description": "Kompozycja dwóch obiektów. Dobór modeli i zawartość wymagają potwierdzenia.",
+      "sku": null,
+      "material": null,
+      "color": null,
+      "dimensions": null,
+      "grossPLN": null,
+      "stock": null,
+      "status": "draft",
+      "dispatch": null,
+      "quantity": 1,
+      "gpsr": {
+        "producer": null,
+        "address": null,
+        "email": null,
+        "identifier": null,
+        "warnings": null
+      },
+      "photos": [],
+      "photosApproved": false,
+      "setContents": null,
+      "separateSetStock": false,
+      "stripePaymentLink": null,
+      "family": "ZESTAW",
+      "verifiedCheckout": null
+    },
+    {
+      "id": "zestaw-4",
+      "slug": "zestaw-4",
+      "name": "Kwartet",
+      "type": "zestaw",
+      "model": "Kwartet",
+      "description": "Cztery formy obok siebie. Zestaw jest zapowiedzią; jego ostateczny skład wymaga potwierdzenia.",
+      "sku": null,
+      "material": null,
+      "color": null,
+      "dimensions": null,
+      "grossPLN": null,
+      "stock": null,
+      "status": "draft",
+      "dispatch": null,
+      "quantity": 1,
+      "gpsr": {
+        "producer": null,
+        "address": null,
+        "email": null,
+        "identifier": null,
+        "warnings": null
+      },
+      "photos": [
+        {
+          "asset": "four",
+          "label": "Cztery formy",
+          "alt": "Cztery formy obok siebie: dwie kule z kapturkami i dwie płaskie ozdoby na złotych sznurkach.",
+          "kind": "wizualizacja"
+        },
+        {
+          "asset": "box",
+          "label": "Koncepcja opakowania",
+          "alt": "Przykład pudełka na pojedynczą bombkę; nie przedstawia opakowania kwartetu.",
+          "kind": "wizualizacja"
+        }
+      ],
+      "photosApproved": false,
+      "setContents": null,
+      "separateSetStock": false,
+      "stripePaymentLink": null,
+      "family": "ZESTAW",
+      "verifiedCheckout": null
+    }
+  ]
+}

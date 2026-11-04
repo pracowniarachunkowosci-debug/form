@@ -9,8 +9,10 @@ import zipfile
 ROOT = Path(__file__).resolve().parents[1]
 OUT = ROOT / '.artifacts'
 OUT.mkdir(exist_ok=True)
+for check in (['scripts/render_store.py', '--check'], ['scripts/check_store_gate.py']):
+    subprocess.run([sys.executable, *check], check=True, cwd=ROOT)
 subprocess.run([sys.executable, str(ROOT/'scripts/check_publication.py')], check=True, cwd=ROOT)
-files = sorted([*ROOT.glob('*.html'), *ROOT.glob('*.css'), ROOT/'script.js', ROOT/'favicon.svg', ROOT/'robots.txt', ROOT/'sitemap.xml', *[p for p in (ROOT/'assets').rglob('*') if p.is_file()]])
+files = sorted([*ROOT.glob('*.html'), *ROOT.glob('*.css'), ROOT/'script.js', ROOT/'store-gallery.js', ROOT/'favicon.svg', ROOT/'robots.txt', ROOT/'sitemap.xml', *[p for p in (ROOT/'assets').rglob('*') if p.is_file()]])
 allowed_assets = {'.avif', '.webp', '.jpg', '.jpeg', '.png', '.svg', '.woff', '.woff2'}
 assert all(p.suffix.lower() in allowed_assets for p in files if 'assets' in p.relative_to(ROOT).parts)
 manifest = [{'path': p.relative_to(ROOT).as_posix(), 'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()} for p in files]
