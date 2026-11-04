@@ -1,5 +1,7 @@
 # LH Orange — audyt i plan migracji
 
+**Aktualny odbiór 04.11.2026:** [wydanie #14 — 16 stron, paczka, G1–G8 i rollback](LH_RELEASE_14.md). Poniżej zachowano historyczny stan PR #11.
+
 Stan odczytany 3 listopada 2026. **Faza A: przygotowanie; brak zgody na wykonanie fazy B.**
 Zadanie: [komentarz właściciela w PR #10](https://github.com/pracowniarachunkowosci-debug/form/pull/10#issuecomment-6606701517).
 Gałąź publikacyjna powstała z `main` / `38e0bd9bc8296b70ac68d92753d63f447d70df3e`.
@@ -86,7 +88,7 @@ Bez uwierzytelnienia sprawdzono port 21: serwer ProFTPD odpowiedział, `AUTH TLS
 
 ### B3. QA po przełączeniu
 
-12. Porównać DNS autorytatywny i co najmniej dwa resolvery. Sprawdzić HTTPS obu nazw, dziesięć podstron, statusy i nagłówki, robots/sitemap, brak testowego noindex/autoryzacji na produkcji, grafikę i formularz. Zweryfikować formularz na docelowym origin, przekierowanie po zapisie, double opt-in i wypisanie na adresie testowym zatwierdzonym przez właściciela.
+12. Porównać DNS autorytatywny i co najmniej dwa resolvery. Sprawdzić HTTPS obu nazw, 16 stron, statusy i nagłówki, robots/sitemap, brak testowego noindex/autoryzacji na produkcji, grafikę i formularz. Zweryfikować formularz na docelowym origin, przekierowanie po zapisie, double opt-in i wypisanie na adresie testowym zatwierdzonym przez właściciela.
 13. Sprawdzić przychodzącą i wychodzącą pocztę OVH na kontrolowanych adresach oraz SPF/DKIM/DMARC z nagłówka wiadomości. Dopiero osobno planować zmianę polityki DMARC/uwierzytelnienie Brevo.
 14. Po stabilizacji przywrócić TTL 3600. Utrzymać dotychczasowe Pages i stare wydanie minimum 48 godzin i do potwierdzenia stabilnej propagacji. Zablokować indeksowanie/dostęp do technicznej kopii, nie naruszając ACME ani produkcji. Zapisać protokół odbioru.
 

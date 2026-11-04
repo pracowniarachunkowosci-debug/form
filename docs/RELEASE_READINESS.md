@@ -1,5 +1,7 @@
 # PR #11 — decyzje operacyjne i GO/NO-GO
 
+**Aktualny odbiór 04.11.2026:** [wydanie #14 — 16 stron, paczka, G1–G8 i rollback](LH_RELEASE_14.md). Poniżej zachowano historyczny stan PR #11.
+
 Stan: 03.11.2026, **NO-GO / faza A**. Nie przeprowadzono uploadu, dodawania domeny, zmian DNS/SSL ani kontaktu z dostawcami. [Audyt bazowy i rekordy rollback](LH_ORANGE_MIGRATION.md). Ten dokument doprecyzowuje warunki wykonania, nie jest zgodą na migrację.
 
 ## Bramka decyzji
@@ -55,7 +57,7 @@ Przekierowanie na HTTP, obejście błędu certyfikatu czy sam HTML „przerwa te
 
 - [ ] Publiczne A/AAAA/CNAME na obu nazwach i dwóch resolverach zgodne; strefa poza zatwierdzonym WWW identyczna z eksportem.
 - [ ] Poprawny TLS/SAN/łańcuch/data na apex i www, bez pętli przekierowań; jeden kanoniczny host; odnowienie certyfikatu udokumentowane.
-- [ ] Wszystkie pliki ZIP/manifestu na właściwym katalogu; 10 stron i zasoby 200, nieistniejąca ścieżka 404, AVIF/WebP poprawne MIME, brak listowania.
+- [ ] Wszystkie pliki ZIP/manifestu na właściwym katalogu; 16 stron i zasoby 200, nieistniejąca ścieżka 404, AVIF/WebP poprawne MIME, brak listowania.
 - [ ] R04 desktop/mobile, brak overflow, menu/klawiatura, zdjęcia zgodne z odbiorem; żadnego checkoutu/Stripe.
 - [ ] Produkcja bez testowej autoryzacji/noindex; canonical/sitemap/robots właściwe; techniczna kopia chroniona osobno.
 - [ ] Cookies: nowy profil bez GA; odmowa i refresh bez GA; akceptacja/cofnięcie i drugi tab w uzgodnionym teście; wycofanie nie kasuje danych formularza.

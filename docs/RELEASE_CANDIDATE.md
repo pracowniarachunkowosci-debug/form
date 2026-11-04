@@ -1,5 +1,7 @@
 # PR #11 — lokalny kandydat do przeglądu
 
+**Aktualny odbiór 04.11.2026:** [wydanie #14 — 16 stron, paczka, G1–G8 i rollback](LH_RELEASE_14.md). Poniżej zachowano historyczny stan PR #11.
+
 **ARCHIWALNE po podmianie hero:** identyfikatory poniżej dotyczą poprzedniego stanu bez bombki. Nie obejmują [nowego tymczasowego preview](HERO_CONCEPT_PREVIEW.md) i nie mogą identyfikować bieżącej strony. Nie zbudowano ani nie zatwierdzono nowej paczki publikacyjnej w iteracji koncepcyjnej.
 
 Zbudowano 03.11.2026 z czystego drzewa. **NO-GO dla publikacji**: otwarte warunki w [RELEASE_READINESS](RELEASE_READINESS.md). Paczka zawiera projekty dokumentów i obecny editorial bez produktu. Po otrzymaniu fotografii, akceptacji dokumentów lub innej zmianie strony powstanie nowe wydanie do odbioru.
