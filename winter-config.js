@@ -113,8 +113,9 @@ if (typeof document !== 'undefined') {
       const next=get('[data-next]');next.disabled=active===size-1;
       next.onclick=()=>{active++;draw();get('[data-slots]').children[active].focus()};
       const {done,groups}=summary(data,slots);
-      get('[data-count]').textContent='Wybrano '+done+' z '+size;
-      get('.progress-line span').style.width=(done/size*100)+'%';
+      const models=groups.reduce((count,group)=>count+group.count,0);
+      get('[data-count]').textContent='Modele: '+models+'/'+size+' · Kolory: '+done+'/'+size;
+      get('.progress-line span').style.width=((models+done)/(2*size)*100)+'%';
       get('[data-summary-note]').textContent=done===size?'Kompozycja kompletna.':groups.length?'Pozycję dopełnia wybór dostępnego koloru.':'Twoje formy pojawią się tutaj.';
       get('[data-summary]').replaceChildren(...groups.map(g=>{const li=el('li');li.append(el('strong',g.name),el('span',g.label+' · '+g.count+' szt.'));return li}));
       const rule=data.sizes.find(s=>s.size===size);

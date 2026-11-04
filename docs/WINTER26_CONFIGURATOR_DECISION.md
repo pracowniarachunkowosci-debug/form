@@ -6,7 +6,7 @@
 
 Z katalogu prowadzą trzy wejścia do **jednej** strony Kwartetu: [4](../winter-zestaw-4.html?size=4#kompozycja), [6](../winter-zestaw-4.html?size=6#kompozycja) i [8](../winter-zestaw-4.html?size=8#kompozycja). Dotychczasowy adres działa bez parametrów (4). [Duet](../winter-zestaw-2.html) pozostaje zapowiedzią. W każdym miejscu można zmienić model, a po zatwierdzeniu palety — kolor. Zmiana modelu czyści kolor wyłącznie tej pozycji. Powiększenie zestawu zachowuje wybory; zmniejszenie wymaga potwierdzenia, jeśli odrzuci wybrane pozycje. Escape zachowuje wybory. Wyzerowanie również wymaga potwierdzenia. Podsumowanie grupuje identyczne pozycje; poszczególne sztuki nadal edytuje się osobno.
 
-Licznik uwzględnia tylko kompletną parę model–kolor dostępną w ramach opublikowanego stanu. Można dziś wybrać cztery modele i nadal zobaczyć „Wybrano 0 z 4” — kolory nie są zatwierdzone. Kompozycja jest przechowywana wyłącznie w pamięci otwartej strony; odświeżenie ją usuwa. „Powiadom mnie” prowadzi na istniejącą listę, nie przesyła składu ani nie rezerwuje egzemplarzy. Nie ma współdzielonego stanu między klientami, obietnicy wysyłki ani oferty opakowania. Modelowe miniatury są wizualizacjami poglądowymi; żadnego barwienia zdjęć.
+Podsumowanie liczy osobno miejsca z modelem i miejsca z dostępnym kolorem. Cztery wybrane modele bez potwierdzonej palety dają „Modele: 4/4 · Kolory: 0/4”. Kompozycja jest kompletna dopiero po wybraniu dostępnego koloru dla każdego modelu. Kompozycja jest przechowywana wyłącznie w pamięci otwartej strony; odświeżenie ją usuwa. „Powiadom mnie” prowadzi na istniejącą listę, nie przesyła składu ani nie rezerwuje egzemplarzy. Nie ma współdzielonego stanu między klientami, obietnicy wysyłki ani oferty opakowania. Modelowe miniatury są wizualizacjami poglądowymi; żadnego barwienia zdjęć.
 
 ## Jedno źródło danych
 
@@ -53,6 +53,16 @@ Wprowadzenie wariantów: zatwierdzić próbkę i wariant powiązane ID, przypisa
 ## Odbiór interfejsu
 
 [Desktop](previews/atelier-desktop.jpg) · [390 px](previews/atelier-mobile390.jpg) · [320 px](previews/atelier-mobile320.jpg). Sprawdzono w Chrome brak poziomego przewijania, natywne radia strzałkami i spacją, przełączanie rozmiarów, powtórzenia/edycję, Escape w oknie utraty wyborów, potwierdzenie zmniejszenia i reset. W prywatnej próbie (poza wydaniem) rzeczywisty UI osiągnął 4/4, zablokował drugą sztukę wyczerpanego SKU, obsłużył dwie sztuki innego SKU i pokazał cenę/zdjęcie wybranej próbki oraz komunikat przy braku fotografii. Przypadki 6/6 i 8/8, inne SKU, puste i nadmiarowe wybory pokrywają testy reguł. Testy generatora LF/CRLF, starej bramki, cookies, niezmienionego hero i referencji należą do builda #18.
+
+### Korekta R02 względem PR #18
+
+| Szerokość w Chrome | Kwartet z PR #18 | Konfigurator R02 |
+|---|---|---|
+| 1440 px | [Karta zestawu](previews/quartet-base-1440.jpg) | [Edycja i podsumowanie](previews/atelier-desktop.jpg) |
+| 390 px | [Karta zestawu](previews/quartet-base-390.jpg) | [Miejsca i edytor](previews/atelier-mobile390.jpg) · [Podsumowanie](previews/atelier-summary390.jpg) |
+| 320 px | [Karta zestawu](previews/quartet-base-320.jpg) | [Podsumowanie i nieaktywna nawigacja](previews/atelier-mobile320.jpg) |
+
+Pozostaje tło karty z PR #18. Panel edycji odsłania to samo tło, sloty i podsumowanie mają wspólną porcelanę (#faf8f3), wybrany model i fokus klawiatury — grafit (#25231f). W Chrome sprawdzono obramowanie po najechaniu, zaznaczenie, widoczny fokus i nieaktywny przycisk ostatniej pozycji. Przy wszystkich trzech szerokościach zawartość obu stron mieści się w obszarze przewijania bez przewijania w poziomie. W galerii HELIX sprawdzono zmianę ujęcia, otwarcie drugiego kadru Enterem i powrót fokusu do powiększanego kadru po Escape.
 
 ## Decyzje właściciela przed sprzedażą
 
