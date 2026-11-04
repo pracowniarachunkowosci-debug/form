@@ -34,6 +34,8 @@ approved = subprocess.check_output(['git','show','6d8e07b:winter-26.html'],cwd=R
 def stable_main(text):
     main=re.search(r'<main\b.*?</main>',text,re.S).group()
     main=re.sub(r'<article class="product-card".*?</article>', '<card>',main,flags=re.S)
+    # Only the invitation to compose in the sets intro changed for #17.
+    main=main.replace('Odkryj Duet albo ułóż własną kompozycję. Zestawy pozostają zapowiedzią.', 'Zestawy pozostają zapowiedzią. Do sprzedaży mogą trafić wyłącznie potwierdzone, gotowe kompozycje z osobnym zapasem.')
     return re.sub(r'(?:<figure class="set-scene">.*?</figure>)?<div class="sets-grid">.*?</article></div>', '<sets>',main,flags=re.S)
 assert stable_main(html)==stable_main(approved)
 assert re.search(r'<header.*?</header>',html,re.S).group()==re.search(r'<header.*?</header>',approved,re.S).group()
@@ -49,6 +51,8 @@ assert script.split('// Interaktywne badanie')[1] == original_script.split('// I
 for forbidden in ('noindex', 'nofollow', 'Content-Security-Policy', 'form-action', 'previews/', 'buy.stripe.com', 'js.stripe.com', 'checkout.stripe.com'):
     assert forbidden not in html, forbidden
 assert html.count('class="product-card"') == 4
+assert html.count('data-color-model=') == 4
+for size in (4,6,8): assert f'winter-zestaw-4.html?size={size}#kompozycja' in html
 cards = re.findall(r'<article class="product-card".*?</article>', html, re.S)
 assert all(card.count('class="status-pill"') == 1 for card in cards)
 for card, product in zip(cards, (p for p in registry['products'] if p['type']=='pojedynczy'), strict=True):

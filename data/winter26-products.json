@@ -55,7 +55,8 @@
       "separateSetStock": false,
       "stripePaymentLink": null,
       "family": "KNITTED",
-      "verifiedCheckout": null
+      "verifiedCheckout": null,
+      "variants": []
     },
     {
       "id": "knitted-medallion",
@@ -99,7 +100,8 @@
       "separateSetStock": false,
       "stripePaymentLink": null,
       "family": "KNITTED",
-      "verifiedCheckout": null
+      "verifiedCheckout": null,
+      "variants": []
     },
     {
       "id": "helix",
@@ -143,7 +145,8 @@
       "separateSetStock": false,
       "stripePaymentLink": null,
       "family": "SCULPTURAL",
-      "verifiedCheckout": null
+      "verifiedCheckout": null,
+      "variants": []
     },
     {
       "id": "full-soft",
@@ -187,7 +190,8 @@
       "separateSetStock": false,
       "stripePaymentLink": null,
       "family": "SCULPTURAL",
-      "verifiedCheckout": null
+      "verifiedCheckout": null,
+      "variants": []
     },
     {
       "id": "zestaw-2",
@@ -226,7 +230,7 @@
       "name": "Kwartet",
       "type": "zestaw",
       "model": "Kwartet",
-      "description": "Cztery formy obok siebie. Zestaw jest zapowiedzią; jego ostateczny skład wymaga potwierdzenia.",
+      "description": "Wybierz cztery, sześć lub osiem miejsc i ułóż własną kompozycję z modeli WINTER 26.",
       "sku": null,
       "material": null,
       "color": null,
@@ -243,14 +247,7 @@
         "identifier": null,
         "warnings": null
       },
-      "photos": [
-        {
-          "asset": "four",
-          "label": "Cztery formy",
-          "alt": "Cztery formy obok siebie: dwie kule z kapturkami i dwie płaskie ozdoby na złotych sznurkach.",
-          "kind": "wizualizacja"
-        }
-      ],
+      "photos": [],
       "photosApproved": false,
       "setContents": null,
       "separateSetStock": false,
@@ -258,5 +255,31 @@
       "family": "ZESTAW",
       "verifiedCheckout": null
     }
-  ]
+  ],
+  "configuration": {
+    "colors": [],
+    "sizes": [
+      {
+        "size": 4,
+        "priceApproved": false,
+        "grossGrosz": null,
+        "shippingApproved": false,
+        "shippingGrosz": null
+      },
+      {
+        "size": 6,
+        "priceApproved": false,
+        "grossGrosz": null,
+        "shippingApproved": false,
+        "shippingGrosz": null
+      },
+      {
+        "size": 8,
+        "priceApproved": false,
+        "grossGrosz": null,
+        "shippingApproved": false,
+        "shippingGrosz": null
+      }
+    ]
+  }
 }

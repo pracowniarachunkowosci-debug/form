@@ -1,5 +1,5 @@
 /* WINTER 26 only: approved R04 layout and palette. */
-.winter-page { --burgundy: #632d3b; --paper: #faf8f3; --cream: #faf8f3; --ink: #25231f; --surface: #f2eee6; --muted: #625d54; --rule: #dcd6cc; }
+.winter-page { --burgundy: #632d3b; --porcelain: #faf8f3; --paper: var(--porcelain); --cream: var(--porcelain); --ink: #25231f; --surface: #f2eee6; --muted: #625d54; --rule: #dcd6cc; }
 [hidden] { display: none !important; }
 .skip-link { position: fixed; top: -120px; left: 20px; z-index: 200; padding: 15px 24px; background: var(--paper); color: var(--ink); }
 .skip-link:focus { top: 12px; }

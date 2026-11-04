@@ -13,7 +13,7 @@ def purchase_panel(p, store):
     policy = store['release']
     link = checkout_link(p, store)
     parts = []
-    if p['grossPLN'] is not None:
+    if 'variants' not in p and p['grossPLN'] is not None:
         parts.append(f'<p class="detail-price">{price(p["grossPLN"])} brutto</p>')
     if link:
         parts.append(f'<div class="purchase-terms"><p>{escape(policy["delivery"])} · {price(policy["shippingPLN"])}<br>'
