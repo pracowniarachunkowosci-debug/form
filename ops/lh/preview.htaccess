@@ -1,0 +1,12 @@
+# Install FIRST, before HTML/assets. Replace placeholder with an absolute private path.
+Options -Indexes
+DirectoryIndex index.html
+AddType image/avif .avif
+AddType image/webp .webp
+SSLRequireSSL
+AuthType Basic
+AuthName "Pracownia Form RC"
+AuthUserFile "/REPLACE_OUTSIDE_PUBLIC_HTML/pf-preview.htpasswd"
+Require valid-user
+Header always set X-Robots-Tag "noindex, nofollow, noarchive"
+Header always set Cache-Control "private, no-store"

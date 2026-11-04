@@ -5,7 +5,7 @@ from pathlib import Path
 from store_gate import checkout_link
 from store_panel import purchase_panel, facts, price
 ROOT=Path(__file__).resolve().parents[1]
-def read(p): return p.read_bytes().decode('utf8')
+def read(p): return p.read_bytes().decode('utf8').replace('\r\n', '\n')
 def write(p,s):
     if '--check' in sys.argv:
         assert p.exists() and read(p)==s, f'Stale generated page: {p.name}'
