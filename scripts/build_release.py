@@ -7,30 +7,40 @@ import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / '.artifacts'
-OUT.mkdir(exist_ok=True)
-for check in (['scripts/render_store.py', '--check'], ['scripts/check_store_gate.py']):
+commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT,text=True).strip()
+if subprocess.check_output(['git','status','--porcelain'], cwd=ROOT):
+    sys.exit('Release requires a clean checkout; commit or isolate your changes first.')
+OUT = ROOT / '.artifacts' / ('lh-' + commit[:12])
+OUT.mkdir(parents=True, exist_ok=True)
+def payload(p):
+    data = p.read_bytes()
+    return data.replace(b'\r\n', b'\n') if p.suffix in {'.html','.js','.css','.svg','.txt','.xml'} else data
+
+for check in (['scripts/render_store.py', '--check'], ['scripts/check_render_eol.py'], ['scripts/check_store_gate.py']):
     subprocess.run([sys.executable, *check], check=True, cwd=ROOT)
 subprocess.run([sys.executable, str(ROOT/'scripts/check_publication.py')], check=True, cwd=ROOT)
-files = sorted([*ROOT.glob('*.html'), *ROOT.glob('*.css'), ROOT/'script.js', ROOT/'store-gallery.js', ROOT/'favicon.svg', ROOT/'robots.txt', ROOT/'sitemap.xml', *[p for p in (ROOT/'assets').rglob('*') if p.is_file()]])
+subprocess.run(['node','scripts/check_consent.cjs'], cwd=ROOT, check=True)
+subprocess.run(['node','--check','store-gallery.js'], cwd=ROOT, check=True)
+files = sorted([*ROOT.glob('*.html'), *ROOT.glob('*.css'), ROOT/'script.js', ROOT/'store-gallery.js', ROOT/'favicon.svg', ROOT/'robots.txt', ROOT/'sitemap.xml', *[p for p in (ROOT/'assets').rglob('*') if p.is_file()]], key=lambda p: p.relative_to(ROOT).as_posix())
 allowed_assets = {'.avif', '.webp', '.jpg', '.jpeg', '.png', '.svg', '.woff', '.woff2'}
 assert all(p.suffix.lower() in allowed_assets for p in files if 'assets' in p.relative_to(ROOT).parts)
-manifest = [{'path': p.relative_to(ROOT).as_posix(), 'bytes': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()} for p in files]
+blobs = {p.relative_to(ROOT).as_posix(): payload(p) for p in files}
+manifest = [{'path': name, 'bytes': len(blob), 'sha256': hashlib.sha256(blob).hexdigest()} for name, blob in blobs.items()]
 with zipfile.ZipFile(OUT/'pracownia-form-lh.zip', 'w', compression=zipfile.ZIP_DEFLATED) as archive:
     for p in files:
         info = zipfile.ZipInfo(p.relative_to(ROOT).as_posix(), date_time=(1980, 1, 1, 0, 0, 0))
         info.create_system = 3
         info.external_attr = 0o100644 << 16
         info.compress_type = zipfile.ZIP_DEFLATED
-        archive.writestr(info, p.read_bytes(), compresslevel=9)
-(OUT/'manifest.json').write_text(json.dumps(manifest, ensure_ascii=False, indent=2)+'\n', encoding='utf-8')
+        archive.writestr(info, blobs[info.filename], compresslevel=9)
+(OUT/'manifest.json').write_bytes((json.dumps(manifest, ensure_ascii=False, indent=2)+'\n').encode())
 with zipfile.ZipFile(OUT/'pracownia-form-lh.zip') as archive:
     assert archive.testzip() is None
     assert archive.namelist() == [item['path'] for item in manifest]
     for item in manifest:
         assert hashlib.sha256(archive.read(item['path'])).hexdigest() == item['sha256']
 release = {
-    'source_commit': subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip(),
+    'source_commit': commit,
     'source_dirty': bool(subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT)),
     'archive': 'pracownia-form-lh.zip',
     'archive_sha256': hashlib.sha256((OUT/'pracownia-form-lh.zip').read_bytes()).hexdigest(),
@@ -39,5 +49,6 @@ release = {
     'files': len(files), 'deployment_authorized': False
 }
 (OUT/'release.json').write_text(json.dumps(release, indent=2)+'\n', encoding='utf-8')
+print(f'Output: {OUT}')
 print(f'Local archive only: {len(files)} files, {sum(item["bytes"] for item in manifest):,} bytes uncompressed.')
 print(json.dumps(release))

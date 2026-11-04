@@ -1,0 +1,10 @@
+{
+  "source_commit": "20bc512e8b80be6de469eadf4aa0849fa3659355",
+  "source_dirty": false,
+  "archive": "pracownia-form-lh.zip",
+  "archive_sha256": "952f91afea3c5e50fd94484e2df362924104264242ea881777d3303549b26985",
+  "archive_bytes": 9169919,
+  "manifest_sha256": "76cc1203f042300639fc1d757b1c9d8d7f907478c44b54bd9c7e8c9fb3f7498a",
+  "files": 109,
+  "deployment_authorized": false
+}

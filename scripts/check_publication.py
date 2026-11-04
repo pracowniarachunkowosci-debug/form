@@ -30,7 +30,7 @@ html = (ROOT/'winter-26.html').read_text(encoding='utf-8')
 ga = lambda s: next(x for x in re.findall(r'<script>.*?</script>', s, re.S) if 'PF_GA_MEASUREMENT_ID' in x)
 assert ga(html) == ga(baseline('winter-26.html')), 'GA initialization changed'
 # The hero, header and all content outside the catalog cards / sets are frozen at PR11.
-approved = subprocess.check_output(['git','show','6d8e07b:winter-26.html'],cwd=ROOT).decode().replace('\\r\\n','\\n')
+approved = subprocess.check_output(['git','show','6d8e07b:winter-26.html'],cwd=ROOT).decode().replace('\r\n','\n')
 def stable_main(text):
     main=re.search(r'<main\b.*?</main>',text,re.S).group()
     main=re.sub(r'<article class="product-card".*?</article>', '<card>',main,flags=re.S)
@@ -63,6 +63,17 @@ for product in registry['products']:
         assert 'buy.stripe.com' not in detail and 'href="index.html#preorder"' in detail
 assert 'https://pracowniaform.com/winter-26.html' in html
 assert not any(t == 'form' for t, a in pages['winter-26.html'].tags)
+assert len(pages) == 16
+for name,page in pages.items():
+    assert not any(a.get('href','').startswith(('https://buy.stripe.com','https://checkout.stripe.com')) for _,a in page.tags), name
+    assert any(t == 'title' for t,a in page.tags), name
+    canon=[a['href'] for t,a in page.tags if t=='link' and a.get('rel')=='canonical']
+    robots = [a['content'] for t,a in page.tags if t=='meta' and a.get('name')=='robots']
+    if name in {'zapis-potwierdzony.html','zapis-prawie-gotowy.html'}:
+        assert any('noindex' in value for value in robots), name
+    else:
+        assert canon == ['https://pracowniaform.com/' + ('' if name=='index.html' else name)], (name,canon)
+        assert not any('noindex' in value for value in robots), name
 refs = 0
 for name, page in pages.items():
     assert any('data-cookie-settings' in a for _, a in page.tags), f'No settings entry: {name}'
