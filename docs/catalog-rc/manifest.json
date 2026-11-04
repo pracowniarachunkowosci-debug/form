@@ -1,0 +1,557 @@
+[
+  {
+    "path": "assets/galaxy.webp",
+    "bytes": 181460,
+    "sha256": "890ac09796aaf2baf11feb75d422eb17c54f726d390cf51fa508c5cc09c0bfb1"
+  },
+  {
+    "path": "assets/hero-form.webp",
+    "bytes": 255914,
+    "sha256": "be28a2e46f66659d53d276fadca92f5fefdf9b4a57c1fa3487421b6bb332842b"
+  },
+  {
+    "path": "assets/hero-premium.webp",
+    "bytes": 135478,
+    "sha256": "87a90f33a9bcbb603bd7dcda04018e6076d41d63e7db89014a829c948e4ee248"
+  },
+  {
+    "path": "assets/hero.webp",
+    "bytes": 135478,
+    "sha256": "87a90f33a9bcbb603bd7dcda04018e6076d41d63e7db89014a829c948e4ee248"
+  },
+  {
+    "path": "assets/inspirations.webp",
+    "bytes": 308614,
+    "sha256": "8f75d1c1a130f5829a74d8eaebc583fea750f51ff78f67b3d3be8ac2cfd0f94a"
+  },
+  {
+    "path": "assets/kintsugi-detail.webp",
+    "bytes": 269124,
+    "sha256": "acea4537e4f0e71b64eb83b9bd1151b6c00fef950fac8585e05e035c7cdd03a8"
+  },
+  {
+    "path": "assets/kintsugi-hero.webp",
+    "bytes": 241746,
+    "sha256": "20aa354760d0b4a947373b921cac354f3fc990e8a5ff9e7391cc5d793f91986e"
+  },
+  {
+    "path": "assets/kintsugi-lantern.webp",
+    "bytes": 206774,
+    "sha256": "49b449fa2b1f2206e9f921375be0c79ab2663b3b13304a5e477bfad8985d6621"
+  },
+  {
+    "path": "assets/kintsugi-light.webp",
+    "bytes": 122842,
+    "sha256": "f222e43c6ec5346e7a47a6c36f9615db81fb843df39326256a490a031321efaf"
+  },
+  {
+    "path": "assets/kintsugi-mood.webp",
+    "bytes": 111004,
+    "sha256": "d0961b748bfda2f1a98519726e03f14ac06829a5d74b86a89e4b9258b9478fa5"
+  },
+  {
+    "path": "assets/kintsugi.webp",
+    "bytes": 220196,
+    "sha256": "c78f960d0f63dd97d244cfc358892a55fcf4228413a3b3473111239275522787"
+  },
+  {
+    "path": "assets/nord-detail.webp",
+    "bytes": 94854,
+    "sha256": "fd75152c8f5d05f75285db68f05224ca29e1fa71b5b76285aba33966472515a4"
+  },
+  {
+    "path": "assets/nord-galaxy.webp",
+    "bytes": 166146,
+    "sha256": "d435daa89ba90fc4381f546e91093007ac2faf14f09d8a2dc6caeda5d91503f1"
+  },
+  {
+    "path": "assets/nord-hero.webp",
+    "bytes": 125428,
+    "sha256": "191420f7a7a8fe636b60272d9a3d61c663f130eea2b1c6ff6106f711fcd4b1a4"
+  },
+  {
+    "path": "assets/nord-lifestyle.webp",
+    "bytes": 94854,
+    "sha256": "fd75152c8f5d05f75285db68f05224ca29e1fa71b5b76285aba33966472515a4"
+  },
+  {
+    "path": "assets/nord.webp",
+    "bytes": 94718,
+    "sha256": "47cdc6c045744848f34131a5004c72449f2e348d8f1a192e1a347a72a4b9daca"
+  },
+  {
+    "path": "assets/stone-alt.webp",
+    "bytes": 122432,
+    "sha256": "953eccfa5b18d8d486f1e063f8beff82b2e7ed485f99c7b0ca6ab22951bbef36"
+  },
+  {
+    "path": "assets/stone-detail.webp",
+    "bytes": 180834,
+    "sha256": "b95565159e4d3260d3cd2f50e9fd5ffa33392385c441365173af379f62311438"
+  },
+  {
+    "path": "assets/stone-hero.webp",
+    "bytes": 171686,
+    "sha256": "676afbd9f321ed8a4cef4e07ccb27ea443783bf0dec63763fee789abd7bdd6aa"
+  },
+  {
+    "path": "assets/stone-mood.webp",
+    "bytes": 176430,
+    "sha256": "11472d8006cb6ab1cd5bf13052ddaf78664399b43db47b65923b4e4715f4144f"
+  },
+  {
+    "path": "assets/stone.webp",
+    "bytes": 123786,
+    "sha256": "ed90c0091d2d59249343f50d920d0e3b11108127e0c7687f8c42876ef180b74c"
+  },
+  {
+    "path": "assets/store/four-1120.avif",
+    "bytes": 27572,
+    "sha256": "1596da2940693c0576875c70054b25e188d2007fe6326ae1cbb2e70a79469605"
+  },
+  {
+    "path": "assets/store/four-1120.webp",
+    "bytes": 47432,
+    "sha256": "70e19fb81e42dcbf5f381d5ae2f819244d62ce96324db8ba11b5c91466d2bd09"
+  },
+  {
+    "path": "assets/store/four-360.avif",
+    "bytes": 4728,
+    "sha256": "9f3e62447d797808602247e4fb240c8d7eac54684a3385cb84db015849f07102"
+  },
+  {
+    "path": "assets/store/four-360.webp",
+    "bytes": 8562,
+    "sha256": "0b53e49a4394db6ef2a5a2ae69c2bbca6d1524ed29a16071282dd8e1bc1b752a"
+  },
+  {
+    "path": "assets/store/four-680.avif",
+    "bytes": 12634,
+    "sha256": "30fb2378c82fea216dc085674e17f3e45119aaf51508c2f5cbd9afbb3a37637a"
+  },
+  {
+    "path": "assets/store/four-680.webp",
+    "bytes": 23056,
+    "sha256": "69057ef75fd85739975ec8f34c84a38393ca4edcf833f0043026d6c0287cef5f"
+  },
+  {
+    "path": "assets/store/full-soft-1120.avif",
+    "bytes": 96879,
+    "sha256": "118d928c53cfe46f50daeb9ac84888fafb6fb43693a4b448e6442faeedc0d533"
+  },
+  {
+    "path": "assets/store/full-soft-1120.webp",
+    "bytes": 155380,
+    "sha256": "610e772544103609674b76176a52f19e83801655f051990f9257f9ff526d9a3a"
+  },
+  {
+    "path": "assets/store/full-soft-360.avif",
+    "bytes": 13915,
+    "sha256": "5a0c81334890f5b9e0002391f7c6a1fac575bc16a82851c126b98a25ed2d08e2"
+  },
+  {
+    "path": "assets/store/full-soft-360.webp",
+    "bytes": 24872,
+    "sha256": "e09c766e12836f50eef443c38f07970c9f5c0c416138cfca64e95a7665dddfe6"
+  },
+  {
+    "path": "assets/store/full-soft-680.avif",
+    "bytes": 43345,
+    "sha256": "2b3eb0b857e7bd224efcbcb1a106ad3653a48f5b07c5bbd28461cc966fb827f6"
+  },
+  {
+    "path": "assets/store/full-soft-680.webp",
+    "bytes": 73920,
+    "sha256": "b00d5ee0094b15719fc46377d727869c3c5cd8265974c5c550f252d0d939b7ac"
+  },
+  {
+    "path": "assets/store/full-soft-side-292.avif",
+    "bytes": 7814,
+    "sha256": "eaee892965d0e059af31c3da923e553c555b4cadeb6b7b104e3abf4d7ecb3b54"
+  },
+  {
+    "path": "assets/store/full-soft-side-292.webp",
+    "bytes": 12654,
+    "sha256": "9aa5ecfea6cfb57c815a92c33042327c843b9085c229fc35edb9246d1976a1b7"
+  },
+  {
+    "path": "assets/store/helix-1120.avif",
+    "bytes": 71534,
+    "sha256": "8e0f4670a0f32d7eae4d243e227993d313752049d9f8d30546f2715949a4b637"
+  },
+  {
+    "path": "assets/store/helix-1120.webp",
+    "bytes": 117694,
+    "sha256": "ad6d293389f9b86fca46d3a59bb3c7f54f4d40feea2885cff20dea640c4f9c04"
+  },
+  {
+    "path": "assets/store/helix-360.avif",
+    "bytes": 8920,
+    "sha256": "a24e09f212e4050dd3671124c873faebe575727c5fac4b2859c4523ab2b78998"
+  },
+  {
+    "path": "assets/store/helix-360.webp",
+    "bytes": 16998,
+    "sha256": "cbdb42405f3b82858238daeb5ce9ff52669d014b111fdc9f6f68ced545b0c211"
+  },
+  {
+    "path": "assets/store/helix-680.avif",
+    "bytes": 31826,
+    "sha256": "89eb5cce8dda7cd45394a8be14e0b205e1d03e437687782352ebf119f2146619"
+  },
+  {
+    "path": "assets/store/helix-680.webp",
+    "bytes": 55506,
+    "sha256": "e13a36e9ac3591cb7d38785cc91fe5fcc28f62e79248a618d9e189d9167b9116"
+  },
+  {
+    "path": "assets/store/helix-detail-360.avif",
+    "bytes": 9758,
+    "sha256": "e02b3d17d0292cc44c31faa62962142d3de036a5cffe656b3a165afdf6dd6ef7"
+  },
+  {
+    "path": "assets/store/helix-detail-360.webp",
+    "bytes": 16022,
+    "sha256": "c985548de057241ca4f846cc4a666c1c6173e916e153bb600ae8464d7b52cf38"
+  },
+  {
+    "path": "assets/store/helix-detail-518.avif",
+    "bytes": 17148,
+    "sha256": "7a5802b9e6bbab35811f08e5ed77a741d0e51251fd3ad12fa53001ed00048ff9"
+  },
+  {
+    "path": "assets/store/helix-detail-518.webp",
+    "bytes": 26618,
+    "sha256": "1adc53cd3a2b4fb8ceb59bfe1fbbb8593e9b2d93e675894aadf7e977e10bef65"
+  },
+  {
+    "path": "assets/store/medallion-detail-1120.avif",
+    "bytes": 87222,
+    "sha256": "9c2ab432a6c6f80f8cf588196bacf2519f50eb38f770dddedafd5c9e37642d02"
+  },
+  {
+    "path": "assets/store/medallion-detail-1120.webp",
+    "bytes": 153964,
+    "sha256": "3193dbc7c1c7f66cdaeb414e942b41933f2efa2454f05b36991726d794fe6ccb"
+  },
+  {
+    "path": "assets/store/medallion-detail-360.avif",
+    "bytes": 12508,
+    "sha256": "3ced1a05e3aca07ae81f7136b732377657dffc3dc2909b13c471162986543cba"
+  },
+  {
+    "path": "assets/store/medallion-detail-360.webp",
+    "bytes": 23642,
+    "sha256": "e260d198ee43f03cf5e231f6b9d762d8312403f0e186f4f2d753215cf0d7c7f2"
+  },
+  {
+    "path": "assets/store/medallion-detail-680.avif",
+    "bytes": 36463,
+    "sha256": "d2f92042b6a3c2939743ad80814df84758a31fe9ea72f13ddc72f8ed64d6b4d6"
+  },
+  {
+    "path": "assets/store/medallion-detail-680.webp",
+    "bytes": 69706,
+    "sha256": "f1a0f27eacbd7d2e7e0d4516a8349e2360d89b4c051a6061709f037751ec1b29"
+  },
+  {
+    "path": "assets/store/medallion-loop-264.avif",
+    "bytes": 8570,
+    "sha256": "6e1199c432a6bbdaf1157eb23ee0a6036c298e2cc16e3bb80c10f70f45761f89"
+  },
+  {
+    "path": "assets/store/medallion-loop-264.webp",
+    "bytes": 15528,
+    "sha256": "5aae9ef4d9cff756589fd0a892fb92c2a10ac98afa4589c8d57378451e6ff854"
+  },
+  {
+    "path": "assets/store/star-1120.avif",
+    "bytes": 64451,
+    "sha256": "2a62bdce0e7b7753c3404f99403ccdfe6acb767e0b49928cf70809028db52012"
+  },
+  {
+    "path": "assets/store/star-1120.webp",
+    "bytes": 106366,
+    "sha256": "96ec9a00ff69da90d685c608185d159c6bdea4799a9ef11f21558bb2c98e5297"
+  },
+  {
+    "path": "assets/store/star-360.avif",
+    "bytes": 10231,
+    "sha256": "7f5dab934c1669447c3347008942d4292492e9d8f65a54ca3749a9fd03a9775f"
+  },
+  {
+    "path": "assets/store/star-360.webp",
+    "bytes": 17856,
+    "sha256": "15efa0a98985f48a7adecae01ab4bc3d6e14fe617610bf8344ac9514ebe4871d"
+  },
+  {
+    "path": "assets/store/star-680.avif",
+    "bytes": 28124,
+    "sha256": "dc836da9c8be4896c9b9747328fda8fafb6ec453fce18f7a880c585a7c63623e"
+  },
+  {
+    "path": "assets/store/star-680.webp",
+    "bytes": 49502,
+    "sha256": "84a18deadc942ae320e393ed39c32f619421276446b6cd84c6c32f40b43f9663"
+  },
+  {
+    "path": "assets/store/star-loop-326.avif",
+    "bytes": 8437,
+    "sha256": "b0f8e0cb3f8cf70504db058dc61f5ed7cf48a0ef03c5f24421bd7afa1dd83d58"
+  },
+  {
+    "path": "assets/store/star-loop-326.webp",
+    "bytes": 13868,
+    "sha256": "af7fba9b5b1794e4d5f3fe9fee2412de9c93f0a66dafdfae0b31b45d8a1043bc"
+  },
+  {
+    "path": "assets/winter-26-candlestick-winter.png",
+    "bytes": 569788,
+    "sha256": "139becb9d2f0f313e21a7f92331580ae2b5539da85df4a3e981c927b3d1f04b2"
+  },
+  {
+    "path": "assets/winter-26-helix.jpg",
+    "bytes": 123485,
+    "sha256": "e683833a55eefbe27ec8d4d3c011740994064ca167c535b45f73f4fa34f842c7"
+  },
+  {
+    "path": "assets/winter-26-hero-editorial.webp",
+    "bytes": 101902,
+    "sha256": "362afd873a0fc68481f7fb5b4d453f63460ff3ecce55d2a53b6ada9611953883"
+  },
+  {
+    "path": "assets/winter-26-process.png",
+    "bytes": 1969060,
+    "sha256": "7ecda3e2f216148cff4cc5ec86a2574cce9675ef79effe3d28dc77dc64091dca"
+  },
+  {
+    "path": "assets/winter-26-solis-dish.webp",
+    "bytes": 87496,
+    "sha256": "c45b62f6c457410783748e2b5385be2dd217ff04cb573ae7df7f5fe8e61ff47e"
+  },
+  {
+    "path": "assets/winter-26-solis-winter.webp",
+    "bytes": 99716,
+    "sha256": "7b14ab71be4ad3787f17c2801355e3802800f8886ea98bd87003f7a3f8ec0284"
+  },
+  {
+    "path": "assets/winter-26-vine-product.webp",
+    "bytes": 86426,
+    "sha256": "1bc90d602811abd1e38d1960f64165bf3138e8859162129e1aa6257323683af2"
+  },
+  {
+    "path": "assets/winter-26-zen-smoke.webp",
+    "bytes": 105422,
+    "sha256": "0079beaf63597260fe7a6d67017fffda4e9bee8d0fe57e93ab391aa78841ab13"
+  },
+  {
+    "path": "assets/winter-open-concept-360.avif",
+    "bytes": 9838,
+    "sha256": "62ea995cf7a3ca90b337510291bb82d478fa131ee7214a65bb7ea56d2d3a1d68"
+  },
+  {
+    "path": "assets/winter-open-concept-360.webp",
+    "bytes": 16550,
+    "sha256": "3c43ac5640e0fa77cae3df17a82c5732e72fdc693ba77bc6e40b1eda5deea5d0"
+  },
+  {
+    "path": "assets/winter-open-concept-480.avif",
+    "bytes": 15478,
+    "sha256": "4f05f1f2e3437fc86a64656b483127405b70ff806526f4cea0e052fc9189d8c3"
+  },
+  {
+    "path": "assets/winter-open-concept-480.webp",
+    "bytes": 25212,
+    "sha256": "16197b3d2e79e5dc00e4c6de6ec6d069668e668d8a31c12c511e9eb16bbb5127"
+  },
+  {
+    "path": "assets/winter-open-concept-693.avif",
+    "bytes": 26169,
+    "sha256": "e5c16dd679e3af5de2f9a893cd3b78ee8e821ccde2b6b57118257775293e5a7f"
+  },
+  {
+    "path": "assets/winter-open-concept-693.webp",
+    "bytes": 41282,
+    "sha256": "67d132fe9cd745d5b2083fb54f711d85a185214c922458a198f66ae5d86222bc"
+  },
+  {
+    "path": "assets/winter-r04-1024.avif",
+    "bytes": 39536,
+    "sha256": "a88fda3e110364ab6c9e67a194082943eebb125d1a934a9b2d3078d299f6c61a"
+  },
+  {
+    "path": "assets/winter-r04-1024.webp",
+    "bytes": 68020,
+    "sha256": "95d125e551c240c573632dcdd0fdc8e5786ed71cf048868a705a1082af37be3f"
+  },
+  {
+    "path": "assets/winter-r04-1536.avif",
+    "bytes": 69746,
+    "sha256": "859b73bbb4f29cc69c2e3de25409ac5857b4f88ac331912d8b6e647adc10e323"
+  },
+  {
+    "path": "assets/winter-r04-1536.webp",
+    "bytes": 123402,
+    "sha256": "652f236e6c98440b21e900fc5b1e5c538f4f7f748b62a00a50af398f2d5c87f3"
+  },
+  {
+    "path": "assets/winter-r04-480.avif",
+    "bytes": 11776,
+    "sha256": "fdbbc5d914d43317b735893f1c58eaac5b9e7beb73f1457ace3b2e83c45f32a7"
+  },
+  {
+    "path": "assets/winter-r04-480.webp",
+    "bytes": 19912,
+    "sha256": "c861fda308c64fc58c84cb23421f9d2e0d240eff384e115af741be1183256208"
+  },
+  {
+    "path": "assets/winter-r04-768.avif",
+    "bytes": 24798,
+    "sha256": "0925edeed80c0d3d692ef7357ac8fd0b12bc4f353e2d4ee4e1541b32abb687fe"
+  },
+  {
+    "path": "assets/winter-r04-768.webp",
+    "bytes": 43390,
+    "sha256": "077f2545d0d20d9ec0a60337aad3b85580e7c41d70717fd38f31ceff32a45e75"
+  },
+  {
+    "path": "assets/winter-r04-social.jpg",
+    "bytes": 136804,
+    "sha256": "5c43a5bba603cbb4f9ffafdf6e606922e52980430174bae4221a3a30ce186f6c"
+  },
+  {
+    "path": "assets/wood.webp",
+    "bytes": 149122,
+    "sha256": "5f87189a1df2f5dcdd721c22f78e3be97d818eb710c3c07794f9718a83ae4c62"
+  },
+  {
+    "path": "favicon.svg",
+    "bytes": 328,
+    "sha256": "002133b8fad345098efd8379380aefefed4b0557aced79393749bb5d56ad98cd"
+  },
+  {
+    "path": "index.html",
+    "bytes": 34785,
+    "sha256": "1ed18ee9ca2b5879f52afe5e95ee73c2e047a56411f80e15f44f2ccb6850e537"
+  },
+  {
+    "path": "kolekcja-kintsugi.html",
+    "bytes": 13232,
+    "sha256": "3393f83fe139b176820ac9192ca93fb343169fbdbbca1d84a386cb18b5a421c9"
+  },
+  {
+    "path": "kolekcja-nord.html",
+    "bytes": 12854,
+    "sha256": "a6d0a4bccdcceaa1e3dad0ceeaf89871ee1df946740d5584a1979ed87a06e2a6"
+  },
+  {
+    "path": "kolekcja-stone.html",
+    "bytes": 13191,
+    "sha256": "71b145f585287ca9f639bc8a4d5d44f2676fc115df9b26432c17ac69cf5e2522"
+  },
+  {
+    "path": "kontakt.html",
+    "bytes": 5604,
+    "sha256": "f6e4d83833da3d9c8a6eb6f15950b1837b18f15d7b39e837cd70e250164b85d3"
+  },
+  {
+    "path": "polityka-prywatnosci.html",
+    "bytes": 14325,
+    "sha256": "7f4e45984af9e630a83991265b8b05ddb007bae58006f17d5bbe1200f70660ea"
+  },
+  {
+    "path": "robots.txt",
+    "bytes": 70,
+    "sha256": "ca52a972b0d468b9271919da7d49919e52e81f48ccfac00eae1f3193807883e3"
+  },
+  {
+    "path": "script.js",
+    "bytes": 8596,
+    "sha256": "cfcebcb064963a955918924f30f632d87646343984ce35adbd784a91c7a86ff8"
+  },
+  {
+    "path": "sitemap.xml",
+    "bytes": 1392,
+    "sha256": "8512324e290b4ba86c50ab4f69c83f96791ccd176c5102c5be18c69250f23bbd"
+  },
+  {
+    "path": "store-gallery.js",
+    "bytes": 1576,
+    "sha256": "03418b4298a6bbd4279082b431640d6eb24cf2b5cc64d599394e4aebd490d55a"
+  },
+  {
+    "path": "store.css",
+    "bytes": 4592,
+    "sha256": "810cc92b28ea9e75e2ae3c549c57f1558bc77e7fdb94fadf25d2daf5051d19a4"
+  },
+  {
+    "path": "styles.css",
+    "bytes": 57127,
+    "sha256": "88aeee2937fcb153d0c2fbd7c9e66e38ad35a9ebdc0cbf56e11b878987ccf8fd"
+  },
+  {
+    "path": "winter-26.css",
+    "bytes": 16489,
+    "sha256": "09e5108a94f5a37ca3f1a2638f0532fd09ed70662660d6c06407f7c0fe4392a1"
+  },
+  {
+    "path": "winter-26.html",
+    "bytes": 20441,
+    "sha256": "7d387283dd182f4e7767db387f9005edffbeed0b70ecd88f5698f6c7cbdf3a2a"
+  },
+  {
+    "path": "winter-atelier.css",
+    "bytes": 6596,
+    "sha256": "6c3e6582e8c82a03506d8c3a427f30ba21970faa51d6e95d2cb1819c391ade02"
+  },
+  {
+    "path": "winter-config.js",
+    "bytes": 8527,
+    "sha256": "d36a962362da4b4aaccf1df7276659d5c9eeeb33278ccd9e9eb5ef701ea836fd"
+  },
+  {
+    "path": "winter-full-soft.html",
+    "bytes": 11354,
+    "sha256": "bbd60fc3f6f464d327ab78c869a0ae71e4069a292b234d03be786b51affee065"
+  },
+  {
+    "path": "winter-helix.html",
+    "bytes": 11399,
+    "sha256": "6fc29a7f1a13653baf88f949b4e5824904319e9f8c406cf4f5397fd74d4e1df5"
+  },
+  {
+    "path": "winter-knitted-medallion.html",
+    "bytes": 11589,
+    "sha256": "0c5818364cc1e9c62b0d7ac35c4696e2034fc3090f7155bb7e0e5aa4cbf56bc3"
+  },
+  {
+    "path": "winter-knitted-star.html",
+    "bytes": 11312,
+    "sha256": "ba7b096fdd8e0a014395c81f05aff881b42bcbad6d0290c6bb1d8748affd469e"
+  },
+  {
+    "path": "winter-zestaw-2.html",
+    "bytes": 8439,
+    "sha256": "5c8a6686dadf74ee89600598af2255143f746bb72f31c3fc2822146583ef8ae4"
+  },
+  {
+    "path": "winter-zestaw-4.html",
+    "bytes": 9118,
+    "sha256": "0ae016114bd390f2515a39789e9a969020f384b2047c4bc2ebfc3b92c8c3cdf9"
+  },
+  {
+    "path": "zapis-potwierdzony.html",
+    "bytes": 4949,
+    "sha256": "c8b2785a2dfa219d83d589be28c09d001f61793109293f8bd3622c07a825c6f8"
+  },
+  {
+    "path": "zapis-prawie-gotowy.html",
+    "bytes": 4910,
+    "sha256": "55264e1b4d32f389f3d2499a581e15afd3d38757293b5849128db6471d4bd010"
+  },
+  {
+    "path": "zasady-premiery.html",
+    "bytes": 8439,
+    "sha256": "3a893792d37d39d71671b77f396928ef1bb013018d7d75657fb811b8b06f185d"
+  }
+]
