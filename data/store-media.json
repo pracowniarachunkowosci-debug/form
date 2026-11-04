@@ -124,17 +124,5 @@
       680,
       1120
     ]
-  },
-  "box": {
-    "source": "Obraz ChatGPT 4 lis 2026, 16_22_40-6.png",
-    "sha256": "a8d39afe8862e24009bf9fc7261e0f298fad360607b3e36614811d70fedfb619",
-    "crop": null,
-    "width": 1122,
-    "height": 1402,
-    "widths": [
-      360,
-      680,
-      1120
-    ]
   }
 }

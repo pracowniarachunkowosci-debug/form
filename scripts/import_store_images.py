@@ -13,7 +13,7 @@ shots = [
  ('medallion-loop',board,(609,0,873,411)), ('medallion-detail',portrait('37-3'),None),
  ('helix',portrait('35-2'),None), ('helix-detail',board,(681,770,1199,1312)),
  ('full-soft',portrait('39-5'),None), ('full-soft-side',board,(306,419,598,762)),
- ('four',board,(0,0,1199,411)), ('box',portrait('40-6'),None)]
+ ('four',board,(0,0,1199,411))]
 out=ROOT/'assets/store'; out.mkdir(parents=True,exist_ok=True)
 manifest={}
 for key,filename,box in shots:

@@ -3,6 +3,7 @@ import json,re,sys
 from html import escape
 from pathlib import Path
 from store_gate import checkout_link
+from store_panel import purchase_panel, facts, price
 ROOT=Path(__file__).resolve().parents[1]
 def read(p): return p.read_bytes().decode('utf8')
 def write(p,s):
@@ -10,8 +11,6 @@ def write(p,s):
         assert p.exists() and read(p)==s, f'Stale generated page: {p.name}'
     else: p.write_bytes(s.encode('utf8'))
 def e(s): return escape(str(s),quote=True)
-def known(s): return e(s) if s is not None else 'Do potwierdzenia'
-def pln(v): return f'{v:.2f} zł'.replace('.',',') if v is not None else 'Do potwierdzenia'
 store=json.loads(read(ROOT/'data/winter26-products.json')); products=store['products']; policy=store['release']
 media=json.loads(read(ROOT/'data/store-media.json'))
 URL='https://pracowniaform.com/'
@@ -76,17 +75,24 @@ def detail(p,n):
         for attr,v in [('width',w),('height',round(m['height']*w/m['width']))]:
             head=re.sub(rf'(og:image:{attr}" content=")\d+',lambda a:a[1]+str(v),head)
     link=checkout_link(p,store); target=p['slug'] if p['type']=='pojedynczy' else 'zestawy'
-    fields=[('Technika','Druk 3D'),('Materiał',known(p['material'])),('Kolor',known(p['color'])),('Wymiary',known(p['dimensions'])),('SKU',known(p['sku'])),('Stan fizyczny',known(p['stock'])),('Cena brutto',pln(p['grossPLN'])),('Ilość w pilocie','1 zestaw' if p['type']=='zestaw' else '1 sztuka')]
-    specs=''.join(f'<div><dt>{k}</dt><dd>{v}</dd></div>' for k,v in fields)
-    gps=p['gpsr']
-    safety='<dl>'+''.join(f'<div><dt>{k}</dt><dd>{known(gps[v])}</dd></div>' for k,v in [('Producent','producer'),('Adres','address'),('E-mail','email'),('Identyfikator','identifier'),('Instrukcja i ostrzeżenia','warnings')])+'</dl>'
+    if link:
+        head=head.replace('Kolekcja w przygotowaniu · sprzedaż nieaktywna','Kolekcja WINTER 26')
+    specs=facts([('Technika','Druk 3D'),('Materiał',p['material']),('Kolor',p['color']),('Wymiary',p['dimensions']),
+                 ('SKU',p['sku']),('Stan fizyczny',p['stock']),('Ilość','1 zestaw' if p['type']=='zestaw' else '1 sztuka')])
+    safety_rows=facts([(label,p['gpsr'][key]) for label,key in [('Producent','producer'),('Adres','address'),('E-mail','email'),
+                       ('Identyfikator','identifier'),('Instrukcja i ostrzeżenia','warnings')]])
+    safety=('<dl>'+safety_rows+'</dl>') if safety_rows else '<p>Informacje o produkcie udostępnimy przed sprzedażą.</p>'
+    shipping=''.join(f'<p>{label}: {value}</p>' for label,value in [
+        ('Koszt', price(policy['shippingPLN']) if policy['shippingPLN'] is not None else None),
+        ('Termin nadania', e(p['dispatch']) if p['dispatch'] else None)] if value is not None)
+    note='Forma ma znaczenie.' if p['type']!='zestaw' else ('Skład: '+e(p['setContents']) if p['setContents'] else '')
     commercial=''.join(f'<a class="text-link" href="{e(policy[k])}">{label}</a> ' for k,label in [('termsPage','Regulamin sprzedaży'),('returnsPage','Zwroty i reklamacje')] if policy[k])
     main=f'''<main id="main" class="shell store-page"><nav class="crumb" aria-label="Ścieżka"><a href="winter-26.html#{target}">WINTER 26</a><span>/</span>{title}</nav>
 <div class="store-layout">{gallery(p)}<section class="store-story"><p class="eyebrow">0{n} / {e(p['family'])} · WINTER 26</p><h1>{title}</h1><p class="store-lead">{e(p['description'])}</p><span class="status-pill">{state(p)}</span>
-<p class="detail-price">{pln(p['grossPLN']) if p['grossPLN'] is not None else 'Cena w przygotowaniu'}</p>{'' if link else '<a class="editorial-button" href="index.html#preorder">Powiadom mnie ↗</a>'}<dl class="facts">{specs}</dl>
-<p class="edition-note">{('Skład: '+known(p['setContents'])) if p['type']=='zestaw' else 'Forma ma znaczenie.'}</p></section></div>
-<section class="store-info"><div><p class="eyebrow">01 / Realizacja</p><h2>Dostawa</h2><p>{e(policy['delivery'])}. Ręczna realizacja.</p><p>Koszt: {pln(policy['shippingPLN'])}<br>Termin nadania: {known(p['dispatch'])}</p></div>
-<div><p class="eyebrow">02 / Po zakupie</p><h2>Zwroty i reklamacje</h2><p>{e(policy['returnsSummary'] or 'Zasady i adres zwrotów wymagają zatwierdzenia przed sprzedażą.')}</p><p>{e(policy['complaintsSummary'] or 'Procedura reklamacji w przygotowaniu.')}</p>{commercial}<a class="text-link" href="kontakt.html">Kontakt z pracownią</a></div>
+{purchase_panel(p,store)}<dl class="facts">{specs}</dl>
+{f'<p class="edition-note">{note}</p>' if note else ''}</section></div>
+<section class="store-info"><div><p class="eyebrow">01 / Realizacja</p><h2>Dostawa</h2><p>{e(policy['delivery'])}. Ręczna realizacja.</p>{shipping}</div>
+<div><p class="eyebrow">02 / Po zakupie</p><h2>Zwroty i reklamacje</h2><p>{e(policy['returnsSummary'] or 'Zasady i adres zwrotów wymagają zatwierdzenia przed sprzedażą.')}</p>{('<p>'+e(policy['complaintsSummary'])+'</p>') if policy['complaintsSummary'] else ''}{commercial}<a class="text-link" href="kontakt.html">Kontakt z pracownią</a></div>
 <div><p class="eyebrow">03 / Identyfikacja</p><h2>Bezpieczeństwo</h2>{safety}</div>
 <div><p class="eyebrow">04 / Pracownia</p><h2>Sprzedawca</h2><p>PRACOWNIA RACHUNKOWOŚCI sp. z o.o.<br>ul. Trawowa 19/1, 54-614 Wrocław<br>NIP 8943197084 · KRS 0000997294</p><a class="text-link" href="mailto:kontakt@pracowniaform.com">kontakt@pracowniaform.com</a></div></section>
 <div class="store-order"><p>{'1 sztuka · płatność na stronie Stripe' if link else 'Sprzedaż nieaktywna. Zapis na listę nie jest zamówieniem.'}</p><a class="editorial-button" href="{e(link or 'index.html#preorder')}">{'Kup' if link else 'Powiadom mnie'} ↗</a><a class="text-link" href="winter-26.html#{target}">Wróć do kolekcji</a></div></main>'''

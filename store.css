@@ -21,3 +21,5 @@
 .zoom-dialog{background:#1b1916;color:#fff8eb;border:0;padding:16px;max-width:min(94vw,1200px);max-height:93dvh}.zoom-dialog::backdrop{background:#000c}.zoom-dialog form{text-align:right}.zoom-dialog button{min-height:44px;background:transparent;color:inherit;border:1px solid #cabda9;padding:6px 14px;cursor:pointer}.zoom-dialog img{width:auto;max-width:100%;height:auto;max-height:72dvh;object-fit:contain;display:block;margin:auto}.zoom-dialog p{font-size:.84rem;margin-top:8px}
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
 @media(max-width:760px){.store-layout,.store-info{grid-template-columns:minmax(0,1fr)}.store-page{padding-block:18px 38px}.store-story h1{font-size:clamp(2.1rem,10vw,3.2rem)}.store-gallery figure img{max-height:62dvh}.store-info{gap:12px;margin:24px 0}.store-gallery figcaption{flex-wrap:wrap}.store-order{align-items:flex-start;flex-direction:column}}
+
+.purchase-panel{margin:1.25rem 0}.purchase-terms{max-width:42ch;line-height:1.55;margin-bottom:1rem}.purchase-terms p+p{margin-top:.6rem}.purchase-terms a{color:inherit;text-decoration:underline}
