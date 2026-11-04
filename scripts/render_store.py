@@ -2,6 +2,7 @@
 import json,re,sys
 from html import escape
 from pathlib import Path
+from config_catalog import catalog_data, controls, config_scripts, BUILDER
 from store_gate import checkout_link
 from store_panel import purchase_panel, facts, price
 ROOT=Path(__file__).resolve().parents[1]
@@ -13,6 +14,7 @@ def write(p,s):
 def e(s): return escape(str(s),quote=True)
 store=json.loads(read(ROOT/'data/winter26-products.json')); products=store['products']; policy=store['release']
 media=json.loads(read(ROOT/'data/store-media.json'))
+options=catalog_data(store,media)
 URL='https://pracowniaform.com/'
 def page(p): return 'winter-'+p['slug']+'.html'
 def image(shot,sizes,loading='lazy'):
@@ -31,11 +33,15 @@ def card(p,n):
 <a class="store-cover" href="{dest}" aria-label="Zobacz {e(p['name'])}">{visual}<span class="cover-number">0{n} / {p['family']}</span></a>
 <div class="product-heading"><h3 id="name-{slug}"><a href="{dest}">{e(p['name'])}</a></h3><span class="status-pill">{state(p)}</span></div>
 <p class="product-description">{e(p['description'])}</p>
-<div class="premiere-action"><p class="purchase-note">{caption} · druk 3D</p><a class="editorial-button" href="{dest}">Poznaj obiekt <span aria-hidden="true">↗</span></a></div>
+{controls(p,options)}<div class="premiere-action"><p class="purchase-note">{caption} · druk 3D</p><a class="editorial-button" href="{dest}">Poznaj obiekt <span aria-hidden="true">↗</span></a></div>
 </article>'''
 def sets():
     cards=[]
     for p in products[4:]:
+        if p['id']=='zestaw-4':
+            links=' '.join(f'<a class="set-link" href="{page(p)}?size={rule["size"]}#kompozycja">{rule["size"]} szt. ↗</a>' for rule in options['sizes'])
+            cards.append(f'<article><span class="set-number">04 / 06 / 08</span><h3>Skomponuj swój zestaw</h3><p>{e(p["description"])}</p><div class="set-entries">{links}</div></article>')
+            continue
         cards.append(f'<article><span class="set-number">0{p["slug"][-1]}</span><h3>{e(p["name"])}</h3><p>{e(p["description"])}</p><a class="set-link" href="{page(p)}">Zobacz zapowiedź ↗</a></article>')
     shot=next(iter(products[-1]['photos']),None)
     scene=('<figure class="set-scene">'+image(shot,'90vw')+'<figcaption>Studium kolekcji · '+('wizualizacja poglądowa' if shot['kind']=='wizualizacja' else 'fotografia')+'</figcaption></figure>') if shot else ''
@@ -46,6 +52,10 @@ for n,p in enumerate(products[:4],1):
     catalog,c=re.subn(r'<article class="product-card" id="'+p['slug']+r'".*?</article>',lambda _:card(p,n),catalog,count=1,flags=re.S);assert c==1
 catalog,c=re.subn(r'(?:<figure class="set-scene">.*?</figure>)?<div class="sets-grid">.*?</article></div>(?=</div></section>)',lambda _:sets(),catalog,count=1,flags=re.S);assert c==1
 if 'href="store.css"' not in catalog: catalog=catalog.replace('href="winter-26.css">','href="winter-26.css"><link rel="stylesheet" href="store.css">',1)
+catalog=catalog.replace('Zestawy pozostają zapowiedzią. Do sprzedaży mogą trafić wyłącznie potwierdzone, gotowe kompozycje z osobnym zapasem.', 'Odkryj Duet albo ułóż własną kompozycję. Zestawy pozostają zapowiedzią.')
+catalog=re.sub(r'<script type="application/json" id="winter-options">.*?</script><script defer src="winter-config.js"></script>', '', catalog, flags=re.S)
+catalog=catalog.replace('</body>', config_scripts(options)+'</body>')
+if 'href="winter-atelier.css"' not in catalog: catalog=catalog.replace('href="store.css">','href="store.css"><link rel="stylesheet" href="winter-atelier.css">',1)
 write(catalog_path,catalog)
 def gallery(p):
     if not p['photos']: return '<div class="set-monogram"><span>PF</span><p>Fotografia w przygotowaniu</p></div>'
@@ -77,8 +87,8 @@ def detail(p,n):
     link=checkout_link(p,store); target=p['slug'] if p['type']=='pojedynczy' else 'zestawy'
     if link:
         head=head.replace('Kolekcja w przygotowaniu · sprzedaż nieaktywna','Kolekcja WINTER 26')
-    specs=facts([('Technika','Druk 3D'),('Materiał',p['material']),('Kolor',p['color']),('Wymiary',p['dimensions']),
-                 ('SKU',p['sku']),('Stan fizyczny',p['stock']),('Ilość','1 zestaw' if p['type']=='zestaw' else '1 sztuka')])
+    specs=facts([('Technika','Druk 3D'),('Materiał',p['material']),('Kolor',p['color'] if 'variants' not in p else None),('Wymiary',p['dimensions']),
+                 ('SKU',p['sku'] if 'variants' not in p else None),('Stan fizyczny',p['stock'] if 'variants' not in p else None),('Ilość','1 zestaw' if p['type']=='zestaw' else '1 sztuka')])
     safety_rows=facts([(label,p['gpsr'][key]) for label,key in [('Producent','producer'),('Adres','address'),('E-mail','email'),
                        ('Identyfikator','identifier'),('Instrukcja i ostrzeżenia','warnings')]])
     safety=('<dl>'+safety_rows+'</dl>') if safety_rows else '<p>Informacje o produkcie udostępnimy przed sprzedażą.</p>'
@@ -89,13 +99,16 @@ def detail(p,n):
     commercial=''.join(f'<a class="text-link" href="{e(policy[k])}">{label}</a> ' for k,label in [('termsPage','Regulamin sprzedaży'),('returnsPage','Zwroty i reklamacje')] if policy[k])
     main=f'''<main id="main" class="shell store-page"><nav class="crumb" aria-label="Ścieżka"><a href="winter-26.html#{target}">WINTER 26</a><span>/</span>{title}</nav>
 <div class="store-layout">{gallery(p)}<section class="store-story"><p class="eyebrow">0{n} / {e(p['family'])} · WINTER 26</p><h1>{title}</h1><p class="store-lead">{e(p['description'])}</p><span class="status-pill">{state(p)}</span>
-{purchase_panel(p,store)}<dl class="facts">{specs}</dl>
+{controls(p,options) if p['type']=='pojedynczy' else ''}{purchase_panel(p,store)}<dl class="facts">{specs}</dl>
 {f'<p class="edition-note">{note}</p>' if note else ''}</section></div>
 <section class="store-info"><div><p class="eyebrow">01 / Realizacja</p><h2>Dostawa</h2><p>{e(policy['delivery'])}. Ręczna realizacja.</p>{shipping}</div>
 <div><p class="eyebrow">02 / Po zakupie</p><h2>Zwroty i reklamacje</h2><p>{e(policy['returnsSummary'] or 'Zasady i adres zwrotów wymagają zatwierdzenia przed sprzedażą.')}</p>{('<p>'+e(policy['complaintsSummary'])+'</p>') if policy['complaintsSummary'] else ''}{commercial}<a class="text-link" href="kontakt.html">Kontakt z pracownią</a></div>
 <div><p class="eyebrow">03 / Identyfikacja</p><h2>Bezpieczeństwo</h2>{safety}</div>
 <div><p class="eyebrow">04 / Pracownia</p><h2>Sprzedawca</h2><p>PRACOWNIA RACHUNKOWOŚCI sp. z o.o.<br>ul. Trawowa 19/1, 54-614 Wrocław<br>NIP 8943197084 · KRS 0000997294</p><a class="text-link" href="mailto:kontakt@pracowniaform.com">kontakt@pracowniaform.com</a></div></section>
 <div class="store-order"><p>{'1 sztuka · płatność na stronie Stripe' if link else 'Sprzedaż nieaktywna. Zapis na listę nie jest zamówieniem.'}</p><a class="editorial-button" href="{e(link or 'index.html#preorder')}">{'Kup' if link else 'Powiadom mnie'} ↗</a><a class="text-link" href="winter-26.html#{target}">Wróć do kolekcji</a></div></main>'''
+    if p['id']=='zestaw-4':
+        main=f'''<main id="main" class="shell store-page"><nav class="crumb" aria-label="Ścieżka"><a href="winter-26.html#zestawy">WINTER 26</a><span>/ Kompozycje</span></nav>{BUILDER}<p class="duet-link"><a href="winter-zestaw-2.html">Zobacz także Duet ↗</a></p></main>'''
+        head=head.replace('<title>Kwartet —', '<title>Skomponuj swój zestaw —')
     dialog='<dialog class="zoom-dialog" aria-label="Powiększenie obrazu"><form method="dialog"><button autofocus>Zamknij ×</button></form><img alt=""><p></p></dialog>'
     return head+main+tail.replace('<script src="script.js">',dialog+'<script src="store-gallery.js" defer></script><script src="script.js">')
 for n,p in enumerate(products,1): write(ROOT/page(p),detail(p,n))

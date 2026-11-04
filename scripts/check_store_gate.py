@@ -15,6 +15,8 @@ for im in p['photos']: im['kind']='fotografia'
 url='https://buy.stripe.com/OfflineFixture'
 p.update(stripePaymentLink=url,verifiedCheckout=dict(url=url,sku='fixture',pricePLN=20,shippingPLN=10,
     quantity=1,adjustableQuantity=False,currency='PLN',country='PL'))
+assert checkout_link(p,s) is None  # even a fully approved parent must not sell an unspecified color
+p.pop('variants')  # legacy, single fixed SKU exercises PR13 gates independently
 assert checkout_link(p,s)==url
 # Render the real detail template outside the served tree. This fixture never becomes a live CTA.
 from tempfile import TemporaryDirectory
@@ -23,7 +25,7 @@ import subprocess, sys
 root=Path(__file__).resolve().parents[1]
 with TemporaryDirectory() as tmp:
     dest=Path(tmp)
-    for rel in ['scripts/render_store.py','scripts/store_gate.py','scripts/store_panel.py','data/store-media.json','winter-26.html','sitemap.xml']:
+    for rel in ['scripts/render_store.py','scripts/store_gate.py','scripts/store_panel.py','scripts/config_catalog.py','data/store-media.json','winter-26.html','sitemap.xml']:
         (dest/rel).parent.mkdir(exist_ok=True)
         copyfile(root/rel,dest/rel)
     def render():

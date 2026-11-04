@@ -6,6 +6,8 @@ def present(value):
 def money(value):
     return type(value) in (float,int) and value>=0
 def checkout_link(p, store):
+    # A model-level URL cannot identify a chosen variant or a custom set.
+    if 'variants' in p or p.get('id')=='zestaw-4': return None
     release=store['release']
     if not all(release.get(k) is True for k in ('salesApproved','sandboxPassed','legalApproved','sellerApproved')): return None
     if not all(present(release.get(k)) for k in ('termsPage','returnsPage','privacyPage','returnsSummary','complaintsSummary','delivery')): return None
