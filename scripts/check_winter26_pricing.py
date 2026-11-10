@@ -11,7 +11,7 @@ CODE = "WINTER10"
 
 class PricingTests(unittest.TestCase):
     def test_agreed_totals(self):
-        for size, usual, coded in [(1, 4000, 4000), (2, 8400, 7400), (4, 15000, 14000),
+        for size, usual, coded in [(1, 5000, 4000), (2, 8400, 7400), (4, 15000, 14000),
                                    (6, 22000, 21000), (8, 29000, 28000)]:
             with self.subTest(size=size):
                 pack = ([VASE, STAR, MED] * 3)[:size]
@@ -24,10 +24,15 @@ class PricingTests(unittest.TestCase):
     def test_two_packs_plus_single(self):
         packs = [[STAR]*4, [MED]*2, [VASE]]
         q = quote(packs, CODE)
-        self.assertEqual((q["regularGrosz"], q["discountGrosz"], q["totalGrosz"]), (27400, 2000, 25400))
+        self.assertEqual((q["regularGrosz"], q["discountGrosz"], q["totalGrosz"]), (28400, 3000, 25400))
         self.assertEqual(quote(packs)["shippingGrosz"], 0)
         self.assertEqual(quote([[VASE]] * 6, CODE)["totalGrosz"], 24000)
         self.assertIsNone(quote([[STAR]*4, [VASE]], CODE)["shippingGrosz"])
+
+    def test_separate_singles_versus_duet(self):
+        for code, singles, duet in [(None, 10000, 8400), (CODE, 8000, 7400)]:
+            self.assertEqual(quote([[VASE], [STAR]], code)["merchandiseGrosz"], singles)
+            self.assertEqual(quote([[VASE, STAR]], code)["merchandiseGrosz"], duet)
 
     def test_bad_code_size_or_model(self):
         for packs, code in [([[VASE]*6], "INVALID"), ([[STAR]*3], CODE), ([["helix", STAR]], CODE),

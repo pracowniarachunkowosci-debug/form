@@ -25,10 +25,10 @@ def quote(packs, code=None):
             regular += _POLICY["singleGrossGrosz"]
         elif str(size) in _POLICY["setGrossGrosz"]:
             regular += _POLICY["setGrossGrosz"][str(size)]
-            if code is not None:
-                discount += coupon["discountPerSetGrosz"]
         else:
             raise ValueError("Nieobsługiwana liczba ozdób w zestawie.")
+        if code is not None:
+            discount += coupon["discountPerPackGrosz"]
         count += size
     merchandise = regular - discount
     shipping = 0 if count >= _POLICY["freeCourierFromOrnaments"] else _POLICY["smallOrderCourierGrosz"]
