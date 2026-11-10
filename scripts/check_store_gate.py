@@ -36,7 +36,7 @@ with TemporaryDirectory() as tmp:
     panel=html.split('class="purchase-panel"',1)[1].split('<dl class="facts">',1)[0]
     buy=f'href="{url}"'
     assert html.count(buy)==2
-    for expected in ('20,00 zł brutto','InPost Kurier na adres w Polsce','10,00 zł','Nadawanie zamówień planujemy rozpocząć 23 listopada 2026 r.','Zwroty: approved','href="returns.html"'):
+    for expected in ('20,00 zł brutto','Przesyłki planujemy realizować przez InPost.','10,00 zł','Nadawanie zamówień planujemy rozpocząć 23 listopada 2026 r.','Zwroty: approved','href="returns.html"'):
         assert panel.index(expected)<panel.index(buy),expected
     assert 'sprzedaż nieaktywna' not in html
     p['stock']=0

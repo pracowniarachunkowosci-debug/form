@@ -32,12 +32,11 @@ def dispatch_notice(p):
 def card(p,n):
     shot=next(iter(p['photos']),None); slug=e(p['slug']); dest=page(p)
     visual=image(shot,'(max-width: 720px) 90vw, 46vw') if shot else '<span class="set-monogram">Zdjęcia produktu po zatwierdzeniu</span>'
-    caption=concept_label(shot) if shot else 'Zdjęcia produktu po zatwierdzeniu'
     return f'''<article class="product-card" id="{slug}" aria-labelledby="name-{slug}">
 <a class="store-cover" href="{dest}" aria-label="Zobacz {e(p['name'])}">{visual}<span class="cover-number">0{n} / {p['family']}</span></a>
 <div class="product-heading"><h3 id="name-{slug}"><a href="{dest}">{e(p['name'])}</a></h3><span class="status-pill">{state(p)}</span></div>
 <p class="product-description">{e(p['description'])}</p>
-{controls(p,options)}<div class="premiere-action"><p class="purchase-note">{caption} · Materiał: {e(material_notice(p))}</p><a class="editorial-button" href="{dest}">Poznaj obiekt <span aria-hidden="true">↗</span></a></div>
+{controls(p,options)}<div class="premiere-action"><a class="editorial-button" href="{dest}">Poznaj obiekt <span aria-hidden="true">↗</span></a></div>
 </article>'''
 def sets():
     cards=[]

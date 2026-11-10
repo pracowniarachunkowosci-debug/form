@@ -28,6 +28,9 @@ home = (ROOT/'index.html').read_text(encoding='utf-8')
 form = lambda s: re.search(r'<form\b.*?</form>', s, re.S).group()
 expected_form = form(baseline('index.html')).replace('kolekcji i pre-orderu.', 'kolekcji i przedsprzedaży.')
 assert form(home) == expected_form, 'Brevo form structure changed'
+assert 'Aktualna premiera Pracowni Form obejmuje kolekcję WINTER 26' in home
+assert 'Nord, Stone i Kintsugi pozostają w portfolio marki' in home
+assert 'nie są częścią tej przedsprzedaży' in home
 for path in ('robots.txt',):
     assert (ROOT/path).read_text(encoding='utf-8') == baseline(path), path
 html = (ROOT/'winter-26.html').read_text(encoding='utf-8')
@@ -49,6 +52,9 @@ assert stable_main(html)==stable_main(approved)
 assert re.search(r'<header.*?</header>',html,re.S).group()==re.search(r'<header.*?</header>',approved,re.S).group()
 assert 'WINTER 26 — przedsprzedaż' in html and '23 listopada 2026 r.' in html
 assert 'Powiadom mnie o przedsprzedaży' in html
+assert 'Kadr koncepcyjny · Materiał: Do potwierdzenia przed sprzedażą' not in html
+assert 'Przesyłki planujemy realizować przez InPost.' in html
+assert 'InPost Kurier' not in html and 'Paczkomat' not in html
 registry=json.loads((ROOT/'data/winter26-products.json').read_text(encoding='utf8'))
 from xml.etree import ElementTree as ET
 def urls(s): return {x.text for x in ET.fromstring(s).findall('.//{*}loc')}
