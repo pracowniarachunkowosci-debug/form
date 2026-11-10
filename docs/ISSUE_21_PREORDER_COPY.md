@@ -1,5 +1,7 @@
 # Issue #21 — WINTER 26: komunikacja przedsprzedaży
 
+**Aktualizacja 10.11.2026:** [Ustalony cennik dla Polski, kod na zestawy i zasady dostawy](WINTER26_CENNIK_PL.md). Poniżej stan przygotowań z Issue #21; decyzja z 10.11 zastępuje wcześniejsze otwarte pytania o ceny, rodzaj kuriera i próg darmowej dostawy. Kwota płatnej dostawy dla 1–5 ozdób pozostaje do ustalenia.
+
 Dokument akceptacyjny dla tekstów i zasad wdrażanych w draft PR. Nie aktywuje zakupów, Stripe Live ani publikacji.
 
 ## Proponowana komunikacja publiczna

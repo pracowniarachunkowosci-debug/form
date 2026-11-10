@@ -16,7 +16,7 @@ def payload(p):
     data = p.read_bytes()
     return data.replace(b'\r\n', b'\n') if p.suffix in {'.html','.js','.css','.svg','.txt','.xml'} else data
 
-for check in (['scripts/render_store.py', '--check'], ['scripts/check_render_eol.py'], ['scripts/check_config_registry.py'], ['scripts/check_store_gate.py']):
+for check in (['scripts/check_winter26_pricing.py'], ['scripts/render_store.py', '--check'], ['scripts/check_render_eol.py'], ['scripts/check_config_registry.py'], ['scripts/check_store_gate.py']):
     subprocess.run([sys.executable, *check], check=True, cwd=ROOT)
 subprocess.run([sys.executable, str(ROOT/'scripts/check_publication.py')], check=True, cwd=ROOT)
 subprocess.run(['node','scripts/check_consent.cjs'], cwd=ROOT, check=True)
