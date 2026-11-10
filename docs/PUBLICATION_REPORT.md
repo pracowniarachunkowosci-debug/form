@@ -17,7 +17,7 @@ Aktualizacja po obu recenzjach PR #11: [odpowiedź na uwagi i nowe testy](PR11_R
 - Naprawione nieistniejące kotwice `#manifest`/`#wykonczenia` → istniejące `#pracownia`/`#materialy`; mobilne menu kontaktu, prywatności i zasad premiery podłączone do istniejącego JS. Usunięto pozorny odnośnik Instagram „Wkrótce” i odwołania do nieistniejących faviconów; zachowano SVG.
 - W prywatności poprawiono kontakt `.com`, fakty o już używanym Brevo i analityce po zgodzie oraz dane administratora wskazanego przez właściciela (ALEO, porównane z API KRS). Te same dane identyfikują sprzedawcę w WINTER. Nie dodano rachunku bankowego ani danych osób z zarządu.
 - Na wszystkich dziesięciu stronach dodano dostęp do ustawień cookies, ponowny wybór i wycofanie zgody. Zmiany wspólnego JS i CSS dotyczą tego interfejsu; pozostały JS, `robots.txt`, `sitemap.xml` i inicjalizacja GA pozostają zgodne z bazą. Nagłówek i główna treść WINTER pozostają zgodne z zatwierdzonym stanem `e054e60`.
-- Zasady premiery opisują teraz wyłącznie listę WINTER 26, bez pre-orderu. Polityka prywatności ma datę projektu 03.11.2026, odbiorców, podstawy, kryteria retencji i transfery z jawnymi kwestiami do potwierdzenia. Data projektu nie jest datą zatwierdzenia. Stopki wskazują 2026.
+- Zasady premiery opisują teraz WINTER 26 i przygotowywaną przedsprzedaż bez aktywnej sprzedaży. Polityka prywatności ma datę projektu 03.11.2026, odbiorców, podstawy, kryteria retencji i transfery z jawnymi kwestiami do potwierdzenia. Data projektu nie jest datą zatwierdzenia. Stopki wskazują 2026.
 
 ## Wyniki weryfikacji
 

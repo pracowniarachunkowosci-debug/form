@@ -1,6 +1,6 @@
 # Hero z otwartą bombką — tymczasowy podgląd
 
-03.11.2026. Wykonanie [korekty priorytetu właściciela](https://github.com/pracowniarachunkowosci-debug/form/pull/11#issuecomment-6616463727). **Wizualizacja jest już podłączona do `winter-26.html`; nie czeka na sesję produktową.** PR pozostaje draftem, bez publikacji.
+03.11.2026. Wykonanie [korekty priorytetu właściciela](https://github.com/pracowniarachunkowosci-debug/form/pull/11#issuecomment-6616463727). **Kadr koncepcyjny jest już podłączony do `winter-26.html`; nie jest fotografią dokumentalną oferowanego SKU.** PR pozostaje draftem, bez publikacji.
 
 ## Źródło i obróbka
 
@@ -8,7 +8,7 @@ Właściciel dołączył do tej sesji plik `codex-clipboard-9031e908-dbd5-4042-b
 
 Ta rozdzielczość wystarcza do tymczasowego podglądu przy desktopowej szerokości obrazu około 663 px. Nie zapewnia pełnej ostrości przy powiększeniu ani desktopowym DPR 2. Przyszłe zdjęcia zastąpią wizualizację w osobnym etapie; nie blokują bieżącej zmiany.
 
-Podpis: **„Wizualizacja koncepcyjna AI na podstawie modelu Pracowni Form. Fotografia produktu w przygotowaniu.”** Alt również identyfikuje AI. Obraz nie jest przedstawiany jako fotografia produktu. Dotychczasowy OG/social pozostaje editorialem bez produktu; tymczasowej wizualizacji nie przenoszono do metadanych udostępniania.
+Podpis: **„Kadr koncepcyjny na podstawie modelu Pracowni Form. Zdjęcia produktu i warianty wymagają potwierdzenia przed zakupem.”** Alt identyfikuje kadr koncepcyjny. Obraz nie jest przedstawiany jako fotografia oferowanego wariantu. Dotychczasowy OG/social pozostaje editorialem bez produktu.
 
 | Wymiary | AVIF | WebP |
 |---|---:|---:|

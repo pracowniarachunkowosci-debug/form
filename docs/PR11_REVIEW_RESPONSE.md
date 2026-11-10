@@ -1,12 +1,12 @@
 # PR #11 — uzupełnienie fazy A, 3 listopada 2026
 
-**Aktualizacja po korekcie priorytetu:** tymczasowe hero z otwartą bombką jest już widoczne w podglądzie, oznaczone jako wizualizacja AI. [Wynik, porównania i ograniczenie rozdzielczości](HERO_CONCEPT_PREVIEW.md). Oczekiwanie na zdjęcia poniżej dotyczy finalnej fotografii, nie bieżącego preview.
+**Aktualizacja po korekcie priorytetu:** tymczasowe hero z otwartą bombką jest już widoczne w podglądzie, oznaczone jako kadr koncepcyjny. [Wynik, porównania i ograniczenie rozdzielczości](HERO_CONCEPT_PREVIEW.md). Oczekiwanie na zdjęcia poniżej dotyczy finalnej fotografii, nie bieżącego preview.
 
 Realizuje [recenzję](https://github.com/pracowniarachunkowosci-debug/form/pull/11#issuecomment-6608120252) i [decyzję o przyszłym hero](https://github.com/pracowniarachunkowosci-debug/form/pull/11#issuecomment-6615915478). To przygotowanie do odbioru, **NO-GO dla publikacji**. Pozostałe PR pozostają nietknięte.
 
 ## Wykonane teraz
 
-1. Zasady listy opisują WINTER 26 bez zamówień i pre-orderu; nie zapowiadają Nord/Stone/Kintsugi jako tego pilota. Zachowano stare identyfikatory sekcji, aby nie zepsuć odnośników.
+1. Zasady listy opisują WINTER 26 z przygotowywaną przedsprzedażą, ale bez aktywnych zamówień i płatności; nie zapowiadają Nord/Stone/Kintsugi jako tego pilota. Zachowano stare identyfikatory sekcji, aby nie zepsuć odnośników.
 2. Dokumenty mają rzeczywistą datę przygotowania projektu 03.11.2026, wyraźnie odróżnioną od nieustalonej daty zatwierdzenia. Usunięto placeholder daty i stare lata 2025 w stopkach.
 3. Każda z 10 stron ma „Ustawienia cookies” w stopce; polityka także w treści. Panel można otwierać wielokrotnie, odrzucić lub ponownie zaakceptować analitykę, zamknąć bez zmiany, zamknąć Escape; fokus wraca do przycisku otwierającego. Panel jest niemodalnym regionem, więc nie więzi klawiatury.
 4. Cofnięcie ustawia `ga-disable-G-58YFJ2RHNZ`, przekazuje odmowę w Consent Mode i usuwa dostępne first-party cookies `_ga*`, `_gid`, `_gat*` dla hosta/domen nadrzędnych i ścieżek. Cookies innych usług pozostają. Po odświeżeniu z odmową skrypt GA nie jest pobierany. Cofnięcie w drugiej karcie działa przez zdarzenie `storage`. Nie resetuje formularza ani nie przeładowuje strony.

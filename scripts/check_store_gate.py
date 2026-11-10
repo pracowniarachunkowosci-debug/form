@@ -34,14 +34,14 @@ with TemporaryDirectory() as tmp:
         return (dest/'winter-knitted-star.html').read_text(encoding='utf8')
     html=render()
     panel=html.split('class="purchase-panel"',1)[1].split('<dl class="facts">',1)[0]
-    buy=f'href="{url}">Kup'
+    buy=f'href="{url}"'
     assert html.count(buy)==2
-    for expected in ('20,00 zł brutto','Kurier na terenie Polski','10,00 zł','Nadanie: fixture','Zwroty: approved','href="returns.html"'):
+    for expected in ('20,00 zł brutto','Przesyłki planujemy realizować przez InPost.','10,00 zł','Nadawanie zamówień planujemy rozpocząć 23 listopada 2026 r.','Zwroty: approved','href="returns.html"'):
         assert panel.index(expected)<panel.index(buy),expected
     assert 'sprzedaż nieaktywna' not in html
     p['stock']=0
     blocked=render()
-    assert url not in blocked and 'Powiadom mnie' in blocked
+    assert url not in blocked and 'Powiadom mnie o przedsprzedaży' in blocked
     p['stock']=1
 for k,v in [('grossPLN',19),('sku',None),('stock',0),('quantity',2),('photos',[]),('verifiedCheckout',None),
             ('stripePaymentLink',url+'?quantity=2'),('stripePaymentLink','https://buy.stripe.com.example.org/x'),
