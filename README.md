@@ -1,5 +1,7 @@
 # Pracownia Form
 
+**WINTER 26 / ceny w Polsce:** [cennik, kod WINTER10 dla singli i zestawów i dostawa](docs/WINTER26_CENNIK_PL.md).
+
 **WINTER 26 / Issue #12:** [katalog, konfiguracja produktów, podglądy i warunki aktywacji](docs/WINTER26_STOREFRONT_HANDOFF.md). Ta gałąź jest draftem sklepu na bazie PR #11. Lokalny podgląd sklepu: port 8772; port 8771 poniżej należy do bazowego PR #11.
 
 Statyczna strona HTML/CSS/JS. Gałąź publikacyjna LH zawiera zatwierdzony hybrydowy WINTER AFTER DARK R04; pozostaje draftem bez zgody na wdrożenie.
