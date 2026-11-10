@@ -17,8 +17,9 @@ with tempfile.TemporaryDirectory() as directory:
         subprocess.run(command, cwd=tmp, check=True)
     card = tmp / 'winter-helix.html'
     original = card.read_bytes()
-    assert b'Powiadom mnie' in original
-    card.write_bytes(original.replace(b'Powiadom mnie', b'Nieaktualny opis', 1))
+    cta = 'Powiadom mnie o przedsprzedaży'.encode('utf-8')
+    assert cta in original
+    card.write_bytes(original.replace(cta, b'Nieaktualny opis', 1))
     result = subprocess.run(command, cwd=tmp, capture_output=True)
     assert result.returncode and b'Stale generated page: winter-helix.html' in result.stderr
 print('PASS: LF and CRLF render identically; actual card edit is rejected.')

@@ -9,8 +9,15 @@
     "returnsSummary": null,
     "complaintsSummary": null,
     "privacyPage": "polityka-prywatnosci.html",
-    "delivery": "Kurier na terenie Polski",
-    "shippingPLN": null
+    "delivery": "InPost Kurier na adres w Polsce",
+    "shippingPLN": null,
+    "preorderLabel": "WINTER 26 — przedsprzedaż",
+    "preorderStatus": "Przedsprzedaż wkrótce",
+    "preorderCta": "Powiadom mnie o przedsprzedaży",
+    "dispatchStart": "23 listopada 2026 r.",
+    "dispatchNotice": "Nadawanie zamówień planujemy rozpocząć 23 listopada 2026 r.",
+    "deliveryNotice": "Data nadania nie jest gwarantowaną datą doręczenia. Termin doręczenia zależy od przewoźnika.",
+    "carrierNotice": "Przesyłki realizujemy przez InPost Kurier na adres w Polsce. Paczkomaty nie są obecnie obsługiwane."
   },
   "products": [
     {

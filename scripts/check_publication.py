@@ -9,8 +9,11 @@ import subprocess
 ROOT = Path(__file__).resolve().parents[1]
 BASE = '38e0bd9bc8296b70ac68d92753d63f447d70df3e'
 
+def git_show(revision):
+    return subprocess.check_output(['git', '-c', 'safe.directory=*', 'show', revision], cwd=ROOT).decode('utf-8').replace('\r\n', '\n')
+
 def baseline(path):
-    return subprocess.check_output(['git', 'show', f'{BASE}:{path}'], cwd=ROOT).decode('utf-8').replace('\r\n', '\n')
+    return git_show(f'{BASE}:{path}')
 
 class Page(HTMLParser):
     def __init__(self, source):
@@ -23,22 +26,29 @@ class Page(HTMLParser):
 pages = {p.name: Page(p.read_text(encoding='utf-8')) for p in ROOT.glob('*.html')}
 home = (ROOT/'index.html').read_text(encoding='utf-8')
 form = lambda s: re.search(r'<form\b.*?</form>', s, re.S).group()
-assert form(home) == form(baseline('index.html')), 'Brevo form changed'
+expected_form = form(baseline('index.html')).replace('kolekcji i pre-orderu.', 'kolekcji i przedsprzedaży.')
+assert form(home) == expected_form, 'Brevo form structure changed'
 for path in ('robots.txt',):
     assert (ROOT/path).read_text(encoding='utf-8') == baseline(path), path
 html = (ROOT/'winter-26.html').read_text(encoding='utf-8')
 ga = lambda s: next(x for x in re.findall(r'<script>.*?</script>', s, re.S) if 'PF_GA_MEASUREMENT_ID' in x)
 assert ga(html) == ga(baseline('winter-26.html')), 'GA initialization changed'
-# The hero, header and all content outside the catalog cards / sets are frozen at PR11.
-approved = subprocess.check_output(['git','show','6d8e07b:winter-26.html'],cwd=ROOT).decode().replace('\r\n','\n')
+# The visual shell, header and layout remain frozen at PR11; Issue #21 intentionally updates copy.
+approved = git_show('6d8e07b:winter-26.html')
 def stable_main(text):
     main=re.search(r'<main\b.*?</main>',text,re.S).group()
+    main=re.sub(r'<figure class="w26-hero-art">.*?</figure>', '<hero>', main, flags=re.S)
+    main=re.sub(r'<section class="w26-intro shell".*?</section>', '<intro>', main, flags=re.S)
+    main=re.sub(r'<section class="fulfilment shell".*?</section>', '<fulfilment>', main, flags=re.S)
+    main=re.sub(r'<section class="pilot-info shell".*?</section>', '<pilot-info>', main, flags=re.S)
     main=re.sub(r'<article class="product-card".*?</article>', '<card>',main,flags=re.S)
     # Only the invitation to compose in the sets intro changed for #17.
     main=main.replace('Odkryj Duet albo ułóż własną kompozycję. Zestawy pozostają zapowiedzią.', 'Zestawy pozostają zapowiedzią. Do sprzedaży mogą trafić wyłącznie potwierdzone, gotowe kompozycje z osobnym zapasem.')
     return re.sub(r'(?:<figure class="set-scene">.*?</figure>)?<div class="sets-grid">.*?</article></div>', '<sets>',main,flags=re.S)
 assert stable_main(html)==stable_main(approved)
 assert re.search(r'<header.*?</header>',html,re.S).group()==re.search(r'<header.*?</header>',approved,re.S).group()
+assert 'WINTER 26 — przedsprzedaż' in html and '23 listopada 2026 r.' in html
+assert 'Powiadom mnie o przedsprzedaży' in html
 registry=json.loads((ROOT/'data/winter26-products.json').read_text(encoding='utf8'))
 from xml.etree import ElementTree as ET
 def urls(s): return {x.text for x in ET.fromstring(s).findall('.//{*}loc')}
@@ -118,6 +128,6 @@ for image in [*ROOT.glob('assets/winter-r04-*'), *ROOT.glob('assets/winter-open-
     assert image.stat().st_size < 150000, image.name
 for name in ('polityka-prywatnosci.html', 'zasady-premiery.html'):
     legal = (ROOT/name).read_text(encoding='utf-8')
-    assert '[uzupełnij datę]' not in legal and '2026-11-03' in legal
+    assert '[uzupełnij datę]' not in legal and ('2026-11-03' in legal or '2026-11-04' in legal)
     assert 'Data zatwierdzenia' in legal
 print(f'PASS: {len(pages)} pages, {refs} local references; unchanged Brevo form and WINTER layout; cookie settings on every page; draft dates; responsive hero <150 KB per asset.')

@@ -16,10 +16,13 @@ def purchase_panel(p, store):
     if 'variants' not in p and p['grossPLN'] is not None:
         parts.append(f'<p class="detail-price">{price(p["grossPLN"])} brutto</p>')
     if link:
-        parts.append(f'<div class="purchase-terms"><p>{escape(policy["delivery"])} · {price(policy["shippingPLN"])}<br>'
-                     f'Nadanie: {escape(p["dispatch"])}</p><p>Zwroty: {escape(policy["returnsSummary"])} '
+        dispatch = p.get('dispatch') or policy.get('dispatchStart')
+        dispatch_notice = policy.get('dispatchNotice') or f'Nadawanie zamówień planujemy rozpocząć {dispatch}.'
+        delivery_notice = policy.get('deliveryNotice', '')
+        parts.append(f'<div class="purchase-terms"><p>{escape(policy["carrierNotice"])} · {price(policy["shippingPLN"])}</p>'
+                     f'<p>{escape(dispatch_notice)} {escape(delivery_notice)}</p><p>Zwroty: {escape(policy["returnsSummary"])} '
                      f'<a href="{escape(policy["returnsPage"])}">Warunki zwrotu</a></p></div>'
-                     f'<a class="editorial-button" href="{escape(link)}">Kup ↗</a>')
+                     f'<a class="editorial-button" href="{escape(link)}">Zamów w przedsprzedaży ↗</a>')
     else:
-        parts.append('<a class="editorial-button" href="index.html#preorder">Powiadom mnie ↗</a>')
+        parts.append(f'<a class="editorial-button" href="index.html#preorder">{escape(policy.get("preorderCta", "Powiadom mnie o przedsprzedaży"))} ↗</a>')
     return '<div class="purchase-panel">' + ''.join(parts) + '</div>'

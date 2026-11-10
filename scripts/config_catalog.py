@@ -78,7 +78,7 @@ BUILDER = '''<section id="kompozycja" class="atelier" aria-labelledby="atelier-t
 <div data-slots class="slots" role="group" aria-label="Miejsca w zestawie"></div>
 <div class="edit-position"><p class="eyebrow" data-edit-title></p>
 <fieldset><legend>Wybierz model</legend><div data-models class="model-grid"></div></fieldset>
-<p class="help">Wizualizacje modeli są poglądowe.</p>
+<p class="help">Modele są pokazane jako materiały koncepcyjne. Fotografie produktu i warianty wymagają potwierdzenia przed zakupem.</p>
 <fieldset><legend>Wybierz kolor</legend><div data-colors></div></fieldset>
 <button class="ink-button" data-next type="button">Następna bombka →</button></div></div>
 <aside class="composition" id="sklad" aria-label="Podsumowanie zestawu"><p class="eyebrow">02 &nbsp; / &nbsp; Kompozycja</p><h2>Twój zestaw</h2>
@@ -86,8 +86,8 @@ BUILDER = '''<section id="kompozycja" class="atelier" aria-labelledby="atelier-t
 <div class="progress-line" aria-hidden="true"><span></span></div><p data-summary-note></p>
 <ul data-summary></ul><p data-totals></p>
 <button type="button" class="reset-set" data-reset>Wyczyść wybór</button>
-<a href="index.html#preorder" class="ink-button">Powiadom mnie ↗</a>
-<small>Kompozycja jest podglądem. Nie rezerwuje produktów.</small></aside></div>
+<a href="index.html#preorder" class="ink-button">Powiadom mnie o przedsprzedaży ↗</a>
+<small>Kompozycja pomaga wybrać modele. Nie jest zamówieniem ani rezerwacją produktów.</small></aside></div>
 <dialog class="atelier-confirm" aria-labelledby="change-question"><h2 id="change-question"></h2>
 <form method="dialog"><button class="ink-button" value="cancel" autofocus>Zachowaj wybór</button><button class="reset-set" value="ok" data-confirm-ok></button></form></dialog>
 </div><noscript>Do komponowania zestawu włącz JavaScript. Możesz też przejść do listy premierowej.</noscript></section>'''

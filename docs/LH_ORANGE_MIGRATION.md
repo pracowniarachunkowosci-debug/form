@@ -110,7 +110,7 @@ Rollback DNS też podlega TTL i nie jest natychmiastowy. W mieszanym okresie obi
 - [x] Administrator wskazany przez właściciela: PRACOWNIA RACHUNKOWOŚCI sp. z o.o., ul. Trawowa 19/1, 54-614 Wrocław, NIP 8943197084, KRS 0000997294. [ALEO wskazane przez właściciela](https://aleo.com/pl/firma/pracownia-rachunkowosci-spolka-z-ograniczona-odpowiedzialnoscia-wroclaw); nazwa, adres i NIP potwierdzone 03.11.2026 w [aktualnym odpisie API KRS](https://api-krs.ms.gov.pl/api/krs/OdpisAktualny/0000997294?rejestr=P&format=json). Adres siedziby nie oznacza automatycznie adresu zwrotów.
 - [x] Ustawienia cookies w stopce każdej strony i w polityce: ponowny wybór, wycofanie, odmowa po odświeżeniu; testy lokalne opisane w PR11_REVIEW_RESPONSE.
 - [ ] Właściciel zatwierdza projekt polityki z 03.11.2026 i ustala datę obowiązywania. Do potwierdzenia rzeczywiste retencje, umowy, odbiorcy, transfery i obsługa kontaktu; test kodu nie potwierdza kompletności prawnej.
-- [x] Projekt zasad premiery przepisany na listę WINTER 26, bez przyjmowania zamówień i pre-orderu; stopki 2026.
+- [x] Projekt zasad premiery przepisany na listę WINTER 26 i przygotowywaną przedsprzedaż bez przyjmowania zamówień ani płatności; planowane nadania od 23.11.2026; stopki 2026.
 - [ ] Merytoryczna akceptacja zasad i treści strony; nie traktować ich jako gotowego regulaminu sprzedaży WINTER.
 - [ ] Kontrolowany test zapisu, double opt-in, wypisania i dostarczalności Brevo na docelowym origin. GET i walidacja formularza już sprawdzone, wysyłki nie wykonano.
 - [ ] Pełny eksport DNS, DKIM, usługi subdomen, zewnętrzna poczta LH, plan SSL i rollback potwierdzone.
