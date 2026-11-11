@@ -41,7 +41,7 @@ approved = git_show('6d8e07b:winter-26.html')
 outline=lambda page:[attrs.get('id') for tag,attrs in Page(page).tags if tag=='section' and attrs.get('id')]
 assert outline(html)==outline(approved)
 assert re.search(r'<header.*?</header>',html,re.S).group()==re.search(r'<header.*?</header>',approved,re.S).group()
-assert '23 listopada 2026 r.' in html and 'Kurier InPost w Polsce' in html
+assert '23 listopada 2026 r.' in html and '20,49 zł' in html and 'Paczkomat® 18,49 zł' in html
 assert 'Ostateczna metoda dostawy' not in html and 'HELIX' not in html
 pricing=json.loads((ROOT/'data/winter26-pricing-pl.json').read_text(encoding='utf8'))
 registry=json.loads((ROOT/'data/winter26-products.json').read_text(encoding='utf8'))
