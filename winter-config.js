@@ -69,6 +69,75 @@ if (typeof document !== 'undefined') {
     let commerceMode='closed', busy=false, attempt=null, smallShipping=null, liveInfo=null, expectedTotal=null;
     const commerceOpen=()=>commerceMode!=='closed';
     const acceptance=get('[data-accept-terms]');acceptance.onchange=()=>draw();
+    let delivery='courier', lockerAvailable=false, lockerFee=null, geoToken='', selectedPoint=null;
+    let pointSeq=0, mapSeq=0, mapTimer=null, sdk=null, checking=false, pointMessage='';
+    const courier=get('[data-delivery-courier]'), locker=get('[data-delivery-locker]'), pointInput=get('[data-point-id]');
+    const mapDialog=get('[data-map-dialog]'), mapButton=get('[data-open-map]'), mapHost=get('[data-map-host]');
+    const normalizePoint=id=>typeof id==='string'?id.trim().toUpperCase():'';
+    const validId=id=>/^[A-Z0-9][A-Z0-9_-]{2,31}$/.test(id);
+    function setMethod(method){
+      if(busy||method==='locker'&&!lockerAvailable)return;
+      delivery=method;checking=false;pointSeq++;pointMessage='';acceptance.checked=false;
+      draw();
+    }
+    courier.onchange=()=>setMethod('courier');locker.onchange=()=>setMethod('locker');
+    function resetPoint(){
+      pointSeq++;checking=false;selectedPoint=null;pointMessage='';acceptance.checked=false;draw();
+    }
+    pointInput.oninput=resetPoint;
+    async function checkPoint(){
+      if(delivery!=='locker'||!lockerAvailable||busy)return;
+      const id=normalizePoint(pointInput.value),seq=++pointSeq;selectedPoint=null;acceptance.checked=false;
+      if(!validId(id)){checking=false;pointMessage='Wpisz kod automatu Paczkomat®.';draw();return}
+      checking=true;pointMessage='Sprawdzamy adres automatu w InPost…';draw();
+      try{
+        const res=await fetch('api/pickup-point.php?id='+encodeURIComponent(id),{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
+        const result=await res.json().catch(()=>null);
+        if(seq!==pointSeq||delivery!=='locker')return;
+        if(!res.ok||!result||result.id!==id||typeof result.address!=='string'||!result.address.trim()){
+          throw new Error(!res.ok&&typeof result?.message==='string'?result.message:'Nie udało się potwierdzić adresu. Sprawdź kod lub wybierz inny automat.');
+        }
+        selectedPoint={id,address:result.address.trim()};pointInput.value=id;pointMessage='';
+      }catch(e){if(seq===pointSeq)pointMessage=e instanceof Error&&e.name==='Error'?e.message:'Nie udało się połączyć z wyszukiwarką automatów. Spróbuj ponownie.'}
+      finally{if(seq===pointSeq){checking=false;draw()}}
+    }
+    get('[data-find-point]').onclick=checkPoint;
+    pointInput.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();checkPoint()}};
+    function loadMapSdk(){
+      if(sdk)return sdk;
+      const host=commerceMode==='test'?'https://sandbox-easy-geowidget-sdk.easypack24.net':'https://geowidget.inpost.pl';
+      sdk=new Promise((resolve,reject)=>{
+        const script=el('script'),css=el('link');css.rel='stylesheet';css.href=host+'/inpost-geowidget.css';
+        script.src=host+'/inpost-geowidget.js';script.async=true;script.referrerPolicy='strict-origin-when-cross-origin';
+        script.onload=resolve;script.onerror=()=>{script.remove();css.remove();reject(new Error('sdk'))};
+        document.head.append(css,script);
+      }).catch(e=>{sdk=null;throw e});
+      return sdk;
+    }
+    mapDialog.onclose=()=>{clearTimeout(mapTimer);mapSeq++;mapHost.replaceChildren();mapButton.focus()};
+    get('[data-close-map]').onclick=()=>mapDialog.close();
+    mapButton.onclick=async()=>{
+      if(!geoToken||!lockerAvailable||delivery!=='locker'||busy)return;
+      const seq=++mapSeq,mapStatus=get('[data-map-status]');
+      mapDialog.showModal();mapStatus.textContent='Ładowanie mapy InPost…';
+      const trouble='Mapa nie odpowiada. Zamknij ją i wpisz kod automatu w koszyku.';
+      const timer=mapTimer=setTimeout(()=>{if(seq===mapSeq&&mapDialog.open)mapStatus.textContent=trouble},15000);
+      try{
+        await loadMapSdk();if(seq!==mapSeq||!mapDialog.open){clearTimeout(timer);return}
+        const widget=el('inpost-geowidget');
+        for(const [key,val] of Object.entries({token:geoToken,language:'pl',country:'PL',config:'parcelCollect'}))widget.setAttribute(key,val);
+        widget.addEventListener('inpost.geowidget.init',event=>{
+          const api=event.detail?.api;if(seq!==mapSeq||!mapDialog.open||typeof api?.addPointSelectedCallback!=='function')return;
+          clearTimeout(timer);mapStatus.textContent='';
+          api.changePointsType?.('PARCEL_LOCKER');
+          api.addPointSelectedCallback(point=>{
+            if(seq!==mapSeq||!mapDialog.open||!validId(normalizePoint(point?.name)))return;
+            mapDialog.close();pointInput.value=normalizePoint(point.name);checkPoint();
+          });
+        },{once:true});
+        mapHost.replaceChildren(widget);
+      }catch{clearTimeout(timer);if(seq===mapSeq&&mapDialog.open)mapStatus.textContent=trouble}
+    };
     function validateLive(info){
       const has=(v)=>typeof v==='string'&&Boolean(v.trim());
       if(location.protocol!=='https:'||!/^[a-f0-9]{64}$/i.test(info.approvalVersion||'')||
@@ -181,10 +250,23 @@ if (typeof document !== 'undefined') {
         if(p.some(s=>s.model))li.append(remove);
         return li;
       }));
-      const shipping=count>=data.freeFrom?0:(commerceOpen()?smallShipping:data.sizes[0].shippingGrosz);
+      const free=count>=data.freeFrom;
+      const shipping=free?0:delivery==='locker'?lockerFee:(commerceOpen()?smallShipping:data.sizes[0].shippingGrosz);
+      const shippingName=delivery==='locker'?'Paczkomat® InPost':'Kurier InPost';
+      const pointRequired=delivery==='locker'&&!selectedPoint;
+      get('[data-delivery-picker]').hidden=!commerceOpen();
+      courier.checked=delivery==='courier';locker.checked=delivery==='locker';locker.disabled=!lockerAvailable;
+      get('[data-courier-fee]').textContent=free?'w cenie':smallShipping===null?'brak wyceny':money(smallShipping);
+      get('[data-locker-fee]').textContent=!lockerAvailable?'obecnie niedostępny':free?'w cenie':money(lockerFee);
+      get('[data-locker-panel]').hidden=delivery!=='locker';mapButton.hidden=!geoToken;
+      mapButton.textContent=selectedPoint?'Zmień Paczkomat na mapie':'Wybierz Paczkomat na mapie';
+      get('[data-locker-directory]').hidden=commerceMode!=='live';
+      get('[data-point-summary]').textContent=selectedPoint?'Wybrany automat: '+selectedPoint.id+' · '+selectedPoint.address:'';
+      get('[data-point-status]').textContent=pointMessage;
+      get('[data-find-point]').disabled=checking||!pointInput.value.trim();
       const total=shipping==null?null:merchandise+shipping;
       get('[data-totals]').textContent=[count+' szt. · Ozdoby: '+money(merchandise)+' brutto',
-        shipping===0?'Kurier InPost w Polsce w cenie':shipping==null?'Dostawa płatna osobno':'Kurier InPost: '+money(shipping),
+        shipping===0?shippingName+' w Polsce w cenie':shipping==null?'Dostawa płatna osobno':shippingName+': '+money(shipping),
         total===null?'':'Razem: '+money(total)].filter(Boolean).join(' · ');
       expectedTotal=total;
       const live=commerceMode==='live';get('[data-live-facts]').hidden=!live;
@@ -198,9 +280,9 @@ if (typeof document !== 'undefined') {
       const btn=get('[data-checkout]'), payment=get('[data-payment-status]');
       btn.hidden=!commerceOpen();get('[data-notify]').hidden=commerceOpen();
       btn.textContent=live?'Przejdź do płatności — '+(total===null?'':money(total)):'Przejdź do płatności testowej';
-      btn.disabled=busy || !ready || total===null || Boolean(codeField.value.trim()) || (live&&!acceptance.checked);
+      btn.disabled=busy || pointRequired || !ready || total===null || Boolean(codeField.value.trim()) || (live&&!acceptance.checked);
       payment.textContent=!commerceOpen()?'Możesz ułożyć kompozycję. Zapisz się, aby otrzymać informację o rozpoczęciu sprzedaży.':
-        busy?'Przygotowujemy płatność…':(live?'Zamówienie z obowiązkiem zapłaty potwierdzisz w następnym kroku na stronie Stripe. ':'Tryb testowy — bez pobrania pieniędzy. ')+(!ready?'Wybierz dostępny kolor każdej ozdoby.':total===null?'Koszt dostawy nie został ustawiony.':codeField.value.trim()?'Usuń nieaktywny kod, aby przejść dalej.':live&&!acceptance.checked?'Zapoznaj się z regulaminem i zaakceptuj go.':'Sprawdź skład i kwotę przed przejściem do płatności.');
+        busy?'Przygotowujemy płatność…':(live?'Zamówienie z obowiązkiem zapłaty potwierdzisz w następnym kroku na stronie Stripe. ':'Tryb testowy — bez pobrania pieniędzy. ')+(!ready?'Wybierz dostępny kolor każdej ozdoby.':pointRequired?'Wybierz i potwierdź automat Paczkomat® przed płatnością.':total===null?'Koszt dostawy nie został ustawiony.':codeField.value.trim()?'Usuń nieaktywny kod, aby przejść dalej.':live&&!acceptance.checked?'Zapoznaj się z regulaminem i zaakceptuj go.':'Sprawdź skład i kwotę przed przejściem do płatności.');
       get('[data-reset]').disabled=!groups.length;
       get('[data-reset]').onclick=()=>confirmEdit('Wyczyścić wszystkie wybory w zestawie?', 'Wyczyść',yes=>{
         if(yes){slots=Array.from({length:size},empty);active=0;draw();get('[data-slots]').children[0].focus()}
@@ -211,12 +293,13 @@ if (typeof document !== 'undefined') {
       const orderPacks=quotedPacks().map(p=>p.map(s=>({modelId:s.model,colorId:s.color})));
       const contents=orderPacks.length===1?{selections:orderPacks[0]}:{packs:orderPacks}, checkoutTotal=expectedTotal;
       const acceptanceProof=commerceMode==='live'?{termsAccepted:acceptance.checked,approvalVersion:liveInfo.approvalVersion}:{};
-      const signature=JSON.stringify([contents,checkoutTotal,acceptanceProof]);
+      const destination={delivery_method:delivery,...(delivery==='locker'?{pickup_point:selectedPoint.id}:{})};
+      const signature=JSON.stringify([contents,checkoutTotal,acceptanceProof,destination]);
       if(!attempt||attempt.signature!==signature)attempt={signature,id:crypto.randomUUID()};
       busy=true;draw();
       try{
         const res=await fetch('api/checkout.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','Accept':'application/json'},
-          body:JSON.stringify({...contents,code:codeField.value.trim(),requestId:attempt.id,...acceptanceProof})});
+          body:JSON.stringify({...contents,...destination,code:codeField.value.trim(),requestId:attempt.id,...acceptanceProof})});
         const json=await res.json();
         if(!res.ok)throw new Error(json.message||'Próba nie została przyjęta. Sprawdź dostępność i spróbuj ponownie.');
         if(!Number.isInteger(checkoutTotal)||json.totalGrosz!==checkoutTotal)throw new Error('Kwota zamówienia uległa zmianie. Wróć do wyboru i sprawdź podsumowanie.');
@@ -237,6 +320,9 @@ if (typeof document !== 'undefined') {
           v.stock=Number.isInteger(n)&&n>0?n:0;v.available=v.stock>0;
         }
         smallShipping=Number.isInteger(info.smallOrderCourierGrosz)&&info.smallOrderCourierGrosz>=0?info.smallOrderCourierGrosz:null;
+        lockerFee=Number.isInteger(info.locker_amount_grosze)&&info.locker_amount_grosze>0?info.locker_amount_grosze:null;
+        lockerAvailable=info.locker_available===true&&lockerFee!==null;
+        geoToken=lockerAvailable&&typeof info.geowidget_token==='string'?info.geowidget_token.trim():'';
         if(info.mode==='live'){
           if(smallShipping===null)return;
           liveInfo=info;showLive(info);

@@ -47,7 +47,7 @@ def catalog_data(store, media, pricing):
     sizes = {1:pricing['singleGrossGrosz'], **{int(k):v for k,v in pricing['setGrossGrosz'].items()}}
     assert sorted(sizes) == [1,2,4,6,8] and all(type(v) is int and v > 0 for v in sizes.values())
     threshold = pricing['freeCourierFromOrnaments']
-    return dict(models=models, featured=pricing['featuredSetSize'], freeFrom=threshold,
+    return dict(models=models, featured=pricing['featuredSetSize'], freeFrom=threshold, smallOrderLockerGrosz=pricing['smallOrderLockerGrosz'],
                 sizes=[dict(size=n, grossGrosz=sizes[n], shippingGrosz=0 if n>=threshold else pricing['smallOrderCourierGrosz']) for n in sorted(sizes)])
 
 def controls(p, data):
@@ -65,7 +65,7 @@ def config_scripts(data):
 BUILDER = '''<section id="kompozycja" class="atelier" aria-labelledby="atelier-title">
 <header class="atelier-intro"><p class="eyebrow">WINTER 26 &nbsp; / &nbsp; Kompozycje</p>
 <h1 id="atelier-title">Skomponuj swój zestaw</h1>
-<p>Wybierz wzory i wykończenia. Możesz powtarzać swoje ulubione ozdoby. Od sześciu sztuk kurier w Polsce jest w cenie.</p></header>
+<p>Wybierz wzory i wykończenia. Możesz powtarzać swoje ulubione ozdoby. Od sześciu sztuk dostawa w Polsce jest w cenie.</p></header>
 <div data-builder hidden>
 <fieldset class="size-picker"><legend>Wielkość zestawu</legend><div data-sizes></div></fieldset>
 <div class="compose-layout"><div class="workspace">
@@ -82,7 +82,19 @@ BUILDER = '''<section id="kompozycja" class="atelier" aria-labelledby="atelier-t
 <div class="progress-line" aria-hidden="true"><span></span></div><p data-summary-note></p>
 <ul data-summary></ul><div class="pack-actions"><button type="button" class="ink-button" data-add-pack>Dodaj kolejną kompozycję</button></div>
 <section class="basket" aria-labelledby="basket-title"><h3 id="basket-title">Twój koszyk</h3>
-<ul data-basket></ul><p data-totals aria-live="polite"></p></section>
+<ul data-basket></ul>
+<fieldset class="delivery-picker" data-delivery-picker hidden><legend>Dostawa w Polsce</legend>
+<label><input type="radio" data-delivery-courier name="delivery-method" value="courier" checked> <span>Kurier na adres · <strong data-courier-fee></strong></span></label>
+<label><input type="radio" data-delivery-locker name="delivery-method" value="locker" disabled> <span>Paczkomat® InPost · <strong data-locker-fee></strong></span></label>
+<div data-locker-panel hidden>
+<p data-point-summary class="point-receipt" aria-live="polite"></p>
+<button type="button" class="ink-button" data-open-map hidden>Wybierz Paczkomat na mapie</button>
+<label class="locker-id" for="locker-id">Kod automatu Paczkomat®</label>
+<div class="locker-search"><input id="locker-id" data-point-id type="text" maxlength="32" autocapitalize="characters" spellcheck="false" autocomplete="off" aria-describedby="point-help"><button class="reset-set" data-find-point type="button">Sprawdź kod</button></div>
+<p id="point-help" class="help">Wpisz oznaczenie z automatu, np. WRO01M. Przed płatnością pokażemy jego adres.</p>
+<a class="text-link" data-locker-directory href="https://inpost.pl/znajdz-paczkomat" target="_blank" rel="noopener noreferrer" hidden>Znajdź kod w lokalizatorze InPost ↗</a>
+<p data-point-status role="status" aria-live="polite"></p></div></fieldset>
+<p data-totals aria-live="polite"></p></section>
 <button type="button" class="reset-set" data-reset>Wyczyść wybór</button>
 <div class="coupon-entry"><label for="winter-coupon">Kod rabatowy <small>(opcjonalnie)</small></label>
 <div><input id="winter-coupon" data-coupon type="text" maxlength="64" autocapitalize="characters" spellcheck="false" aria-describedby="coupon-status"><button type="button" class="reset-set" data-apply-code>Sprawdź kod</button></div>
@@ -96,6 +108,9 @@ BUILDER = '''<section id="kompozycja" class="atelier" aria-labelledby="atelier-t
 <button type="button" data-checkout class="ink-button" hidden>Przejdź do płatności testowej</button>
 <a href="index.html#preorder" data-notify class="text-link">Powiadom mnie o sprzedaży ↗</a>
 <small>Samo ułożenie kompozycji nie rezerwuje ozdób. Planowany początek nadań: 23 listopada 2026 r.</small></aside></div>
+<dialog class="locker-map" data-map-dialog aria-labelledby="locker-map-title"><header><h2 id="locker-map-title">Wybierz Paczkomat®</h2>
+<button type="button" class="ink-button" data-close-map autofocus>Zamknij mapę</button></header>
+<p data-map-status role="status"></p><div data-map-host></div></dialog>
 <dialog class="atelier-confirm" aria-labelledby="change-question"><h2 id="change-question"></h2>
 <form method="dialog"><button class="ink-button" value="cancel" autofocus>Zachowaj wybór</button><button class="reset-set" value="ok" data-confirm-ok></button></form></dialog>
 </div><noscript>Do komponowania zestawu włącz JavaScript. Możesz też przejść do listy premierowej.</noscript></section>'''

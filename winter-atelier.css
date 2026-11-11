@@ -80,3 +80,17 @@
 .basket{margin-top:1.05rem;border-top:1px solid var(--rule);padding-top:.85rem}
 .basket h3{font:normal 1.5rem/1.25 Georgia,serif;margin:0}
 .basket .reset-set{justify-self:start}
+/* Destination is chosen in the shop, before payment. */
+.atelier .delivery-picker{margin:1.1rem 0 .8rem;padding:.85rem 0;border-block:1px solid var(--rule)}
+.delivery-picker>label{min-height:44px;display:flex;align-items:center;gap:.55rem;cursor:pointer;font-size:.94rem}
+.delivery-picker input[type=radio]{width:1.15rem;height:1.15rem;accent-color:var(--ink);flex:none}
+.delivery-picker input:disabled+span{color:var(--muted)}
+[data-locker-panel]{padding:.25rem 0 .65rem}.locker-id{display:block;margin:.85rem 0 .3rem;font-size:.9rem}
+.locker-search{display:flex;flex-wrap:wrap;gap:.45rem;align-items:center}
+.locker-search input{min-width:0;max-width:100%;width:9rem;min-height:44px;padding:.45rem .6rem;border:1px solid var(--rule);font:inherit;color:var(--ink);background:var(--porcelain)}
+.point-receipt{font-weight:600;overflow-wrap:anywhere}
+.locker-map{width:min(60rem,96vw);max-width:96vw;max-height:95dvh;margin:auto;background:var(--porcelain);color:var(--ink);border:1px solid var(--rule);padding:clamp(.7rem,2vw,1.4rem);overflow:auto}
+.locker-map::backdrop{background:rgb(15 15 15 / .65)}
+.locker-map header{position:static;display:flex;align-items:center;justify-content:space-between;gap:.5rem;flex-wrap:wrap;background:inherit;padding:0}
+.locker-map h2{font-size:clamp(1.25rem,3.8vw,2rem)}
+.locker-map inpost-geowidget{display:block;width:100%;height:clamp(13rem,64vh,39rem);height:clamp(13rem,64dvh,39rem)}

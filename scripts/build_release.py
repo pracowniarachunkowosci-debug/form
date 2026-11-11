@@ -30,7 +30,7 @@ if not php:
     sys.exit('PHP CLI with curl and PDO SQLite is required to verify this release (set PF_PHP_BIN).')
 for source in sorted((ROOT/'api').glob('*.php')):
     subprocess.run([php,'-l',str(source)],check=True,cwd=ROOT,stdout=subprocess.DEVNULL)
-for suite in ('tests/checkout-sandbox.php','tests/checkout-live-gates.php'):
+for suite in ('tests/checkout-sandbox.php','tests/checkout-live-gates.php','tests/checkout-locker.php'):
     subprocess.run([php,suite],check=True,cwd=ROOT)
 # Only program sources and public catalogs: no private configuration, databases or test drivers.
 backend = sorted((ROOT/'api').glob('*.php'))

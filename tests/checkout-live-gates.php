@@ -34,8 +34,8 @@ try{
   file_put_contents($file,json_encode($c));file_put_contents($root.'/terms.html','changed fixture',FILE_APPEND);
   rejected(fn()=>live_config());ensure(live_config(true)['mode']==='live','pending webhook must survive new release');
   $make=['requestId'=>'12345678-1234-4321-8123-123456789abc','code'=>'','selections'=>array_fill(0,6,['modelId'=>'full-soft','colorId'=>'marble'])];
-  $ver=$cfg['approvalVersion'];rejected(fn()=>quote($make,policy(),1500,$ver),'TERMS');
-  $q=quote($make+['approvalVersion'=>$ver,'termsAccepted'=>true],policy(),1500,$ver);ensure($q['total']===22000 && $q['shipping']===0,'6 at full price with courier');
+  $ver=$cfg['approvalVersion'];rejected(fn()=>quote($make,policy(),$ver),'TERMS');
+  $q=quote($make+['approvalVersion'=>$ver,'termsAccepted'=>true],policy(),$ver);ensure($q['total']===22000 && $q['shipping']===0,'6 at full price with courier');
   $db->exec("INSERT INTO stock VALUES('full-soft:marble',6)");$owner='owner-key';
   rate($db,$cfg,$owner,$make['requestId']);$o=order($db,$make['requestId'],$q,$owner);
   $params=checkout_params($o,$c['origin'],true);ensure(count($params['line_items'])===1 && !str_contains($params['line_items'][0]['price_data']['product_data']['name'],'TEST'),'live line item');
