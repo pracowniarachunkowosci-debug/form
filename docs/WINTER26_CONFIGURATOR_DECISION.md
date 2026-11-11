@@ -1,6 +1,6 @@
 # WINTER 26 — kompozycja i decyzja o płatnościach
 
-**Decyzja cenowa 10.11.2026:** [Cennik stały według rozmiaru zestawu, WINTER10 i kurier od 6 sztuk w cenie](WINTER26_CENNIK_PL.md). Zasady techniczne poniżej opisują wcześniejszy etap katalogu.
+**Decyzja cenowa 11.11.2026:** [Cennik stały według rozmiaru zestawu, nieaktywny kod i kurier od 6 sztuk w cenie](WINTER26_CENNIK_PL.md). Zasady techniczne poniżej opisują wcześniejszy etap katalogu.
 
 **Decyzja dla Pracowni Form:** udostępnić do odbioru konfigurator jako część katalogu. Do sprzedaży zestawów z indywidualnym składem i wspólnym stanem wybrać **Checkout Sessions tworzone na serwerze**. Zachować Payment Links dla gotowych, jednoznacznych SKU z osobnym zapasem. [Odbiór Sandbox #16](https://github.com/pracowniarachunkowosci-debug/form/pull/16) potwierdził jedną stałą pozycję + kuriera, nie zamówienia komponowane. W #17 nie tworzono kont, sesji, rezerwacji, linków ani płatności.
 

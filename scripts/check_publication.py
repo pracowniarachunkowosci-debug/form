@@ -36,29 +36,18 @@ for path in ('robots.txt',):
 html = (ROOT/'winter-26.html').read_text(encoding='utf-8')
 ga = lambda s: next(x for x in re.findall(r'<script>.*?</script>', s, re.S) if 'PF_GA_MEASUREMENT_ID' in x)
 assert ga(html) == ga(baseline('winter-26.html')), 'GA initialization changed'
-# The visual shell, header and layout remain frozen at PR11; Issue #21 intentionally updates copy.
+# Content changed from four concepts to three sellable models; preserve layout/hero and navigation.
 approved = git_show('6d8e07b:winter-26.html')
-def stable_main(text):
-    main=re.search(r'<main\b.*?</main>',text,re.S).group()
-    main=re.sub(r'<figure class="w26-hero-art">.*?</figure>', '<hero>', main, flags=re.S)
-    main=re.sub(r'<section class="w26-intro shell".*?</section>', '<intro>', main, flags=re.S)
-    main=re.sub(r'<section class="fulfilment shell".*?</section>', '<fulfilment>', main, flags=re.S)
-    main=re.sub(r'<section class="pilot-info shell".*?</section>', '<pilot-info>', main, flags=re.S)
-    main=re.sub(r'<article class="product-card".*?</article>', '<card>',main,flags=re.S)
-    # Only the invitation to compose in the sets intro changed for #17.
-    main=main.replace('Odkryj Duet albo ułóż własną kompozycję. Zestawy pozostają zapowiedzią.', 'Zestawy pozostają zapowiedzią. Do sprzedaży mogą trafić wyłącznie potwierdzone, gotowe kompozycje z osobnym zapasem.')
-    return re.sub(r'(?:<figure class="set-scene">.*?</figure>)?<div class="sets-grid">.*?</article></div>', '<sets>',main,flags=re.S)
-assert stable_main(html)==stable_main(approved)
+outline=lambda page:[attrs.get('id') for tag,attrs in Page(page).tags if tag=='section' and attrs.get('id')]
+assert outline(html)==outline(approved)
 assert re.search(r'<header.*?</header>',html,re.S).group()==re.search(r'<header.*?</header>',approved,re.S).group()
-assert 'WINTER 26 — przedsprzedaż' in html and '23 listopada 2026 r.' in html
-assert 'Powiadom mnie o przedsprzedaży' in html
-assert 'Kadr koncepcyjny · Materiał: Do potwierdzenia przed sprzedażą' not in html
-assert 'Przesyłki planujemy realizować przez InPost.' in html
-assert 'InPost Kurier' not in html and 'Paczkomat' not in html
+assert '23 listopada 2026 r.' in html and 'Kurier InPost w Polsce' in html
+assert 'Ostateczna metoda dostawy' not in html and 'HELIX' not in html
+pricing=json.loads((ROOT/'data/winter26-pricing-pl.json').read_text(encoding='utf8'))
 registry=json.loads((ROOT/'data/winter26-products.json').read_text(encoding='utf8'))
 from xml.etree import ElementTree as ET
 def urls(s): return {x.text for x in ET.fromstring(s).findall('.//{*}loc')}
-expected={f'https://pracowniaform.com/winter-{p["slug"]}.html' for p in registry['products']}
+expected={f'https://pracowniaform.com/winter-{p["slug"]}.html' for p in registry['products'] if p['type']!='pojedynczy' or p['id'] in pricing['eligibleModelIds']}
 assert urls((ROOT/'sitemap.xml').read_text()) == urls(baseline('sitemap.xml')) | expected
 script = (ROOT/'script.js').read_text(encoding='utf-8')
 original_script = baseline('script.js')
@@ -66,12 +55,12 @@ assert script.split('// Cookie consent + GA4')[0] == original_script.split('// C
 assert script.split('// Interaktywne badanie')[1] == original_script.split('// Interaktywne badanie')[1]
 for forbidden in ('noindex', 'nofollow', 'Content-Security-Policy', 'form-action', 'previews/', 'buy.stripe.com', 'js.stripe.com', 'checkout.stripe.com'):
     assert forbidden not in html, forbidden
-assert html.count('class="product-card"') == 4
-assert html.count('data-color-model=') == 4
-for size in (4,6,8): assert f'winter-zestaw-4.html?size={size}#kompozycja' in html
+assert html.count('class="product-card"') == len(pricing['eligibleModelIds'])
+assert html.count('data-color-model=') == len(pricing['eligibleModelIds'])
+for size in (1,2,4,6,8): assert f'winter-zestaw-4.html?size={size}#kompozycja' in html
 cards = re.findall(r'<article class="product-card".*?</article>', html, re.S)
 assert all(card.count('class="status-pill"') == 1 for card in cards)
-for card, product in zip(cards, (p for p in registry['products'] if p['type']=='pojedynczy'), strict=True):
+for card, product in zip(cards, (p for p in registry['products'] if p['id'] in pricing['eligibleModelIds']), strict=True):
     assert 'class="store-cover"' in card and f'href="winter-{product["slug"]}.html"' in card
     assert ('<picture>' in card) == bool(product['photos']), product['slug']
 for product in registry['products']:
@@ -89,11 +78,17 @@ for name,page in pages.items():
     assert any(t == 'title' for t,a in page.tags), name
     canon=[a['href'] for t,a in page.tags if t=='link' and a.get('rel')=='canonical']
     robots = [a['content'] for t,a in page.tags if t=='meta' and a.get('name')=='robots']
-    if name in {'zapis-potwierdzony.html','zapis-prawie-gotowy.html'}:
+    if name in {'zapis-potwierdzony.html','zapis-prawie-gotowy.html','winter-helix.html'}:
         assert any('noindex' in value for value in robots), name
     else:
         assert canon == ['https://pracowniaform.com/' + ('' if name=='index.html' else name)], (name,canon)
         assert not any('noindex' in value for value in robots), name
+builder=(ROOT/'winter-zestaw-4.html').read_text()
+assert 'id="winter-coupon"' in builder and 'data-apply-code' in builder and 'data-checkout class="ink-button" hidden' in builder
+public_options=json.loads(re.search(r'id="winter-options">(.*?)</script>',builder,re.S).group(1))
+assert len(public_options['models'])==3 and all(len(m['variants'])==4 for m in public_options['models'])
+assert len({v['sku'] for m in public_options['models'] for v in m['variants']})==12
+assert 'WINTER10' not in builder and 'WINTER10' not in html
 refs = 0
 for name, page in pages.items():
     assert any('data-cookie-settings' in a for _, a in page.tags), f'No settings entry: {name}'

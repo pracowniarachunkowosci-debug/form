@@ -1,10 +1,10 @@
 # Pracownia Form
 
-**WINTER 26 / ceny w Polsce:** [cennik, kod WINTER10 dla singli i zestawów i dostawa](docs/WINTER26_CENNIK_PL.md).
+**WINTER 26 / ceny w Polsce:** [cennik regularny, pole na późniejszy kod i dostawa](docs/WINTER26_CENNIK_PL.md).
 
 **WINTER 26 / Issue #12:** [katalog, konfiguracja produktów, podglądy i warunki aktywacji](docs/WINTER26_STOREFRONT_HANDOFF.md). Ta gałąź jest draftem sklepu na bazie PR #11. Lokalny podgląd sklepu: port 8772; port 8771 poniżej należy do bazowego PR #11.
 
-Statyczna strona HTML/CSS/JS. Gałąź publikacyjna LH zawiera zatwierdzony hybrydowy WINTER AFTER DARK R04; pozostaje draftem bez zgody na wdrożenie.
+**Bieżące wydanie z 11.11.2026:** [zlecenie publikacji i testów #24](https://github.com/pracowniarachunkowosci-debug/form/issues/24) oraz [instrukcja dla operatora](docs/WINTER26_WYDANIE.md). Właściciel zlecił publikację z aktualnymi materiałami. Nie oznacza to przeprowadzenia testów z prawdziwym kontem Stripe ani wykonania przełączenia domeny. Poprzednie raporty poniżej pozostają zapisem starszych wersji.
 
 - [Raport zmian i podglądy](docs/PUBLICATION_REPORT.md)
 - [Aktualny hero z otwartą bombką — porównanie desktop/mobile](docs/HERO_CONCEPT_PREVIEW.md)

@@ -20,4 +20,9 @@ for(const v of [{...a,stock:0},{...a,stock:null},{...a,sku:null},{...a,available
  assert(!eligible(v,[],0,data));
 const over=[slot(a),slot(a),slot(a),slot(b)];
 assert.notEqual(summary(data,over).done,4);
+assert.equal(summary(data,[slot(a)]).done,1);
+assert.equal(summary(data,[slot(a),slot(a)]).done,2);
+const previewOnly={models:[{id:'test',name:'Test',variants:[{...a,stock:null,available:false}]}]};
+assert.equal(summary(previewOnly,[slot(a)],true).done,1);
+assert.equal(summary(previewOnly,[slot(a)],false).done,0);
 console.log('PASS: 4/6/8 complete, repeated SKUs aggregate; unknown, excess and unavailable cannot complete a set.');

@@ -1,7 +1,9 @@
-"""Build a local static release archive. Does not upload or change hosting."""
+"""Build a local LH webroot archive from a clean checkout; no upload or provider calls."""
 from pathlib import Path
 import hashlib
 import json
+import os
+import shutil
 import subprocess
 import sys
 import zipfile
@@ -22,7 +24,18 @@ subprocess.run([sys.executable, str(ROOT/'scripts/check_publication.py')], check
 subprocess.run(['node','scripts/check_consent.cjs'], cwd=ROOT, check=True)
 subprocess.run(['node','--check','store-gallery.js'], cwd=ROOT, check=True)
 subprocess.run(['node','scripts/check_config.cjs'], cwd=ROOT, check=True)
-files = sorted([*ROOT.glob('*.html'), *ROOT.glob('*.css'), ROOT/'script.js', ROOT/'store-gallery.js', ROOT/'winter-config.js', ROOT/'favicon.svg', ROOT/'robots.txt', ROOT/'sitemap.xml', *[p for p in (ROOT/'assets').rglob('*') if p.is_file()]], key=lambda p: p.relative_to(ROOT).as_posix())
+subprocess.run(['node','scripts/check_store_composition.cjs'],cwd=ROOT,check=True)
+php = os.environ.get('PF_PHP_BIN') or shutil.which('php')
+if not php:
+    sys.exit('PHP CLI with curl and PDO SQLite is required to verify this release (set PF_PHP_BIN).')
+for source in sorted((ROOT/'api').glob('*.php')):
+    subprocess.run([php,'-l',str(source)],check=True,cwd=ROOT,stdout=subprocess.DEVNULL)
+for suite in ('tests/checkout-sandbox.php','tests/checkout-live-gates.php'):
+    subprocess.run([php,suite],check=True,cwd=ROOT)
+# Only program sources and public catalogs: no private configuration, databases or test drivers.
+backend = sorted((ROOT/'api').glob('*.php'))
+catalogs = [ROOT/'data/winter26-pricing-pl.json', ROOT/'data/winter26-products.json']
+files = sorted([*backend, *catalogs, *ROOT.glob('*.html'), *ROOT.glob('*.css'), ROOT/'script.js', ROOT/'store-gallery.js', ROOT/'winter-config.js', ROOT/'favicon.svg', ROOT/'robots.txt', ROOT/'sitemap.xml', *[p for p in (ROOT/'assets').rglob('*') if p.is_file()]], key=lambda p: p.relative_to(ROOT).as_posix())
 allowed_assets = {'.avif', '.webp', '.jpg', '.jpeg', '.png', '.svg', '.woff', '.woff2'}
 assert all(p.suffix.lower() in allowed_assets for p in files if 'assets' in p.relative_to(ROOT).parts)
 blobs = {p.relative_to(ROOT).as_posix(): payload(p) for p in files}
@@ -47,7 +60,7 @@ release = {
     'archive_sha256': hashlib.sha256((OUT/'pracownia-form-lh.zip').read_bytes()).hexdigest(),
     'archive_bytes': (OUT/'pracownia-form-lh.zip').stat().st_size,
     'manifest_sha256': hashlib.sha256((OUT/'manifest.json').read_bytes()).hexdigest(),
-    'files': len(files), 'deployment_authorized': False
+    'files': len(files), 'deployment_target': 'LH Orange', 'uploaded_by_this_build': False
 }
 (OUT/'release.json').write_text(json.dumps(release, indent=2)+'\n', encoding='utf-8')
 print(f'Output: {OUT}')

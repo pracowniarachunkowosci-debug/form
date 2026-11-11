@@ -60,3 +60,23 @@
 .atelier :is(.slot,.ink-button,.reset-set,.help a):focus-visible{outline:3px solid var(--ink);outline-offset:3px}
 
 .atelier .reset-set:disabled{color:var(--muted);text-decoration:none;cursor:not-allowed}
+
+/* WINTER 26: summaries and optional promotion field. */
+.composition [hidden]{display:none!important}
+.coupon-entry{border-block:1px solid var(--rule);margin:1rem 0;padding:1rem 0}
+.coupon-entry label{display:block;font-weight:600;margin-bottom:.5rem}
+.coupon-entry label small{font-weight:400}
+.coupon-entry>div{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.coupon-entry input{box-sizing:border-box;min-width:5rem;flex:1 1 8rem;max-width:100%;padding:.62rem;border:1px solid var(--rule);border-radius:0;background:var(--porcelain);color:var(--ink);font:inherit}
+.coupon-entry [role=status]:empty{display:none}
+[data-payment-status]{font-size:.88rem;line-height:1.5}
+.catalog-prices{display:flex;gap:1rem;flex-wrap:wrap}.catalog-prices .set-link{white-space:nowrap}
+[data-live-facts]{padding-block:.5rem 1rem}
+[data-live-facts] :is(p,summary,label){font-size:.88rem;line-height:1.5}
+[data-live-facts] a{text-decoration:underline;text-underline-offset:.17em}
+[data-live-facts] details{margin-block:.8rem}
+[data-live-facts] .legal-accept{display:block;padding:.55rem 0;cursor:pointer}
+.pack-actions{margin:.8rem 0}
+.basket{margin-top:1.05rem;border-top:1px solid var(--rule);padding-top:.85rem}
+.basket h3{font:normal 1.5rem/1.25 Georgia,serif;margin:0}
+.basket .reset-set{justify-self:start}
