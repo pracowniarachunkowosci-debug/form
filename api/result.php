@@ -1,0 +1,4 @@
+<?php
+declare(strict_types=1);require_once __DIR__.'/_common.php';headers_private();
+try{$cfg=deployment(true);$live=$cfg['mode']==='live';}catch(Throwable $e){http_response_code(404);exit;}
+?><!doctype html><html lang="pl"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Powrót z płatności WINTER 26</title><main><h1><?=isset($_GET['cancel'])?'Przerwano próbę płatności':($live?'Powrót z płatności':'Powrót z płatności testowej')?></h1><p><?= $live?'Status płatności sprawdzamy u operatora. Sam powrót do sklepu nie oznacza przyjęcia zamówienia do realizacji.':'To był test sklepu. Nie wyślemy produktów i nie pobierzemy pieniędzy. Status próby operator potwierdza na podstawie zdarzenia Stripe.' ?></p><a href="/winter-zestaw-4.html?size=6#kompozycja">Powrót do konfiguratora</a></main></html>

@@ -9,7 +9,7 @@
     "returnsSummary": null,
     "complaintsSummary": null,
     "privacyPage": "polityka-prywatnosci.html",
-    "delivery": "InPost",
+    "delivery": "Kurier InPost w Polsce",
     "shippingPLN": null,
     "preorderLabel": "WINTER 26 — przedsprzedaż",
     "preorderStatus": "Przedsprzedaż wkrótce",
@@ -17,7 +17,7 @@
     "dispatchStart": "23 listopada 2026 r.",
     "dispatchNotice": "Nadawanie zamówień planujemy rozpocząć 23 listopada 2026 r.",
     "deliveryNotice": "Data nadania nie jest gwarantowaną datą doręczenia. Termin doręczenia zależy od przewoźnika.",
-    "carrierNotice": "Przesyłki planujemy realizować przez InPost. Ostateczna metoda dostawy, ceny i ewentualny próg darmowej wysyłki zostaną potwierdzone przed aktywacją zakupów."
+    "carrierNotice": "Kurier InPost w Polsce: dostawa w cenie od 6 ozdób w zamówieniu. Przy 1–5 ozdobach dostawa jest płatna osobno."
   },
   "products": [
     {
@@ -31,7 +31,7 @@
       "material": null,
       "color": null,
       "dimensions": null,
-      "grossPLN": null,
+      "grossPLN": 50,
       "stock": null,
       "status": "draft",
       "dispatch": null,
@@ -63,7 +63,44 @@
       "stripePaymentLink": null,
       "family": "KNITTED",
       "verifiedCheckout": null,
-      "variants": []
+      "variants": [
+        {
+          "colorId": "dual",
+          "sku": "PF-W26-STAR-DUAL",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        },
+        {
+          "colorId": "red-matte",
+          "sku": "PF-W26-STAR-RED-MATTE",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        },
+        {
+          "colorId": "white",
+          "sku": "PF-W26-STAR-WHITE",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        },
+        {
+          "colorId": "marble",
+          "sku": "PF-W26-STAR-MARBLE",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        }
+      ]
     },
     {
       "id": "knitted-medallion",
@@ -76,7 +113,7 @@
       "material": null,
       "color": null,
       "dimensions": null,
-      "grossPLN": null,
+      "grossPLN": 50,
       "stock": null,
       "status": "draft",
       "dispatch": null,
@@ -108,7 +145,44 @@
       "stripePaymentLink": null,
       "family": "KNITTED",
       "verifiedCheckout": null,
-      "variants": []
+      "variants": [
+        {
+          "colorId": "dual",
+          "sku": "PF-W26-MED-DUAL",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        },
+        {
+          "colorId": "red-matte",
+          "sku": "PF-W26-MED-RED-MATTE",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        },
+        {
+          "colorId": "white",
+          "sku": "PF-W26-MED-WHITE",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        },
+        {
+          "colorId": "marble",
+          "sku": "PF-W26-MED-MARBLE",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        }
+      ]
     },
     {
       "id": "helix",
@@ -123,7 +197,7 @@
       "dimensions": null,
       "grossPLN": null,
       "stock": null,
-      "status": "draft",
+      "status": "archived",
       "dispatch": null,
       "quantity": 1,
       "gpsr": {
@@ -158,15 +232,15 @@
     {
       "id": "full-soft",
       "slug": "full-soft",
-      "name": "FULL SOFT",
+      "name": "VASE",
       "type": "pojedynczy",
-      "model": "FULL SOFT",
+      "model": "VASE",
       "description": "Pełna kula o miękkim, spiralnym rytmie. Wypukłe pasma łagodnie prowadzą światło wokół bryły.",
       "sku": null,
       "material": null,
       "color": null,
       "dimensions": null,
-      "grossPLN": null,
+      "grossPLN": 50,
       "stock": null,
       "status": "draft",
       "dispatch": null,
@@ -198,7 +272,44 @@
       "stripePaymentLink": null,
       "family": "SCULPTURAL",
       "verifiedCheckout": null,
-      "variants": []
+      "variants": [
+        {
+          "colorId": "dual",
+          "sku": "PF-W26-VASE-DUAL",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        },
+        {
+          "colorId": "red-matte",
+          "sku": "PF-W26-VASE-RED-MATTE",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        },
+        {
+          "colorId": "white",
+          "sku": "PF-W26-VASE-WHITE",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        },
+        {
+          "colorId": "marble",
+          "sku": "PF-W26-VASE-MARBLE",
+          "status": "approved",
+          "stock": null,
+          "available": false,
+          "grossGrosz": 5000,
+          "photoAsset": null
+        }
+      ]
     },
     {
       "id": "zestaw-2",
@@ -264,28 +375,53 @@
     }
   ],
   "configuration": {
-    "colors": [],
+    "colors": [
+      {
+        "id": "dual",
+        "label": "Dual",
+        "approved": true,
+        "hex": null
+      },
+      {
+        "id": "red-matte",
+        "label": "Czerwony matowy",
+        "approved": true,
+        "hex": null
+      },
+      {
+        "id": "white",
+        "label": "Biały",
+        "approved": true,
+        "hex": null
+      },
+      {
+        "id": "marble",
+        "label": "Marble",
+        "approved": true,
+        "hex": null
+      }
+    ],
     "sizes": [
       {
         "size": 4,
-        "priceApproved": false,
-        "grossGrosz": null,
+        "priceApproved": true,
+        "grossGrosz": 15000,
         "shippingApproved": false,
         "shippingGrosz": null
       },
       {
         "size": 6,
-        "priceApproved": false,
-        "grossGrosz": null,
-        "shippingApproved": false,
-        "shippingGrosz": null
+        "priceApproved": true,
+        "grossGrosz": 22000,
+        "shippingApproved": true,
+        "shippingGrosz": 0
       },
       {
         "size": 8,
-        "priceApproved": false,
-        "grossGrosz": null,
-        "shippingApproved": false,
-        "shippingGrosz": null
+        "priceApproved": true,
+        "grossGrosz": 29000,
+        "shippingApproved": true,
+        "shippingGrosz": 0
       }
     ]
   }

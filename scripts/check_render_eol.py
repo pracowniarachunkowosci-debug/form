@@ -15,11 +15,11 @@ with tempfile.TemporaryDirectory() as directory:
             (tmp / source.name).write_bytes(source.read_bytes().replace(b'\r\n', b'\n').replace(b'\n', eol))
         command = [sys.executable, str(tmp / 'scripts/render_store.py'), '--check']
         subprocess.run(command, cwd=tmp, check=True)
-    card = tmp / 'winter-helix.html'
+    card = tmp / 'winter-knitted-star.html'
     original = card.read_bytes()
-    cta = 'Powiadom mnie o przedsprzedaży'.encode('utf-8')
+    cta = 'KNITTED STAR'.encode('utf-8')
     assert cta in original
     card.write_bytes(original.replace(cta, b'Nieaktualny opis', 1))
     result = subprocess.run(command, cwd=tmp, capture_output=True)
-    assert result.returncode and b'Stale generated page: winter-helix.html' in result.stderr
+    assert result.returncode and b'Stale generated page: winter-knitted-star.html' in result.stderr
 print('PASS: LF and CRLF render identically; actual card edit is rejected.')

@@ -11,9 +11,8 @@ def quote(packs, code=None):
     Keep explicit pack boundaries: four separate singles are not a quartet.
     Caller validates SKU/stock separately. Never supply money from the browser.
     """
-    coupon = _POLICY["coupon"]
-    if code is not None and (not isinstance(code, str) or code.strip().upper() != coupon["code"]):
-        raise ValueError("Nieznany kod rabatowy.")
+    if code is not None and (not isinstance(code, str) or code.strip()):
+        raise ValueError("Ten kod nie jest aktywny.")
     if not isinstance(packs, (list, tuple)) or not packs:
         raise ValueError("Pusty lub niepoprawny koszyk.")
     count = regular = discount = 0
@@ -27,8 +26,6 @@ def quote(packs, code=None):
             regular += _POLICY["setGrossGrosz"][str(size)]
         else:
             raise ValueError("Nieobsługiwana liczba ozdób w zestawie.")
-        if code is not None:
-            discount += coupon["discountPerPackGrosz"]
         count += size
     merchandise = regular - discount
     shipping = 0 if count >= _POLICY["freeCourierFromOrnaments"] else _POLICY["smallOrderCourierGrosz"]

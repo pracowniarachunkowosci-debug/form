@@ -1,9 +1,20 @@
 {
   "currency": "PLN",
-  "eligibleModelIds": ["full-soft", "knitted-star", "knitted-medallion"],
+  "eligibleModelIds": [
+    "full-soft",
+    "knitted-star",
+    "knitted-medallion"
+  ],
   "singleGrossGrosz": 5000,
-  "setGrossGrosz": {"2": 8400, "4": 15000, "6": 22000, "8": 29000},
-  "coupon": {"code": "WINTER10", "discountPerPackGrosz": 1000},
+  "setGrossGrosz": {
+    "2": 8400,
+    "4": 15000,
+    "6": 22000,
+    "8": 29000
+  },
+  "coupon": {
+    "active": false
+  },
   "featuredSetSize": 6,
   "freeCourierFromOrnaments": 6,
   "smallOrderCourierGrosz": null

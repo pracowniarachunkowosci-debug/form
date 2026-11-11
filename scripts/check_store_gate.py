@@ -25,7 +25,7 @@ import subprocess, sys
 root=Path(__file__).resolve().parents[1]
 with TemporaryDirectory() as tmp:
     dest=Path(tmp)
-    for rel in ['scripts/render_store.py','scripts/store_gate.py','scripts/store_panel.py','scripts/config_catalog.py','data/store-media.json','winter-26.html','sitemap.xml']:
+    for rel in ['scripts/render_store.py','scripts/store_gate.py','scripts/store_panel.py','scripts/config_catalog.py','data/store-media.json','data/winter26-pricing-pl.json','winter-26.html','sitemap.xml']:
         (dest/rel).parent.mkdir(exist_ok=True)
         copyfile(root/rel,dest/rel)
     def render():
@@ -36,7 +36,7 @@ with TemporaryDirectory() as tmp:
     panel=html.split('class="purchase-panel"',1)[1].split('<dl class="facts">',1)[0]
     buy=f'href="{url}"'
     assert html.count(buy)==2
-    for expected in ('20,00 zł brutto','Przesyłki planujemy realizować przez InPost.','10,00 zł','Nadawanie zamówień planujemy rozpocząć 23 listopada 2026 r.','Zwroty: approved','href="returns.html"'):
+    for expected in ('20,00 zł brutto','Kurier InPost w Polsce','10,00 zł','Nadawanie zamówień planujemy rozpocząć 23 listopada 2026 r.','Zwroty: approved','href="returns.html"'):
         assert panel.index(expected)<panel.index(buy),expected
     assert 'sprzedaż nieaktywna' not in html
     p['stock']=0

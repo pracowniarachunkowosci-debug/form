@@ -6,6 +6,7 @@ from config_catalog import catalog_data
 root=Path(__file__).resolve().parents[1]
 store=json.loads((root/'data/winter26-products.json').read_bytes())
 media=json.loads((root/'data/store-media.json').read_bytes())
+pricing=json.loads((root/'data/winter26-pricing-pl.json').read_bytes())
 store['configuration']['colors']=[]
 for model in store['products']:
     if model['type']=='pojedynczy': model['variants']=[]
@@ -15,7 +16,7 @@ store['configuration']['colors'].append(dict(id=sid,label='Fixture',hex='#765432
 v=dict(colorId=sid,sku=sid,stock=2,grossGrosz=100,available=True,status='draft',photoAsset=None)
 p['variants']=[v]
 def published():
-    return catalog_data(store,media)['models'][0]['variants']
+    return catalog_data(store,media,pricing)['models'][0]['variants']
 assert not published()
 v['status']='approved';assert published()[0]['grossGrosz']==100
 store['configuration']['colors'][0]['approved']=False;assert not published()
