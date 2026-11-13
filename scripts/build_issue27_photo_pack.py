@@ -50,7 +50,7 @@ MAPPING = {
     "WEB019": ("VASE", "nierozpoznany", "wysoka", "confirmed geometry", "Detail crop of 004, whose VASE geometry matches 238 by owner confirmation."),
     "WEB020": ("VASE", "nierozpoznany", "wysoka", "confirmed geometry", "Detail crop of 238, the owner-confirmed light speckled VASE geometry."),
     "WEB021": ("poza ofertą", "nierozpoznany", "wysoka", "unmatched/outside current assortment", "Detail crop of 250; the rosette geometry is outside the current three-model catalog."),
-    "WEB022": ("poza ofertą", "nierozpoznany", "średnia", "unmatched/outside current assortment", "Lifestyle image shows a flattened rosette-like object without enough evidence for one of the current three SKUs."),
+    "WEB022": ("VASE", "nierozpoznany", "średnia", "candidate", "045 shows a full spiral VASE-like ornament, not a rosette; exact relation to 004/238 and color remain unconfirmed."),
     "WEB023": ("VASE", "dual", "średnia", "owner decision required", "Lifestyle image is visually compatible with the dark spiral family around 248/255; Dual is only a visual candidate."),
     "WEB024": ("VASE", "nierozpoznany", "średnia", "owner decision required", "Lifestyle image shows a beige spiral form; beige is not a current catalog color and the exact SKU is unconfirmed."),
     "WEB025": ("KNITTED STAR", "nierozpoznany", "średnia", "candidate", "Lifestyle image visibly shows a star geometry compatible with KNITTED STAR; exact variant/color is not confirmed."),
@@ -58,9 +58,9 @@ MAPPING = {
 }
 
 DECISIONS = [
-    ("1 · VASE candidates and roles", ["004", "238", "243", "245"], "Rekomendacja: use 004/238 as the only high-confidence VASE geometry pair; consider 243 a separate smooth candidate and 245 a lower-confidence VASE candidate. Confirm which images are accepted into the 12-variant catalog and choose main/gallery/detail."),
+    ("1 · VASE candidates and roles", ["004", "238", "243", "245", "045"], "Rekomendacja: use 004/238 as the only high-confidence VASE geometry pair; consider 243 a separate smooth candidate, 245 a lower-confidence VASE candidate and 045 a VASE-compatible lifestyle candidate. Confirm accepted images and main/gallery/detail."),
     ("2 · VASE colors and exclusions", ["248", "255", "258", "171", "213"], "Rekomendacja: 248/255 are the Dual candidate pair, 258 is the red VASE candidate; keep 171/213 as lifestyle candidates only until color/SKU is confirmed."),
-    ("3 · Outside-current-assortment objects", ["244", "250", "257", "045", "146"], "Rekomendacja: keep these out of the three-model catalog. Their rosette/flattened geometry does not safely match VASE, KNITTED STAR or KNITTED MEDALLION."),
+    ("3 · Outside-current-assortment objects", ["244", "250", "257", "146"], "Rekomendacja: keep these four objects out of the three-model catalog. Their rosette geometry does not safely match VASE, KNITTED STAR or KNITTED MEDALLION."),
     ("4 · KNITTED STAR color split", ["259", "260", "262", "263", "083"], "Rekomendacja: geometry is confirmed; use 262 as the red-matte candidate, 259/263 as the light-color candidate pool, 260 as detail, and 083 only as lifestyle. Confirm White vs Marble before any SKU mapping."),
     ("5 · KNITTED MEDALLION", ["261"], "Rekomendacja: retain 261 as the sole KNITTED MEDALLION candidate, with no color or material assigned. Confirm which one of the four catalog colors it represents; all other medallion slots need new photography."),
 ]

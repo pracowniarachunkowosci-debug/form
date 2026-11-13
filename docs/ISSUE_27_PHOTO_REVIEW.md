@@ -31,8 +31,9 @@ Pakiet `08_PRODUCT_WEB_HANDOFF` został zweryfikowany razem z `START_TUTAJ.md`, 
 | 258 | czerwona forma spiralna; kandydat VASE / red-matte | main |
 | 259, 260, 262, 263 | geometria KNITTED STAR — potwierdzona; kolory i role katalogowe nie w pełni ustalone | main / detail |
 | 261 | geometria KNITTED MEDALLION — potwierdzona; kolor i materiał nieustalone | main |
-| 045, 171, 213, 083, 146 | lifestyle; tylko dodatkowa galeria po akceptacji; 045/146 rekomendowane poza katalogiem | gallery |
-| 045, 171, 213, 083, 146 | aranżacje lifestyle | wyłącznie dodatkowa galeria po akceptacji; nie używać jako `main` |
+| 045 | lifestyle z pełną jasną spiralną formą; kandydat VASE, ale niepotwierdzona relacja z 004/238 | gallery |
+| 171, 213, 083, 146 | lifestyle; tylko dodatkowa galeria po akceptacji; `146` rekomendowane poza katalogiem | gallery |
+| 171, 213, 083, 146 | aranżacje lifestyle | wyłącznie dodatkowa galeria po akceptacji; nie używać jako `main` |
 
 ## Potwierdzone rozpoznanie wizualne
 
@@ -43,6 +44,7 @@ Na podstawie odpowiedzi właściciela potwierdzone są poniższe geometrie i rel
 - `248` i `255` — podobieństwo w rodzinie wizualnej Dual; dokładna rola kadru i wariant pozostają otwarte;
 - `250` — osobna forma rozetowa, nie przypisywać do spiralnej VASE;
 - `257` i `258` — różne geometrie; `258` wygląda jak spiralna VASE, `257` jak forma rozetowa; nie scalać;
+- `045` — po ponownym porównaniu wygląda jak pełna jasna spiralna ozdoba zgodna wizualnie z VASE, nie jak oczywista rozeta; dokładna relacja z `004/238` i kolor pozostają otwarte;
 - `259`, `260`, `262`, `263` — geometria KNITTED STAR rozpoznana; faktura i kolor różnią się między zdjęciami;
 - `261` — geometria KNITTED MEDALLION rozpoznana; kolor i materiał pozostają do potwierdzenia.
 
@@ -50,9 +52,9 @@ Na podstawie odpowiedzi właściciela potwierdzone są poniższe geometrie i rel
 
 Pełne obrazy są obok siebie w HTML/PDF. Poniższe pytania nie powtarzają potwierdzonego rozpoznania geometrii:
 
-1. **VASE / wybór zdjęć katalogowych:** czy do aktualnego VASE (`full-soft`) włączamy `004/238`, osobny kandydat `243` i kandydat `245`? Rekomendacja: `004/238` jako jedyny wysoki poziom pewności; `243` i `245` pozostawić jako decyzję właściciela.
+1. **VASE / wybór zdjęć katalogowych:** czy do aktualnego VASE (`full-soft`) włączamy `004/238`, osobny kandydat `243`, kandydata `245` i lifestyle `045`? Rekomendacja: `004/238` jako jedyny wysoki poziom pewności; `243/245` pozostawić jako decyzję właściciela, a `045` traktować wyłącznie jako VASE-compatible lifestyle do czasu potwierdzenia relacji.
 2. **VASE / kolory i role:** czy `248/255` przyjmujemy jako parę Dual, a `258` jako red-matte? Rekomendacja: tak jako kandydaci; wybrać `main/gallery/detail` i potwierdzić kolor bez wnioskowania o materiale. `171/213` zostawić jako lifestyle.
-3. **Poza aktualnym katalogiem:** czy utrzymujemy poza ofertą `244`, `250/WEB021`, `257`, `045` i `146`? Rekomendacja: tak — ich geometria rozetowa/spłaszczona nie pasuje bezpiecznie do VASE, KNITTED STAR ani KNITTED MEDALLION.
+3. **Poza aktualnym katalogiem:** czy utrzymujemy poza ofertą `244`, `250/WEB021`, `257` i `146`? Rekomendacja: tak — ich geometria rozetowa/spłaszczona nie pasuje bezpiecznie do VASE, KNITTED STAR ani KNITTED MEDALLION. `045` nie należy do tej grupy; pozostaje kandydatem VASE lifestyle.
 4. **KNITTED STAR / paleta:** jak rozdzielić `259`, `262` i `263` między White/Marble/red-matte? Rekomendacja: `262` jest kandydatem red-matte, `259/263` tworzą jasną pulę White/Marble, `260` pozostaje detalem; `083` tylko lifestyle.
 5. **KNITTED MEDALLION / jedyne zdjęcie:** który z kolorów katalogu reprezentuje `261` i jaki materiał ma być wpisany? Rekomendacja: zachować `261` jako jedyny kandydat modelu, bez przypisania koloru/materiału; pozostałe trzy kolory wymagają zdjęć.
 
@@ -83,7 +85,7 @@ To jest propozycja analityczna, nie zapis katalogu. Kolor jest oznaczony jako ka
 | 004 | WEB019 | detail | VASE | nierozpoznany | wysoka | confirmed geometry | Detal źródła 004, należącego do potwierdzonej pary 004/238. |
 | 238 | WEB020 | detail | VASE | nierozpoznany | wysoka | confirmed geometry | Detal źródła 238, należącego do potwierdzonej pary 004/238. |
 | 250 | WEB021 | detail | poza ofertą | nierozpoznany | wysoka | unmatched/outside current assortment | Detal rozetowej formy 250, bez pasującego SKU w obecnym katalogu. |
-| 045 | WEB022 | gallery/lifestyle | poza ofertą | nierozpoznany | średnia | unmatched/outside current assortment | Spłaszczony rozetowy obiekt bez bezpiecznego dopasowania do trzech modeli. |
+| 045 | WEB022 | gallery/lifestyle | VASE | nierozpoznany | średnia | candidate | Pełna jasna spiralna ozdoba zgodna wizualnie z VASE, ale bez potwierdzenia relacji z 004/238. |
 | 171 | WEB023 | gallery/lifestyle | VASE | dual | średnia | owner decision required | Ciemna spiralna forma zgodna wizualnie z rodziną 248/255; Dual tylko kandydat. |
 | 213 | WEB024 | gallery/lifestyle | VASE | nierozpoznany | średnia | owner decision required | Beżowa forma spiralna; beż nie jest zatwierdzonym kolorem katalogu. |
 | 083 | WEB025 | gallery/lifestyle | KNITTED STAR | nierozpoznany | średnia | candidate | Widoczna geometria gwiazdy zgodna z KNITTED STAR; kolor/SKU otwarte. |
