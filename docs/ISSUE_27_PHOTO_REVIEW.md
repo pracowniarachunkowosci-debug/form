@@ -15,6 +15,7 @@ Pakiet `08_PRODUCT_WEB_HANDOFF` został zweryfikowany razem z `START_TUTAJ.md`, 
 - wszystkie pozycje mają `ready_for_auto_assignment: false` i nie mogą trafić do `variants[].photoAsset` bez decyzji właściciela.
 - VASE zachowuje slug `full-soft`; nie tworzę nowego sluga ani nowego SKU.
 - zdjęcia lifestyle nie zastępują neutralnych ujęć `main`.
+- właściciel doprecyzował docelową paletę 5 kolorów: Czerwony, Biały, Biały nakrapiany (Marble), Czarno-czerwony (Black / Red) oraz rekomendowane Cappuccino; istniejące dane katalogowe mają obecnie tylko cztery `colorId`/SKU.
 
 ## Inwentaryzacja źródeł
 
@@ -53,10 +54,10 @@ Na podstawie odpowiedzi właściciela potwierdzone są poniższe geometrie i rel
 Pełne obrazy są obok siebie w HTML/PDF. Poniższe pytania nie powtarzają potwierdzonego rozpoznania geometrii:
 
 1. **VASE / wybór zdjęć katalogowych:** czy do aktualnego VASE (`full-soft`) włączamy `004/238`, osobny kandydat `243`, kandydata `245` i lifestyle `045`? Rekomendacja: `004/238` jako jedyny wysoki poziom pewności; `243/245` pozostawić jako decyzję właściciela, a `045` traktować wyłącznie jako VASE-compatible lifestyle do czasu potwierdzenia relacji.
-2. **VASE / kolory i role:** czy `248/255` przyjmujemy jako parę Dual, a `258` jako red-matte? Rekomendacja: tak jako kandydaci; wybrać `main/gallery/detail` i potwierdzić kolor bez wnioskowania o materiale. `171/213` zostawić jako lifestyle.
+2. **VASE / kolory i role:** czy `248/255` przyjmujemy jako parę Czarno-czerwony (Black / Red), `258` jako Czerwony, `004/238` jako Biały nakrapiany (Marble), `243` jako Biały, a `245` jako kandydat Cappuccino? Rekomendacja: traktować wszystkie jako kandydatów wizualnych — niezatwierdzonych; wybrać `main/gallery/detail` i potwierdzić kolory na podstawie fizycznych próbek, nie zdjęcia.
 3. **Poza aktualnym katalogiem:** czy utrzymujemy poza ofertą `244`, `250/WEB021`, `257` i `146`? Rekomendacja: tak — ich geometria rozetowa/spłaszczona nie pasuje bezpiecznie do VASE, KNITTED STAR ani KNITTED MEDALLION. `045` nie należy do tej grupy; pozostaje kandydatem VASE lifestyle.
-4. **KNITTED STAR / paleta:** jak rozdzielić `259`, `262` i `263` między White/Marble/red-matte? Rekomendacja: `262` jest kandydatem red-matte, `259/263` tworzą jasną pulę White/Marble, `260` pozostaje detalem; `083` tylko lifestyle.
-5. **KNITTED MEDALLION / jedyne zdjęcie:** który z kolorów katalogu reprezentuje `261` i jaki materiał ma być wpisany? Rekomendacja: zachować `261` jako jedyny kandydat modelu, bez przypisania koloru/materiału; pozostałe trzy kolory wymagają zdjęć.
+4. **KNITTED STAR / paleta:** czy `262` zostawić jako kandydata Czerwonego, `259` jako kandydata Białego, a `263` jako kandydata Białego nakrapianego (Marble)? Rekomendacja: wszystkie trzy oznaczyć jako kandydatów wizualnych — niezatwierdzonych; `260` pozostaje detalem bez koloru, `083` tylko lifestyle, a Cappuccino/Dual wymagają nowych zdjęć.
+5. **KNITTED MEDALLION / kolor nierozpoznany:** jaki kolor i materiał ma `261`? Rekomendacja: nie przypisywać go do White; pozostawić osobny slot `Kolor nierozpoznany`. Wszystkie pięć kolorystycznych SKU Medallion wymagają osobnych potwierdzonych zdjęć.
 
 ## Rekomendowane mapowanie wszystkich 26 assetów
 
@@ -64,53 +65,59 @@ To jest propozycja analityczna, nie zapis katalogu. Kolor jest oznaczony jako ka
 
 | Źródło | WEB | Rola | Model | Kolor | Pewność | Status | Uzasadnienie |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| 004 | WEB001 | main | VASE | nierozpoznany | wysoka | confirmed geometry | Właściciel potwierdził geometrię 004 = 238; kolor/materiał otwarte. |
+| 004 | WEB001 | main | VASE | Biały nakrapiany (Marble) — kandydat wizualny — niezatwierdzony | wysoka | confirmed geometry | Właściciel potwierdził geometrię 004 = 238; Marble wynika wyłącznie z wyglądu, nie potwierdza materiału. |
 | 008 | WEB002 | gallery | VASE | nierozpoznany | średnia | candidate | Spiralny wygląd jest zgodny z rodziną VASE, ale relacja z 004/238 niepotwierdzona. |
 | 014 | WEB003 | gallery | VASE | nierozpoznany | średnia | candidate | Spiralny wygląd zgodny z VASE; brak potwierdzenia relacji z 004/238. |
 | 232 | WEB004 | gallery | VASE | nierozpoznany | średnia | candidate | Jasna, nakrapiana forma spiralna; relacja do potwierdzonej pary pozostaje otwarta. |
-| 238 | WEB005 | main | VASE | nierozpoznany | wysoka | confirmed geometry | Ta sama jasna, nakrapiana geometria VASE co 004. |
-| 243 | WEB006 | main | VASE | white | średnia | owner decision required | Odrębna, gładsza forma spiralna; White to tylko kandydat wizualny. |
+| 238 | WEB005 | main | VASE | Biały nakrapiany (Marble) — kandydat wizualny — niezatwierdzony | wysoka | confirmed geometry | Ta sama jasna, nakrapiana geometria VASE co 004; Marble nie potwierdza materiału. |
+| 243 | WEB006 | main | VASE | Biały — kandydat wizualny — niezatwierdzony | średnia | owner decision required | Odrębna, gładsza forma spiralna; White jest tylko kandydatem wizualnym. |
 | 244 | WEB007 | gallery | poza ofertą | nierozpoznany | wysoka | unmatched/outside current assortment | Spłaszczona rozeta nie pasuje bezpiecznie do trzech modeli katalogu. |
-| 245 | WEB008 | main | VASE | nierozpoznany | średnia | candidate | Pełna forma spiralna jest kompatybilna z VASE, ale kolor i relacja do 244 są otwarte. |
-| 248 | WEB009 | main | VASE | dual | średnia | owner decision required | Potwierdzone podobieństwo wizualne do 255; Dual pozostaje kandydatem. |
+| 245 | WEB008 | main | VASE | Cappuccino — kandydat wizualny — niezatwierdzony | średnia | owner decision required | Pełna forma spiralna jest kompatybilna z VASE; ciepły beż sugeruje Cappuccino, ale wymaga próbki fizycznej i nowego ID/SKU. |
+| 248 | WEB009 | main | VASE | Czarno-czerwony (Black / Red) — kandydat wizualny — niezatwierdzony | średnia | owner decision required | Potwierdzone podobieństwo wizualne do 255; kolor i role pozostają otwarte. |
 | 250 | WEB010 | gallery | poza ofertą | nierozpoznany | wysoka | unmatched/outside current assortment | Właściciel potwierdził osobną formę rozetową, nie detal VASE. |
 | 255 | WEB011 | main | VASE | dual | średnia | owner decision required | Kandydat tej samej rodziny wizualnej co 248; brak finalnego SKU/koloru. |
-| 257 | WEB012 | gallery | poza ofertą | red-matte | wysoka | unmatched/outside current assortment | Osobna czerwona geometria rozetowa; nie scalać z 258. |
-| 258 | WEB013 | main | VASE | red-matte | średnia | owner decision required | Wygląda jak czerwona spiralna VASE; red-matte nie dowodzi materiału. |
-| 259 | WEB014 | main | KNITTED STAR | nierozpoznany | wysoka | confirmed geometry | Geometria KNITTED STAR potwierdzona; kolor/SKU otwarte. |
+| 257 | WEB012 | gallery | poza ofertą | Czerwony — kandydat wizualny — niezatwierdzony | wysoka | unmatched/outside current assortment | Osobna czerwona geometria rozetowa; nie scalać z 258. |
+| 258 | WEB013 | main | VASE | Czerwony — kandydat wizualny — niezatwierdzony | średnia | owner decision required | Wygląda jak czerwona spiralna VASE; kolor nie dowodzi materiału. |
+| 259 | WEB014 | main | KNITTED STAR | Biały — kandydat wizualny — niezatwierdzony | wysoka | owner decision required | Geometria KNITTED STAR potwierdzona; White wynika tylko z wyglądu, nie z materiału VASE. |
 | 260 | WEB015 | detail | KNITTED STAR | nierozpoznany | wysoka | confirmed geometry | Detal potwierdzonej geometrii KNITTED STAR. |
 | 261 | WEB016 | main | KNITTED MEDALLION | nierozpoznany | wysoka | confirmed geometry | Geometria KNITTED MEDALLION potwierdzona; kolor/materiał otwarte. |
-| 262 | WEB017 | main | KNITTED STAR | red-matte | wysoka | owner decision required | Geometria potwierdzona, czerwień widoczna; red-matte jest tylko kandydatem koloru. |
-| 263 | WEB018 | main | KNITTED STAR | nierozpoznany | wysoka | confirmed geometry | Geometria potwierdzona; ciepły jasny wygląd nie dowodzi White/Marble. |
-| 004 | WEB019 | detail | VASE | nierozpoznany | wysoka | confirmed geometry | Detal źródła 004, należącego do potwierdzonej pary 004/238. |
-| 238 | WEB020 | detail | VASE | nierozpoznany | wysoka | confirmed geometry | Detal źródła 238, należącego do potwierdzonej pary 004/238. |
+| 262 | WEB017 | main | KNITTED STAR | Czerwony — kandydat wizualny — niezatwierdzony | wysoka | owner decision required | Geometria potwierdzona, czerwień widoczna; kolor nie dowodzi materiału. |
+| 263 | WEB018 | main | KNITTED STAR | Biały nakrapiany (Marble) — kandydat wizualny — niezatwierdzony | wysoka | owner decision required | Geometria potwierdzona; Marble wynika tylko z wyglądu i nie jest kopiowany z VASE. |
+| 004 | WEB019 | detail | VASE | Biały nakrapiany (Marble) — kandydat wizualny — niezatwierdzony | wysoka | confirmed geometry | Detal źródła 004, należącego do potwierdzonej pary 004/238. |
+| 238 | WEB020 | detail | VASE | Biały nakrapiany (Marble) — kandydat wizualny — niezatwierdzony | wysoka | confirmed geometry | Detal źródła 238, należącego do potwierdzonej pary 004/238. |
 | 250 | WEB021 | detail | poza ofertą | nierozpoznany | wysoka | unmatched/outside current assortment | Detal rozetowej formy 250, bez pasującego SKU w obecnym katalogu. |
 | 045 | WEB022 | gallery/lifestyle | VASE | nierozpoznany | średnia | candidate | Pełna jasna spiralna ozdoba zgodna wizualnie z VASE, ale bez potwierdzenia relacji z 004/238. |
-| 171 | WEB023 | gallery/lifestyle | VASE | dual | średnia | owner decision required | Ciemna spiralna forma zgodna wizualnie z rodziną 248/255; Dual tylko kandydat. |
-| 213 | WEB024 | gallery/lifestyle | VASE | nierozpoznany | średnia | owner decision required | Beżowa forma spiralna; beż nie jest zatwierdzonym kolorem katalogu. |
+| 171 | WEB023 | gallery/lifestyle | VASE | Czarno-czerwony (Black / Red) — kandydat wizualny — niezatwierdzony | średnia | owner decision required | Ciemna spiralna forma zgodna wizualnie z rodziną 248/255; kolor pozostaje kandydatem. |
+| 213 | WEB024 | gallery/lifestyle | VASE | Cappuccino — kandydat wizualny — niezatwierdzony | średnia | owner decision required | Beżowa forma spiralna; Cappuccino wymaga potwierdzenia fizycznego i nowego ID/SKU. |
 | 083 | WEB025 | gallery/lifestyle | KNITTED STAR | nierozpoznany | średnia | candidate | Widoczna geometria gwiazdy zgodna z KNITTED STAR; kolor/SKU otwarte. |
 | 146 | WEB026 | gallery/lifestyle | poza ofertą | red-matte | średnia | unmatched/outside current assortment | Czerwona forma rozetowa; nie dopasowywać na siłę do VASE ani STAR. |
 
 Pełne nazwy plików, wymiary, metadane manifestu i uzasadnienia są także w [CSV](issue-27-photo-review/PHOTO_MAPPING_RECOMMENDATION.csv) oraz HTML.
 
-## Propozycja katalogu 3 × 4
+## Propozycja katalogu 3 × 5
 
-Poniższa matryca zachowuje istniejące slug/SKU i pokazuje najlepszy obecnie kandydat. Nie aktywuje żadnego wariantu i nie ustawia `photoAsset`.
+Docelowa paleta obejmuje pięć nazw kolorów: Czerwony, Biały, Biały nakrapiany (Marble), Czarno-czerwony (Black / Red) oraz rekomendowane Cappuccino. Obecne dane mają tylko cztery `colorId`/SKU (`dual`, `red-matte`, `white`, `marble`); Cappuccino wymaga osobnego przygotowania ID/SKU i akceptacji. Matryca nie aktywuje żadnego wariantu i nie ustawia `photoAsset`.
 
-| Model / slug | Kolor | Main | Galeria | Detale | Braki / warunek |
+W tabeli mapowania `Rola` oznacza `source_role` z handoffu. `recommended_site_role` jest rozdzielone w CSV/HTML/PDF, aby np. WEB009/WEB011 mogły mieć oba `source_role=main`, ale rekomendowane role `main/gallery`, a WEB005/WEB001 odpowiednio `main/gallery`.
+
+| Model / slug | Kolor docelowy | Main | Galeria | Detale | Braki / warunek |
 | --- | --- | --- | --- | --- | --- |
-| VASE / `full-soft` | dual | WEB009 | WEB011 | brak | potwierdzić Dual i role |
-| VASE / `full-soft` | red-matte | WEB013 | brak | brak | potwierdzić model/kolor; brak galerii/detalu |
-| VASE / `full-soft` | white | WEB006 | brak | brak | zaakceptować odrębną gładką odmianę jako VASE |
-| VASE / `full-soft` | marble | WEB005 | WEB001 | WEB019, WEB020 | potwierdzić kolor/materiał; geometria ma wysoką pewność |
-| KNITTED STAR / `knitted-star` | dual | brak | brak | brak | brak fotografii |
-| KNITTED STAR / `knitted-star` | red-matte | WEB017 | brak | brak | kolor tylko kandydat; brak galerii/detalu |
-| KNITTED STAR / `knitted-star` | white | WEB014 | WEB025 lifestyle | WEB015 | rozstrzygnąć White vs Marble |
-| KNITTED STAR / `knitted-star` | marble | WEB018 | brak | brak | rozstrzygnąć kolor; brak galerii/detalu |
-| KNITTED MEDALLION / `knitted-medallion` | dual | brak | brak | brak | brak fotografii; WEB016 ma nierozpoznany kolor |
-| KNITTED MEDALLION / `knitted-medallion` | red-matte | brak | brak | brak | brak czerwonego kandydata |
-| KNITTED MEDALLION / `knitted-medallion` | white | WEB016 | brak | brak | tylko prowizoryczny slot; kolor/materiał do potwierdzenia |
-| KNITTED MEDALLION / `knitted-medallion` | marble | brak | brak | brak | WEB016 nie może być powielony przed decyzją kolorystyczną |
+| VASE / `full-soft` | Czarno-czerwony (Black / Red) | WEB009 | WEB011 | brak | kandydat wizualny — niezatwierdzony; WEB009/WEB011 mają source_role `main`, sklep: `main/gallery` |
+| VASE / `full-soft` | Czerwony | WEB013 | brak | brak | kandydat wizualny — niezatwierdzony; galeria/detal brak |
+| VASE / `full-soft` | Biały | WEB006 | brak | brak | kandydat wizualny — niezatwierdzony; odrębna gładka geometria do akceptacji jako VASE |
+| VASE / `full-soft` | Biały nakrapiany (Marble) | WEB005 | WEB001 | WEB019, WEB020 | kandydat wizualny — niezatwierdzony; WEB005/WEB001 source_role `main`, sklep: `main/gallery` |
+| VASE / `full-soft` | Cappuccino — ID/SKU do przygotowania | WEB008 | brak | brak | kandydat wizualny — niezatwierdzony; piąty kolor bez istniejącego `colorId`/SKU |
+| KNITTED STAR / `knitted-star` | Czarno-czerwony (Black / Red) | brak | brak | brak | brak fotografii; nie kopiować koloru z VASE |
+| KNITTED STAR / `knitted-star` | Czerwony | WEB017 | brak | brak | kandydat wizualny — niezatwierdzony; galeria/detal brak |
+| KNITTED STAR / `knitted-star` | Biały | WEB014 | brak | WEB015 | kandydat wizualny — niezatwierdzony; WEB015 ma kolor nierozpoznany |
+| KNITTED STAR / `knitted-star` | Biały nakrapiany (Marble) | WEB018 | brak | brak | kandydat wizualny — niezatwierdzony; galeria/detal brak |
+| KNITTED STAR / `knitted-star` | Cappuccino — ID/SKU do przygotowania | brak | brak | brak | brak fotografii; nie kopiować koloru z VASE |
+| KNITTED MEDALLION / `knitted-medallion` | Czarno-czerwony (Black / Red) | brak | brak | brak | brak fotografii; nie kopiować koloru z VASE |
+| KNITTED MEDALLION / `knitted-medallion` | Czerwony | brak | brak | brak | brak fotografii; brak potwierdzonego czerwonego medallionu |
+| KNITTED MEDALLION / `knitted-medallion` | Biały | brak | brak | brak | WEB016 nie ma rozpoznanego koloru |
+| KNITTED MEDALLION / `knitted-medallion` | Biały nakrapiany (Marble) | brak | brak | brak | WEB016 nie ma rozpoznanego koloru |
+| KNITTED MEDALLION / `knitted-medallion` | Cappuccino — ID/SKU do przygotowania | brak | brak | brak | brak fotografii i brak istniejącego `colorId`/SKU |
+| KNITTED MEDALLION / `knitted-medallion` | Kolor nierozpoznany | WEB016 | — | — | osobny slot evidence modelu; nie przypisywać do White ani innego koloru |
 
 ## Bezpieczny stan wdrożenia
 
