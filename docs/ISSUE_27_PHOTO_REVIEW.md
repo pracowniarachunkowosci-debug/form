@@ -29,15 +29,28 @@ Pakiet `08_PRODUCT_WEB_HANDOFF` został zweryfikowany razem z `START_TUTAJ.md`, 
 | 261 | jasna ażurowa forma medalionowa | main; kolor i materiał wymagają potwierdzenia |
 | 045, 171, 213, 083, 146 | aranżacje lifestyle | wyłącznie dodatkowa galeria po akceptacji; nie używać jako `main` |
 
-## Pytania blokujące przypisanie do SKU
+## Potwierdzone rozpoznanie wizualne
 
-1. Czy 004, 008, 014 oraz 232/238 przedstawiają ten sam wariant? Jeśli tak, czy jest to `full-soft` / Marble?
-2. Czy 243 jest wariantem White, czy oddzielną geometrią poza aktualną ofertą?
-3. Czy 244/245 są ofertowym kolorem? Obecny katalog nie ma zatwierdzonego beżu.
-4. Czy 248/255 to ten sam wariant Dual i który kadr ma być `main`? Czy 250 jest jego detalem?
-5. Czy 257/258 są wariantem `red-matte` VASE?
-6. Czy 259/260/263 przedstawiają jedną geometrię KNITTED STAR? Który wariant to White, a który Marble? Czy 083 jest tylko lifestyle dla tej samej sztuki?
-7. Jaki model, wariant i materiał przedstawia 261?
+Na podstawie odpowiedzi właściciela potwierdzone są poniższe geometrie i relacje zdjęć. Potwierdzenie nie rozstrzyga jeszcze koloru, materiału, SKU ani gotowości do publikacji:
+
+- `004` i `238` — ta sama jasna, nakrapiana geometria VASE;
+- `243` — podobna spiralna forma, ale gładsza powierzchnia; odrębna odmiana/egzemplarz, bez łączenia z `004/238`;
+- `248` i `255` — podobieństwo w rodzinie wizualnej Dual; dokładna rola kadru i wariant pozostają otwarte;
+- `250` — osobna forma rozetowa, nie przypisywać do spiralnej VASE;
+- `257` i `258` — różne geometrie; `258` wygląda jak spiralna VASE, `257` jak forma rozetowa; nie scalać;
+- `259`, `260`, `262`, `263` — geometria KNITTED STAR rozpoznana; faktura i kolor różnią się między zdjęciami;
+- `261` — geometria KNITTED MEDALLION rozpoznana; kolor i materiał pozostają do potwierdzenia.
+
+## Pozostałe decyzje blokujące przypisanie do SKU
+
+1. Dla `004/238`: który kadr ma być `main`, które `gallery/detail`, oraz jaki kolor i materiał należy przypisać? Czy `008/014/232` należą do tej samej rodziny, czy są odrębnymi egzemplarzami?
+2. Dla `243`: jaki jest docelowy kolor, materiał, SKU i rola kadru (`main/gallery/detail`)?
+3. Dla `244/245`: czy beż jest zatwierdzonym kolorem ofertowym, jaki materiał i SKU mają reprezentować oraz który kadr jest główny?
+4. Dla `248/255`: który kadr jest `main`, który `gallery/detail`, oraz czy można zatwierdzić wspólny wariant Dual i materiał?
+5. Dla `250`: jaki model/SKU, kolor, materiał i rola kadru są właściwe dla osobnej formy rozetowej?
+6. Dla `257` i `258`: jakie są osobne modele/SKU, kolory, materiały i role kadrów? Nie łączyć ich w jeden model.
+7. Dla `259/260/262/263`: które zdjęcia odpowiadają kolorom White/Marble/red lub innym zatwierdzonym wariantom, jaki materiał i który kadr ma być `main`? Czy `083` pozostaje wyłącznie lifestyle?
+8. Dla `261`: jaki kolor, materiał i SKU należy przypisać do KNITTED MEDALLION oraz który kadr jest główny?
 
 ## Bezpieczny stan wdrożenia
 

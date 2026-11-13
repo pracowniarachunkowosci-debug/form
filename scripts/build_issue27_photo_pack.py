@@ -19,14 +19,14 @@ from reportlab.pdfbase.ttfonts import TTFont
 
 
 GROUPS = [
-    ("004 / 008 / 014 / 232 / 238", ["004", "008", "014", "232", "238"], "Czy 004, 008, 014 oraz 232/238 pokazują ten sam wariant?"),
-    ("243", ["243"], "Czy 243 jest wariantem White, czy osobną geometrią poza ofertą?"),
-    ("244 / 245", ["244", "245"], "Czy beż z 244/245 jest zatwierdzonym kolorem w ofercie?"),
-    ("248 / 250 / 255", ["248", "250", "255"], "Czy 248/255 to ten sam wariant Dual i czy 250 jest jego detalem?"),
-    ("257 / 258", ["257", "258"], "Czy 257/258 są wariantem red-matte VASE?"),
-    ("259 / 260 / 262 / 263", ["259", "260", "262", "263"], "Czy 259/260/263 to jedna geometria KNITTED STAR? Gdzie należy 262?"),
-    ("261", ["261"], "Jaki model, wariant i materiał przedstawia 261?"),
-    ("Lifestyle", ["045", "171", "213", "083", "146"], "Czy te aranżacje mają być tylko dodatkowymi kadrami po potwierdzeniu wariantu?"),
+    ("004 / 008 / 014 / 232 / 238", ["004", "008", "014", "232", "238"], "Potwierdzone: 004 i 238 to ta sama geometria VASE. Ustal role main/gallery/detail, kolor i materiał; rozstrzygnij, czy 008/014/232 należą do tej samej rodziny."),
+    ("243", ["243"], "243 jest odrębną, gładszą odmianą spiralną. Ustal kolor, materiał, SKU i rolę kadru."),
+    ("244 / 245", ["244", "245"], "Ustal, czy beż 244/245 jest zatwierdzonym kolorem ofertowym, oraz wybierz SKU, materiał i kadr główny."),
+    ("248 / 250 / 255", ["248", "250", "255"], "248/255 są podobne wizualnie jako kandydaci Dual; ustal role kadrów i wariant. 250 to osobna forma rozetowa, nie detal spiralnej VASE."),
+    ("257 / 258", ["257", "258"], "257 i 258 to różne geometrie. Ustal osobne modele/SKU, kolory, materiały i role kadrów; nie scalać."),
+    ("259 / 260 / 262 / 263", ["259", "260", "262", "263"], "Geometria KNITTED STAR jest rozpoznana. Ustal kolory, materiały, SKU i role main/gallery/detail dla poszczególnych zdjęć."),
+    ("261", ["261"], "Geometria KNITTED MEDALLION jest rozpoznana. Ustal kolor, materiał, SKU i rolę kadru."),
+    ("Lifestyle", ["045", "171", "213", "083", "146"], "Ustal, które aranżacje pozostają wyłącznie lifestyle po przypisaniu właściwych wariantów; nie używać ich jako main."),
 ]
 
 CATALOG_MODELS = [
