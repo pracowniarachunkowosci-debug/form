@@ -171,11 +171,22 @@ Rekomendowane SKU dla przyszłego piątego koloru, zgodnie z obecną konwencją:
 
 ### Media i ograniczenia
 
-`store-media.preview.json` zawiera `colorId`, `kind: fotografia`, `alt`, role oraz kontrakt `srcset` WebP/AVIF, ale ma `preview: true`, `approved: false` i nie jest używany przez sklep. Oryginalne JPG pozostają zachowane. W tym środowisku nie ma dostępnego lokalnego enkodera WebP/AVIF, a sandbox blokuje automatyczne pobieranie pochodnych z lokalnej przeglądarki; dlatego pliki pochodne nie zostały pozornie wygenerowane ani wpisane do aktywnego rejestru. To jest blokada techniczna do wykonania w pipeline z encoderem, nie zmiana mapowania.
+`store-media.preview.json` zawiera `colorId`, `kind: fotografia`, naturalny polski `alt`, role oraz roboczy kontrakt mediów, ale ma `preview: true`, `approved: false` i nie jest używany przez sklep. Oryginalne JPG pozostają zachowane, a każda propozycja ma zweryfikowany fallback `assets/WEBxxx.jpg`. WebP/AVIF mają puste tablice `srcset`, a status jest jednoznaczny: **NOT RUN / BLOCKED** — w tym środowisku nie ma dostępnego lokalnego enkodera WebP/AVIF, a sandbox blokuje automatyczne pobieranie pochodnych z lokalnej przeglądarki. Pliki pochodne nie zostały pozornie wygenerowane ani wpisane do aktywnego rejestru. To jest blokada techniczna pipeline'u, nie zmiana mapowania.
 
 ### Karty wysyłkowe
 
 Proof A6 zawiera trzy modele, oznaczenie PREVIEW / DO AKCEPTACJI, pięciokolorową identyfikację, link do właściwego sluga produktu oraz jawne pola materiału/producenta/pielęgnacji/GPSR do uzupełnienia. Pole QR jest wizualnym miejscem w proofie; właściwy kod QR należy wygenerować po akceptacji docelowego URL i danych produktu. Nie wpisano cen, stanów, dostępności ani danych materiałowych.
+
+### QA preview po uwagach z PR #28
+
+- **Mobile overflow: PASS.** Izolowany preview zmierzono przy viewportach 320, 360, 390 i 430 px; w każdym przypadku `document.documentElement.scrollWidth <= clientWidth` (odpowiednio 305/305, 345/345, 375/375, 415/415 px przy pasku przewijania). Tekst notice, lead i karty nie wychodzą poza layout.
+- **Kadrowanie packshotów: PASS.** Główne zdjęcia kart VASE, KNITTED STAR i KNITTED MEDALLION mają `object-fit: contain` z bezpiecznym paddingiem. Galerie produktowe i matryca również używają `contain`; crop `cover` pozostaje wyłącznie dla lifestyle. PDF A6 ma 3 strony, format 105 × 148 mm i został wyrenderowany kontrolnie.
+- **Alt text: PASS.** Wszystkie 20 obrazów preview ma niepuste, naturalne polskie opisy widocznego obiektu/ujęcia; nie zawierają statusów manifestu, niezatwierdzonego filamentu ani technicznego uzasadnienia przypisania.
+- **Rzeczywiste pliki: PASS.** Wszystkie 17 użytych wpisów `store-media.preview.json` wskazuje istniejący plik `assets/WEBxxx.jpg`; nie ma odwołań do nieistniejących pochodnych.
+- **WebP/AVIF: NOT RUN / BLOCKED.** W preview-media nie ma plików WebP/AVIF, `srcset.webp` i `srcset.avif` pozostają puste, a JPEG jest jedynym zweryfikowanym fallbackiem. Nie raportuję tego jako gotowego responsywnego zestawu.
+- **Linki/formularze preview: PASS / N/A.** Preview zawiera 0 formularzy i 0 aktywnych linków na stronie podglądu; linki do stron produktów są generowane wyłącznie w proofie A6. Nie zmieniono checkoutu ani integracji InPost.
+- **Katalog i notice: PASS.** W aktywnym pliku `data/winter26-products.json` diff względem `release/winter26-lh-nov11` ogranicza się do dwóch pól `release.delivery` i `release.carrierNotice`. Nie zmieniono wariantów, zdjęć, cen, stanów, dostępności ani checkoutu.
+- **QR: NOT RUN / BLOCKED.** Karty nadal mają jawny placeholder QR; właściwy kod nie został wygenerowany przed akceptacją URL-i i danych produktu.
 
 ### Pozostałe decyzje — maksymalnie 5
 
