@@ -1,0 +1,565 @@
+{
+  "preview": true,
+  "automatic_assignment_allowed": false,
+  "activeCatalogUntouched": true,
+  "targetColors": [
+    {
+      "id": "red-matte",
+      "label": "Czerwony",
+      "displayHex": "#9f3b35",
+      "status": "propozycja"
+    },
+    {
+      "id": "white",
+      "label": "Biały",
+      "displayHex": "#f3f0e8",
+      "status": "propozycja"
+    },
+    {
+      "id": "marble",
+      "label": "Biały nakrapiany (Marble)",
+      "displayHex": "#d8d2c6",
+      "status": "propozycja"
+    },
+    {
+      "id": "dual",
+      "label": "Czarno-czerwony (Black / Red)",
+      "displayHex": "#252723",
+      "status": "propozycja"
+    },
+    {
+      "id": "cappuccino",
+      "label": "Cappuccino",
+      "displayHex": "#b18c73",
+      "status": "propozycja"
+    }
+  ],
+  "models": [
+    {
+      "id": "full-soft",
+      "name": "VASE",
+      "slug": "full-soft",
+      "skuPrefix": "PF-W26-VASE",
+      "existingSkuConvention": "PF-W26-VASE-<COLOR_ID>"
+    },
+    {
+      "id": "knitted-star",
+      "name": "KNITTED STAR",
+      "slug": "knitted-star",
+      "skuPrefix": "PF-W26-STAR",
+      "existingSkuConvention": "PF-W26-STAR-<COLOR_ID>"
+    },
+    {
+      "id": "knitted-medallion",
+      "name": "KNITTED MEDALLION",
+      "slug": "knitted-medallion",
+      "skuPrefix": "PF-W26-MED",
+      "existingSkuConvention": "PF-W26-MED-<COLOR_ID>"
+    }
+  ],
+  "media": [
+    {
+      "assetId": "WEB009",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "dual",
+      "colorLabel": "Czarno-czerwony (Black / Red)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Czarno-czerwony (Black / Red) — ujęcie main",
+      "source": "assets/WEB009.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB009-360.webp",
+          "preview-media/WEB009-680.webp",
+          "preview-media/WEB009-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB009-360.avif",
+          "preview-media/WEB009-680.avif",
+          "preview-media/WEB009-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB011",
+      "sourceRole": "main",
+      "recommendedSiteRole": "gallery",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "dual",
+      "colorLabel": "Czarno-czerwony (Black / Red)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Czarno-czerwony (Black / Red) — ujęcie gallery",
+      "source": "assets/WEB011.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB011-360.webp",
+          "preview-media/WEB011-680.webp",
+          "preview-media/WEB011-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB011-360.avif",
+          "preview-media/WEB011-680.avif",
+          "preview-media/WEB011-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB023",
+      "sourceRole": "gallery",
+      "recommendedSiteRole": "lifestyle",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "dual",
+      "colorLabel": "Czarno-czerwony (Black / Red)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Czarno-czerwony (Black / Red) — ujęcie lifestyle",
+      "source": "assets/WEB023.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB023-360.webp",
+          "preview-media/WEB023-680.webp",
+          "preview-media/WEB023-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB023-360.avif",
+          "preview-media/WEB023-680.avif",
+          "preview-media/WEB023-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB013",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "red-matte",
+      "colorLabel": "Czerwony",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Czerwony — ujęcie main",
+      "source": "assets/WEB013.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB013-360.webp",
+          "preview-media/WEB013-680.webp",
+          "preview-media/WEB013-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB013-360.avif",
+          "preview-media/WEB013-680.avif",
+          "preview-media/WEB013-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB006",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "white",
+      "colorLabel": "Biały",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Biały — ujęcie main",
+      "source": "assets/WEB006.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB006-360.webp",
+          "preview-media/WEB006-680.webp",
+          "preview-media/WEB006-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB006-360.avif",
+          "preview-media/WEB006-680.avif",
+          "preview-media/WEB006-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB022",
+      "sourceRole": "gallery",
+      "recommendedSiteRole": "lifestyle",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "white",
+      "colorLabel": "Biały",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Biały — ujęcie lifestyle",
+      "source": "assets/WEB022.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB022-360.webp",
+          "preview-media/WEB022-680.webp",
+          "preview-media/WEB022-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB022-360.avif",
+          "preview-media/WEB022-680.avif",
+          "preview-media/WEB022-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB005",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "marble",
+      "colorLabel": "Biały nakrapiany (Marble)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Biały nakrapiany (Marble) — ujęcie main",
+      "source": "assets/WEB005.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB005-360.webp",
+          "preview-media/WEB005-680.webp",
+          "preview-media/WEB005-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB005-360.avif",
+          "preview-media/WEB005-680.avif",
+          "preview-media/WEB005-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB001",
+      "sourceRole": "main",
+      "recommendedSiteRole": "gallery",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "marble",
+      "colorLabel": "Biały nakrapiany (Marble)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Biały nakrapiany (Marble) — ujęcie gallery",
+      "source": "assets/WEB001.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB001-360.webp",
+          "preview-media/WEB001-680.webp",
+          "preview-media/WEB001-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB001-360.avif",
+          "preview-media/WEB001-680.avif",
+          "preview-media/WEB001-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB019",
+      "sourceRole": "detail",
+      "recommendedSiteRole": "detail",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "marble",
+      "colorLabel": "Biały nakrapiany (Marble)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Biały nakrapiany (Marble) — ujęcie detail",
+      "source": "assets/WEB019.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB019-360.webp",
+          "preview-media/WEB019-680.webp",
+          "preview-media/WEB019-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB019-360.avif",
+          "preview-media/WEB019-680.avif",
+          "preview-media/WEB019-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB020",
+      "sourceRole": "detail",
+      "recommendedSiteRole": "detail",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "marble",
+      "colorLabel": "Biały nakrapiany (Marble)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Biały nakrapiany (Marble) — ujęcie detail",
+      "source": "assets/WEB020.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB020-360.webp",
+          "preview-media/WEB020-680.webp",
+          "preview-media/WEB020-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB020-360.avif",
+          "preview-media/WEB020-680.avif",
+          "preview-media/WEB020-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB008",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "cappuccino",
+      "colorLabel": "Cappuccino",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Cappuccino — ujęcie main",
+      "source": "assets/WEB008.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB008-360.webp",
+          "preview-media/WEB008-680.webp",
+          "preview-media/WEB008-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB008-360.avif",
+          "preview-media/WEB008-680.avif",
+          "preview-media/WEB008-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB024",
+      "sourceRole": "gallery",
+      "recommendedSiteRole": "lifestyle",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "cappuccino",
+      "colorLabel": "Cappuccino",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "VASE — Cappuccino — ujęcie lifestyle",
+      "source": "assets/WEB024.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB024-360.webp",
+          "preview-media/WEB024-680.webp",
+          "preview-media/WEB024-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB024-360.avif",
+          "preview-media/WEB024-680.avif",
+          "preview-media/WEB024-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB017",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "knitted-star",
+      "model": "KNITTED STAR",
+      "colorId": "red-matte",
+      "colorLabel": "Czerwony",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "KNITTED STAR — Czerwony — ujęcie main",
+      "source": "assets/WEB017.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB017-360.webp",
+          "preview-media/WEB017-680.webp",
+          "preview-media/WEB017-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB017-360.avif",
+          "preview-media/WEB017-680.avif",
+          "preview-media/WEB017-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB014",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "knitted-star",
+      "model": "KNITTED STAR",
+      "colorId": "white",
+      "colorLabel": "Biały",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "KNITTED STAR — Biały — ujęcie main",
+      "source": "assets/WEB014.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB014-360.webp",
+          "preview-media/WEB014-680.webp",
+          "preview-media/WEB014-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB014-360.avif",
+          "preview-media/WEB014-680.avif",
+          "preview-media/WEB014-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB015",
+      "sourceRole": "detail",
+      "recommendedSiteRole": "detail",
+      "modelId": "knitted-star",
+      "model": "KNITTED STAR",
+      "colorId": "white",
+      "colorLabel": "Biały",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "KNITTED STAR — Biały — ujęcie detail",
+      "source": "assets/WEB015.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB015-360.webp",
+          "preview-media/WEB015-680.webp",
+          "preview-media/WEB015-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB015-360.avif",
+          "preview-media/WEB015-680.avif",
+          "preview-media/WEB015-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB025",
+      "sourceRole": "gallery",
+      "recommendedSiteRole": "lifestyle",
+      "modelId": "knitted-star",
+      "model": "KNITTED STAR",
+      "colorId": "white",
+      "colorLabel": "Biały",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "KNITTED STAR — Biały — ujęcie lifestyle",
+      "source": "assets/WEB025.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB025-360.webp",
+          "preview-media/WEB025-680.webp",
+          "preview-media/WEB025-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB025-360.avif",
+          "preview-media/WEB025-680.avif",
+          "preview-media/WEB025-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB018",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "knitted-star",
+      "model": "KNITTED STAR",
+      "colorId": "marble",
+      "colorLabel": "Biały nakrapiany (Marble)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "KNITTED STAR — Biały nakrapiany (Marble) — ujęcie main",
+      "source": "assets/WEB018.jpg",
+      "srcset": {
+        "webp": [
+          "preview-media/WEB018-360.webp",
+          "preview-media/WEB018-680.webp",
+          "preview-media/WEB018-1120.webp"
+        ],
+        "avif": [
+          "preview-media/WEB018-360.avif",
+          "preview-media/WEB018-680.avif",
+          "preview-media/WEB018-1120.avif"
+        ]
+      },
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    }
+  ],
+  "missing": [
+    {
+      "modelId": "knitted-star",
+      "colorId": "dual",
+      "label": "Czarno-czerwony (Black / Red)",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-star",
+      "colorId": "cappuccino",
+      "label": "Cappuccino",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-medallion",
+      "colorId": "dual",
+      "label": "Czarno-czerwony (Black / Red)",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-medallion",
+      "colorId": "red-matte",
+      "label": "Czerwony",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-medallion",
+      "colorId": "white",
+      "label": "Biały",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-medallion",
+      "colorId": "marble",
+      "label": "Biały nakrapiany (Marble)",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-medallion",
+      "colorId": "cappuccino",
+      "label": "Cappuccino",
+      "reason": "Brak fotografii głównej w handoffie"
+    }
+  ]
+}

@@ -141,3 +141,47 @@ Na tym etapie karta wysyłkowa może być wyłącznie proofem układu. Nie wpisu
 - plansze JPG znajdują się w `docs/issue-27-photo-review/boards/`, a miniatury źródłowe w `docs/issue-27-photo-review/assets/`;
 - pakiet zawiera pięć plansz decyzji właściciela, pokazuje kandydatów i hipotezy manifestu, ale nie zmienia żadnego `photoAsset`, wariantu, ceny, stanu ani dostępności.
 
+## Roboczy pakiet kart i mediów / PREVIEW
+
+Na tej samej gałęzi przygotowano izolowany podgląd kart produktowych i matrycy katalogowej. Jest to warstwa do akceptacji, nie aktywny katalog sprzedażowy:
+
+- [podgląd trzech kart, galerii, detali i 15 kombinacji](issue-27-photo-review/product-preview.html);
+- [screenshot desktop](issue-27-photo-review/product-preview-desktop.png) · [screenshot mobile](issue-27-photo-review/product-preview-mobile.png);
+- [roboczy `store-media.preview.json`](issue-27-photo-review/store-media.preview.json);
+- [źródło wydruku A6](issue-27-photo-review/product-cards-print.html) · [PDF proof kart trzech modeli](issue-27-photo-review/winter26-product-cards-preview.pdf).
+
+### Katalog pięciu kolorów
+
+| Nazwa klientowska | Rekomendowany `colorId` | Istniejący stan |
+| --- | --- | --- |
+| Czerwony | `red-matte` | istnieje |
+| Biały | `white` | istnieje |
+| Biały nakrapiany (Marble) | `marble` | istnieje |
+| Czarno-czerwony (Black / Red) | `dual` | istnieje |
+| Cappuccino | `cappuccino` | rekomendacja; nie dodano ID/SKU |
+
+Rekomendowane SKU dla przyszłego piątego koloru, zgodnie z obecną konwencją: `PF-W26-VASE-CAPPUCCINO`, `PF-W26-STAR-CAPPUCCINO`, `PF-W26-MED-CAPPUCCINO`. Nie zostały zapisane w katalogu ani aktywowane. Istniejące SKU i slugi, w tym VASE `full-soft`, nie zostały zmienione.
+
+### Stan zdjęć w kartach
+
+- **VASE / `full-soft`**: karta pokazuje WEB009 jako główny kandydat, a w galerii WEB011, WEB023, WEB022, WEB001, WEB019, WEB020 i WEB024 zgodnie z proponowanymi rolami. Matryca pokazuje kandydatów WEB013, WEB006, WEB005, WEB009 i WEB008 dla pięciu kolorów.
+- **KNITTED STAR**: karta pokazuje WEB017 jako główny kandydat oraz WEB015 i WEB025 jako detal/lifestyle; matryca jawnie pokazuje brak Dual i Cappuccino.
+- **KNITTED MEDALLION**: karta pokazuje WEB016 wyłącznie jako dowód geometrii modelu, bez przypisania koloru/SKU; wszystkie pięć pól wariantów pozostaje bez fotografii.
+- Poza ofertą pozostają WEB007/WEB010/WEB012/WEB021/WEB026 zgodnie z wcześniejszą decyzją właściciela; nie pojawiają się jako warianty.
+
+### Media i ograniczenia
+
+`store-media.preview.json` zawiera `colorId`, `kind: fotografia`, `alt`, role oraz kontrakt `srcset` WebP/AVIF, ale ma `preview: true`, `approved: false` i nie jest używany przez sklep. Oryginalne JPG pozostają zachowane. W tym środowisku nie ma dostępnego lokalnego enkodera WebP/AVIF, a sandbox blokuje automatyczne pobieranie pochodnych z lokalnej przeglądarki; dlatego pliki pochodne nie zostały pozornie wygenerowane ani wpisane do aktywnego rejestru. To jest blokada techniczna do wykonania w pipeline z encoderem, nie zmiana mapowania.
+
+### Karty wysyłkowe
+
+Proof A6 zawiera trzy modele, oznaczenie PREVIEW / DO AKCEPTACJI, pięciokolorową identyfikację, link do właściwego sluga produktu oraz jawne pola materiału/producenta/pielęgnacji/GPSR do uzupełnienia. Pole QR jest wizualnym miejscem w proofie; właściwy kod QR należy wygenerować po akceptacji docelowego URL i danych produktu. Nie wpisano cen, stanów, dostępności ani danych materiałowych.
+
+### Pozostałe decyzje — maksymalnie 5
+
+1. Akceptacja nazw klientowskich i rekomendacji technicznego ID `cappuccino`.
+2. Potwierdzenie kolorów VASE WEB006/WEB008/WEB009/WEB013 na podstawie próbek fizycznych.
+3. Akceptacja WEB015 jako detalu White KNITTED STAR albo zamówienie nowego detalu z potwierdzonym kolorem.
+4. Uzupełnienie fotografii Dual/Cappuccino dla KNITTED STAR oraz wszystkich pięciu wariantów KNITTED MEDALLION.
+5. Po akceptacji: uruchomienie enkodera WebP/AVIF, wygenerowanie właściwych QR i dopiero potem ewentualne przypisanie `variants[].photoAsset`.
+
