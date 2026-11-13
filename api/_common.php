@@ -15,7 +15,13 @@ function endpoint(callable $fn): never {
     catch(Throwable $e) { error_log('WINTER26 checkout: '.get_class($e)); send_json(['error'=>'UNAVAILABLE','message'=>'Usługa płatności jest niedostępna.'],503); }
 }
 function method(string $m): void { if(($_SERVER['REQUEST_METHOD']??'')!==$m){header('Allow: '.$m);problem('METHOD',405,'Nieobsługiwana metoda.');} }
-function under(string $file,string $root): bool { return $file===$root || str_starts_with($file,rtrim($root,'/').'/'); }
+function under(string $file,string $root): bool {
+    if(DIRECTORY_SEPARATOR==='\\'){
+        $file=strtolower(str_replace('\\','/',$file));
+        $root=strtolower(str_replace('\\','/',$root));
+    }
+    return $file===$root || str_starts_with($file,rtrim($root,'/').'/');
+}
 function config_path(string $mode,string $root): string {
     $env=$mode==='live'?'PF_LIVE_CONFIG':'PF_TEST_CONFIG';
     // LH without environment-variable support: sibling directory outside this site's WWW root.
