@@ -53,3 +53,10 @@ Do czasu odpowiedzi:
 
 Na tym etapie karta wysyłkowa może być wyłącznie proofem układu. Nie wpisuję jako faktu niepotwierdzonego SKU, koloru, materiału, producenta, ostrzeżeń ani adresu. Finalna karta A6/A7 zostanie zasilona tym samym potwierdzonym źródłem katalogowym co sklep i będzie zawierać: nazwę modelu, kolor, zweryfikowany materiał i użytkowanie, pielęgnację, informacje producenta/bezpieczeństwa, identyfikację zamówienia, QR do strony produktu oraz oznaczenie edycji WINTER 26.
 
+## Pakiet decyzyjny z rzeczywistymi zdjęciami
+
+- [HTML z planszą kontaktową, porównaniami i pełnymi metadanymi](issue-27-photo-review/index.html)
+- [PDF do pobrania / przekazania właścicielowi](issue-27-photo-review/issue-27-photo-decision-pack.pdf)
+- plansze JPG znajdują się w `docs/issue-27-photo-review/boards/`, a miniatury źródłowe w `docs/issue-27-photo-review/assets/`;
+- pakiet pokazuje kandydatów i hipotezy manifestu, ale nie zmienia żadnego `photoAsset`, wariantu, ceny, stanu ani dostępności.
+
