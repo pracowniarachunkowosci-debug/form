@@ -29,7 +29,7 @@ Praca na tej samej gałęzi PR #28: `codex/issue-27-winter26-photo-store`, od `9
 
 Nie zmieniono apex, `www`, MX, SPF, DKIM, DMARC ani nameserverów. Nie zmieniono istniejących witryn, baz, poczty, certyfikatów ani ustawień wspólnych Pracowni Rachunkowości. Na LH przed utworzeniem stagingu ten serwer pokazywał 0 stron i 0 baz MySQL; utworzono wyłącznie opisane nowe zasoby.
 
-FTPS: certyfikat i logowanie AUTH TLS/PROT P przechodzą. LIST/MLSD/NLST kończą się `425 Unable to build data connection: Operation not permitted`. Błąd potwierdzony w Pythonie i curl/Schannel; próby ponownego użycia sesji TLS 1.2 również nie odblokowały kanału danych. HOST jest reklamowany w FEAT, ale `HOST serwer533947.lh.pl` został odrzucony jako nieznany host. Nie obniżano zabezpieczeń TLS ani separacji. Przygotowano zgłoszenie do LH; **jeszcze niewysłane — oczekuje zgody właściciela na wiadomość do obsługi**.
+FTPS: certyfikat i logowanie AUTH TLS/PROT P przechodzą. LIST/MLSD/NLST kończą się `425 Unable to build data connection: Operation not permitted`. Błąd potwierdzony w Pythonie i curl/Schannel; próby ponownego użycia sesji TLS 1.2 również nie odblokowały kanału danych. HOST jest reklamowany w FEAT, ale `HOST serwer533947.lh.pl` został odrzucony jako nieznany host. Nie obniżano zabezpieczeń TLS ani separacji. Po zgodzie właściciela wysłano [zgłoszenie LH TKT-KTNHLTAY](https://www.lh.pl/panel/helpdesk/ticket/9235), utworzone 14.11.2026 o 00:39, status „W trakcie obsługi”. Dotyczy wyłącznie stagingu, bez sekretów i bez zgody na zmiany globalne. Odpowiedź techniczna jeszcze nie dotarła.
 
 Techniczna domena LH udostępnia `public_html`, dlatego sam katalog obok `www` nie dowodzi prywatności. Przed uploadem sekretów LH musi potwierdzić prywatną ścieżkę i dostęp PHP przy zachowanej separacji. Nie użyto katalogu innej firmy ani wspólnej bazy.
 
@@ -85,7 +85,7 @@ Rzeczywisty pomiar w przeglądarce lokalnej, nie fizyczny telefon. Landing po po
 | InPost mapa / wybór / zmiana punktu / przełączenie na kuriera | **NOT RUN na LH** |
 | InPost rzeczywista walidacja kodu/adresu i zapis punktu | **NOT RUN** |
 
-Sesja Stripe Sandbox jest zalogowana. Nie utworzono nowego klucza ani endpointu webhook; nie zapisano sekretu w repo. InPost Sandbox wymaga osobnego logowania właściciela: otwarta karta „Logowanie | InPost” na `stage-account.inpost-group.com`. Należy podać własny e-mail/telefon i wybrać „Akceptuj i kontynuuj”, a następnie zakończyć uwierzytelnienie. Haseł, OTP i tokenów nie należy przesyłać w rozmowie. Wcześniej ujawnionego tokenu nie użyto. Nie utworzono przesyłek ani etykiet.
+Sesja Stripe Sandbox jest zalogowana. Nie utworzono nowego klucza ani endpointu webhook; nie zapisano sekretu w repo. Właściciel zgłosił zalogowanie do InPost Sandbox, lecz ponowne wejście przez `sandbox-manager.paczkomaty.pl` i przycisk „Zaloguj przez Konto InPost” nadal kończy się formularzem na `stage-account.inpost-group.com`. Zalogowana karta `manager.paczkomaty.pl` jest produkcyjna, więc nie zastępuje testowej sesji. Otwarta właściwa karta wymaga dokończenia logowania: własny e-mail/telefon → „Akceptuj i kontynuuj” → uwierzytelnienie → powrót do `sandbox-manager.paczkomaty.pl`. Haseł, OTP i tokenów nie należy przesyłać w rozmowie. Wcześniej ujawnionego tokenu nie użyto. Nie utworzono przesyłek ani etykiet. Rozdział tokenów mapy testowej i produkcyjnej potwierdza [dokumentacja Geowidget InPost](https://dokumentacja-inpost.atlassian.net/wiki/spaces/PL/pages/50069505).
 
 ## Dokumenty i dane blokujące Live
 
