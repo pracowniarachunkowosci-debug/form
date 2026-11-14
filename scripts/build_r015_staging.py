@@ -34,7 +34,7 @@ for p in sorted((ROOT/'assets/winter26-r015').rglob('*')):
 assert len(blobs)>124 and len(baseline['files'])==124
 # Keep all executable result-page PHP and the checkout request/availability code exact.
 old=git('show',BASE+':api/result.php').decode()
-assert re.findall(r'<\?php(.*?)\?>',old,re.S)==re.findall(r'<\?php(.*?)\?>',blobs['api/result.php'].decode(),re.S)
+assert re.findall(r'<\?(?:php|=).*?\?>',old.replace('\r\n','\n'),re.S)==re.findall(r'<\?(?:php|=).*?\?>',blobs['api/result.php'].decode().replace('\r\n','\n'),re.S)
 old=git('show',BASE+':winter-config.js').decode();new=blobs['winter-config.js'].decode()
 for marker,end in [("get('[data-checkout]').onclick=async",'\n    async function availability'),('    async function availability',None)]:
  assert marker in old and marker in new,marker

@@ -103,7 +103,10 @@ try:
   delta=[n for n in new if new[n]!=old.get(n)]
   need({n for n in delta if n in old}==allowed and all(n in allowed or n.startswith('assets/winter26-r015/') for n in delta),'visual_only_allowlist')
   need(all(new[n]==h for n,h in old.items() if n not in allowed),'protected_backend_security_legal_data_unchanged')
-  need(re.findall(rb'<\?php(.*?)\?>',(pub/'api/result.php').read_bytes(),re.S)==re.findall(rb'<\?php(.*?)\?>',z.read('api/result.php'),re.S),'result_php_logic_unchanged')
+  # Compare every executable block, including short echo tags. Only CRLF/LF
+  # differs between the verified Windows-era baseline and canonical release.
+  php_blocks=lambda b:re.findall(rb'<\?(?:php|=).*?\?>',b.replace(b'\r\n',b'\n'),re.S)
+  need(php_blocks((pub/'api/result.php').read_bytes())==php_blocks(z.read('api/result.php')),'result_php_logic_unchanged')
   backup_root.mkdir(exist_ok=True,mode=0o700);need(backup_root.resolve()==backup_root,'backup_root_scoped')
   backup=backup_root/('r015-'+time.strftime('%Y%m%d-%H%M%S'));backup.mkdir(mode=0o700)
   for n in old:
