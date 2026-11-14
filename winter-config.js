@@ -240,11 +240,16 @@ if (typeof document !== 'undefined') {
       const slot=slots[active],model=data.models.find(m=>m.id===slot.model);
       get('[data-edit-title]').textContent='Bombka '+String(active+1).padStart(2,'0')+' / '+String(size).padStart(2,'0');
       get('[data-edit-status]').textContent=issueFor(slot,active,slots)||'Model i kolor wybrane. Możesz przejść dalej.';
+      const colorField=get('[data-color-field]');
       get('[data-models]').replaceChildren(...data.models.map(m=>{
         const tile=el('span',null,'model-tile');if(m.thumb)tile.append(picture(m.thumb));
         tile.append(el('small',m.family),el('strong',m.name));
-        return radio('model',m.id,tile,slot.model===m.id,id=>{slots[active]={model:id,color:null};draw();focusRadio('model',id)});
+        const card=el('div',null,'model-card');card.setAttribute('data-selected',String(slot.model===m.id));
+        card.append(radio('model',m.id,tile,slot.model===m.id,id=>{slots[active]={model:id,color:null};draw();focusRadio('model',id)}));
+        if(slot.model===m.id)card.append(colorField);
+        return card;
       }));
+      colorField.hidden=!model;if(!model)get('[data-color-home]').append(colorField);
       const colors=get('[data-colors]');
       if(!model?.variants.length)colors.replaceChildren(el('p',model?'Paletę tego modelu pokażemy po zatwierdzeniu próbek.':'Najpierw wybierz formę.','help'));
       else colors.replaceChildren(...model.variants.map(v=>{
