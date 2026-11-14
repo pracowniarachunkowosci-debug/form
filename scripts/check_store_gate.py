@@ -27,7 +27,9 @@ with TemporaryDirectory() as tmp:
     dest=Path(tmp)
     for rel in ['scripts/render_store.py','scripts/store_gate.py','scripts/store_panel.py','scripts/config_catalog.py','data/store-media.json','data/winter26-pricing-pl.json','winter-26.html','sitemap.xml']:
         (dest/rel).parent.mkdir(exist_ok=True)
-        copyfile(root/rel,dest/rel)
+        # The legacy renderer gate keeps its original fixture; R01.5 has a new view.
+        source=root/'tests/fixtures/winter26-legacy-catalog.html' if rel=='winter-26.html' else root/rel
+        copyfile(source,dest/rel)
     def render():
         (dest/'data/winter26-products.json').write_text(json.dumps(s),encoding='utf8')
         subprocess.run([sys.executable,'scripts/render_store.py'],cwd=dest,check=True,capture_output=True)
