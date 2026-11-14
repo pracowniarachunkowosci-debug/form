@@ -36,6 +36,7 @@ O **13:00 czasu panelu** wysłano uzupełnienie **TKT-KTNHLTAY**: SSL rozwiązan
 
 - Walidator PEM: **13/13 testów lokalnych PASS**, syntetyczne klucze posprzątane; osobno PASS prawdziwego PEM.
 - [Nieaktywna propozycja Actions](LH_ACTIONS_PROPOSAL.md): szablon poza `.github/workflows`, pełne SHA akcji, kontrola pochodzenia paczki, deny-all i trzy blokady wdrożenia. **14/14 testów offline PASS**, actionlint PASS. Bez runu, sekretów i transferu.
+- Pełny lokalny `build_release.py` na czystym `6ea1559be02b`: **PASS**, 125 plików; suity PHP/JS/Python, ceny/dostawy, cookie consent, konfigurator, closed gates i lokalny MOCK. Pierwsza próba była zablokowana przez dostęp PHP w sandboxie; ponowienie z dostępem do workspace przeszło bez zmiany aplikacji. Rzeczywista kopia deny-all `package`/`verify`: **PASS lokalnie**, 124 pliki. [Build](staging-20261114/build-6ea1559.json), [paczka](staging-20261114/quarantine-6ea1559.json). Obie lokalne, bez uploadu.
 - Ceny, stany, SKU, checkout, InPost, zdjęcia i layout nie zmieniły się. Zakupy na LH i fizycznym telefonie pozostają NOT RUN; wcześniejsze lokalne testy Stripe Sandbox to odrębny wynik.
 
 Następny krok: LH potwierdza prywatny zasób, następnie odbiór niesekretną sondą przy zachowanej separacji. Dopiero potem config, baza testowa, ochrona stagingu, świeży build i zatwierdzony upload. **Bez produkcji, merge, Stripe Live i zmian zasobów Pracowni Rachunkowości.**

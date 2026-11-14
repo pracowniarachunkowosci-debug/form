@@ -1,0 +1,13 @@
+{
+  "source_commit": "6ea1559be02bb1a090c3c70f6af3a03d562eb7ca",
+  "source_dirty": false,
+  "archive": "pf-staging-denied.zip",
+  "archive_sha256": "a40b2bf5b04f7a6b65790c918304f8ac029f145a5552e2455b1932f205937698",
+  "archive_bytes": 9208729,
+  "manifest_sha256": "25e1f11264b3d3f7f926bb5484ed63488c9f85bee8e2ac0595b2f8c3d5614aa2",
+  "files": 124,
+  "deployment_target": "LH PF staging quarantine",
+  "protection": "deny-all-v1",
+  "source_archive_sha256": "e4afe0c2f97a8885dff70442cf479779ea5c79bb93e635676020c3cb5aaf851d",
+  "uploaded_by_this_build": false
+}

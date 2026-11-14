@@ -58,6 +58,8 @@ Historia FTPS: wcześniejsze Python/curl zwracały 425 kanału danych. **Obecna 
 
 Techniczna domena LH udostępnia `public_html`, dlatego sam katalog obok `www` nie dowodzi prywatności. Przed uploadem sekretów LH musi potwierdzić prywatną ścieżkę i dostęp PHP przy zachowanej separacji. Nie użyto katalogu innej firmy ani wspólnej bazy.
 
+**Nowy build po SSL:** `6ea1559be02b` PASS, 125 plików; kopia stagingowa deny-all 124 pliki i kontrola integralności PASS. Bez uploadu. [Raport builda](staging-20261114/build-6ea1559.json), [raport kopii stagingowej](staging-20261114/quarantine-6ea1559.json).
+
 ## Testy lokalne — wcześniejsze wyniki aplikacji
 
 Lokalne PHP 8.4.27 NTS z curl/PDO SQLite/SQLite3, pobrane z oficjalnego wydania Windows; SHA-256 paczki zweryfikowany. Bez zmian systemowego PATH. LH PHP 8.5 nie został jeszcze uruchomiony na kodzie aplikacji.
