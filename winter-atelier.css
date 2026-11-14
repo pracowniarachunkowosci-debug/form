@@ -164,3 +164,7 @@
 .atelier .model-card [data-colors]{clear:both;display:grid;grid-template-columns:1fr;gap:.5rem}
 .atelier .model-card [data-colors] .choice input+span{padding:.6rem;min-height:48px;font-size:.85rem}
 @media(max-width:760px){.atelier .model-card [data-color-field]{padding:.8rem .45rem}.atelier .model-card [data-color-field] legend{font-size:1rem}}
+.swatch .color-chip{width:1.65rem;height:1.65rem;flex:0 0 1.65rem;border:1px solid #aaa39a;box-shadow:inset 0 0 0 2px #ffffff45}
+.color-chip-white{background:#f4f1e9}.color-chip-red-matte{background:#ad292c}
+.color-chip-dual{background:linear-gradient(125deg,#242323 0 44%,#9f3431 48% 100%)}
+.color-chip-marble{background-color:#ece8de;background-image:radial-gradient(#79756e 12%,transparent 18%),radial-gradient(#a49e94 10%,transparent 16%);background-size:7px 9px,11px 7px;background-position:0 0,3px 4px}

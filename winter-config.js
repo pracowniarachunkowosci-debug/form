@@ -36,7 +36,7 @@ if (typeof document !== 'undefined') {
   }
   function swatch(v,disabled) {
     const face=el('span',null,'swatch');
-    if(v.hex){const dot=el('i');dot.style.backgroundColor=v.hex;face.append(dot)}
+    if(v.hex||['dual','red-matte','white','marble'].includes(v.colorId)){const dot=el('i',null,'color-chip color-chip-'+v.colorId);dot.setAttribute('aria-hidden','true');if(v.hex)dot.style.backgroundColor=v.hex;face.append(dot)}
     face.append(el('span',v.label+(disabled?' · niedostępny':'')));return face;
   }
   for (const block of document.querySelectorAll('[data-color-model]')) {
