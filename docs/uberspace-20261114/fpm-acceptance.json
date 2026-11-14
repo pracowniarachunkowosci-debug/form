@@ -1,0 +1,72 @@
+{
+  "checks": {
+    "single_pf26_pool_no_existing_test_override": true,
+    "php85_selected": true,
+    "fpm_reloaded_with_explicit_pool_env": true,
+    "probe_syntax_valid": true,
+    "missing_token_rejected": true,
+    "wrong_token_rejected": true,
+    "non_exact_host_rejected": true,
+    "http_not_executed": true,
+    "probe_replay_rejected": true,
+    "synthetic_config_mode_0400": true,
+    "runtime_outside_documentroot": true
+  },
+  "cleanup": {
+    "public_probe_removed": true,
+    "fpm_config_restored_exactly": true,
+    "private_test_files_removed": true,
+    "probe_returns_404": true,
+    "original_www_unchanged": true
+  },
+  "scope": "synthetic-fpm-only",
+  "cli": {
+    "version": "8.5.12",
+    "sapi": "cli",
+    "pdo_sqlite": true,
+    "curl": true,
+    "openssl": true,
+    "test_config_unset": true
+  },
+  "available_php_branches": [
+    "8.3",
+    "8.4",
+    "8.5"
+  ],
+  "http_status": 200,
+  "fpm": {
+    "php_version": "8.5.12",
+    "sapi": "fpm-fcgi",
+    "checks": {
+      "fpm_extensions": true,
+      "fpm_environment_and_config_path": true,
+      "synthetic_config_read": true,
+      "config_write_denied": true,
+      "runtime_create_read_rename_delete": true,
+      "sqlite_delete_journal": true,
+      "sqlite_wal_shm_and_isolation": true,
+      "private_sqlite_wal_shm_http_denied": true,
+      "sqlite_integrity_and_cleanup": true
+    },
+    "extensions": {
+      "pdo_sqlite": true,
+      "curl": true,
+      "openssl": true
+    },
+    "openssl": "OpenSSL 3.6.5 29 Sep 2026",
+    "curl": "8.23.0",
+    "sqlite": "3.54.1",
+    "all_passed": true
+  },
+  "private_http_denied": {
+    "config": true,
+    "token": true,
+    "home_config": true,
+    "encoded_parent": true
+  },
+  "final_cli_version": "8.5.12",
+  "all_passed": true,
+  "host_key_verified": true,
+  "authenticated": true,
+  "remote_exit": 0
+}
