@@ -1,0 +1,11 @@
+{
+  "comparison": "Repeated read-only remote scan confirms all 124 finalized manifest hashes",
+  "application_files_match_deployment_evidence": true,
+  "htaccess_sha256": "dd2eaf435c8af96d7d2faf8bf529687647e20d210240972b550f1a3478403db3",
+  "deployed_htaccess_sha256": "dd2eaf435c8af96d7d2faf8bf529687647e20d210240972b550f1a3478403db3",
+  "local_previous_htaccess_sha256": "8c17b66468f939de4284171f737e348a720b59a53fb5e9bddff41aef7745459c",
+  "difference": "one blank line before ErrorDocument, present on server; restored in local overlay only",
+  "final_read_used_previous_local_manifest": false,
+  "final_file_count": 124,
+  "final_remote_manifest_matches": true
+}

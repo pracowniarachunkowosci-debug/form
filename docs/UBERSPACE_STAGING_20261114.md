@@ -42,56 +42,111 @@ MOCK PHP assertions passed. These are local tests, not remote purchase acceptanc
 [Fresh build provenance](uberspace-20261114/fresh-build.json). The existing builder
 uses a historical `lh-` archive name; this is a newly built local artifact, not an
 LH upload and not a reused historical ZIP. Staging-only protection and robots
-overlays will be applied to a separately manifested deployment package without
+overlays were applied to a separately manifested deployment package without
 editing the source application's public files.
 
-## Stage 3 result — STOP, automatic rollback verified
+## Stage 3 — deployed, Sandbox purchases verified
 
-The owner-required security gate failed **before uploading any application**.
-The harmless bootstrap control file returned HTTP **401**, but its response did
-not satisfy the complete required `X-Robots-Tag: noindex, noarchive` and
-`Cache-Control: no-store` header check. The evidence records this combined check;
-it does not identify which individual header/directive was missing. No bypass or
-retry was performed after the failed gate.
+The owner authorized resumption after the earlier bootstrap STOP. Individual
+response checks established that **both headers were absent on 401**. Replacing
+the Header directives alone did not fix that response. A local
+`ErrorDocument 401 "Authentication required"` did. Observed 401 and authenticated
+200 responses now independently contain `noindex`, `noarchive` and `no-store`.
+The overlay unsets the onsuccess header table and sets the always table; it has
+no conflicting `Header set` directives. This is a staging overlay, not a change
+to the application source.
 
-[Sanitized deployment stop](uberspace-20261114/deployment-security-stop.json).
+[Header diagnosis](uberspace-20261114/response-headers.json) and
+[deployment security checks](uberspace-20261114/deployment-success.json).
+The previous [rollback evidence](uberspace-20261114/deployment-security-stop.json)
+is retained only as historical evidence and is superseded by the successful run.
 
-Preflight passed: pinned SSH identity, only the default domain on the account,
-verified default-domain symlink, original webroot containing only the welcome
-file, no unknown files, PHP 8.5, and the expected existing Stripe Sandbox account.
-The default DocumentRoot was briefly switched to a protected directory containing
-only a harmless control file. Basic Auth used a password hash outside DocumentRoot,
-behind the existing account WWW mode-0750 boundary. The application was not copied.
+### Isolation and configuration
 
-Rollback restored the original DocumentRoot and welcome file. Its SHA-256 before,
-after rollback, and in an independent HTTPS GET is identical:
-`6ece1bba2d491b00526758be614a75bf0ea045ead6a1246438fb15e252d114af`.
-The root returns 200 with that welcome page, and the control URL returns 404.
+Only the default pf26 host was configured. Inventory found one known welcome
+file and no unknown files; its backup remains intact. `html` points to
+`winter26/app/public` inside the account WWW tree, never to `/home`.
+Private config and database/session/cache/log/upload runtime stay outside WWW.
+Directory modes are 0700, config 0400, database 0600; PHP-FPM has UMask 0077.
+`PF_TEST_CONFIG` is set explicitly in the accepted FPM mechanism; no Live override.
+The existing Sandbox key and the signing secret returned on creation of the
+exact pf26 endpoint are held only in private config. Tester token is hashed.
+The seed was run using the existing CLI source, then removed from WWW.
+All 12 variants started with synthetic quantity 20, without catalog changes.
 
-New staging directories remain quarantined outside the active DocumentRoot, with
-`Require all denied`; the copied welcome backup is retained. The private directory
-skeleton is empty. The Basic Auth password hash remains outside DocumentRoot.
-No application, Stripe-secret configuration, database, seed or webhook endpoint was
-installed. FPM configuration was not changed during this attempt. PHP remains 8.5.
-Sandbox API access in this stage was read-only account/balance/endpoint inspection.
+Anonymous page/asset/checkout/webhook-GET requests return 401; wrong Basic
+password and alternate API paths are rejected. Only the exact POST webhook path
+is exempt from Basic Auth and an unsigned request returns 400 SIGNATURE.
+Technical-host and private/internal-file access tests passed. Robots blocks all
+crawling and contains no production sitemap. No DNS/domain/mail/LH changes.
 
-The fresh staging package has 124 files; only `.htaccess` and `robots.txt` are
-staging overlays. CLI seed and Live-maintenance sources are excluded from the
-public archive. Source application files remain unchanged.
-[Staging package provenance](uberspace-20261114/staging-package.json).
+### Package identity
 
-Additional existing loopback HTTP suite passed: tester-independent MOCK UI/status,
-point selection/errors, host/origin guards, hidden internals, canonical SQLite
-order data, stock idempotency, courier and mixed 2+4 cart. No provider calls.
-[Local HTTP evidence](uberspace-20261114/local-mock-http.json).
+The finalized 124-file package reproduces the deployed ErrorDocument overlay:
 
-The old LH-specific runtime harness was not portable to this workspace (hard-coded
-historical fixture directory); its attempted invocation returned
-`local_harness_failed`. This is not recorded as an Uberspace acceptance result.
-No LH fixtures or resources were changed to force it to run.
+- Archive SHA-256: `2a3701a8409c8e4818626ac7afe42053e8f912e0e93658d08b4b97201126e211`.
+- Manifest SHA-256: `77a2cd1b97e771fab942d618fb30f9178e1b17777b0c33ba85415f594fe998ce`.
+- The originally transported package SHA remains in the deployment evidence;
+  it predates the verified, on-server ErrorDocument addition. It is not claimed
+  to be the finalized archive. Application bytes are unchanged in both packages.
+- Staging-only `.htaccess` and `robots.txt` overlays; excluded CLI seed and
+  Live-maintenance source. No keys, private config, database or test fixtures.
 
-Remote application checkout, card/BLIK, signed webhook/redelivery, post-payment
-SQLite and viewport/physical-phone acceptance are **NOT RUN**, because publication
-stopped at the earlier security gate. No store URL is ready for owner acceptance.
-Further deployment requires addressing the response-header gate and a new owner
-decision to resume. No Stripe Live, real shipping, merge or production changes.
+[Finalized package](uberspace-20261114/staging-package.json).
+
+### Actual remote checkout acceptance
+
+Browser purchases on pf26 completed with **card Sandbox 70.49 PLN** (courier)
+and **BLIK Sandbox 68.49 PLN** (TEST01M MOCK pickup). Stripe API independently
+reports both `succeeded`, paid Checkout sessions and `livemode=false`.
+No actual funds or shipments were involved. The result page correctly states
+that redirect alone is not payment confirmation.
+
+The initial SQLite observer confirmed reservation and payment via signed
+webhooks. The card SKU went from 20 to 19 at reservation and was not decremented
+again on payment. The second paid SKU is also 19. Stripe CLI resent both actual
+completion events to the exact pf26 endpoint; stock stayed unchanged.
+A separate synthetic checkout verified request idempotency and 409 for changed
+contents with the same request ID. The cancel return page rendered correctly.
+Explicit expiry of that own unpaid Stripe session delivered a signed expiry
+event and restored its reserved item to 20. A browser cancel redirect itself
+does not immediately release stock; Stripe expiry is the release trigger tested.
+
+MOCK provider failure disabled checkout; selecting valid TEST01M restored it.
+Cart, variant choice, courier/locker costs and return navigation passed in the
+browser. Mobile widths 320/360/390/430 had no horizontal overflow; variant cards
+and controls were inspected visually. Physical-phone acceptance is left to owner.
+
+[Stripe payment proof](uberspace-20261114/stripe-payments.json),
+[remote retries, conflict and release tests](uberspace-20261114/remote-checkout.json),
+[mobile measurements](uberspace-20261114/mobile-viewports.json).
+
+### Owner phone acceptance
+
+Open https://pf26.uber.space/api/test-access.php. Use Basic username `pf26-tester`
+and the existing password from the local DPAPI display/owner password manager;
+then enter the saved tester token. Do not put credentials into URLs or messages.
+Choose variants and courier or a TEST01M/TEST02M MOCK point, then test payment.
+Use Stripe test card 4242 4242 4242 4242, future expiry and any three-digit CVC,
+or BLIK Sandbox code 123456. Enter only synthetic customer details.
+Never use real payment details or a bank-generated BLIK code.
+
+References: [Stripe test cards](https://docs.stripe.com/testing),
+[BLIK Sandbox](https://docs.stripe.com/payments/blik/accept-a-payment?payment-ui=checkout),
+[official event redelivery](https://docs.stripe.com/webhooks#manual-retries).
+
+PR #28 remains draft. No merge, Stripe Live, real shipping or production publish.
+The old LH-specific harness was not portable to this checkout; its earlier
+failure is not recorded as an Uberspace pass. Existing local checkout suites,
+InPost MOCK suites and loopback HTTP checks passed as documented above.
+
+[Final read-only SQLite verification](uberspace-20261114/final-sqlite.json) confirms
+two paid orders, one released reservation, four unique events, private modes,
+integrity `ok` and exactly 124 public files. BLIK also emitted an asynchronous
+success event; duplicate resend did not add another inventory deduction.
+
+The initial comparison detected a local manifest whitespace mismatch in
+`.htaccess` (one blank line). After correcting the local overlay, the owner
+unlocked a second read-only SSH check. **All 124 deployed hashes now match the
+finalized manifest**, including `.htaccess`. No server application changes were
+needed. The final JSON is the result of that repeated remote check.
