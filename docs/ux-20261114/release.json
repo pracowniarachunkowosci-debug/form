@@ -1,0 +1,12 @@
+{
+  "commit": "ab1a5f577b93d5ab58a20d40e4e8f00db8c51a08",
+  "files": 124,
+  "changed_public_files": [
+    "winter-atelier.css",
+    "winter-config.js",
+    "winter-zestaw-4.html"
+  ],
+  "archive_sha256": "daaa9390f7795be8d80d169934f80eb03d34a770af55b8b727d985c458db8b39",
+  "manifest_sha256": "b9af50ee00116e94027e2209787a8af555dd8df124850715265da3b599ef043c",
+  "backend_catalog_assets_security_overlays_unchanged": true
+}
