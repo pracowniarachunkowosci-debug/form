@@ -1,6 +1,6 @@
 # LH staging — stan na 14 listopada 2026
 
-**NO-GO do odbioru zakupowego na LH i do sprzedaży Live.** `https://test.pracowniaform.com` nie jest jeszcze działającym sklepem. **Aktualizacja 14.11 po diagnostyce:** FTPS w WinSCP oraz PHP 8.5.12 działają; pozostały niedopasowany certyfikat HTTPS i odmowa utworzenia prywatnego katalogu przez PHP-FPM. Przygotowano konto ACME i rzeczywisty DNS-01 wyłącznie dla stagingu, bez dodania TXT, wydania lub instalacji certyfikatu. LH otrzymało uzupełnienie zgłoszenia o 11:39 czasu panelu. [Pełna diagnoza, dowody i procedura odnowienia](LH_DNS01_PRIVATE_20261114.md).
+**NO-GO do odbioru zakupowego na LH i do sprzedaży Live.** `https://test.pracowniaform.com` nie jest jeszcze działającym sklepem. **Aktualizacja 14.11 po imporcie:** FTPS, PHP 8.5.12 i HTTPS infrastruktury działają. Za osobnymi zgodami wykonano DNS-01, wydano i zainstalowano LE tylko dla stagingu, po czym usunięto własny TXT. Niezależny odczyt potwierdził nazwę, łańcuch i numer seryjny. Pozostała odmowa prywatnego katalogu PHP-FPM. LH otrzymało aktualizację o 13:00 czasu panelu. [Wyniki SSL](LH_SSL_RESULT_20261114.md), [prywatny runtime](LH_PRIVATE_CONFIG_DECISION.md).
 
 Rzeczywiste płatności kartą i BLIK w Stripe Sandbox przeszły wcześniej z lokalnym PHP oraz podpisanymi webhookami przez Stripe CLI. **Nie są testem aplikacji na hostingu LH.** Na LH uruchomiono wyłącznie tymczasowe sondy infrastruktury, już usunięte; WWW pusty, bez aplikacji, bazy i sekretów runtime.
 
@@ -8,12 +8,12 @@ Rzeczywiste płatności kartą i BLIK w Stripe Sandbox przeszły wcześniej z lo
 
 | Obszar | Status i zakres dowodu |
 |---|---|
-| Staging LH | **BLOCKED** — HTTPS i prywatny katalog; `TKT-KTNHLTAY` uzupełnione, nadal otwarte; bez uploadu aplikacji |
+| Staging LH | **BLOCKED** — prywatny katalog/config PHP-FPM; `TKT-KTNHLTAY` uzupełnione, nadal otwarte; bez uploadu aplikacji |
 | FTPS | **PASS WinSCP** — listing, upload i usunięcie własnych sond; historyczne 425 nie blokuje tej sesji |
-| HTTPS | **FAIL** — ponowne sprawdzenie 14.11 nadal daje `SEC_E_WRONG_PRINCIPAL` |
+| HTTPS | **PASS infrastruktury** — LE z SAN stagingu, zaufany łańcuch i zgodny serial w zewnętrznym teście; 403 pustego WWW. Norton ogranicza lokalny pomiar fingerprintu origin |
 | PHP i backend | PHP-FPM 8.5.12, PDO SQLite, cURL i zapis WWW **PASS na LH**; backend aplikacji **NOT RUN na LH** |
 | Prywatny katalog | **FAIL** — rzeczywiste mkdir poza public_html odrzucone przez PHP-FPM; prośba do LH o dedykowany katalog i prawa |
-| DNS-01 | Konto/challenge przygotowane; TXT i import wymagają osobnej akceptacji, DNS bez zmian w diagnostyce |
+| DNS-01 | **PASS** po zgodach: TXT → valid → cleanup → wydanie PEM; import osobno zatwierdzony i wykonany |
 | Stripe karta | **PASS Sandbox + lokalny PHP**, 70,49 PLN; LH NOT RUN |
 | Stripe BLIK | **PASS Sandbox + lokalny PHP**, 234,00 PLN dla 2 + 4; LH NOT RUN |
 | Webhook | **PASS Stripe CLI → lokalny PHP**, podpis, `paid`, idempotencja; LH NOT RUN |
@@ -45,11 +45,11 @@ Praca na tej samej gałęzi PR #28: `codex/issue-27-winter26-photo-store`, od `9
 | Katalog WWW | `/public_html/pf-stage-20261114/www` |
 | PHP vhosta | 8.5; separacja domeny włączona; Multipoczta wyłączona |
 | Nowe konto FTPS | dostęp ograniczony do `/public_html/pf-stage-20261114`; hasło poza repozytorium |
-| DNS OVH | dodano tylko `test A 195.2.223.12` i `test TXT "lh.pl"`, TTL 3600 |
+| DNS OVH | trwałe `test A 195.2.223.12` i `test TXT "lh.pl"`, TTL 3600; tymczasowy TXT DNS-01 dodany i usunięty po zgodzie, reszta identyczna |
 | Weryfikacja DNS | oba autorytatywne OVH oraz 1.1.1.1 i 8.8.8.8 zgodne; brak AAAA/CAA hosta i CAA apex; szczegóły w nowym raporcie |
 | Baza | **nie utworzona na LH**; potrzebna osobna SQLite poza wszystkimi katalogami WWW |
 | Kopia przed uploadem | Katalog początkowo i po sprzątaniu pusty, listing WinSCP działa. Nie było istniejących plików do kopiowania; nie deklarujemy kopii aplikacji. Przed przyszłym uploadem powtórzyć inwentaryzację i skopiować ewentualne nowe dane. |
-| HTTPS | **FAIL**: niedopasowana nazwa certyfikatu; początkowo panel zwracał 503, następnie błąd weryfikacji DNS mimo poprawnych publicznych rekordów |
+| HTTPS | **PASS po DNS-01 / imporcie Własny**, ważny do 12.02.2027. Pierwotne błędy zarządzanego LE i routing HTTP-01 nadal do diagnozy LH |
 | Ochrona dostępu/noindex | **NOT DEPLOYED**; aplikacja, Basic Auth i nagłówki stagingu nie zostały wgrane |
 
 Nie zmieniono apex, `www`, MX, SPF, DKIM, DMARC ani nameserverów. Nie zmieniono istniejących witryn, baz, poczty, certyfikatów ani ustawień wspólnych Pracowni Rachunkowości. Na LH przed utworzeniem stagingu ten serwer pokazywał 0 stron i 0 baz MySQL; utworzono wyłącznie opisane nowe zasoby.

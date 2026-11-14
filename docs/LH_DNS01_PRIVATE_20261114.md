@@ -1,8 +1,10 @@
 # LH: DNS-01 i prywatna konfiguracja — wynik 14.11.2026
 
-Zakres: PR #28 / Issue #24, wyłącznie `test.pracowniaform.com`, vhost `1711054`, serwer `serwer533947`, dedykowane WWW `/public_html/pf-stage-20261114/www`. Kontynuacja [polecenia właściciela](https://github.com/pracowniarachunkowosci-debug/form/pull/28#issuecomment-6875900114). Bez zmian DNS, aplikacji, baz, produkcji ani innych vhostów w tym etapie.
+Zakres: PR #28 / Issue #24, wyłącznie `test.pracowniaform.com`, vhost `1711054`, serwer `serwer533947`, dedykowane WWW `/public_html/pf-stage-20261114/www`. Kontynuacja [polecenia właściciela](https://github.com/pracowniarachunkowosci-debug/form/pull/28#issuecomment-6875900114).
 
-**FTPS i PHP działają. HTTPS oraz prywatna konfiguracja nadal blokują upload aplikacji.** Konto ACME i rzeczywiste wyzwanie DNS-01 przygotowano za zgodą właściciela; klient czeka przed walidacją. Certyfikat nie został jeszcze wydany ani zainstalowany. Wartość TXT przekazano wyłącznie w rozmowie, nie w repozytorium lub zgłoszeniu LH.
+**Aktualizacja po osobnych zgodach właściciela: DNS-01 zakończone, certyfikat wydany, zweryfikowany i zainstalowany. HTTPS infrastruktury PASS.** Testowy TXT posprzątano, 16 wcześniejszych rekordów pozostało identycznych. Prywatna konfiguracja nadal blokuje upload. [Aktualny raport SSL](LH_SSL_RESULT_20261114.md), [decyzja architektoniczna](LH_PRIVATE_CONFIG_DECISION.md), [nieaktywna propozycja Actions](LH_ACTIONS_PROPOSAL.md).
+
+**Poniżej zachowany zapis wcześniejszej diagnostyki, przed zgodami na DNS/import.** Stwierdzenia „nie wydano”, „bez zmian DNS” i „HTTPS FAIL” opisują tamten etap; bieżący stan określa raport powyżej. Nie powtarzano HTTP-01 ani sond PHP podczas importu SSL.
 
 ## Rzeczywiste pomiary
 

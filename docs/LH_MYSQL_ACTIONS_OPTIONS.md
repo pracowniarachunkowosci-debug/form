@@ -1,5 +1,7 @@
 # LH staging: opcje MySQL i GitHub Actions do akceptacji
 
+**Aktualizacja wykonawcza:** SSL single-SAN zainstalowano po osobnej zgodzie; prywatny runtime nadal blokuje sklep. Zobacz [wynik SSL](LH_SSL_RESULT_20261114.md), [decyzję o prywatnym katalogu](LH_PRIVATE_CONFIG_DECISION.md) oraz [konkretną, nieaktywną propozycję Actions](LH_ACTIONS_PROPOSAL.md). Poniżej wcześniejsza analiza zakresu; nie wdrożono adaptera MySQL ani workflow.
+
 Stan analizy: 14.11.2026, kontynuacja PR #28. Odczyt lokalnej gałęzi `codex/issue-27-winter26-photo-store`, HEAD `70c1fd0d729d62bddc6de38171b63c973f548ce9`. Dokument jest propozycją zakresu, nie zgodą na wykonanie. Analiza MySQL/Actions opiera się na kodzie; nie wykonano adaptera, jego testów, migracji ani inicjalizacji DB. Rzeczywiste pomiary infrastruktury są opisane oddzielnie w [raporcie DNS-01/PHP-FPM](LH_DNS01_PRIVATE_20261114.md).
 
 ## 1. Decyzja w skrócie
