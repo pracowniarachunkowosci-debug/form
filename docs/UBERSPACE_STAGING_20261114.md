@@ -45,14 +45,53 @@ LH upload and not a reused historical ZIP. Staging-only protection and robots
 overlays will be applied to a separately manifested deployment package without
 editing the source application's public files.
 
-## Stage 3 status
+## Stage 3 result — STOP, automatic rollback verified
 
-Preparation in progress. No stage-3 server deployment or remote purchase result
-is claimed yet. Sandbox secrets are supplied locally, outside Git and logs.
-Publication requires inventory/backup, private configuration, Basic Auth covering
-all content with only the exact signed POST webhook exception, and real HTTP
-security checks. Any failed deployment security gate stops publication.
+The owner-required security gate failed **before uploading any application**.
+The harmless bootstrap control file returned HTTP **401**, but its response did
+not satisfy the complete required `X-Robots-Tag: noindex, noarchive` and
+`Cache-Control: no-store` header check. The evidence records this combined check;
+it does not identify which individual header/directive was missing. No bypass or
+retry was performed after the failed gate.
 
-Pending: server deployment, remote signed Stripe webhooks, card/BLIK Sandbox,
-inventory/idempotency checks, mobile viewport checks and owner physical-phone
-acceptance. No Stripe Live or real shipping.
+[Sanitized deployment stop](uberspace-20261114/deployment-security-stop.json).
+
+Preflight passed: pinned SSH identity, only the default domain on the account,
+verified default-domain symlink, original webroot containing only the welcome
+file, no unknown files, PHP 8.5, and the expected existing Stripe Sandbox account.
+The default DocumentRoot was briefly switched to a protected directory containing
+only a harmless control file. Basic Auth used a password hash outside DocumentRoot,
+behind the existing account WWW mode-0750 boundary. The application was not copied.
+
+Rollback restored the original DocumentRoot and welcome file. Its SHA-256 before,
+after rollback, and in an independent HTTPS GET is identical:
+`6ece1bba2d491b00526758be614a75bf0ea045ead6a1246438fb15e252d114af`.
+The root returns 200 with that welcome page, and the control URL returns 404.
+
+New staging directories remain quarantined outside the active DocumentRoot, with
+`Require all denied`; the copied welcome backup is retained. The private directory
+skeleton is empty. The Basic Auth password hash remains outside DocumentRoot.
+No application, Stripe-secret configuration, database, seed or webhook endpoint was
+installed. FPM configuration was not changed during this attempt. PHP remains 8.5.
+Sandbox API access in this stage was read-only account/balance/endpoint inspection.
+
+The fresh staging package has 124 files; only `.htaccess` and `robots.txt` are
+staging overlays. CLI seed and Live-maintenance sources are excluded from the
+public archive. Source application files remain unchanged.
+[Staging package provenance](uberspace-20261114/staging-package.json).
+
+Additional existing loopback HTTP suite passed: tester-independent MOCK UI/status,
+point selection/errors, host/origin guards, hidden internals, canonical SQLite
+order data, stock idempotency, courier and mixed 2+4 cart. No provider calls.
+[Local HTTP evidence](uberspace-20261114/local-mock-http.json).
+
+The old LH-specific runtime harness was not portable to this workspace (hard-coded
+historical fixture directory); its attempted invocation returned
+`local_harness_failed`. This is not recorded as an Uberspace acceptance result.
+No LH fixtures or resources were changed to force it to run.
+
+Remote application checkout, card/BLIK, signed webhook/redelivery, post-payment
+SQLite and viewport/physical-phone acceptance are **NOT RUN**, because publication
+stopped at the earlier security gate. No store URL is ready for owner acceptance.
+Further deployment requires addressing the response-header gate and a new owner
+decision to resume. No Stripe Live, real shipping, merge or production changes.
