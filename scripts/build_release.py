@@ -33,6 +33,7 @@ subprocess.run(['node','scripts/check_consent.cjs'], cwd=ROOT, check=True)
 subprocess.run(['node','--check','store-gallery.js'], cwd=ROOT, check=True)
 subprocess.run(['node','scripts/check_config.cjs'], cwd=ROOT, check=True)
 subprocess.run(['node','scripts/check_store_composition.cjs'],cwd=ROOT,check=True)
+subprocess.run(['node','tests/configurator-journey.cjs'],cwd=ROOT,check=True)
 php = os.environ.get('PF_PHP_BIN') or shutil.which('php')
 if not php:
     sys.exit('PHP CLI with curl and PDO SQLite is required to verify this release (set PF_PHP_BIN).')

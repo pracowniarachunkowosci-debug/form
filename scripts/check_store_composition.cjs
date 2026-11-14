@@ -51,11 +51,11 @@ async function test(mode,pair=null,lockerFlow=false){
   };
   if(lockerFlow&&!pair){
     const courier=select('[data-delivery-courier]'),locker=select('[data-delivery-locker]');
-    locker.onchange();assert(btn.disabled);assert.match(totals.textContent,/68,49/);assert.equal(head.children.length,0);
+    locker.onchange();assert.equal(btn['data-ready'],'false');assert.match(totals.textContent,/68,49/);assert.equal(head.children.length,0);
     const map=select('[data-open-map]');
     assert.equal(map.hidden,lockerFlow!=='map');
-    await verifyPoint('FAKE17');assert(btn.disabled);assert.match(select('[data-point-status]').textContent,/niedostępny/);
-    await verifyPoint('wro01m');assert(!btn.disabled);assert.match(select('[data-point-summary]').textContent,/WRO01M.*Próbna 1/);
+    await verifyPoint('FAKE17');assert.equal(btn['data-ready'],'false');assert.match(select('[data-point-status]').textContent,/niedostępny/);
+    await verifyPoint('wro01m');assert.equal(btn['data-ready'],'true');assert.match(select('[data-point-summary]').textContent,/WRO01M.*Próbna 1/);
     await btn.onclick();assert.equal(body.delivery_method,'locker');assert.equal(body.pickup_point,'WRO01M');const first=body.requestId;
     assert(!JSON.stringify(body).includes('Próbna'));
     if(lockerFlow==='map'){
@@ -68,11 +68,11 @@ async function test(mode,pair=null,lockerFlow=false){
       pick({name:'WRO02M',address:{line1:'Never trust this address'}});await new Promise(ok=>setImmediate(ok));
       assert.match(select('[data-point-summary]').textContent,/WRO02M.*Próbna 1/);
     } else {
-      const input=select('[data-point-id]');input.value='WRO02M';input.oninput();assert(btn.disabled);
+      const input=select('[data-point-id]');input.value='WRO02M';input.oninput();assert.equal(btn['data-ready'],'false');
       await verifyPoint(input.value);
     }
     await btn.onclick();assert.equal(body.pickup_point,'WRO02M');assert.notEqual(body.requestId,first);
-    courier.onchange();assert(!btn.disabled);assert.match(totals.textContent,/70,49/);await btn.onclick();assert.equal(body.delivery_method,'courier');assert(!('pickup_point' in body));
+    courier.onchange();assert.equal(btn['data-ready'],'true');assert.match(totals.textContent,/70,49/);await btn.onclick();assert.equal(body.delivery_method,'courier');assert(!('pickup_point' in body));
     return;
   }
   if(pair){
@@ -88,29 +88,29 @@ async function test(mode,pair=null,lockerFlow=false){
     choose(second,'knitted-star','white');
     const expected=(first===2&&second===4)?23400:27000;
     assert.equal(select('[data-basket]').children.length,2);assert.match(totals.textContent,new RegExp('Razem: '+(expected/100)+',00'));
-    assert.match(totals.textContent,/Kurier InPost w Polsce w cenie/);assert(!btn.disabled);
+    assert.match(totals.textContent,/Kurier InPost w Polsce w cenie/);assert.equal(btn['data-ready'],'true');
     if(lockerFlow){
-      select('[data-delivery-locker]').onchange();assert(btn.disabled);assert.match(totals.textContent,/Paczkomat® InPost w Polsce w cenie/);
-      assert.match(totals.textContent,new RegExp('Razem: '+(expected/100)+',00'));await verifyPoint('WRO01M');assert(!btn.disabled);
+      select('[data-delivery-locker]').onchange();assert.equal(btn['data-ready'],'false');assert.match(totals.textContent,/Paczkomat® InPost w Polsce w cenie/);
+      assert.match(totals.textContent,new RegExp('Razem: '+(expected/100)+',00'));await verifyPoint('WRO01M');assert.equal(btn['data-ready'],'true');
     }
     await btn.onclick();
     assert(!('selections' in body));assert.deepEqual(body.packs.map(p=>p.length),pair);
-    select('[data-basket]').children[0].querySelectorAll('button')[0].onclick();
+    select('[data-basket]').children[0].querySelectorAll('button').at(-1).onclick();
     assert.equal(select('[data-basket]').children.length,1);
     assert.match(totals.textContent,lockerFlow?/Paczkomat® InPost: 18,49/:/Kurier InPost: 20,49/);
-    assert(!btn.disabled);return;
+    assert.equal(btn['data-ready'],'true');return;
   }
   if(expectedOpen){
     assert(!btn.hidden);
     if(isLive){
-      assert(btn.disabled);
+      assert.equal(btn['data-ready'],'false');
       assert(!select('[data-live-facts]').hidden);
       assert.match(select('[data-live-dispatch]').textContent,/Nadanie/);
       assert.equal(select('[data-terms-link]').href,'/terms.html');
       const consent=select('[data-accept-terms]');consent.checked=true;consent.onchange();
     }
-    assert(!btn.disabled);assert.match(totals.textContent,/70,49/);
-    code.value='niedostepny';code.oninput();assert(btn.disabled);
+    assert.equal(btn['data-ready'],'true');assert.match(totals.textContent,/70,49/);
+    code.value='niedostepny';code.oninput();assert.equal(btn['data-ready'],'false');
     code.value='';code.oninput();await btn.onclick();assert.deepEqual(body,{selections:[{modelId:'full-soft',colorId:'marble'}],delivery_method:'courier',code:'',requestId:'test-order-id-1',...(isLive?{termsAccepted:true,approvalVersion:read.approvalVersion}:{})});
     if(mode==='wrong-amount'){assert(!redirect);assert.match(select('[data-payment-status]').textContent,/Kwota/)}
     else if(isLive){assert.equal(redirect,'https://checkout.stripe.com/c/pay/test')}

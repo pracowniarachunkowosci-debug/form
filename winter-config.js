@@ -18,7 +18,13 @@ function summary(data,slots,preview=false,otherSlots=[]) {
   });
   return {done,groups:[...groups.values()]};
 }
-if (typeof module !== 'undefined') module.exports={variantFor,eligible,summary};
+function missingChoice(data,slot,slots,index,preview=false,others=[]) {
+  if(!data.models.some(m=>m.id===slot.model))return 'Wybierz model';
+  const v=variantFor(data,slot);
+  if(!v)return 'Wybierz kolor';
+  return !preview&&!eligible(v,slots,index,data,others)?'Wybierz dostępny kolor':'';
+}
+if (typeof module !== 'undefined') module.exports={variantFor,eligible,summary,missingChoice};
 if (typeof document !== 'undefined') {
   const data=JSON.parse(document.querySelector('#winter-options').textContent);
   const el=(tag,txt,cls)=>{const n=document.createElement(tag);if(txt!=null)n.textContent=txt;if(cls)n.className=cls;return n};
@@ -76,10 +82,10 @@ if (typeof document !== 'undefined') {
     const courier=get('[data-delivery-courier]'), locker=get('[data-delivery-locker]'), pointInput=get('[data-point-id]');
     const mapDialog=get('[data-map-dialog]'), mapButton=get('[data-open-map]'), mapHost=get('[data-map-host]');
     const mockBanner=el('p',null,'point-receipt'), mockPicker=el('label'), mockSelect=el('select');
-    mockBanner.append(el('strong',mockNotice));mockBanner.hidden=true;mockBanner.setAttribute('data-points-mock-notice','');
-    mockPicker.append(el('span',mockNotice+' · wybierz scenariusz: '),mockSelect);mockPicker.hidden=true;
+    mockBanner.append(el('small','Dostawa testowa — bez nadania przesyłki.'));mockBanner.hidden=true;mockBanner.setAttribute('data-points-mock-notice','');
+    mockPicker.append(el('span','Wybierz punkt odbioru'),mockSelect);mockPicker.hidden=true;
     mockPicker.style.flexWrap='wrap';mockSelect.style.maxWidth='100%';mockSelect.style.width='100%';mockSelect.style.minHeight='44px';mockSelect.style.font='inherit';
-    mockSelect.setAttribute('data-test-point-picker','');mockSelect.setAttribute('aria-label','Wybierz testowy punkt lub scenariusz błędu');
+    mockSelect.setAttribute('data-test-point-picker','');mockSelect.setAttribute('aria-label','Wybierz testowy punkt odbioru');
     get('[data-delivery-picker]').append(mockBanner);get('[data-locker-panel]').append(mockPicker);
     const normalizePoint=id=>typeof id==='string'?id.trim().toUpperCase():'';
     const validId=id=>/^[A-Z0-9][A-Z0-9_-]{2,31}$/.test(id);
@@ -97,7 +103,7 @@ if (typeof document !== 'undefined') {
       if(delivery!=='locker'||!lockerAvailable||busy)return;
       const id=normalizePoint(pointInput.value),seq=++pointSeq;selectedPoint=null;acceptance.checked=false;
       if(!validId(id)){checking=false;pointMessage='Wpisz kod automatu Paczkomat®.';draw();return}
-      checking=true;pointMessage=mockPoints?mockNotice+' — sprawdzamy dane testowe…':'Sprawdzamy adres automatu w InPost…';draw();
+      checking=true;pointMessage='Sprawdzamy punkt odbioru…';draw();
       try{
         const res=await fetch('api/pickup-point.php?id='+encodeURIComponent(id),{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
         const result=await res.json().catch(()=>null);
@@ -107,7 +113,7 @@ if (typeof document !== 'undefined') {
           throw new Error(!res.ok&&typeof result?.message==='string'?result.message:'Nie udało się potwierdzić adresu. Sprawdź kod lub wybierz inny automat.');
         }
         selectedPoint={id,address:result.address.trim()};pointInput.value=id;pointMessage='';
-      }catch(e){if(seq===pointSeq)pointMessage=e instanceof Error&&e.name==='Error'?e.message:'Nie udało się połączyć z wyszukiwarką automatów. Spróbuj ponownie.'}
+      }catch(e){if(seq===pointSeq)pointMessage=mockPoints?'Nie udało się wybrać punktu. Wybierz inny lub spróbuj ponownie.':e instanceof Error&&e.name==='Error'?e.message:'Nie udało się połączyć z wyszukiwarką automatów. Spróbuj ponownie.'}
       finally{if(seq===pointSeq){checking=false;draw()}}
     }
     get('[data-find-point]').onclick=checkPoint;
@@ -171,6 +177,16 @@ if (typeof document !== 'undefined') {
     }
     let size=data.sizes.some(s=>s.size===request)?request:data.featured, slots=Array.from({length:size},empty), active=0;
     const saved=[];
+    let step=1;
+    function goStep(n){if(busy)return;step=n;draw();const panel=get('[data-stage="'+n+'"]');panel.focus?.({preventScroll:true});panel.scrollIntoView?.({block:'start',behavior:'instant'});}
+    function editSlot(pack,index,missing=false){
+      if(busy)return;
+      if(pack!==slots){const i=saved.indexOf(pack);if(i<0)return;if(slots.some(s=>s.model))saved[i]=slots;else saved.splice(i,1);slots=pack;size=pack.length;}
+      active=index;step=2;draw();const editor=get(missing&&nameOf(slots[index])?'[data-colors]':'.edit-position');editor.setAttribute('tabindex','-1');editor.focus?.({preventScroll:true});editor.scrollIntoView?.({block:missing?'center':'start',behavior:'instant'});
+    }
+    const issueFor=(slot,i,pack)=>missingChoice(data,slot,pack,i,!commerceOpen(),quotedPacks().filter(p=>p!==pack).flat());
+    function firstMissing(){for(const pack of quotedPacks())for(let i=0;i<pack.length;i++)if(issueFor(pack[i],i,pack))return {pack,index:i};return null;}
+    get('[data-start]').onclick=()=>goStep(2);get('[data-review]').onclick=()=>goStep(3);
     const quotedPacks=()=>saved.length && !slots.some(s=>s.model)?[...saved]:[...saved,slots];
     const priceFor=pack=>data.sizes.find(r=>r.size===pack.length).grossGrosz;
     function removeCurrent(){
@@ -198,6 +214,9 @@ if (typeof document !== 'undefined') {
     }
     function draw(){
       root.inert=busy;
+      for(let n=1;n<=3;n++)get('[data-stage="'+n+'"]').hidden=step!==n;
+      get('.workspace').hidden=step!==2;
+      get('[data-steps]').replaceChildren(...['Rozmiar','Komponowanie','Podsumowanie'].map((label,i)=>{const b=el('button',(i+1)+'. '+label);b.type='button';b.setAttribute('aria-current',step===i+1?'step':'false');b.onclick=()=>goStep(i+1);return b}));
       const previous=saved.flat();
       get('[data-sizes]').replaceChildren(...data.sizes.map(({size:n})=>radio('size',n,el('span',(n===data.featured?'Polecamy · ':'')+n+' szt.'),n===size,()=>{
         const lost=slots.slice(n).filter(s=>s.model).length;
@@ -214,11 +233,13 @@ if (typeof document !== 'undefined') {
         b.append(el('small','Nº '+String(i+1).padStart(2,'0')));
         if(src)b.append(picture(src));else b.append(el('span','＋','slot-mark'));
         b.append(el('strong',nameOf(slot)||'Wybierz formę'),el('small',model?(v?.label||'Wybierz kolor'):''));
-        b.setAttribute('aria-label','Bombka '+(i+1)+': '+(nameOf(slot)||'puste miejsce')+(v?' / '+v.label:''));
-        b.onclick=()=>{active=i;draw();get('[data-slots]').children[i].focus({preventScroll:true})};return b;
+        const issue=issueFor(slot,i,slots);b.setAttribute('data-complete',String(!issue));b.append(el('span',issue||'✓ Gotowa','slot-state'));
+        b.setAttribute('aria-label','Bombka '+(i+1)+': '+(nameOf(slot)||'puste miejsce')+(v?' / '+v.label:'')+' — '+(issue||'gotowa'));
+        b.onclick=()=>editSlot(slots,i);return b;
       }));
       const slot=slots[active],model=data.models.find(m=>m.id===slot.model);
       get('[data-edit-title]').textContent='Bombka '+String(active+1).padStart(2,'0')+' / '+String(size).padStart(2,'0');
+      get('[data-edit-status]').textContent=issueFor(slot,active,slots)||'Model i kolor wybrane. Możesz przejść dalej.';
       get('[data-models]').replaceChildren(...data.models.map(m=>{
         const tile=el('span',null,'model-tile');if(m.thumb)tile.append(picture(m.thumb));
         tile.append(el('small',m.family),el('strong',m.name));
@@ -232,29 +253,38 @@ if (typeof document !== 'undefined') {
           if(!commerceOpen() || eligible(v,slots,active,data,previous)){slot.color=id;draw();focusRadio('slot-color',id)}
         },!ok);
       }));
-      const next=get('[data-next]');next.disabled=active===size-1;
-      next.onclick=()=>{active++;draw();get('[data-slots]').children[active].focus()};
+      const next=get('[data-next]');next.disabled=false;next.textContent=active===size-1?'Zobacz podsumowanie →':'Następna bombka →';
+      next.onclick=()=>{if(active===size-1)goStep(3);else editSlot(slots,active+1)};
+      const prev=get('[data-prev]');prev.disabled=active===0;prev.onclick=()=>{if(active>0)editSlot(slots,active-1)};
       const {done,groups}=summary(data,slots,!commerceOpen(),previous);
       const models=groups.reduce((count,group)=>count+group.count,0);
       get('[data-count]').textContent='Modele: '+models+'/'+size+' · Kolory: '+done+'/'+size;
+      get('[data-compose-count]').textContent='Gotowe bombki: '+done+' z '+size;
       get('.progress-line span').style.width=((models+done)/(2*size)*100)+'%';
-      get('[data-summary-note]').textContent=done===size?'Kompozycja kompletna.':groups.length?'Pozycję dopełnia wybór dostępnego koloru.':'Twoje formy pojawią się tutaj.';
+      get('[data-summary-note]').textContent=done===size?'Kompozycja kompletna.':'Uzupełnij wskazane pozycje. Każda bombka potrzebuje modelu i koloru.';
       get('[data-summary]').replaceChildren(...groups.map(g=>{const li=el('li');li.append(el('strong',g.name),el('span',g.label+' · '+g.count+' szt.'));return li}));
       const packs=quotedPacks(), all=packs.flat(), count=all.length;
       const merchandise=packs.reduce((sum,p)=>sum+priceFor(p),0);
       const ready=summary(data,all,!commerceOpen()).done===count;
+      const issues=[];
+      packs.forEach((pack,pi)=>pack.forEach((s,i)=>{const reason=issueFor(s,i,pack);if(reason){const li=el('li'),b=el('button',(packs.length>1?'Zestaw '+(pi+1)+' · ':'')+'Bombka '+(i+1)+(nameOf(s)?' · '+nameOf(s):'')+': '+reason,'issue-link');b.type='button';b.onclick=()=>editSlot(pack,i,true);li.append(b);issues.push(li)}}));
+      get('[data-issues]').replaceChildren(...issues);get('[data-issues]').hidden=!issues.length;
       const add=get('[data-add-pack]');add.disabled=busy||done!==size||saved.length+1>=10;
       add.onclick=()=>{
         if(add.disabled)return;
         saved.push(slots);slots=Array.from({length:1},empty);size=1;active=0;acceptance.checked=false;draw();
-        get('[data-sizes]').querySelectorAll('input')[0]?.focus();
+        goStep(1);
       };
       get('[data-basket]').replaceChildren(...packs.map((p,i)=>{
         const li=el('li'), current=p===slots;
         const completed=summary(data,p,!commerceOpen(),all.filter(s=>!p.includes(s))).done===p.length;
         li.append(el('strong',(p.length===1?'Pojedyncza ozdoba':'Komplet '+p.length+' szt.')+' · '+money(priceFor(p))));
         const labels=summary(data,p,true).groups.map(g=>g.count+' × '+g.name+' / '+g.label).join('; ');
-        li.append(el('span',(labels||'Wybierz wzór i kolor')+(completed?'': ' · do uzupełnienia')));
+        li.append(el('span',completed?'Wszystkie bombki gotowe':'Uzupełnij oznaczone bombki'));
+        const items=el('ol',null,'individual-items');p.forEach((s,j)=>{const item=el('li'),v=variantFor(data,s),m=data.models.find(m=>m.id===s.model),src=v?.photo?.thumb||m?.thumb;
+          if(src)item.append(picture(src));const copy=el('div');copy.append(el('strong','Bombka '+(j+1)+' · '+(m?.name||'Wybierz model')),el('span',v?.label||'Kolor nie został wybrany'));
+          const reason=issueFor(s,j,p);copy.append(el('small',reason||'✓ Gotowa',reason?'needs-choice':'complete-choice'));item.append(copy);
+          const edit=el('button','Edytuj','reset-set');edit.type='button';edit.setAttribute('aria-label','Edytuj bombkę '+(j+1)+(packs.length>1?' w zestawie '+(i+1):''));edit.onclick=()=>editSlot(p,j);item.append(edit);items.append(item)});li.append(items);
         const remove=el('button','Usuń','reset-set');remove.type='button';
         remove.setAttribute('aria-label','Usuń pozycję '+(i+1)+' z koszyka');
         remove.onclick=()=>{if(current)removeCurrent();else{saved.splice(i,1);acceptance.checked=false;draw()}};
@@ -263,18 +293,19 @@ if (typeof document !== 'undefined') {
       }));
       const free=count>=data.freeFrom;
       const shipping=free?0:delivery==='locker'?lockerFee:(commerceOpen()?smallShipping:data.sizes[0].shippingGrosz);
-      const shippingName=delivery==='locker'?(mockPoints?'Punkt testowy · '+mockNotice:'Paczkomat® InPost'):'Kurier InPost';
+      const shippingName=delivery==='locker'?'Paczkomat® InPost':'Kurier InPost';
       const pointRequired=delivery==='locker'&&!selectedPoint;
       get('[data-delivery-picker]').hidden=!commerceOpen();
       courier.checked=delivery==='courier';locker.checked=delivery==='locker';locker.disabled=!lockerAvailable;
       get('[data-courier-fee]').textContent=free?'w cenie':smallShipping===null?'brak wyceny':money(smallShipping);
-      get('[data-locker-fee]').textContent=(mockPoints?mockNotice+' · ':'')+(!lockerAvailable?'obecnie niedostępny':free?'w cenie':money(lockerFee));
+      get('[data-locker-fee]').textContent=(!lockerAvailable?'obecnie niedostępny':free?'w cenie':money(lockerFee));
       mockBanner.hidden=!mockPoints||!commerceOpen();mockPicker.hidden=!mockPoints;
       mockSelect.disabled=busy||checking;mockSelect.value=normalizePoint(pointInput.value);
       get('[data-locker-panel]').hidden=delivery!=='locker';mapButton.hidden=mockPoints||!geoToken;
       mapButton.textContent=selectedPoint?'Zmień Paczkomat na mapie':'Wybierz Paczkomat na mapie';
       get('[data-locker-directory]').hidden=mockPoints||commerceMode!=='live';
-      get('[data-point-summary]').textContent=selectedPoint?'Wybrany automat: '+selectedPoint.id+' · '+selectedPoint.address:'';
+      get('.locker-id').hidden=mockPoints;get('.locker-search').hidden=mockPoints;get('#point-help').hidden=mockPoints;
+      get('[data-point-summary]').textContent=selectedPoint?'Wybrany automat: '+selectedPoint.id+' · '+selectedPoint.address.replace(mockNotice+' — ',''):'';
       get('[data-point-status]').textContent=pointMessage;
       get('[data-find-point]').disabled=checking||!pointInput.value.trim();
       const total=shipping==null?null:merchandise+shipping;
@@ -293,9 +324,14 @@ if (typeof document !== 'undefined') {
       const btn=get('[data-checkout]'), payment=get('[data-payment-status]');
       btn.hidden=!commerceOpen();get('[data-notify]').hidden=commerceOpen();
       btn.textContent=localMockDemo?'Zapisz lokalną próbę — bez płatności':live?'Przejdź do płatności — '+(total===null?'':money(total)):'Przejdź do płatności testowej';
-      btn.disabled=busy || pointRequired || !ready || total===null || Boolean(codeField.value.trim()) || (live&&!acceptance.checked);
+      btn.disabled=busy;btn.setAttribute('data-ready',String(Boolean(ready&&!pointRequired&&total!==null&&!codeField.value.trim()&&(!live||acceptance.checked))));
+      if(!ready)btn.textContent='Uzupełnij wybór — '+issues.length+' do poprawy';
+      else if(pointRequired)btn.textContent='Wybierz punkt odbioru';
       payment.textContent=!commerceOpen()?'Możesz ułożyć kompozycję. Zapisz się, aby otrzymać informację o rozpoczęciu sprzedaży.':
-        busy?'Przygotowujemy płatność…':(live?'Zamówienie z obowiązkiem zapłaty potwierdzisz w następnym kroku na stronie Stripe. ':'Tryb testowy — bez pobrania pieniędzy. ')+(!ready?'Wybierz dostępny kolor każdej ozdoby.':pointRequired?'Wybierz i potwierdź automat Paczkomat® przed płatnością.':total===null?'Koszt dostawy nie został ustawiony.':codeField.value.trim()?'Usuń nieaktywny kod, aby przejść dalej.':live&&!acceptance.checked?'Zapoznaj się z regulaminem i zaakceptuj go.':'Sprawdź skład i kwotę przed przejściem do płatności.');
+        busy?'Przygotowujemy płatność…':(live?'Zamówienie z obowiązkiem zapłaty potwierdzisz w następnym kroku na stronie Stripe. ':'Zakup testowy — bez pobrania pieniędzy. ')+(!ready?'Wskażemy Ci brakujący wybór.':pointRequired?'Wybierz punkt odbioru.':total===null?'Nie udało się ustalić kosztu dostawy. Spróbuj ponownie później.':codeField.value.trim()?'Usuń nieaktywny kod, aby przejść dalej.':live&&!acceptance.checked?'Zapoznaj się z regulaminem i zaakceptuj go.':'Sprawdź skład i kwotę przed przejściem do płatności.');
+      const sticky=get('[data-sticky-action]');sticky.disabled=busy;sticky.textContent=step===1?'Komponuj →':step===2?'Podsumowanie →':btn.hidden?'Uzupełnij zestaw':btn.textContent;
+      get('[data-sticky-copy]').textContent=summary(data,all,!commerceOpen()).done+'/'+count+' gotowych · '+money(total??merchandise);
+      sticky.onclick=()=>{if(step<3)goStep(step+1);else if(commerceOpen())btn.onclick();else{const missing=firstMissing();if(missing)editSlot(missing.pack,missing.index)}};
       get('[data-reset]').disabled=!groups.length;
       get('[data-reset]').onclick=()=>confirmEdit('Wyczyścić wszystkie wybory w zestawie?', 'Wyczyść',yes=>{
         if(yes){slots=Array.from({length:size},empty);active=0;draw();get('[data-slots]').children[0].focus()}
@@ -303,6 +339,10 @@ if (typeof document !== 'undefined') {
     }
     get('[data-checkout]').onclick=async()=>{
       if(!commerceOpen()||busy||get('[data-checkout]').disabled)return;
+      const missing=firstMissing();if(missing){editSlot(missing.pack,missing.index,true);return;}
+      if(delivery==='locker'&&!selectedPoint){goStep(3);const target=mockPoints?mockSelect:pointInput;target.focus?.();target.scrollIntoView?.({block:'center',behavior:'instant'});return;}
+      if(expectedTotal===null||codeField.value.trim())return;
+      if(commerceMode==='live'&&!acceptance.checked){acceptance.focus();return;}
       const orderPacks=quotedPacks().map(p=>p.map(s=>({modelId:s.model,colorId:s.color})));
       const contents=orderPacks.length===1?{selections:orderPacks[0]}:{packs:orderPacks}, checkoutTotal=expectedTotal;
       const acceptanceProof=commerceMode==='live'?{termsAccepted:acceptance.checked,approvalVersion:liveInfo.approvalVersion}:{};
@@ -350,8 +390,8 @@ if (typeof document !== 'undefined') {
         geoToken=!mockPoints&&lockerAvailable&&typeof info.geowidget_token==='string'?info.geowidget_token.trim():'';
         if(mockPoints){
           const placeholder=el('option','Wybierz testowy punkt…');placeholder.value='';
-          mockSelect.replaceChildren(placeholder,...info.test_points.map(p=>{const o=el('option',p.label);o.value=p.id;return o}));
-          get('#point-help').textContent=mockNotice+'. Wpisz TEST01M / TEST02M lub wybierz scenariusz. Adres ustala serwer.';
+          mockSelect.replaceChildren(placeholder,...info.test_points.filter(p=>['TEST01M','TEST02M'].includes(p.id)).map(p=>{const o=el('option',p.id+' — punkt testowy '+(p.id==='TEST01M'?'A':'B'));o.value=p.id;return o}));
+          get('#point-help').textContent='Wybierz jeden z dwóch punktów testowych.';
         }
         if(info.mode==='live'){
           if(smallShipping===null)return;

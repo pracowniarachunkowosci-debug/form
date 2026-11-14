@@ -39,8 +39,8 @@ async function run({mixed=false,local=false,bad=null}={}){
   const btn=select('[data-checkout]'),totals=select('[data-totals]'),picker=created.find(e=>e['data-test-point-picker']==='');
   assert(picker);assert.equal(head.children.length,0);
   if(bad){assert(btn.hidden);assert.equal(calls.length,1);return;}
-  const banner=created.find(e=>e['data-points-mock-notice']==='');assert(!banner.hidden);assert.equal(banner.children[0].textContent,notice);
-  assert.equal(picker.children.length,fixture.settings.test_points.length+1);
+  const banner=created.find(e=>e['data-points-mock-notice']==='');assert(!banner.hidden);assert.match(banner.children[0].textContent,/Dostawa testowa/);
+  assert.equal(picker.children.length,3);
   const manual=async(id)=>{const field=select('[data-point-id]');field.value=id;field.oninput();await select('[data-find-point]').onclick()};
   const choose=async(id)=>{picker.value=id;await picker.onchange()};
   if(mixed){
@@ -48,20 +48,20 @@ async function run({mixed=false,local=false,bad=null}={}){
     const fill=(n,model,color)=>{for(let i=0;i<n;i++){select('[data-slots]').children[i].onclick();find('[data-models]',model).onchange();find('[data-colors]',color).onchange()}};
     fill(2,'full-soft','marble');select('[data-add-pack]').onclick();find('[data-sizes]',4).onchange();fill(4,'knitted-star','white');
   }
-  select('[data-delivery-locker]').onchange();assert(btn.disabled);assert(select('[data-open-map]').hidden);
+  select('[data-delivery-locker]').onchange();assert.equal(btn['data-ready'],'false');assert(select('[data-open-map]').hidden);
   await select('[data-open-map]').onclick();assert.equal(head.children.length,0,'no Geowidget assets');
-  assert(totals.textContent.includes(notice));assert.match(totals.textContent,mixed?/234,00/:/68,49/);
-  await choose('TEST01M');assert(!btn.disabled);assert(select('[data-point-summary]').textContent.includes(fixture.points.TEST01M.body.address));
+  assert(!totals.textContent.includes(notice));assert.match(totals.textContent,mixed?/234,00/:/68,49/);
+  await choose('TEST01M');assert.equal(btn['data-ready'],'true');assert(select('[data-point-summary]').textContent.includes('TEST01M'));
   await btn.onclick();const first=bodies.at(-1);assert.equal(first.pickup_point,'TEST01M');assert(!('pickup_address' in first));assert(!('inpost_points_mock' in first));
   await btn.onclick();assert.equal(bodies.at(-1).requestId,first.requestId,'same request on retry');
   if(mixed){assert.deepEqual(first.packs.map(p=>p.length),[2,4]);return;}
-  await choose('TEST02M');assert(select('[data-point-summary]').textContent.includes(fixture.points.TEST02M.body.address));
+  await choose('TEST02M');assert(select('[data-point-summary]').textContent.includes('TEST02M'));
   await btn.onclick();assert.notEqual(bodies.at(-1).requestId,first.requestId);
-  await manual(' test01m ');assert(!btn.disabled);assert.equal(select('[data-point-id]').value,'TEST01M');
+  await manual(' test01m ');assert.equal(btn['data-ready'],'true');assert.equal(select('[data-point-id]').value,'TEST01M');
   for(const id of ['bad!','TESTUNKNOWN','TESTOFF','TESTBAD','TESTBROKEN','TESTERROR']){
-    await manual(id);assert(btn.disabled);assert(select('[data-point-status]').textContent);assert.equal(select('[data-point-summary]').textContent,'');
+    await manual(id);assert.equal(btn['data-ready'],'false');assert(select('[data-point-status]').textContent);assert.equal(select('[data-point-summary]').textContent,'');
   }
-  select('[data-delivery-courier]').onchange();assert(!btn.disabled);assert.match(totals.textContent,/70,49/);
+  select('[data-delivery-courier]').onchange();assert.equal(btn['data-ready'],'true');assert.match(totals.textContent,/70,49/);
   await btn.onclick();assert.equal(bodies.at(-1).delivery_method,'courier');assert(!('pickup_point' in bodies.at(-1)));
   if(local)assert.match(select('[data-payment-status]').textContent,/zapisano w26_.*Bez płatności/);
   assert.equal(head.children.length,0,'no external scripts or map');
