@@ -25,13 +25,14 @@ if(function_exists('sapi_windows_set_ctrl_handler'))sapi_windows_set_ctrl_handle
 if(function_exists('pcntl_async_signals')){
     pcntl_async_signals(true);pcntl_signal(SIGINT,static fn()=>exit(130));pcntl_signal(SIGTERM,static fn()=>exit(143));
 }
+// Windows can take about two seconds to report refusal; a short timeout is not proof of a free port.
 // Check the fixed loopback port BEFORE creating any SQLite file (also covers older launchers).
-$socket=@stream_socket_client('tcp://127.0.0.1:8787',$socketError,$socketMessage,0.5);
+$socket=@stream_socket_client('tcp://127.0.0.1:8787',$socketError,$socketMessage,5.0);
 if(is_resource($socket)){
     fclose($socket);fwrite(STDERR,"127.0.0.1:8787 is occupied. Existing server untouched; no database created.\n");exit(2);
 }
 if(!in_array($socketError,[61,111,10061],true)){
-    fwrite(STDERR,"Cannot establish that loopback port 8787 is free. No database created.\n");exit(2);
+    fwrite(STDERR,"Cannot establish that loopback port 8787 is free (socket error ".$socketError."). No database created.\n");exit(2);
 }
 $run=bin2hex(random_bytes(12));$dbPath=$directory.'/'.$run.'.sqlite';$logPath=$directory.'/'.$run.'.server.log';
 $newDb=fopen($dbPath,'x');if(!$newDb)throw new RuntimeException('Cannot create new demo database');

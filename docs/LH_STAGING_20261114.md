@@ -59,7 +59,7 @@ Lokalne PHP 8.4.27 NTS z curl/PDO SQLite/SQLite3, pobrane z oficjalnego wydania 
 
 | Kontrola | Wynik i granice |
 | --- | --- |
-| PHP lint | **PASS**, 14 plików |
+| PHP lint | **PASS**, 15 plików |
 | `tests/checkout-sandbox.php` | **PASS**, ceny, koszyk, rezerwacja SKU, niedobór/rollback, idempotencja, payload Stripe, podpis webhooka, kwota/tryb i cykl płatności; bez sieci |
 | `tests/checkout-live-gates.php` | **PASS**, blokady niepełnych dokumentów, katalogu, zgód, niespójnych kluczy i zapasu; bez Stripe |
 | `tests/checkout-locker.php` | **PASS**, stawki, próg łączny, aktywny punkt PL, błędy lookup, kanoniczny adres, zapis danych i idempotencja; bez InPost |
@@ -130,10 +130,10 @@ Skrót jednej [listy danych i decyzji D1–D7](legal-draft/index.html#dane), bez
 
 ## Paczka i decyzja
 
-Build z czystego commitu `da2f1c6badb4bd8384976f09150d5c2cd4ecaea4`: **PASS**.
-124 pliki, ZIP 9 207 958 bajtów; SHA-256 `e9ba6e3a208a41ef8bee81782dff481aba77dc8b3a8ef3db288bfbc5010417b7`.
-Paczka lokalna `.artifacts/lh-da2f1c6badb4/pracownia-form-lh.zip`, `uploaded_by_this_build=false`. Nie jest jeszcze skonfigurowanym stagingiem z uwierzytelnieniem.
+Build z czystego commitu `4ce364b3bb200d61490ad87542637980a2df9e01`: **PASS**, w tym 15 plików PHP i nowy test UI MOCK.
+125 plików, ZIP 9 210 328 bajtów; SHA-256 `0b322faf4b6263a8a25b17ca891bd2fccd93753a3224b790d986e44ba7a44adc`.
+Paczka lokalna `.artifacts/lh-4ce364b3bb20/pracownia-form-lh.zip`, `uploaded_by_this_build=false`. Nie jest jeszcze skonfigurowanym stagingiem z uwierzytelnieniem. Raporty prawne, sterowniki testowe, SQLite i sekrety są wyłączone z paczki.
 
-Powyższa paczka jest poprzednim buildem, nie zawiera bieżącego adaptera MOCK. Aktualny build i commit są podane w najnowszej aktualizacji PR #28; nie wysłano żadnej z paczek na LH.
+Późniejsze poprawki dotyczą lokalnego launchera testów i raportu, nie zawartości WWW. Lokalny konflikt dwóch instancji usunięto; launcher otrzymał blokadę i kontrolę portu. Test HTTP/SQLite przeszedł po wskazaniu bazy właściwego serwera. Nie zaliczono wcześniejszych nieudanych prób jako PASS.
 
 **NO-GO do odbioru LH:** najpierw LH musi umożliwić FTPS, poprawny certyfikat i jednoznacznie prywatny katalog SQLite/sekretów. Następnie upload z ochroną dostępu/noindex i bezpośredni webhook Stripe na LH. InPost nie blokuje dalszego testu sklepu: można użyć jawnego MOCK, a prawdziwy Sandbox pozostaje `BLOCKED — F60AADBC18`. Żaden lokalny PASS nie zastępuje prób na LH i fizycznym telefonie. Bez produkcyjnego DNS, merge, Stripe Live i reklam.
