@@ -50,12 +50,22 @@ Only three public files differ from the accepted staging release:
 Backend, prices, SKU, commercial inventory, photos, legal pages, security overlays
 and private configuration are unchanged.
 
-Deployment is prepared but **pending local SSH unlock**. The scoped deployer
-verifies the existing 124 hashes, saves the three previous files outside WWW,
-replaces only these files, verifies authenticated/anonymous HTTP and the final
-manifest, and compares read-only SQLite snapshots before/after. On a failed
-deployment gate it restores its three original files. It never seeds, resets,
-updates orders or changes Stripe settings.
+**Deployed and verified on pf26.uber.space, 14 November 2026.** The scoped deployer
+verified the existing release, backed up the three previous files outside
+DocumentRoot, replaced only those files, and verified all 124 final hashes.
+Anonymous access remains 401 with noindex/noarchive and no-store; authenticated
+responses serve the exact new bytes. Private configuration is unchanged.
+Read-only SQLite snapshots before/after are identical: two paid orders, one
+released reservation, the same inventory and event ledger. No seed or payment
+was run. The verified rollback is recorded in [deployment evidence](ux-20261114/deployment.json).
+
+Actual HTTPS browser acceptance repeated the six-model/five-color VASE case:
+the final action selected the first ornament and focused its color palette;
+choosing white immediately showed 6/6. Individual item editing, courier and both
+TEST01M/TEST02M selections passed. Only those two points are listed, and the coupon
+field is hidden. Remote viewport measurements at 320/360/390/430 show no horizontal
+overflow and color controls at least 48 px high. No new checkout or payment was
+submitted during browser acceptance. Physical-phone comfort is for owner review.
 
 PR #28 remains draft, with no merge or production release.
 
@@ -63,3 +73,7 @@ PR #28 remains draft, with no merge or production release.
 
 [Viewport measurements](ux-20261114/mobile.json) ·
 [Staging build identity](ux-20261114/release.json)
+
+[Remote viewport measurements](ux-20261114/remote-mobile.json)
+
+![Deployed palette and missing-choice navigation](ux-20261114/remote-palette-390.jpg)
