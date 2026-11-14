@@ -47,4 +47,5 @@ $session=['id'=>'cs_test_fixture','client_reference_id'=>$order['id'],'metadata'
 $event=['id'=>'evt_locker','type'=>'checkout.session.completed','livemode'=>false,'data'=>['object'=>$session]];
 $bad=$event;$bad['data']['object']['metadata']['pickup_point']='WRO02M';fails('EVENT_MISMATCH',fn()=>apply_event($db,$bad));
 apply_event($db,$event);ensure(row($db,'SELECT state FROM orders WHERE id=?',[$order['id']])['state']==='paid','verified paid with correct delivery');
+require __DIR__.'/inpost-mock.php';
 echo "PASS: rates, combined threshold, active PL locker only, lookup failure, canonical fulfilment, Stripe fields and idempotency. No network.\n";

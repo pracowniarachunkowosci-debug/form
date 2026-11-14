@@ -1,0 +1,498 @@
+{
+  "status": "PASS",
+  "browser": "isolated headless Chrome",
+  "htmlFiles": 8,
+  "screenChecks": 40,
+  "printChecks": 8,
+  "printNote": "CSS print emulation plus A4 PDF generation; PDFs not retained. Screenshots are not paginated PDF renders.",
+  "results": [
+    {
+      "file": "cookies-i-zgody.html",
+      "media": "screen",
+      "viewport": 320,
+      "width": 305,
+      "scrollWidth": 305,
+      "heading": "Cookies i zgody",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "cookies-i-zgody.html",
+      "media": "screen",
+      "viewport": 360,
+      "width": 345,
+      "scrollWidth": 345,
+      "heading": "Cookies i zgody",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "cookies-i-zgody.html",
+      "media": "screen",
+      "viewport": 390,
+      "width": 375,
+      "scrollWidth": 375,
+      "heading": "Cookies i zgody",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "cookies-i-zgody.html",
+      "media": "screen",
+      "viewport": 430,
+      "width": 415,
+      "scrollWidth": 415,
+      "heading": "Cookies i zgody",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "cookies-i-zgody.html",
+      "media": "screen",
+      "viewport": 1100,
+      "width": 1085,
+      "scrollWidth": 1085,
+      "heading": "Cookies i zgody",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "cookies-i-zgody.html",
+      "media": "print",
+      "width": 665,
+      "scrollWidth": 665,
+      "navHidden": true,
+      "draftVisible": true,
+      "textHeight": 2694,
+      "pdfBytes": 134558,
+      "pages": 3
+    },
+    {
+      "file": "dostawa-i-platnosci.html",
+      "media": "screen",
+      "viewport": 320,
+      "width": 305,
+      "scrollWidth": 305,
+      "heading": "Dostawa i płatności",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "dostawa-i-platnosci.html",
+      "media": "screen",
+      "viewport": 360,
+      "width": 345,
+      "scrollWidth": 345,
+      "heading": "Dostawa i płatności",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "dostawa-i-platnosci.html",
+      "media": "screen",
+      "viewport": 390,
+      "width": 375,
+      "scrollWidth": 375,
+      "heading": "Dostawa i płatności",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "dostawa-i-platnosci.html",
+      "media": "screen",
+      "viewport": 430,
+      "width": 415,
+      "scrollWidth": 415,
+      "heading": "Dostawa i płatności",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "dostawa-i-platnosci.html",
+      "media": "screen",
+      "viewport": 1100,
+      "width": 1085,
+      "scrollWidth": 1085,
+      "heading": "Dostawa i płatności",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "dostawa-i-platnosci.html",
+      "media": "print",
+      "width": 665,
+      "scrollWidth": 665,
+      "navHidden": true,
+      "draftVisible": true,
+      "textHeight": 1902,
+      "pdfBytes": 130358,
+      "pages": 2
+    },
+    {
+      "file": "formularz-odstapienia.html",
+      "media": "screen",
+      "viewport": 320,
+      "width": 305,
+      "scrollWidth": 305,
+      "heading": "Wzór odstąpienia od umowy",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "formularz-odstapienia.html",
+      "media": "screen",
+      "viewport": 360,
+      "width": 345,
+      "scrollWidth": 345,
+      "heading": "Wzór odstąpienia od umowy",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "formularz-odstapienia.html",
+      "media": "screen",
+      "viewport": 390,
+      "width": 375,
+      "scrollWidth": 375,
+      "heading": "Wzór odstąpienia od umowy",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "formularz-odstapienia.html",
+      "media": "screen",
+      "viewport": 430,
+      "width": 415,
+      "scrollWidth": 415,
+      "heading": "Wzór odstąpienia od umowy",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "formularz-odstapienia.html",
+      "media": "screen",
+      "viewport": 1100,
+      "width": 1085,
+      "scrollWidth": 1085,
+      "heading": "Wzór odstąpienia od umowy",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "formularz-odstapienia.html",
+      "media": "print",
+      "width": 680,
+      "scrollWidth": 680,
+      "navHidden": true,
+      "draftVisible": true,
+      "textHeight": 960,
+      "pdfBytes": 91924,
+      "pages": 1
+    },
+    {
+      "file": "gpsr.html",
+      "media": "screen",
+      "viewport": 320,
+      "width": 305,
+      "scrollWidth": 305,
+      "heading": "GPSR — karta produktu i dokumentacji",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "gpsr.html",
+      "media": "screen",
+      "viewport": 360,
+      "width": 345,
+      "scrollWidth": 345,
+      "heading": "GPSR — karta produktu i dokumentacji",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "gpsr.html",
+      "media": "screen",
+      "viewport": 390,
+      "width": 375,
+      "scrollWidth": 375,
+      "heading": "GPSR — karta produktu i dokumentacji",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "gpsr.html",
+      "media": "screen",
+      "viewport": 430,
+      "width": 415,
+      "scrollWidth": 415,
+      "heading": "GPSR — karta produktu i dokumentacji",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "gpsr.html",
+      "media": "screen",
+      "viewport": 1100,
+      "width": 1085,
+      "scrollWidth": 1085,
+      "heading": "GPSR — karta produktu i dokumentacji",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "gpsr.html",
+      "media": "print",
+      "width": 665,
+      "scrollWidth": 665,
+      "navHidden": true,
+      "draftVisible": true,
+      "textHeight": 3150,
+      "pdfBytes": 159446,
+      "pages": 4
+    },
+    {
+      "file": "index.html",
+      "media": "screen",
+      "viewport": 320,
+      "width": 305,
+      "scrollWidth": 305,
+      "heading": "WINTER 26 — projekty dokumentów",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "index.html",
+      "media": "screen",
+      "viewport": 360,
+      "width": 345,
+      "scrollWidth": 345,
+      "heading": "WINTER 26 — projekty dokumentów",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "index.html",
+      "media": "screen",
+      "viewport": 390,
+      "width": 375,
+      "scrollWidth": 375,
+      "heading": "WINTER 26 — projekty dokumentów",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "index.html",
+      "media": "screen",
+      "viewport": 430,
+      "width": 415,
+      "scrollWidth": 415,
+      "heading": "WINTER 26 — projekty dokumentów",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "index.html",
+      "media": "screen",
+      "viewport": 1100,
+      "width": 1085,
+      "scrollWidth": 1085,
+      "heading": "WINTER 26 — projekty dokumentów",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "index.html",
+      "media": "print",
+      "width": 665,
+      "scrollWidth": 665,
+      "navHidden": false,
+      "draftVisible": true,
+      "textHeight": 1743,
+      "pdfBytes": 134144,
+      "pages": 2
+    },
+    {
+      "file": "polityka-prywatnosci.html",
+      "media": "screen",
+      "viewport": 320,
+      "width": 305,
+      "scrollWidth": 305,
+      "heading": "Prywatność przy zamówieniach",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "polityka-prywatnosci.html",
+      "media": "screen",
+      "viewport": 360,
+      "width": 345,
+      "scrollWidth": 345,
+      "heading": "Prywatność przy zamówieniach",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "polityka-prywatnosci.html",
+      "media": "screen",
+      "viewport": 390,
+      "width": 375,
+      "scrollWidth": 375,
+      "heading": "Prywatność przy zamówieniach",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "polityka-prywatnosci.html",
+      "media": "screen",
+      "viewport": 430,
+      "width": 415,
+      "scrollWidth": 415,
+      "heading": "Prywatność przy zamówieniach",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "polityka-prywatnosci.html",
+      "media": "screen",
+      "viewport": 1100,
+      "width": 1085,
+      "scrollWidth": 1085,
+      "heading": "Prywatność przy zamówieniach",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "polityka-prywatnosci.html",
+      "media": "print",
+      "width": 665,
+      "scrollWidth": 665,
+      "navHidden": true,
+      "draftVisible": true,
+      "textHeight": 3041,
+      "pdfBytes": 161269,
+      "pages": 4
+    },
+    {
+      "file": "regulamin-sklepu.html",
+      "media": "screen",
+      "viewport": 320,
+      "width": 305,
+      "scrollWidth": 305,
+      "heading": "Regulamin sprzedaży WINTER 26",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "regulamin-sklepu.html",
+      "media": "screen",
+      "viewport": 360,
+      "width": 345,
+      "scrollWidth": 345,
+      "heading": "Regulamin sprzedaży WINTER 26",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "regulamin-sklepu.html",
+      "media": "screen",
+      "viewport": 390,
+      "width": 375,
+      "scrollWidth": 375,
+      "heading": "Regulamin sprzedaży WINTER 26",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "regulamin-sklepu.html",
+      "media": "screen",
+      "viewport": 430,
+      "width": 415,
+      "scrollWidth": 415,
+      "heading": "Regulamin sprzedaży WINTER 26",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "regulamin-sklepu.html",
+      "media": "screen",
+      "viewport": 1100,
+      "width": 1085,
+      "scrollWidth": 1085,
+      "heading": "Regulamin sprzedaży WINTER 26",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "regulamin-sklepu.html",
+      "media": "print",
+      "width": 665,
+      "scrollWidth": 665,
+      "navHidden": true,
+      "draftVisible": true,
+      "textHeight": 2612,
+      "pdfBytes": 132566,
+      "pages": 3
+    },
+    {
+      "file": "zwroty-i-reklamacje.html",
+      "media": "screen",
+      "viewport": 320,
+      "width": 305,
+      "scrollWidth": 305,
+      "heading": "Zwroty i reklamacje",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "zwroty-i-reklamacje.html",
+      "media": "screen",
+      "viewport": 360,
+      "width": 345,
+      "scrollWidth": 345,
+      "heading": "Zwroty i reklamacje",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "zwroty-i-reklamacje.html",
+      "media": "screen",
+      "viewport": 390,
+      "width": 375,
+      "scrollWidth": 375,
+      "heading": "Zwroty i reklamacje",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "zwroty-i-reklamacje.html",
+      "media": "screen",
+      "viewport": 430,
+      "width": 415,
+      "scrollWidth": 415,
+      "heading": "Zwroty i reklamacje",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "zwroty-i-reklamacje.html",
+      "media": "screen",
+      "viewport": 1100,
+      "width": 1085,
+      "scrollWidth": 1085,
+      "heading": "Zwroty i reklamacje",
+      "notices": true,
+      "resources": []
+    },
+    {
+      "file": "zwroty-i-reklamacje.html",
+      "media": "print",
+      "width": 665,
+      "scrollWidth": 665,
+      "navHidden": true,
+      "draftVisible": true,
+      "textHeight": 2725,
+      "pdfBytes": 121051,
+      "pages": 3
+    }
+  ]
+}

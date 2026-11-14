@@ -1,0 +1,13 @@
+{
+  "status": "PASS",
+  "html_files": 8,
+  "local_references": 57,
+  "checks": [
+    "HTML nesting",
+    "unique IDs",
+    "local links/fragments",
+    "draft marker/noindex",
+    "no scripts/forms/iframes/remote src"
+  ],
+  "errors": []
+}

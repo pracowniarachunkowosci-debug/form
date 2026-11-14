@@ -5,7 +5,24 @@ declare(strict_types=1);
 function inpost_token(mixed $value): bool {
     return is_string($value) && preg_match('/^[A-Za-z0-9._~+\/=:-]{8,8192}$/D',$value)===1;
 }
+function inpost_mock_notice(): string { return 'TEST / MOCK — bez połączenia z InPost'; }
+function inpost_mock_enabled(array $cfg): bool {
+    if(!array_key_exists('inpost_points_mock',$cfg))return false;
+    // Explicit opt-in only. A malformed flag must never fall through to the real provider.
+    if($cfg['inpost_points_mock']!==true || ($cfg['mode']??null)!=='test' || live_host() ||
+       array_key_exists('inpost_points_token',$cfg) || array_key_exists('inpost_geowidget_token',$cfg))
+        problem('POINTS_CONFIG',503,'Nieprawidłowa konfiguracja testowego adaptera Points.');
+    return true;
+}
+function inpost_mock_fixtures(): array {
+    static $fixtures=null;
+    return $fixtures??=require __DIR__.'/_inpost_mock.php';
+}
 function inpost_settings(array $cfg): array {
+    if(inpost_mock_enabled($cfg))return ['locker_available'=>true,'geowidget_token'=>null,
+        'points_provider'=>'mock','points_notice'=>inpost_mock_notice(),
+        'test_points'=>array_map(fn($id,$fixture)=>['id'=>$id,'label'=>$fixture['label']],
+            array_keys(inpost_mock_fixtures()),array_values(inpost_mock_fixtures()))];
     $enabled=inpost_token($cfg['inpost_points_token']??null);
     $geo=$cfg['inpost_geowidget_token']??null;
     // In particular, do not leak a private API token accidentally copied to both settings.
@@ -47,6 +64,17 @@ function canonical_point(string $id,array $result): array {
 }
 function lookup_point(array $cfg,string $id): array {
     $id=point_id($id);if(!inpost_settings($cfg)['locker_available'])point_unavailable();
+    if(inpost_mock_enabled($cfg)){
+        $fixture=inpost_mock_fixtures()[$id]??null;
+        if(!$fixture)problem('PICKUP_POINT',422,inpost_mock_notice().' — nieznany kod testowy.');
+        if(isset($fixture['error']))problem('POINTS_UNAVAILABLE',503,inpost_mock_notice().' — symulowana awaria API Points.');
+        try{$point=canonical_point($id,$fixture['response']);}
+        catch(StoreError $e){problem($e->kind,$e->status,inpost_mock_notice().' — '.$e->getMessage());}
+        return $point+['provider'=>'mock','notice'=>inpost_mock_notice()];
+    }
+    // TEST codes cannot be sent to either real directory, even after disabling the mock.
+    if(str_starts_with($id,'TEST'))point_invalid();
+    if(!in_array($cfg['mode']??null,['test','live'],true))point_unavailable();
     $base=$cfg['mode']==='live'?'https://api.inpost.pl/v1/points':'https://sandbox-api-gateway-pl.easypack24.net/v1/points';
     $query=http_build_query(['name'=>$id,'type'=>'parcel_locker_only','functions'=>'parcel_collect','virtual'=>0,'per_page'=>1],'','&',PHP_QUERY_RFC3986);
     $ch=curl_init($base.'?'.$query);$raw='';

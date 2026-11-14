@@ -1,0 +1,47 @@
+{
+    "environment": "LOCAL PHP + REAL STRIPE SANDBOX; NOT LH",
+    "orders": [
+        {
+            "orderId": "w26_e9bcf73911b6d5ea39a2d242",
+            "sessionId": "cs_test_b0WE2TvtJcQvbslhnaBkmqa0FiD339GNzGhsA7Fv7GsM0cII2zdt9AJ2yZ",
+            "state": "paid",
+            "items": {
+                "full-soft:marble": 1
+            },
+            "totalGrosz": 7049,
+            "shippingGrosz": 2049,
+            "method": "courier",
+            "pickup_point": null,
+            "pickup_address": null,
+            "stripe_payment_status": "paid",
+            "livemode": false,
+            "payment_method": "card",
+            "shipping_address_present": true
+        },
+        {
+            "orderId": "w26_e9545aaa07d0fc65cdd05751",
+            "sessionId": "cs_test_b06lNkJSDf4xLSVt8KaMrLMWZJ7b2XQfYcX54hOv4AfN6vlWNnH9VcIrBd",
+            "state": "paid",
+            "items": {
+                "knitted-star:red-matte": 2,
+                "knitted-medallion:white": 2,
+                "full-soft:marble": 2
+            },
+            "totalGrosz": 23400,
+            "shippingGrosz": 0,
+            "method": "locker",
+            "pickup_point": "TEST01A",
+            "pickup_address": "TEST \/ MOCK — Punkt testowy, ulica Testowa 1, 00-000 Miasto Testowe",
+            "stripe_payment_status": "paid",
+            "livemode": false,
+            "payment_method": "blik",
+            "shipping_address_present": false
+        }
+    ],
+    "stock": {
+        "full-soft:marble": 17,
+        "knitted-star:red-matte": 18,
+        "knitted-medallion:white": 18
+    },
+    "recorded_events": 3
+}

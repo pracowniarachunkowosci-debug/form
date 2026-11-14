@@ -40,6 +40,7 @@ for source in sorted((ROOT/'api').glob('*.php')):
     subprocess.run([php,'-l',str(source)],check=True,cwd=ROOT,stdout=subprocess.DEVNULL)
 for suite in ('tests/checkout-sandbox.php','tests/checkout-live-gates.php','tests/checkout-locker.php'):
     subprocess.run([php,suite],check=True,cwd=ROOT)
+subprocess.run(['node','tests/inpost-mock-ui.cjs'],check=True,cwd=ROOT,env={**os.environ,'PF_PHP_BIN':php})
 # Only program sources and public catalogs: no private configuration, databases or test drivers.
 backend = sorted((ROOT/'api').glob('*.php'))
 catalogs = [ROOT/'data/winter26-pricing-pl.json', ROOT/'data/winter26-products.json']
