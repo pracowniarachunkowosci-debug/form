@@ -1,0 +1,274 @@
+{
+  "origin": "https://pf26.uber.space",
+  "gallery": [
+    {
+      "model": "VASE",
+      "finish": "Czerwony matowy",
+      "state": "W aranżacji\nZdjęcia produktu\n\nVASE / Czerwony matowy\n\nBrak zdjęcia tego wykończenia.\n\nMożesz obejrzeć pozostałe kolory."
+    },
+    {
+      "model": "VASE",
+      "finish": "Biały",
+      "state": "W aranżacji\nZdjęcia produktu\n\nVASE / Biały\n\nPowiększ\nPoprzednie\n\n1 / 1 · Fotografia\n\nNastępne"
+    },
+    {
+      "model": "VASE",
+      "finish": "Marble",
+      "state": "W aranżacji\nZdjęcia produktu\n\nVASE / Marble\n\nBrak zdjęcia tego wykończenia.\n\nMożesz obejrzeć pozostałe kolory."
+    },
+    {
+      "model": "VASE",
+      "finish": "Dual",
+      "state": "W aranżacji\nZdjęcia produktu\n\nVASE / Dual\n\nOWNER APPROVED\nPowiększ\nPoprzednie\n\n1 / 1 · Fotografia\n\nNastępne"
+    },
+    {
+      "model": "KNITTED STAR",
+      "finish": "Czerwony matowy",
+      "state": "W aranżacji\nZdjęcia produktu\n\nKNITTED STAR / Czerwony matowy\n\nBrak zdjęcia tego wykończenia.\n\nMożesz obejrzeć pozostałe kolory."
+    },
+    {
+      "model": "KNITTED STAR",
+      "finish": "Biały",
+      "state": "W aranżacji\nZdjęcia produktu\n\nKNITTED STAR / Biały\n\nBrak zdjęcia tego wykończenia.\n\nMożesz obejrzeć pozostałe kolory."
+    },
+    {
+      "model": "KNITTED STAR",
+      "finish": "Marble",
+      "state": "W aranżacji\nZdjęcia produktu\n\nKNITTED STAR / Marble\n\nPowiększ\nPoprzednie\n\n1 / 2 · Fotografia\n\nNastępne"
+    },
+    {
+      "model": "KNITTED MEDALLION",
+      "finish": "Dual",
+      "state": "W aranżacji\nZdjęcia produktu\n\nKNITTED MEDALLION / Dual\n\nBrak zdjęcia tego wykończenia.\n\nMożesz obejrzeć pozostałe kolory."
+    },
+    {
+      "model": "KNITTED MEDALLION",
+      "finish": "Czerwony matowy",
+      "state": "W aranżacji\nZdjęcia produktu\n\nKNITTED MEDALLION / Czerwony matowy\n\nBrak zdjęcia tego wykończenia.\n\nMożesz obejrzeć pozostałe kolory."
+    },
+    {
+      "model": "KNITTED MEDALLION",
+      "finish": "Biały",
+      "state": "W aranżacji\nZdjęcia produktu\n\nKNITTED MEDALLION / Biały\n\nBrak zdjęcia tego wykończenia.\n\nMożesz obejrzeć pozostałe kolory."
+    },
+    {
+      "model": "KNITTED MEDALLION",
+      "finish": "Marble",
+      "state": "W aranżacji\nZdjęcia produktu\n\nKNITTED MEDALLION / Marble\n\nPowiększ\nPoprzednie\n\n1 / 1 · Fotografia\n\nNastępne"
+    }
+  ],
+  "responsive": [
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "product",
+      "width": 320
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "product",
+      "width": 360
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "product",
+      "width": 390
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "product",
+      "width": 430
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "product",
+      "width": 1280
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "product",
+      "width": 1440
+    },
+    {
+      "brokenVisibleImages": 0,
+      "checkoutButtons": 1,
+      "overflow": false,
+      "page": "summary",
+      "width": 320
+    },
+    {
+      "brokenVisibleImages": 0,
+      "checkoutButtons": 1,
+      "overflow": false,
+      "page": "summary",
+      "width": 360
+    },
+    {
+      "brokenVisibleImages": 0,
+      "checkoutButtons": 1,
+      "overflow": false,
+      "page": "summary",
+      "width": 390
+    },
+    {
+      "brokenVisibleImages": 0,
+      "checkoutButtons": 1,
+      "overflow": false,
+      "page": "summary",
+      "width": 430
+    },
+    {
+      "brokenVisibleImages": 0,
+      "checkoutButtons": 1,
+      "overflow": false,
+      "page": "summary",
+      "width": 1280
+    },
+    {
+      "brokenVisibleImages": 0,
+      "checkoutButtons": 1,
+      "overflow": false,
+      "page": "summary",
+      "width": 1440
+    },
+    {
+      "brokenVisibleImages": 0,
+      "mainCtaCount": 1,
+      "overflow": false,
+      "page": "composer",
+      "width": 320
+    },
+    {
+      "brokenVisibleImages": 0,
+      "mainCtaCount": 1,
+      "overflow": false,
+      "page": "composer",
+      "width": 360
+    },
+    {
+      "brokenVisibleImages": 0,
+      "mainCtaCount": 1,
+      "overflow": false,
+      "page": "composer",
+      "width": 390
+    },
+    {
+      "brokenVisibleImages": 0,
+      "mainCtaCount": 1,
+      "overflow": false,
+      "page": "composer",
+      "width": 430
+    },
+    {
+      "brokenVisibleImages": 0,
+      "mainCtaCount": 1,
+      "overflow": false,
+      "page": "composer",
+      "width": 1280
+    },
+    {
+      "brokenVisibleImages": 0,
+      "mainCtaCount": 1,
+      "overflow": false,
+      "page": "composer",
+      "width": 1440
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "landing",
+      "width": 320
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "landing",
+      "width": 360
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "landing",
+      "width": 390
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "landing",
+      "width": 430
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "landing",
+      "width": 1280
+    },
+    {
+      "brokenVisibleImages": 0,
+      "overflow": false,
+      "page": "landing",
+      "width": 1440
+    }
+  ],
+  "sizes": [
+    {
+      "selection": "1 ozdoba 50,00 zł",
+      "status": "0 z 1 ozdób skonfigurowanych"
+    },
+    {
+      "selection": "2 ozdoby 84,00 zł",
+      "status": "0 z 2 ozdób skonfigurowanych"
+    },
+    {
+      "selection": "4 ozdoby 150,00 zł",
+      "status": "0 z 4 ozdób skonfigurowanych"
+    },
+    {
+      "selection": "8 ozdób 290,00 zł",
+      "status": "0 z 8 ozdób skonfigurowanych"
+    },
+    {
+      "selection": "Wybór pracowni 6 ozdób 220,00 zł",
+      "status": "0 z 6 ozdób skonfigurowanych"
+    }
+  ],
+  "composition": [
+    "2 z 6 ozdób skonfigurowanych",
+    "3 z 6 ozdób skonfigurowanych",
+    "4 z 6 ozdób skonfigurowanych",
+    "5 z 6 ozdób skonfigurowanych",
+    "6 z 6 ozdób skonfigurowanych"
+  ],
+  "delivery": [
+    {
+      "point": "TEST02M",
+      "confirmed": true
+    },
+    {
+      "point": "TEST01M",
+      "confirmed": true,
+      "checkoutEnabled": true
+    }
+  ],
+  "checks": {
+    "lifestyleFirst": true,
+    "keyboardThumbnailNavigation": true,
+    "zoom2xAndEscape": true,
+    "modelChangeClearsColor": true,
+    "missingModelGuidance": true,
+    "missingColorGuidance": true,
+    "directEdit": true,
+    "courier": true,
+    "footerNotObscured": true,
+    "noNewPayment": true,
+    "testerLoginFromExistingDPAPI": true,
+    "checkoutReturnAndCancel": true,
+    "returnToConfigurator": true,
+    "returnToCollection": true
+  }
+}

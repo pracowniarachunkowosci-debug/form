@@ -1,0 +1,113 @@
+{
+  "scope": "Owner photographic decisions applied to authorized R01.5 pf26 staging integration",
+  "sourceRecord": "R01.5 OWNER_APPROVALS.json",
+  "sourceRecordSha256": "26960420824d76c09a953a3c1218fe62583428afbc14d6f2a1dcb7d74e995bf5",
+  "decisions": [
+    {
+      "decisionId": "R014-OWNER-VASE-DUAL-MAIN-20261114",
+      "status": "OWNER APPROVED",
+      "assetId": "full-soft-czerwono-czarny-main",
+      "modelId": "full-soft",
+      "colorId": "dual",
+      "role": "main",
+      "sourceFile": "PF_W26_FULL-SOFT_czerwono-czarny_ciemne-tlo_1x1_2000.webp",
+      "sha256": "12cfc47cc2d188b6a19142bc114422a680a6c681e0d66a5005d214e6c656e859",
+      "issueCommentUrl": "https://github.com/pracowniarachunkowosci-debug/form/issues/27#issuecomment-6884493844"
+    },
+    {
+      "decisionId": "R015-PHOTO-01-20261114",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "full-soft-bialy-nakrapiany-top",
+      "modelId": "full-soft",
+      "previousColorId": "marble",
+      "colorId": "white",
+      "role": "gallery",
+      "sourceFile": "PF_W26_FULL-SOFT_bialy-nakrapiany_widok-z-gory_ciemne-tlo_1x1_2000.webp",
+      "sha256": "d4069b0fc6e1e6dc856d0413bc8d96fcef652538cc64480f817d5aad5fd9be35",
+      "includeInGallery": true,
+      "roleChanged": false
+    },
+    {
+      "decisionId": "R015-PHOTO-02-20261114",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "knitted-star-bialy-main",
+      "modelId": "knitted-star",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "main",
+      "sourceFile": "PF_W26_KNITTED-STAR_bialy_ciemne-tlo_1x1_2000.webp",
+      "sha256": "1bdab99a099a7de2b523cd1d077ac022950af5022fabba62cc3ea316ad80414d",
+      "includeInGallery": true,
+      "roleChanged": false
+    },
+    {
+      "decisionId": "R015-PHOTO-03-20261114",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "WEB015",
+      "modelId": "knitted-star",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "detail",
+      "sourceFile": "winter26-id260-detail-01-codex.jpg",
+      "sha256": "bbf49713a1ef86d5f5c966faa03387da1323d7cdd1cf44a862a1944816d4944d",
+      "includeInGallery": true,
+      "roleChanged": false
+    },
+    {
+      "decisionId": "R015-PHOTO-04-20261114",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "WEB018",
+      "modelId": "knitted-star",
+      "previousColorId": "marble",
+      "colorId": "white",
+      "role": "main",
+      "sourceFile": "winter26-id263-main-codex.jpg",
+      "sha256": "ceda8bb79aae3b5d55e65d6f4a93e985d20eb416c0b0a11ddd4da620a7b7f1c6",
+      "includeInGallery": false,
+      "roleChanged": false
+    },
+    {
+      "decisionId": "R015-PHOTO-05-20261114",
+      "status": "REJECTED_QUALITY",
+      "assetId": "WEB018",
+      "modelId": "knitted-star",
+      "previousColorId": "marble",
+      "colorId": "white",
+      "role": "main",
+      "sourceFile": "winter26-id263-main-codex.jpg",
+      "sha256": "ceda8bb79aae3b5d55e65d6f4a93e985d20eb416c0b0a11ddd4da620a7b7f1c6",
+      "includeInGallery": false,
+      "roleChanged": false
+    },
+    {
+      "decisionId": "R015-PHOTO-06-20261114",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "knitted-medallion-bialy-main",
+      "modelId": "knitted-medallion",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "main",
+      "sourceFile": "PF_W26_KNITTED-MEDALLION_bialy_ciemne-tlo_1x1_2000.webp",
+      "sha256": "a2e76cb5e8fff9cb09d4053578d95e5d70a4eae2c9351b0720533d4cbc61a542",
+      "includeInGallery": true,
+      "roleChanged": false
+    },
+    {
+      "decisionId": "R015-PHOTO-07-20261114",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "WEB016",
+      "modelId": "knitted-medallion",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "gallery",
+      "sourceFile": "winter26-id261-main-codex.jpg",
+      "sha256": "71834ab0cfb8ef9d2a58f6941004fb1d01065df34a5ee6b71a183a7eb2d8aa22",
+      "includeInGallery": false,
+      "roleChanged": false,
+      "galleryDisposition": "ARCHIVED_BY_OWNER"
+    }
+  ],
+  "originalsPreserved": true,
+  "noRoleChanges": true,
+  "onlyOneOwnerApproved": true
+}

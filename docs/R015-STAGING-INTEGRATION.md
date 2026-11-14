@@ -92,5 +92,6 @@ The helper uses the verified deployment backup, refuses public-file drift and
 never replaces or restores the database. A new session requires the existing
 SSH key to be unlocked locally; no new credentials are generated.
 
-Actual deployment evidence and screenshots are recorded separately after the
-real HTTP/browser checks. A successful local build alone is not acceptance.
+Actual deployment, repeated post-browser verification and screenshots are recorded
+in [R01.5 staging acceptance](R015-STAGING-ACCEPTANCE.md). All real HTTP/data gates
+passed; physical-phone acceptance by the owner remains outstanding.
