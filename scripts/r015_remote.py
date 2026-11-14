@@ -54,7 +54,7 @@ def http_checks(manifest):
  for label,path,data in [('root','/',None),('asset','/assets/winter26-r015/ui.js',None),('checkout','/api/checkout.php',b'{}'),('webhook_get','/api/webhook.php',None),('alt_api','/api//checkout.php',b'{}')]:
   code,body,h=req(path,data=data);need(code==401,'anonymous_'+label+'_401');headers(h,'anonymous_'+label)
  code,_,_=req('/',True,wrong=True);need(code==401,'wrong_password_401')
- code,body,_=req('/api/webhook.php',data=b'{}',ctype='application/json');need(code==400 and json.loads(body).get('code')=='SIGNATURE','unsigned_webhook_400_SIGNATURE')
+ code,body,_=req('/api/webhook.php',data=b'{}',ctype='application/json');need(code==400 and json.loads(body).get('error')=='SIGNATURE','unsigned_webhook_400_SIGNATURE')
  for i,path in enumerate(['/config/test.json','/runtime/database/sandbox.sqlite','/winter26/config/test.json','/.htpasswd','/api/_common.php']):
   code,_,_=req(path,True);need(code in (403,404),'private_probe_'+str(i)+'_denied')
  for path in ['index.html','winter-26.html','winter-zestaw-4.html','winter-config.js','winter-full-soft.html','winter-knitted-star.html','winter-knitted-medallion.html','assets/winter26-r015/ui.js']:
