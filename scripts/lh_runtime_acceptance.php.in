@@ -1,0 +1,338 @@
+<?php
+declare(strict_types=1);
+// Short-lived, standalone acceptance probe. Never include in an application release.
+@ini_set('display_errors', '0');
+@ini_set('display_startup_errors', '0');
+@ini_set('log_errors', '0');
+set_error_handler(static function (): bool { return true; });
+@set_time_limit(20);
+header('Content-Type: application/json; charset=utf-8');
+header('Cache-Control: private, no-store, max-age=0');
+header('X-Robots-Tag: noindex, nofollow, noarchive');
+header('X-Content-Type-Options: nosniff');
+
+$probeSapi = PHP_SAPI; // Local tests replace this one assignment, never the guards.
+$issued = '@ISSUED_UNIX@';
+$expires = '@EXPIRES_UNIX@';
+$tokenHash = '@TOKEN_SHA256@';
+$token = $_SERVER['HTTP_X_PF_PROBE_TOKEN'] ?? '';
+$now = time();
+if ($probeSapi !== 'fpm-fcgi'
+    || ($_SERVER['HTTPS'] ?? '') !== 'on'
+    || (string) ($_SERVER['SERVER_PORT'] ?? '') !== '443'
+    || ($_SERVER['HTTP_HOST'] ?? '') !== 'test.pracowniaform.com'
+    || ($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST'
+    || !preg_match('/\A[0-9]{10}\z/D', $issued)
+    || !preg_match('/\A[0-9]{10}\z/D', $expires)
+    || (int) $expires <= (int) $issued || (int) $expires - (int) $issued > 900
+    || $now < (int) $issued || $now >= (int) $expires
+    || !preg_match('/\A[0-9a-f]{64}\z/D', $tokenHash)
+    || !is_string($token) || !preg_match('/\A[0-9a-f]{64}\z/D', $token)
+    || !hash_equals($tokenHash, hash('sha256', $token))) {
+    http_response_code(404);
+    echo '{"runtime_ok":false,"operator_verified":false,"accepted":false,"error":"not_found"}';
+    exit;
+}
+unset($token, $tokenHash);
+
+$private = '@PRIVATE_ROOT@';
+$webroot = '@WEBROOT@';
+$sep = DIRECTORY_SEPARATOR;
+$config = $private . $sep . 'config';
+$data = $private . $sep . 'data';
+$fixture = $config . $sep . 'lh-runtime-probe-fixture.txt';
+$out = array_fill_keys([
+    'scope_ok', 'config_readable', 'config_not_writable', 'config_create_denied',
+    'data_exclusive_create', 'data_read_write', 'data_rename', 'data_delete',
+    'sqlite_exclusive_create', 'sqlite_delete_mode', 'sqlite_delete_journal_seen',
+    'sqlite_rollback', 'sqlite_commit', 'sqlite_delete_journal_removed',
+    'sqlite_wal_mode', 'sqlite_wal_seen', 'sqlite_shm_seen', 'sqlite_wal_reader',
+    'sqlite_wal_rollback', 'sqlite_wal_commit', 'sqlite_checkpoint',
+    'sqlite_sidecars_removed', 'cleanup_ok', 'runtime_ok', 'operator_verified', 'accepted',
+], false);
+$out['error'] = 'scope_rejected';
+$owned = [];
+$roots = [];
+$run = null;
+$db = null;
+$reader = null;
+$emitted = false;
+
+function demand(bool $ok): void {
+    if (!$ok) { throw new RuntimeException('probe_failed'); }
+}
+
+// Reject lexical aliases AND symlinks/reparse aliases at every existing component.
+// Native Windows paths are only used by local synthetic fixtures; LH uses POSIX paths.
+function exactPath(string $path, bool $directory): bool {
+    $windows = DIRECTORY_SEPARATOR === '\\';
+    $sep = DIRECTORY_SEPARATOR;
+    if ($windows) {
+        if (!preg_match('/\A[A-Z]:\\\\[A-Za-z0-9_.\\\\-]+\z/D', $path)) { return false; }
+        $cursor = substr($path, 0, 3);
+        $parts = explode($sep, substr($path, 3));
+    } else {
+        if (!preg_match('~\A/[A-Za-z0-9_./-]+\z~D', $path)) { return false; }
+        $cursor = '/';
+        $parts = explode('/', substr($path, 1));
+    }
+    foreach ($parts as $i => $part) {
+        if ($part === '' || $part === '.' || $part === '..') { return false; }
+        $cursor = rtrim($cursor, $sep) . $sep . $part;
+        clearstatcache(true, $cursor);
+        $st = @lstat($cursor);
+        $last = $i === count($parts) - 1;
+        $kind = ($last && !$directory) ? 0100000 : 0040000;
+        if ($st === false || ($st['mode'] & 0170000) !== $kind || is_link($cursor)
+            || @realpath($cursor) !== $cursor) { return false; }
+        if ($last && !$directory && $st['nlink'] !== 1) { return false; }
+    }
+    return true;
+}
+
+function stamp(string $path): array {
+    clearstatcache(true, $path);
+    $st = @lstat($path);
+    demand($st !== false);
+    return [$st['dev'], $st['ino'], $st['mode'] & 0170000];
+}
+
+function absent(string $path): bool {
+    clearstatcache(true, $path);
+    return @lstat($path) === false && !is_link($path);
+}
+
+function rootsIntact(): bool {
+    global $roots;
+    foreach ($roots as $path => $identity) {
+        if (!exactPath($path, true) || stamp($path) !== $identity) { return false; }
+    }
+    return count($roots) >= 4;
+}
+
+function ownFile(string $path): void {
+    global $owned;
+    demand(rootsIntact() && exactPath($path, false));
+    if (isset($owned[$path])) { demand(stamp($path) === $owned[$path]); }
+    else { $owned[$path] = stamp($path); }
+}
+
+function createOwn(string $path) {
+    global $owned;
+    demand(rootsIntact() && absent($path));
+    $handle = @fopen($path, 'x+b'); // Never w/a/c: existing targets cannot be overwritten.
+    demand($handle !== false);
+    $st = fstat($handle);
+    $owned[$path] = [$st['dev'], $st['ino'], $st['mode'] & 0170000];
+    try {
+        demand(exactPath($path, false) && stamp($path) === $owned[$path]);
+        return $handle;
+    } catch (Throwable $ignored) { fclose($handle); throw new RuntimeException('probe_failed'); }
+}
+
+function removeOwn(string $path): bool {
+    global $owned;
+    if (!array_key_exists($path, $owned) || !rootsIntact()) { return false; }
+    if (absent($path)) { unset($owned[$path]); return true; } // SQLite may remove its own sidecars.
+    if (!exactPath($path, false) || stamp($path) !== $owned[$path]) { return false; }
+    if (!@unlink($path) || !absent($path)) { return false; }
+    unset($owned[$path]);
+    return true;
+}
+
+function cleanup(): bool {
+    global $owned, $run, $roots;
+    $ok = true;
+    foreach (array_keys($owned) as $path) {
+        try { if (!removeOwn($path)) { $ok = false; } }
+        catch (Throwable $ignored) { $ok = false; }
+    }
+    if ($run !== null) {
+        try {
+            if (!rootsIntact() || @scandir($run) !== ['.', '..'] || !@rmdir($run) || !absent($run)) {
+                $ok = false;
+            } else { unset($roots[$run]); $run = null; }
+        } catch (Throwable $ignored) { $ok = false; }
+    }
+    return $ok && $owned === [] && $run === null;
+}
+
+function closeDatabases(): void {
+    global $db, $reader;
+    foreach (['reader', 'db'] as $name) {
+        $handle = $GLOBALS[$name];
+        if ($handle instanceof PDO) {
+            try { if ($handle->inTransaction()) { $handle->rollBack(); } } catch (Throwable $ignored) {}
+        }
+        $GLOBALS[$name] = null;
+        $handle = null;
+    }
+}
+
+function emitResult(): void {
+    global $out, $emitted;
+    if ($emitted) { return; }
+    $emitted = true;
+    // Never infer this gate from a JSON result, realpath, or absence of a URL.
+    $out['operator_verified'] = false;
+    $out['accepted'] = false;
+    http_response_code($out['runtime_ok'] ? 200 : 503);
+    echo json_encode($out, JSON_UNESCAPED_SLASHES);
+}
+
+register_shutdown_function(static function (): void {
+    global $out, $emitted;
+    if ($emitted) { return; }
+    closeDatabases();
+    $out['cleanup_ok'] = cleanup();
+    $out['runtime_ok'] = false;
+    $out['error'] = $out['cleanup_ok'] ? 'operation_failed' : 'cleanup_failed';
+    emitResult();
+});
+
+function scalar(PDO $handle, string $sql) { return $handle->query($sql)->fetchColumn(); }
+
+// Sidecars are owned only inside our exclusively created, mode-0700 run directory.
+function sidecarSeen(string $path): bool {
+    ownFile($path);
+    clearstatcache(true, $path);
+    return @filesize($path) > 0;
+}
+
+try {
+    demand(exactPath($private, true) && exactPath($webroot, true)
+        && exactPath($config, true) && exactPath($data, true)
+        && $private !== $webroot
+        && !str_starts_with($private . $sep, $webroot . $sep)
+        && !str_starts_with($webroot . $sep, $private . $sep)
+        && __DIR__ === $webroot && ($_SERVER['DOCUMENT_ROOT'] ?? '') === $webroot
+        && exactPath(__FILE__, false) && ($_SERVER['SCRIPT_FILENAME'] ?? '') === __FILE__);
+    foreach ([$private, $webroot, $config, $data] as $path) { $roots[$path] = stamp($path); }
+    $out['scope_ok'] = true;
+    $out['error'] = 'config_rejected';
+    demand(exactPath($fixture, false) && @is_readable($fixture));
+    $configHandle = @fopen($fixture, 'rb');
+    demand($configHandle !== false);
+    try {
+        $st = fstat($configHandle);
+        demand([$st['dev'], $st['ino'], $st['mode'] & 0170000] === stamp($fixture));
+        demand(fread($configHandle, 128) === "PF-RUNTIME-PROBE-NONSECRET-v1\n" && feof($configHandle));
+    } finally { fclose($configHandle); }
+    $out['config_readable'] = true;
+    // Do not open an existing config for writing, chmod it, or overwrite any data.
+    $out['config_not_writable'] = !is_writable($fixture) && !is_writable($config) && !is_writable($private);
+    demand(rootsIntact());
+    $configCanary = $config . $sep . 'pf-config-denial-' . bin2hex(random_bytes(16)) . '.tmp';
+    demand(absent($configCanary));
+    $configAttempt = @fopen($configCanary, 'x+b');
+    if ($configAttempt !== false) {
+        $st = fstat($configAttempt);
+        $owned[$configCanary] = [$st['dev'], $st['ino'], $st['mode'] & 0170000];
+        fclose($configAttempt); // No content written, only this random empty file may be removed.
+    } else { $out['config_create_denied'] = absent($configCanary); }
+    demand($out['config_not_writable'] && $out['config_create_denied']);
+
+    $out['error'] = 'data_failed';
+    demand(rootsIntact());
+    $candidate = $data . $sep . 'pf-runtime-probe-' . bin2hex(random_bytes(16));
+    demand(absent($candidate) && @mkdir($candidate, 0700)); // Existing data/, NOT HOME.
+    // Record ownership immediately; if validation fails, cleanup refuses unsafe roots.
+    $run = $candidate;
+    $roots[$run] = stamp($run);
+    demand(rootsIntact());
+    $file = $run . $sep . 'data-' . bin2hex(random_bytes(16)) . '.tmp';
+    $handle = createOwn($file);
+    $out['data_exclusive_create'] = true;
+    try {
+        $marker = random_bytes(64);
+        demand(fwrite($handle, $marker) === strlen($marker) && fflush($handle) && rewind($handle));
+        demand(fread($handle, 65) === $marker);
+        $out['data_read_write'] = true;
+    } finally { fclose($handle); }
+    $renamed = $run . $sep . 'renamed-' . bin2hex(random_bytes(16)) . '.tmp';
+    demand(rootsIntact() && exactPath($file, false) && stamp($file) === $owned[$file] && absent($renamed));
+    demand(@rename($file, $renamed)); // Fresh target inside private 0700 owned directory.
+    $owned[$renamed] = $owned[$file];
+    unset($owned[$file]);
+    demand(absent($file) && exactPath($renamed, false) && stamp($renamed) === $owned[$renamed]
+        && file_get_contents($renamed) === $marker);
+    $out['data_rename'] = true;
+    demand(removeOwn($renamed));
+    $out['data_delete'] = true;
+
+    $out['error'] = 'sqlite_failed';
+    demand(extension_loaded('pdo_sqlite') && rootsIntact());
+    $sqlite = $run . $sep . 'sqlite-' . bin2hex(random_bytes(16)) . '.sqlite';
+    $handle = createOwn($sqlite);
+    fclose($handle);
+    $out['sqlite_exclusive_create'] = true;
+    $options = [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, PDO::ATTR_TIMEOUT => 1,
+        PDO::ATTR_PERSISTENT => false];
+    $db = new PDO('sqlite:' . $sqlite, null, null, $options);
+    demand(strtolower((string) scalar($db, 'PRAGMA journal_mode=DELETE')) === 'delete');
+    $out['sqlite_delete_mode'] = true;
+    $db->exec('PRAGMA synchronous=FULL');
+    $db->exec('CREATE TABLE probe (n INTEGER NOT NULL)');
+    $db->exec('INSERT INTO probe VALUES (0)');
+    $journal = $sqlite . '-journal';
+    $db->beginTransaction();
+    $db->exec('UPDATE probe SET n=1');
+    demand(sidecarSeen($journal));
+    $out['sqlite_delete_journal_seen'] = true;
+    $db->rollBack();
+    demand((int) scalar($db, 'SELECT n FROM probe') === 0 && absent($journal));
+    unset($owned[$journal]);
+    $out['sqlite_rollback'] = true;
+    $db->beginTransaction();
+    $db->exec('UPDATE probe SET n=2');
+    demand(sidecarSeen($journal));
+    $db->commit();
+    demand((int) scalar($db, 'SELECT n FROM probe') === 2 && absent($journal));
+    unset($owned[$journal]);
+    $out['sqlite_commit'] = true;
+    $out['sqlite_delete_journal_removed'] = true;
+    demand(strtolower((string) scalar($db, 'PRAGMA journal_mode=WAL')) === 'wal');
+    $out['sqlite_wal_mode'] = true;
+    $db->exec('PRAGMA wal_autocheckpoint=0');
+    $db->beginTransaction();
+    $db->exec('UPDATE probe SET n=3');
+    $db->commit();
+    demand(sidecarSeen($sqlite . '-wal'));
+    $out['sqlite_wal_seen'] = true;
+    demand(sidecarSeen($sqlite . '-shm'));
+    $out['sqlite_shm_seen'] = true;
+    $reader = new PDO('sqlite:' . $sqlite, null, null, $options);
+    $reader->beginTransaction();
+    demand((int) scalar($reader, 'SELECT n FROM probe') === 3);
+    $reader->rollBack();
+    $reader = null;
+    $out['sqlite_wal_reader'] = true;
+    $db->beginTransaction();
+    $db->exec('UPDATE probe SET n=4');
+    $db->rollBack();
+    demand((int) scalar($db, 'SELECT n FROM probe') === 3);
+    $out['sqlite_wal_rollback'] = true;
+    $db->beginTransaction();
+    $db->exec('UPDATE probe SET n=5');
+    $db->commit();
+    demand((int) scalar($db, 'SELECT n FROM probe') === 5);
+    $out['sqlite_wal_commit'] = true;
+    $checkpoint = $db->query('PRAGMA wal_checkpoint(TRUNCATE)')->fetch(PDO::FETCH_NUM);
+    demand(array_map('intval', $checkpoint) === [0, 0, 0]);
+    clearstatcache(true, $sqlite . '-wal');
+    demand(exactPath($sqlite . '-wal', false) && filesize($sqlite . '-wal') === 0);
+    $out['sqlite_checkpoint'] = true;
+    closeDatabases();
+    demand(absent($sqlite . '-wal') && absent($sqlite . '-shm') && absent($journal));
+    $out['sqlite_sidecars_removed'] = true;
+    demand(rootsIntact() && exactPath($sqlite, false));
+    $out['runtime_ok'] = true;
+    $out['error'] = 'operator_verification_required';
+} catch (Throwable $ignored) {
+    $out['runtime_ok'] = false; // Only the fixed phase code, never exception text.
+} finally {
+    closeDatabases();
+    $out['cleanup_ok'] = cleanup();
+    if (!$out['cleanup_ok']) { $out['runtime_ok'] = false; $out['error'] = 'cleanup_failed'; }
+    emitResult();
+}
