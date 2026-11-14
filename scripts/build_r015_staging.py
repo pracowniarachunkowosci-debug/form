@@ -64,10 +64,10 @@ with zipfile.ZipFile(OUT/'winter26-r015-staging.zip','w',zipfile.ZIP_DEFLATED) a
 with zipfile.ZipFile(OUT/'winter26-r015-staging.zip') as z:
  assert z.testzip() is None and z.namelist()==[r['path'] for r in manifest]
  assert all(sha(z.read(r['path']))==r['sha256'] for r in manifest)
-(OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8')
+(OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n',encoding='utf-8',newline='\n')
 old={r['path']:r['sha256'] for r in baseline['files']}
 delta=[{'path':r['path'],'change':'modified' if r['path'] in old else 'added','sha256':r['sha256']} for r in manifest if old.get(r['path'])!=r['sha256']]
 release={'target':'https://pf26.uber.space','base':BASE,'source_commit':git('rev-parse','HEAD').decode().strip(),'source_dirty':bool(git('status','--porcelain')),'archive_sha256':sha((OUT/'winter26-r015-staging.zip').read_bytes()),'manifest_sha256':sha((OUT/'manifest.json').read_bytes()),'files':len(manifest),'changed':delta,'deleted':[],'protectedFilesUnchanged':True,'rootOverlay':'index.html <- winter-26.html','photoCounts':{'lifestyle':20,'confirmedProduct':5,'ownerApproved':1}}
-(OUT/'release.json').write_text(json.dumps(release,indent=2)+'\n',encoding='utf-8')
+(OUT/'release.json').write_text(json.dumps(release,indent=2)+'\n',encoding='utf-8',newline='\n')
 print(json.dumps({k:v for k,v in release.items() if k!='changed'},indent=2))
 print('Changes:',len(delta),'modified:',sum(x['change']=='modified' for x in delta))
