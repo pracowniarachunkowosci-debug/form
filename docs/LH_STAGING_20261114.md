@@ -1,21 +1,26 @@
 # LH staging — stan na 14 listopada 2026
 
-**NO-GO do odbioru zakupowego na LH i do sprzedaży Live.** Skonfigurowano osobny vhost i DNS, lecz aplikacja nie została jeszcze wgrana. `https://test.pracowniaform.com` nie jest działającym sklepem: certyfikat nie odpowiada nazwie hosta, a FTPS odrzuca kanał danych. Rzeczywiste płatności kartą i BLIK w Stripe Sandbox przeszły z lokalnym PHP oraz podpisanymi webhookami przez Stripe CLI. **Nie są testem hostingu LH.**
+**NO-GO do odbioru zakupowego na LH i do sprzedaży Live.** `https://test.pracowniaform.com` nie jest jeszcze działającym sklepem. **Aktualizacja 14.11 po diagnostyce:** FTPS w WinSCP oraz PHP 8.5.12 działają; pozostały niedopasowany certyfikat HTTPS i odmowa utworzenia prywatnego katalogu przez PHP-FPM. Przygotowano konto ACME i rzeczywisty DNS-01 wyłącznie dla stagingu, bez dodania TXT, wydania lub instalacji certyfikatu. LH otrzymało uzupełnienie zgłoszenia o 11:39 czasu panelu. [Pełna diagnoza, dowody i procedura odnowienia](LH_DNS01_PRIVATE_20261114.md).
+
+Rzeczywiste płatności kartą i BLIK w Stripe Sandbox przeszły wcześniej z lokalnym PHP oraz podpisanymi webhookami przez Stripe CLI. **Nie są testem aplikacji na hostingu LH.** Na LH uruchomiono wyłącznie tymczasowe sondy infrastruktury, już usunięte; WWW pusty, bez aplikacji, bazy i sekretów runtime.
 
 ## Wynik bieżącego etapu
 
 | Obszar | Status i zakres dowodu |
 |---|---|
-| Staging LH | **BLOCKED** — zgłoszenie LH `TKT-KTNHLTAY`, brak odpowiedzi; nie wykonano uploadu |
+| Staging LH | **BLOCKED** — HTTPS i prywatny katalog; `TKT-KTNHLTAY` uzupełnione, nadal otwarte; bez uploadu aplikacji |
+| FTPS | **PASS WinSCP** — listing, upload i usunięcie własnych sond; historyczne 425 nie blokuje tej sesji |
 | HTTPS | **FAIL** — ponowne sprawdzenie 14.11 nadal daje `SEC_E_WRONG_PRINCIPAL` |
-| PHP i backend | **PASS lokalnie**; **NOT RUN na LH** |
+| PHP i backend | PHP-FPM 8.5.12, PDO SQLite, cURL i zapis WWW **PASS na LH**; backend aplikacji **NOT RUN na LH** |
+| Prywatny katalog | **FAIL** — rzeczywiste mkdir poza public_html odrzucone przez PHP-FPM; prośba do LH o dedykowany katalog i prawa |
+| DNS-01 | Konto/challenge przygotowane; TXT i import wymagają osobnej akceptacji, DNS bez zmian w diagnostyce |
 | Stripe karta | **PASS Sandbox + lokalny PHP**, 70,49 PLN; LH NOT RUN |
 | Stripe BLIK | **PASS Sandbox + lokalny PHP**, 234,00 PLN dla 2 + 4; LH NOT RUN |
 | Webhook | **PASS Stripe CLI → lokalny PHP**, podpis, `paid`, idempotencja; LH NOT RUN |
 | InPost mock | **PASS lokalnie**, jawny adapter, UI, HTTP i SQLite |
 | InPost Sandbox | **BLOCKED — oczekiwanie na InPost, ticket F60AADBC18** |
 | Mobile | **PASS lokalnie**, 320/360/390/430 px; Checkout Stripe 390 px; nie fizyczny telefon/LH |
-| Dokumenty prawne | **Braki danych do Live**; 7 projektów do uzupełnienia/akceptacji |
+| Dokumenty prawne | 7 projektów uzupełnionych potwierdzeniami właściciela; pozostałe procesy/GPSR i finalna akceptacja nadal blokują Live |
 
 Dowody: [Stripe i zapas](STRIPE_SANDBOX_20261114.md), [MOCK i uruchomienie lokalne](INPOST_MOCK_TEST.md), [pakiet dokumentów](legal-draft/index.html), [jedna lista brakujących danych D1–D7](legal-draft/index.html#dane).
 
@@ -41,19 +46,19 @@ Praca na tej samej gałęzi PR #28: `codex/issue-27-winter26-photo-store`, od `9
 | PHP vhosta | 8.5; separacja domeny włączona; Multipoczta wyłączona |
 | Nowe konto FTPS | dostęp ograniczony do `/public_html/pf-stage-20261114`; hasło poza repozytorium |
 | DNS OVH | dodano tylko `test A 195.2.223.12` i `test TXT "lh.pl"`, TTL 3600 |
-| Weryfikacja DNS | autorytatywny `dns106.ovh.net` i resolver `1.1.1.1` zwracają powyższe wartości |
+| Weryfikacja DNS | oba autorytatywne OVH oraz 1.1.1.1 i 8.8.8.8 zgodne; brak AAAA/CAA hosta i CAA apex; szczegóły w nowym raporcie |
 | Baza | **nie utworzona na LH**; potrzebna osobna SQLite poza wszystkimi katalogami WWW |
-| Kopia przed uploadem | `STAT /www` potwierdził pusty nowy katalog (tylko `.` i `..`). Próba pobrania inwentaryzacji/kopii przez kanał danych nie powiodła się; nie deklarujemy wykonanej kopii plikowej. Nie wykonano uploadu. |
+| Kopia przed uploadem | Katalog początkowo i po sprzątaniu pusty, listing WinSCP działa. Nie było istniejących plików do kopiowania; nie deklarujemy kopii aplikacji. Przed przyszłym uploadem powtórzyć inwentaryzację i skopiować ewentualne nowe dane. |
 | HTTPS | **FAIL**: niedopasowana nazwa certyfikatu; początkowo panel zwracał 503, następnie błąd weryfikacji DNS mimo poprawnych publicznych rekordów |
 | Ochrona dostępu/noindex | **NOT DEPLOYED**; aplikacja, Basic Auth i nagłówki stagingu nie zostały wgrane |
 
 Nie zmieniono apex, `www`, MX, SPF, DKIM, DMARC ani nameserverów. Nie zmieniono istniejących witryn, baz, poczty, certyfikatów ani ustawień wspólnych Pracowni Rachunkowości. Na LH przed utworzeniem stagingu ten serwer pokazywał 0 stron i 0 baz MySQL; utworzono wyłącznie opisane nowe zasoby.
 
-FTPS: certyfikat i logowanie AUTH TLS/PROT P przechodzą. LIST/MLSD/NLST kończą się `425 Unable to build data connection: Operation not permitted`. Błąd potwierdzony w Pythonie i curl/Schannel; próby ponownego użycia sesji TLS 1.2 również nie odblokowały kanału danych. HOST jest reklamowany w FEAT, ale `HOST serwer533947.lh.pl` został odrzucony jako nieznany host. Nie obniżano zabezpieczeń TLS ani separacji. Po zgodzie właściciela wysłano [zgłoszenie LH TKT-KTNHLTAY](https://www.lh.pl/panel/helpdesk/ticket/9235), utworzone 14.11.2026 o 00:39, status „W trakcie obsługi”. Dotyczy wyłącznie stagingu, bez sekretów i bez zgody na zmiany globalne. Odpowiedź techniczna jeszcze nie dotarła.
+Historia FTPS: wcześniejsze Python/curl zwracały 425 kanału danych. **Obecna sesja WinSCP działa**, co potwierdził upload, listing i cleanup sond. Nie wyłączano TLS ani separacji. [Zgłoszenie LH TKT-KTNHLTAY](https://www.lh.pl/panel/helpdesk/ticket/9235), utworzone 14.11 o 00:39, zaktualizowano o 11:39 czasu panelu o pomiary HTTP-01, odmowę PHP-FPM i pytania o custom SSL/private config. Nadal „W trakcie obsługi”, w chwili kontroli bez odpowiedzi LH. Dotyczy wyłącznie stagingu, bez sekretów i bez zgody na zmiany globalne.
 
 Techniczna domena LH udostępnia `public_html`, dlatego sam katalog obok `www` nie dowodzi prywatności. Przed uploadem sekretów LH musi potwierdzić prywatną ścieżkę i dostęp PHP przy zachowanej separacji. Nie użyto katalogu innej firmy ani wspólnej bazy.
 
-## Testy lokalne
+## Testy lokalne — wcześniejsze wyniki aplikacji
 
 Lokalne PHP 8.4.27 NTS z curl/PDO SQLite/SQLite3, pobrane z oficjalnego wydania Windows; SHA-256 paczki zweryfikowany. Bez zmian systemowego PATH. LH PHP 8.5 nie został jeszcze uruchomiony na kodzie aplikacji.
 
@@ -119,14 +124,14 @@ Po zgodzie właściciela wysłano [formularzem wsparcia InPost](https://inpost.p
 - Gotowy [pakiet 7 projektów HTML](legal-draft/index.html), zaadaptowany z PR #4: regulamin, dostawa/płatności, zwroty/reklamacje, wzór odstąpienia, prywatność, cookies/zgody i GPSR. Oznaczone **DO AKCEPTACJI / NIEPUBLIKOWANE**, z jedną tabelą danych D1–D7. Nie są zatwierdzonymi dokumentami Live.
 - **PASS** struktury i 57 odwołań w 8 stronach pakietu. Źródła prawne, ograniczenia weryfikacji oraz pozostałe kontrole: [raport prawny](WINTER26_LEGAL_REVIEW.md). Aktywna polityka prywatności i treści strony bez zmian.
 - Cookies i zgody: lokalna suita przechodzi, marketing pozostaje odrębny od zakupu. Nie testowano wysłania formularza do Brevo ani doręczenia wiadomości; nie zapisano testowego adresu na produkcyjną listę.
-- GPSR, materiał i wymiary w katalogu: niepotwierdzone; bramki sprzedaży pozostają zamknięte. Karty A6 nadal są proofem, nie plikami dopuszczonymi do druku.
+- Pakiet prawny zawiera już potwierdzone przez właściciela: sprzedawcę/producenta/administratora, kontakt, adres zwrotów, PLA, faktury Subiekt 123 e-mailem i kontakt do spraw danych bez tytułu IOD. Parametry CAD trzech modeli odczytano ze źródeł projektu; nie są pomiarem gotowych sztuk. Nie zmieniono automatycznie flag akceptacji katalogu. Karty A6 nadal są proofem, nie plikami dopuszczonymi do druku.
 
 Skrót jednej [listy danych i decyzji D1–D7](legal-draft/index.html#dane), bez ponownego pytania o ceny i potwierdzone geometrie:
 
-1. Potwierdzenie sprzedawcy i czynnego kontaktu sklepu oraz rzeczywisty adres przyjmowania zwrotów/reklamacji.
-2. Producent i jego kontakt, materiał/wymiary/identyfikacja trzech modeli oraz zatwierdzone informacje bezpieczeństwa wynikające z oceny produktu.
-3. Maksymalne terminy realizacji od startu nadań 23.11.2026, zasada częściowych zwrotów zestawów, moment zawarcia umowy/pobrania płatności i wysłania potwierdzenia. Nie utożsamiać daty nadania z doręczeniem.
-4. Potwierdzenie rzeczywistych dostawców/odbiorców danych i retencji oraz zakresu opcjonalnego marketingu; finalna akceptacja uzupełnionych dokumentów.
+1. Nie pytamy ponownie o potwierdzone dane firmy, adres i kontakt. Pozostaje test doręczenia wiadomości oraz rzeczywista obsługa potwierdzeń/faktur i realizacji zamówień.
+2. Pozostają pomiary gotowych sztuk, specyfikacja dokładanych zawieszek, identyfikacja partii, ocena ryzyka i wynikające z niej instrukcje GPSR.
+3. Wcześniejsze opłacone zamówienia: nadanie **1 grudnia 2026**; płatności od tej daty: 2–3 dni robocze. Termin 23.11 zastąpiony decyzją właściciela. Do zamknięcia zasada jednej paczki, częściowe zwroty zestawów oraz moment zawarcia umowy i potwierdzenia. Nadanie nie gwarantuje daty doręczenia.
+4. Rzeczywiste umowy/role dostawców, retencja i pomiary usług zewnętrznych oraz finalna akceptacja dokumentów; pełen aktualny zakres w pakiecie prawnym D1–D7.
 
 ## Paczka i decyzja
 
@@ -134,6 +139,6 @@ Build z czystego commitu `4ce364b3bb200d61490ad87542637980a2df9e01`: **PASS**, w
 125 plików, ZIP 9 210 328 bajtów; SHA-256 `0b322faf4b6263a8a25b17ca891bd2fccd93753a3224b790d986e44ba7a44adc`.
 Paczka lokalna `.artifacts/lh-4ce364b3bb20/pracownia-form-lh.zip`, `uploaded_by_this_build=false`. Nie jest jeszcze skonfigurowanym stagingiem z uwierzytelnieniem. Raporty prawne, sterowniki testowe, SQLite i sekrety są wyłączone z paczki.
 
-Późniejsze poprawki dotyczą lokalnego launchera testów i raportu, nie zawartości WWW. Lokalny konflikt dwóch instancji usunięto; launcher otrzymał blokadę i kontrolę portu. Test HTTP/SQLite przeszedł po wskazaniu bazy właściwego serwera. Nie zaliczono wcześniejszych nieudanych prób jako PASS.
+Późniejsze poprawki launchera otrzymały blokadę i kontrolę portu; test HTTP/SQLite przeszedł po wskazaniu bazy właściwego serwera. Nie zaliczono nieudanych prób jako PASS. **Powyższy ZIP jest historyczny:** późniejszy commit `70c1fd0` zmienił datę nadań na 1 grudnia i uzupełnił pakiet prawny. Przed uploadem zbudować i sprawdzić aktualne wydanie; nie przesyłać starej paczki z terminem 23 listopada. Obecny etap diagnostyki dodaje jedynie dokumentację, dowody i szablon sondy poza wydaniem WWW.
 
-**NO-GO do odbioru LH:** najpierw LH musi umożliwić FTPS, poprawny certyfikat i jednoznacznie prywatny katalog SQLite/sekretów. Następnie upload z ochroną dostępu/noindex i bezpośredni webhook Stripe na LH. InPost nie blokuje dalszego testu sklepu: można użyć jawnego MOCK, a prawdziwy Sandbox pozostaje `BLOCKED — F60AADBC18`. Żaden lokalny PASS nie zastępuje prób na LH i fizycznym telefonie. Bez produkcyjnego DNS, merge, Stripe Live i reklam.
+**NO-GO do odbioru LH:** FTPS odblokowany; nadal potrzebne poprawne HTTPS i jednoznacznie prywatny katalog SQLite/sekretów. DNS-01 przygotowany do osobnej akceptacji TXT i importu, prywatna ścieżka oczekuje LH. Następnie aktualny build, upload z ochroną dostępu/noindex i bezpośredni webhook Stripe na LH. InPost nie blokuje dalszego testu sklepu: można użyć jawnego MOCK, a prawdziwy Sandbox pozostaje `BLOCKED — F60AADBC18`. Żaden lokalny PASS nie zastępuje prób na LH i fizycznym telefonie. Bez produkcyjnego DNS, merge, Stripe Live i reklam.
