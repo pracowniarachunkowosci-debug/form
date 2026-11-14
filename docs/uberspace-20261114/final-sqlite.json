@@ -1,0 +1,58 @@
+{
+  "orders": [
+    {
+      "state": "paid",
+      "total_grosz": 7049,
+      "delivery_method": "courier",
+      "items": {
+        "knitted-star:marble": 1
+      }
+    },
+    {
+      "state": "paid",
+      "total_grosz": 6849,
+      "delivery_method": "locker",
+      "items": {
+        "knitted-medallion:white": 1
+      }
+    },
+    {
+      "state": "released",
+      "total_grosz": 7049,
+      "delivery_method": "courier",
+      "items": {
+        "full-soft:dual": 1
+      }
+    }
+  ],
+  "stock": {
+    "full-soft:dual": 20,
+    "full-soft:red-matte": 20,
+    "full-soft:white": 20,
+    "full-soft:marble": 20,
+    "knitted-star:dual": 20,
+    "knitted-star:red-matte": 20,
+    "knitted-star:white": 20,
+    "knitted-star:marble": 19,
+    "knitted-medallion:dual": 20,
+    "knitted-medallion:red-matte": 20,
+    "knitted-medallion:white": 19,
+    "knitted-medallion:marble": 20
+  },
+  "events_count": 4,
+  "mode": "test",
+  "database_mode": "0o600",
+  "final_manifest_matches": true,
+  "manifest_files": 124,
+  "public_files_count": 124,
+  "private_directory_modes": {
+    "config": "0o700",
+    "runtime/database": "0o700",
+    "runtime/sessions": "0o700",
+    "runtime/cache": "0o700",
+    "runtime/logs": "0o700",
+    "runtime/private-uploads": "0o700"
+  },
+  "config_mode": "0o400",
+  "integrity_check": "ok"
+}

@@ -9,8 +9,16 @@ import sys
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-commit = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT,text=True).strip()
-if subprocess.check_output(['git','status','--porcelain'], cwd=ROOT):
+GIT_DIR = os.environ.get('PF_GIT_DIR')
+GIT = ['git', '-c', 'safe.directory=*']
+if GIT_DIR:
+    GIT += ['--git-dir', GIT_DIR, '--work-tree', str(ROOT)]
+
+def git(*args: str) -> bytes:
+    return subprocess.check_output([*GIT, *args], cwd=ROOT)
+
+commit = git('rev-parse', 'HEAD').decode().strip()
+if git('status', '--porcelain'):
     sys.exit('Release requires a clean checkout; commit or isolate your changes first.')
 OUT = ROOT / '.artifacts' / ('lh-' + commit[:12])
 OUT.mkdir(parents=True, exist_ok=True)
@@ -25,13 +33,15 @@ subprocess.run(['node','scripts/check_consent.cjs'], cwd=ROOT, check=True)
 subprocess.run(['node','--check','store-gallery.js'], cwd=ROOT, check=True)
 subprocess.run(['node','scripts/check_config.cjs'], cwd=ROOT, check=True)
 subprocess.run(['node','scripts/check_store_composition.cjs'],cwd=ROOT,check=True)
+subprocess.run(['node','tests/configurator-journey.cjs'],cwd=ROOT,check=True)
 php = os.environ.get('PF_PHP_BIN') or shutil.which('php')
 if not php:
     sys.exit('PHP CLI with curl and PDO SQLite is required to verify this release (set PF_PHP_BIN).')
 for source in sorted((ROOT/'api').glob('*.php')):
     subprocess.run([php,'-l',str(source)],check=True,cwd=ROOT,stdout=subprocess.DEVNULL)
-for suite in ('tests/checkout-sandbox.php','tests/checkout-live-gates.php'):
+for suite in ('tests/checkout-sandbox.php','tests/checkout-live-gates.php','tests/checkout-locker.php'):
     subprocess.run([php,suite],check=True,cwd=ROOT)
+subprocess.run(['node','tests/inpost-mock-ui.cjs'],check=True,cwd=ROOT,env={**os.environ,'PF_PHP_BIN':php})
 # Only program sources and public catalogs: no private configuration, databases or test drivers.
 backend = sorted((ROOT/'api').glob('*.php'))
 catalogs = [ROOT/'data/winter26-pricing-pl.json', ROOT/'data/winter26-products.json']
@@ -55,7 +65,7 @@ with zipfile.ZipFile(OUT/'pracownia-form-lh.zip') as archive:
         assert hashlib.sha256(archive.read(item['path'])).hexdigest() == item['sha256']
 release = {
     'source_commit': commit,
-    'source_dirty': bool(subprocess.check_output(['git', 'status', '--porcelain'], cwd=ROOT)),
+    'source_dirty': bool(git('status', '--porcelain')),
     'archive': 'pracownia-form-lh.zip',
     'archive_sha256': hashlib.sha256((OUT/'pracownia-form-lh.zip').read_bytes()).hexdigest(),
     'archive_bytes': (OUT/'pracownia-form-lh.zip').stat().st_size,

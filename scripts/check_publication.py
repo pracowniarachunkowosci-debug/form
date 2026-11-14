@@ -3,14 +3,20 @@ from pathlib import Path
 from html.parser import HTMLParser
 from urllib.parse import urlsplit, unquote
 import json
+import os
 import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
 BASE = '38e0bd9bc8296b70ac68d92753d63f447d70df3e'
+GIT_DIR = os.environ.get('PF_GIT_DIR')
 
 def git_show(revision):
-    return subprocess.check_output(['git', '-c', 'safe.directory=*', 'show', revision], cwd=ROOT).decode('utf-8').replace('\r\n', '\n')
+    command = ['git', '-c', 'safe.directory=*']
+    if GIT_DIR:
+        command += ['--git-dir', GIT_DIR, '--work-tree', str(ROOT)]
+    command += ['show', revision]
+    return subprocess.check_output(command, cwd=ROOT).decode('utf-8').replace('\r\n', '\n')
 
 def baseline(path):
     return git_show(f'{BASE}:{path}')
@@ -41,7 +47,7 @@ approved = git_show('6d8e07b:winter-26.html')
 outline=lambda page:[attrs.get('id') for tag,attrs in Page(page).tags if tag=='section' and attrs.get('id')]
 assert outline(html)==outline(approved)
 assert re.search(r'<header.*?</header>',html,re.S).group()==re.search(r'<header.*?</header>',approved,re.S).group()
-assert '23 listopada 2026 r.' in html and 'Kurier InPost w Polsce' in html
+assert '1 grudnia 2026 r.' in html and '20,49 zł' in html and 'Paczkomat® 18,49 zł' in html
 assert 'Ostateczna metoda dostawy' not in html and 'HELIX' not in html
 pricing=json.loads((ROOT/'data/winter26-pricing-pl.json').read_text(encoding='utf8'))
 registry=json.loads((ROOT/'data/winter26-products.json').read_text(encoding='utf8'))

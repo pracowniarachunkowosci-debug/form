@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-14",
+  "zone": "pracowniaform.com",
+  "name": "_acme-challenge.test.pracowniaform.com",
+  "type": "TXT",
+  "ttl": 300,
+  "owner_approved_exact_record_validation_cleanup": true,
+  "challenge_value_omitted": true,
+  "before": "NXDOMAIN on both authoritative OVH servers; 16 existing zone records",
+  "after_add": {
+    "5.196.41.1": "one TXT; expected value; TTL 300",
+    "5.135.65.21": "one TXT; expected value; TTL 300",
+    "1.1.1.1": "one TXT; expected value; TTL 300",
+    "8.8.8.8": "one TXT; expected value; TTL 300"
+  },
+  "acme_authorization": "valid",
+  "cleanup_timing": "after valid authorization, at client cleanup prompt, before certificate download",
+  "certificate_issued": true,
+  "after_cleanup": {
+    "5.196.41.1": "NXDOMAIN",
+    "5.135.65.21": "NXDOMAIN",
+    "1.1.1.1": "NXDOMAIN",
+    "8.8.8.8": "NXDOMAIN"
+  },
+  "ovh_table_comparison": {
+    "baseline_record_count": 16,
+    "final_record_count": 16,
+    "all_baseline_rows_identical": true
+  },
+  "existing_test_A": "195.2.223.12 unchanged",
+  "existing_test_TXT": "lh.pl unchanged",
+  "other_zones_touched": false
+}

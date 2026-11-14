@@ -1,0 +1,171 @@
+# INACTIVE / UNRUN proposal. Keep outside .github/workflows.
+# Future reviewed installation name: .github/workflows/lh-staging.yml.
+# Environment protection rules must be configured separately; YAML cannot create them.
+name: PF LH staging proposal
+run-name: PF staging ${{ inputs.source_sha }}
+
+on:
+  workflow_dispatch:
+    inputs:
+      source_sha:
+        description: Full lowercase SHA of the reviewed main snapshot running this workflow
+        required: true
+        type: string
+      request_ftps:
+        description: Request staging review only; hard deployment locks still apply
+        required: true
+        default: false
+        type: boolean
+
+permissions: {}
+concurrency:
+  group: pf-lh-staging
+  cancel-in-progress: false
+defaults:
+  run:
+    shell: bash
+
+jobs:
+  request:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions: {}
+    outputs:
+      sha: ${{ steps.validate.outputs.sha }}
+    steps:
+      - name: Validate identity before any repository code runs
+        id: validate
+        env:
+          REQUESTED_SHA: ${{ inputs.source_sha }}
+        run: |
+          python3 - <<'PY'
+          import os, re
+          repo = 'pracowniarachunkowosci-debug/form'
+          sha = os.environ['REQUESTED_SHA']
+          checks = (
+              os.environ['GITHUB_REPOSITORY'] == repo,
+              os.environ['GITHUB_EVENT_NAME'] == 'workflow_dispatch',
+              os.environ['GITHUB_REF'] == 'refs/heads/main',
+              os.environ['GITHUB_WORKFLOW_REF'] == repo + '/.github/workflows/lh-staging.yml@refs/heads/main',
+              re.fullmatch(r'[0-9a-f]{40}', sha) is not None,
+              sha == os.environ['GITHUB_SHA'],
+              sha == os.environ['GITHUB_WORKFLOW_SHA'],
+          )
+          if not all(checks):
+              raise SystemExit('Only the reviewed PF main workflow snapshot is allowed.')
+          with open(os.environ['GITHUB_OUTPUT'], 'a') as output:
+              output.write('sha=' + sha + '\n')
+          PY
+
+  build:
+    needs: request
+    environment: lh-staging-build-review
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: read
+    outputs:
+      artifact_id: ${{ steps.artifact.outputs.artifact-id }}
+      bundle_sha256: ${{ steps.package.outputs.bundle_sha256 }}
+      manifest_sha256: ${{ steps.package.outputs.manifest_sha256 }}
+      release_sha256: ${{ steps.package.outputs.release_sha256 }}
+    steps:
+      - name: Checkout the approved immutable snapshot
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1, verified 2026-11-14
+        with:
+          repository: pracowniarachunkowosci-debug/form
+          ref: ${{ needs.request.outputs.sha }}
+          fetch-depth: 0 # check_publication.py reads historical commits
+          persist-credentials: false
+          submodules: false
+          lfs: false
+      - name: Require the runner toolchain; never install unpinned setup actions
+        run: |
+          python3 --version
+          node --version
+          php --version
+          php -r 'foreach (["curl", "pdo_sqlite"] as $e) { if (!extension_loaded($e)) { fwrite(STDERR, "Missing PHP extension\n"); exit(1); } }'
+          echo "PF_PHP_BIN=$(command -v php)" >> "$GITHUB_ENV"
+      - name: Offline build and existing regression suites
+        env:
+          EXPECTED_SHA: ${{ needs.request.outputs.sha }}
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          test -z "$(git status --porcelain)"
+          python3 -B ops/github/test_lh_staging.py
+          python3 -B scripts/build_release.py
+          test -z "$(git status --porcelain)"
+      - name: Package a deny-all staging copy and bind its hashes
+        id: package
+        env:
+          EXPECTED_SHA: ${{ needs.request.outputs.sha }}
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          python3 -B ops/github/lh_staging.py package \
+            --source ".artifacts/lh-${EXPECTED_SHA:0:12}" \
+            --output "$RUNNER_TEMP/pf-staging-bundle" --sha "$EXPECTED_SHA"
+      - name: Retain only the protected bundle from this run
+        id: artifact
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2, verified 2026-11-14
+        with:
+          name: pf-staging-${{ needs.request.outputs.sha }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            ${{ runner.temp }}/pf-staging-bundle/pf-staging-denied.zip
+            ${{ runner.temp }}/pf-staging-bundle/manifest.json
+            ${{ runner.temp }}/pf-staging-bundle/release.json
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+          overwrite: false
+
+  infrastructure_review:
+    needs: [request, build]
+    # HARD LOCK 1. No input, secret or repository variable can enable this job.
+    if: ${{ false && inputs.request_ftps }}
+    environment: lh-staging-infrastructure-review
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions: {}
+    steps:
+      - name: Record scope of the separately reviewed infrastructure gate
+        run: |
+          echo 'Required evidence: HTTPS, PHP-FPM private config, all public routes denied, staging-only FTPS jail.'
+          echo 'This step is not infrastructure verification. See docs/LH_ACTIONS_PROPOSAL.md.'
+
+  ftps:
+    needs: [request, build, infrastructure_review]
+    # HARD LOCK 2, plus the independent Python deployment lock.
+    if: ${{ false && inputs.request_ftps }}
+    environment: lh-staging
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout trusted transport and verifier, never code from the artifact
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: pracowniarachunkowosci-debug/form
+          ref: ${{ needs.request.outputs.sha }}
+          persist-credentials: false
+          submodules: false
+          lfs: false
+      - name: Fetch exactly the artifact produced by the dependent build
+        uses: actions/download-artifact@9000827ccba6bdab643e8b6fd33ac0654aef8333 # v8.0.2, verified 2026-11-14
+        with:
+          artifact-ids: ${{ needs.build.outputs.artifact_id }}
+          path: ${{ runner.temp }}/pf-staging-input
+          merge-multiple: true
+          digest-mismatch: error
+      - name: Verify and upload only a new denied directory in the staging jail
+        env:
+          EXPECTED_SHA: ${{ needs.request.outputs.sha }}
+          EXPECTED_BUNDLE_SHA256: ${{ needs.build.outputs.bundle_sha256 }}
+          EXPECTED_MANIFEST_SHA256: ${{ needs.build.outputs.manifest_sha256 }}
+          EXPECTED_RELEASE_SHA256: ${{ needs.build.outputs.release_sha256 }}
+          PF_FTPS_PASSWORD: ${{ secrets.PF_FTPS_PASSWORD }}
+          PYTHONDONTWRITEBYTECODE: '1'
+        run: |
+          python3 -B ops/github/lh_staging.py upload \
+            --source "$RUNNER_TEMP/pf-staging-input" --sha "$EXPECTED_SHA"

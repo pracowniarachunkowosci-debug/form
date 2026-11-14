@@ -1,0 +1,17 @@
+{
+  "source_commit": "d8198ded71980c9aa702241a227b24157fd1e969",
+  "application_baseline": "9cb6100e6368c125e9fc6cbde6958496838c490d",
+  "archive_sha256": "2a3701a8409c8e4818626ac7afe42053e8f912e0e93658d08b4b97201126e211",
+  "manifest_sha256": "77a2cd1b97e771fab942d618fb30f9178e1b17777b0c33ba85415f594fe998ce",
+  "files": 124,
+  "overlays": [
+    ".htaccess",
+    "robots.txt"
+  ],
+  "excluded_cli_sources": [
+    "api/prepare-live.php",
+    "api/seed-test.php"
+  ],
+  "secrets_databases_private_config_absent": true,
+  "source_public_files_unchanged": true
+}

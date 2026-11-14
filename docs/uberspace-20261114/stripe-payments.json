@@ -1,0 +1,18 @@
+[
+  {
+    "status": "complete",
+    "payment_status": "paid",
+    "total": 6849,
+    "sandbox": true,
+    "intent_status": "succeeded",
+    "method": "blik"
+  },
+  {
+    "status": "complete",
+    "payment_status": "paid",
+    "total": 7049,
+    "sandbox": true,
+    "intent_status": "succeeded",
+    "method": "card"
+  }
+]

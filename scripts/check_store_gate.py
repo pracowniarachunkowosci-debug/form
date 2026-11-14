@@ -7,7 +7,7 @@ reg=json.loads((Path(__file__).resolve().parents[1]/'data/winter26-products.json
 assert all(checkout_link(p,reg) is None for p in reg['products'])
 s=deepcopy(reg);p=s['products'][0]
 s['release'].update(salesApproved=True,legalApproved=True,sellerApproved=True,sandboxPassed=True,
-    termsPage='terms.html',returnsPage='returns.html',returnsSummary='approved',complaintsSummary='approved',shippingPLN=10)
+    termsPage='terms.html',returnsPage='returns.html',returnsSummary='approved',complaintsSummary='approved',shippingPLN=10,carrierNotice='Kurier InPost w Polsce')
 p.update(sku='fixture',material='fixture',color='fixture',dimensions='fixture',dispatch='fixture',status='ready',
          stock=1,grossPLN=20,photosApproved=True)
 for k in p['gpsr']: p['gpsr'][k]='approved'
@@ -36,7 +36,7 @@ with TemporaryDirectory() as tmp:
     panel=html.split('class="purchase-panel"',1)[1].split('<dl class="facts">',1)[0]
     buy=f'href="{url}"'
     assert html.count(buy)==2
-    for expected in ('20,00 zł brutto','Kurier InPost w Polsce','10,00 zł','Nadawanie zamówień planujemy rozpocząć 23 listopada 2026 r.','Zwroty: approved','href="returns.html"'):
+    for expected in ('20,00 zł brutto','Kurier InPost w Polsce','10,00 zł','Nadawanie zamówień planujemy rozpocząć 1 grudnia 2026 r.','Zwroty: approved','href="returns.html"'):
         assert panel.index(expected)<panel.index(buy),expected
     assert 'sprzedaż nieaktywna' not in html
     p['stock']=0

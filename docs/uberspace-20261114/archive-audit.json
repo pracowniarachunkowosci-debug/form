@@ -1,0 +1,9 @@
+{
+  "manifest_verified": true,
+  "zip_integrity_passed": true,
+  "secret_patterns_absent": true,
+  "database_and_private_config_absent": true,
+  "test_drivers_absent": true,
+  "files": 125,
+  "note": "CLI maintenance sources are present in source archive and excluded from public staging package."
+}

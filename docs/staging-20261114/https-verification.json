@@ -1,0 +1,45 @@
+{
+  "date": "2026-11-14",
+  "host": "test.pracowniaform.com",
+  "vhost_id": 1711054,
+  "ip": "195.2.223.12",
+  "owner_approved_exact_certificate_import": true,
+  "lh_import": "PASS: own SSL enabled for the exact staging hostname",
+  "local_isrg_only_client": {
+    "direct_ip_with_sni": "certificate verify failed: unable to get local issuer certificate",
+    "dns_with_sni": "certificate verify failed: unable to get local issuer certificate",
+    "explanation_confirmed_by_system_trust_client": "Norton Web/Mail Shield TLS inspection"
+  },
+  "local_system_trust_client": {
+    "hostname_validation": true,
+    "certificate_validation": true,
+    "issuer": "Norton Web/Mail Shield Root",
+    "san": ["test.pracowniaform.com"],
+    "http_status": 403,
+    "server": "Apache",
+    "content_type": "text/html; charset=iso-8859-1",
+    "content_length": 239,
+    "response_date": "Sat, 14 Nov 2026 11:57:39 GMT",
+    "redirect": false,
+    "origin_fingerprint_claimed": false
+  },
+  "browser": "HTTPS page opened without TLS warning; 403 Forbidden",
+  "external_check": {
+    "source": "https://www.sslshopper.com/ssl-checker.html#hostname=test.pracowniaform.com",
+    "ip": "195.2.223.12",
+    "hostname_valid": true,
+    "chain_trusted": true,
+    "correct_intermediates_installed": true,
+    "issuer": "YR1",
+    "san": ["test.pracowniaform.com"],
+    "serial": "06ea3528f6bc89de83e4d07c7df519a64325",
+    "serial_matches_issued_pem": true,
+    "valid_from": "2026-11-14",
+    "valid_to": "2027-02-12",
+    "chain": ["test.pracowniaform.com", "YR1", "Root YR", "ISRG Root X1"],
+    "raw_der_or_fingerprint_exposed_by_ui": false
+  },
+  "security_bypasses": false,
+  "application_uploaded": false,
+  "shop_acceptance": "NO-GO: private runtime config/data and application tests outstanding"
+}

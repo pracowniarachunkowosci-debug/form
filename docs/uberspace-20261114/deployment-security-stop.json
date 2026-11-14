@@ -1,0 +1,44 @@
+{
+  "checks": {
+    "correct_account": true,
+    "sandbox_config_only": true,
+    "archive_transport_sha256": true,
+    "zip_manifest": true,
+    "manifest_hashes": true,
+    "archive_paths_safe": true,
+    "only_default_domain": true,
+    "original_documentroot_is_directory": true,
+    "default_domain_alias_verified": true,
+    "welcome_only_no_unknown_files": true,
+    "no_existing_release_or_private_resources": true,
+    "owned_fpm_config": true,
+    "no_existing_test_or_live_override": true,
+    "php85_cli": true,
+    "expected_stripe_sandbox": true,
+    "welcome_backup_verified": true,
+    "htpasswd_outside_documentroot": true,
+    "account_www_boundary_0750": true,
+    "documentroot_public_symlink_only": true,
+    "bootstrap_basic_auth_and_headers": false,
+    "rollback_target_verified": true
+  },
+  "http": {
+    "bootstrap_anonymous": 401
+  },
+  "deployed": false,
+  "inventory": {
+    "domains": 1,
+    "existing_public_files": 1,
+    "welcome_sha256": "6ece1bba2d491b00526758be614a75bf0ea045ead6a1246438fb15e252d114af",
+    "unknown_files": 0
+  },
+  "failed_stage": "protected_bootstrap",
+  "error_type": "Gate",
+  "failed_gate": "bootstrap_basic_auth_and_headers",
+  "all_security_gates_passed": false,
+  "rollback": {
+    "welcome_restored": true
+  },
+  "new_release_quarantined": true,
+  "host_key_verified": true
+}
