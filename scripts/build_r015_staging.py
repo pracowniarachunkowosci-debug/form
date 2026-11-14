@@ -22,13 +22,15 @@ with zipfile.ZipFile(backup) as z:
   else:
    source=ROOT/('winter-26.html' if name=='index.html' else name)
    blob=source.read_bytes()
-   if source.suffix in ('.html','.js','.css','.svg','.txt','.xml'):blob=blob.replace(b'\r\n',b'\n')
+   if source.suffix in ('.html','.js','.css','.svg','.txt','.xml') or name=='api/result.php':blob=blob.replace(b'\r\n',b'\n')
   if name not in changed:assert blob==old,('Protected file changed',name)
   blobs[name]=blob
 for p in sorted((ROOT/'assets/winter26-r015').rglob('*')):
  if p.is_file():
   assert p.suffix in ('.js','.css','.jpg','.webp','.avif','.png','.svg')
-  blobs[p.relative_to(ROOT).as_posix()]=p.read_bytes()
+  blob=p.read_bytes()
+  if p.suffix in ('.js','.css','.svg'):blob=blob.replace(b'\r\n',b'\n')
+  blobs[p.relative_to(ROOT).as_posix()]=blob
 assert len(blobs)>124 and len(baseline['files'])==124
 # Keep all executable result-page PHP and the checkout request/availability code exact.
 old=git('show',BASE+':api/result.php').decode()
