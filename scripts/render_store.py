@@ -94,7 +94,7 @@ def detail(p,n):
         head=head.replace('content="index, follow"','content="noindex, follow"')
     if link:
         head=head.replace('Kolekcja w przygotowaniu · sprzedaż nieaktywna','Kolekcja WINTER 26')
-        head=head.replace('WINTER 26 — przedsprzedaż <span>Przedsprzedaż wkrótce · nadania planujemy od 23.11.2026</span>', 'WINTER 26 <span>Zakupy aktywne w przedsprzedaży</span>')
+        head=head.replace('WINTER 26 — przedsprzedaż <span>Przedsprzedaż wkrótce · nadania planujemy od 01.12.2026</span>', 'WINTER 26 <span>Zakupy aktywne w przedsprzedaży</span>')
     specs=facts([('Materiał',material_notice(p)),('Kolor',p['color'] if 'variants' not in p else None),('Wymiary',p['dimensions']),
                  ('SKU',p['sku'] if 'variants' not in p else None),('Stan fizyczny',p['stock'] if 'variants' not in p else None),('Ilość','1 zestaw' if p['type']=='zestaw' else '1 sztuka')])
     safety_rows=facts([(label,p['gpsr'][key]) for label,key in [('Producent','producer'),('Adres','address'),('E-mail','email'),

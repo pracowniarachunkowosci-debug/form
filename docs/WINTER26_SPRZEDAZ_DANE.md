@@ -2,6 +2,8 @@
 
 **11 listopada 2026 · materiał wewnętrzny dla Codexa, nie regulamin dla klienta.** Przygotowuje zamówienia testowe i wersję do odbioru przez właściciela. Nie potwierdza stanów magazynowych, akceptacji prawnej ani uruchomienia Stripe Live.
 
+> **Aktualizacja 14.11.2026:** poniżej zachowano historyczny materiał z 11 listopada. Nowsze potwierdzenia właściciela (start nadań **1 grudnia**, 2–3 dni robocze dla późniejszych płatności, adres zwrotów, telefon, producent, PLA, Subiekt 123) znajdują się w [bieżącym pakiecie danych](legal-draft/index.html#dane). Mają pierwszeństwo przed dawnymi datami i polami „do potwierdzenia” w tym materiale.
+
 ## Nie zaczynaj dokumentów od zera
 
 [PR #4 — źródła dokumentów](https://github.com/pracowniarachunkowosci-debug/form/tree/f6e218fe9cfa2772e805b9e62b8d86ae2dec91ba/content) ma **regulamin-sklepu.html**, **zwroty-i-reklamacje.html**, **formularz-odstapienia.html**, **dostawa-i-platnosci.html** i szkic polityki prywatności. To rzeczywiste teksty do adaptacji, nie zatwierdzone dokumenty sprzedaży. Użyj źródeł tekstowych, nie przenoś całego dawnego layoutu ani prototypu zwrotów. Formularz elektroniczny w tym prototypie nie dostarcza oświadczeń. Obecne [zasady premiery](../zasady-premiery.html) dotyczą listy, nie umowy zakupu; obecna [polityka prywatności](../polityka-prywatnosci.html) wymaga rozszerzenia o rzeczywiste zamówienia i odbiorców danych. W sprawdzonych stronach projektu w Notion i wyszukiwaniu powiązanych dokumentów na Dysku Google nie znaleziono późniejszego zatwierdzonego regulaminu.

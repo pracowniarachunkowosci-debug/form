@@ -107,7 +107,7 @@ BUILDER = '''<section id="kompozycja" class="atelier" aria-labelledby="atelier-t
 <p data-payment-status role="status" aria-live="polite">Zakupy uruchomimy po potwierdzeniu dostępności.</p>
 <button type="button" data-checkout class="ink-button" hidden>Przejdź do płatności testowej</button>
 <a href="index.html#preorder" data-notify class="text-link">Powiadom mnie o sprzedaży ↗</a>
-<small>Samo ułożenie kompozycji nie rezerwuje ozdób. Planowany początek nadań: 23 listopada 2026 r.</small></aside></div>
+<small>Samo ułożenie kompozycji nie rezerwuje ozdób. Planowany początek nadań: 1 grudnia 2026 r.</small></aside></div>
 <dialog class="locker-map" data-map-dialog aria-labelledby="locker-map-title"><header><h2 id="locker-map-title">Wybierz Paczkomat®</h2>
 <button type="button" class="ink-button" data-close-map autofocus>Zamknij mapę</button></header>
 <p data-map-status role="status"></p><div data-map-host></div></dialog>

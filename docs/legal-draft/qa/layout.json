@@ -63,9 +63,9 @@
       "scrollWidth": 665,
       "navHidden": true,
       "draftVisible": true,
-      "textHeight": 2694,
-      "pdfBytes": 134558,
-      "pages": 3
+      "textHeight": 3043,
+      "pdfBytes": 137774,
+      "pages": 4
     },
     {
       "file": "dostawa-i-platnosci.html",
@@ -124,8 +124,8 @@
       "scrollWidth": 665,
       "navHidden": true,
       "draftVisible": true,
-      "textHeight": 1902,
-      "pdfBytes": 130358,
+      "textHeight": 1926,
+      "pdfBytes": 126758,
       "pages": 2
     },
     {
@@ -186,7 +186,7 @@
       "navHidden": true,
       "draftVisible": true,
       "textHeight": 960,
-      "pdfBytes": 91924,
+      "pdfBytes": 76404,
       "pages": 1
     },
     {
@@ -246,9 +246,9 @@
       "scrollWidth": 665,
       "navHidden": true,
       "draftVisible": true,
-      "textHeight": 3150,
-      "pdfBytes": 159446,
-      "pages": 4
+      "textHeight": 4776,
+      "pdfBytes": 211726,
+      "pages": 6
     },
     {
       "file": "index.html",
@@ -256,7 +256,7 @@
       "viewport": 320,
       "width": 305,
       "scrollWidth": 305,
-      "heading": "WINTER 26 — projekty dokumentów",
+      "heading": "WINTER 26 — pakiet danych i dokumentów",
       "notices": true,
       "resources": []
     },
@@ -266,7 +266,7 @@
       "viewport": 360,
       "width": 345,
       "scrollWidth": 345,
-      "heading": "WINTER 26 — projekty dokumentów",
+      "heading": "WINTER 26 — pakiet danych i dokumentów",
       "notices": true,
       "resources": []
     },
@@ -276,7 +276,7 @@
       "viewport": 390,
       "width": 375,
       "scrollWidth": 375,
-      "heading": "WINTER 26 — projekty dokumentów",
+      "heading": "WINTER 26 — pakiet danych i dokumentów",
       "notices": true,
       "resources": []
     },
@@ -286,7 +286,7 @@
       "viewport": 430,
       "width": 415,
       "scrollWidth": 415,
-      "heading": "WINTER 26 — projekty dokumentów",
+      "heading": "WINTER 26 — pakiet danych i dokumentów",
       "notices": true,
       "resources": []
     },
@@ -296,7 +296,7 @@
       "viewport": 1100,
       "width": 1085,
       "scrollWidth": 1085,
-      "heading": "WINTER 26 — projekty dokumentów",
+      "heading": "WINTER 26 — pakiet danych i dokumentów",
       "notices": true,
       "resources": []
     },
@@ -307,8 +307,8 @@
       "scrollWidth": 665,
       "navHidden": false,
       "draftVisible": true,
-      "textHeight": 1743,
-      "pdfBytes": 134144,
+      "textHeight": 1913,
+      "pdfBytes": 146080,
       "pages": 2
     },
     {
@@ -368,8 +368,8 @@
       "scrollWidth": 665,
       "navHidden": true,
       "draftVisible": true,
-      "textHeight": 3041,
-      "pdfBytes": 161269,
+      "textHeight": 3603,
+      "pdfBytes": 164989,
       "pages": 4
     },
     {
@@ -429,8 +429,8 @@
       "scrollWidth": 665,
       "navHidden": true,
       "draftVisible": true,
-      "textHeight": 2612,
-      "pdfBytes": 132566,
+      "textHeight": 2700,
+      "pdfBytes": 126704,
       "pages": 3
     },
     {
@@ -490,8 +490,8 @@
       "scrollWidth": 665,
       "navHidden": true,
       "draftVisible": true,
-      "textHeight": 2725,
-      "pdfBytes": 121051,
+      "textHeight": 2744,
+      "pdfBytes": 102914,
       "pages": 3
     }
   ]

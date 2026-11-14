@@ -2,11 +2,11 @@
 
 **DO AKCEPTACJI / NIEPUBLIKOWANE. Komplet siedmiu projektów do przeglądu; brakujące dane i decyzje nie pozwalają uznać ich za zatwierdzone dokumenty Live.**
 
-Otwórz [pakiet HTML](legal-draft/index.html). Jedyna skonsolidowana lista dla właściciela: [D1–D7 — dane znane i brakujące](legal-draft/index.html#dane). Nie trzeba ponownie dostarczać cennika ani rozpoznawać potwierdzonych geometrii zdjęć.
+Otwórz [pakiet HTML](legal-draft/index.html). Bieżący status danych i pozostałych decyzji: [D1–D7 — dane znane i brakujące](legal-draft/index.html#dane). Nie trzeba ponownie dostarczać cennika ani rozpoznawać potwierdzonych geometrii zdjęć.
 
 ## Zakres i adaptacja źródeł
 
-Zmiany wyłącznie w `docs/legal-draft/*` i niniejszym raporcie. Bez zmian aktywnych stron prawnych, checkoutu, flag, konfiguracji, katalogu, cen, stanów i fotografii; bez commit/push/deploy lub wysyłania wiadomości. Nie używano CUA. Git odczytywano z metadanych `C:/Users/lsolt/.codex/visualizations/2026/09/04/01a06d6a-faec-75d1-a6c5-9a6946b9c460/form-git` i drzewa `C:/sklep/form`, bez użycia repozytorium nadrzędnego i plików działalności rachunkowej.
+Aktualizacja 14.11: uzupełniono `docs/legal-draft/*` i niniejszy raport. Na wyraźne polecenie właściciela zmieniono także datę startu nadań w roboczym storefront, generatorach i polach daty katalogu z 23 listopada na 1 grudnia. Ceny, stany, dostępność, zdjęcia, checkout i flagi akceptacji pozostają bez zmian. Bez merge, publikacji, Stripe Live ani zmian zasobów OVH/LH. Nie używano CUA w aktualizacji danych. Git odczytywano z metadanych `C:/Users/lsolt/.codex/visualizations/2026/09/04/01a06d6a-faec-75d1-a6c5-9a6946b9c460/form-git` i drzewa `C:/sklep/form`, bez użycia repozytorium nadrzędnego i plików działalności rachunkowej.
 
 Przeczytano najnowszy załącznik `Wklejony tekst.txt`, [dane sprzedaży](WINTER26_SPRZEDAZ_DANE.md), źródła PR4 oraz komentarze PR28/Issue24 przez odczyt `gh api`. Konektor GitHub był niedostępny; CLI zakończyło odczyt powodzeniem. Z informacji zadania nadrzędnego: rzeczywiste testy Stripe Sandbox karta+BLIK i podpisanych webhooków CLI zakończono z lokalnym PHP — **nie na LH, nie w Live**. W tej podpracy nie powtarzano testów płatności.
 
@@ -24,13 +24,23 @@ Odczytano `git show` dla [źródeł PR4, commit f6e218fe9cfa2772e805b9e62b8d86ae
 ## Dane i decyzje zastosowane w tekstach
 
 - 1/2/4/6/8 ozdób = 50/84/150/220/290 PLN brutto; kurier 20,49 zł, Paczkomat 18,49 zł. Od 6 ozdób łącznie obie metody 0 zł. **2 + 4 = 234 zł + 0 zł dostawy**, bez automatycznego przeliczenia na zestaw 6 za 220 zł. Nie ma aktywnego kodu.
-- 23.11.2026 to planowany początek nadań, nie gwarancja doręczenia ani pełny SLA. Brakuje maksymalnych terminów i zasad mieszanej realizacji.
-- Dane spółki przeniesiono z PR4 jako **niezatwierdzone**. Nie odczytywano aktualnego KRS. Nie wykorzystano telefonu/godzin z innej marki. Adres siedziby nie został uznany za magazyn zwrotów ani adres producenta.
+- **Nowa decyzja właściciela:** zamówienia opłacone przed 01.12.2026 mają zostać nadane 01.12.2026; późniejsze — w ciągu 2–3 dni roboczych od płatności. Data nadania nie jest gwarancją doręczenia. Do uzgodnienia pozostaje jedna paczka dla całego koszyka i szacunek czasu przewozu. Wcześniejszy termin 23.11 jest historyczny i został zastąpiony w aktualnych źródłach strony.
+- **Potwierdzenie właściciela 14.11:** PRACOWNIA RACHUNKOWOŚCI sp. z o.o. jest sprzedawcą, administratorem danych i producentem. Trawowa 19/1, 54-614 Wrocław jest adresem kontaktu, producenta oraz paczek ze zwrotami/reklamacjami. Kontakt: kontakt@pracowniaform.com, +48 504 853 962. Numer i rolę adresu podano dopiero po odpowiedzi właściciela. Odczytano [aktualny odpis KRS](https://api-krs.ms.gov.pl/api/krs/OdpisAktualny/0000997294?rejestr=P&format=json), wygenerowany 14.11.2026 09:37:56, ostatni wpis nr 11 z 07.07.2026. REGON w odpowiedzi API ma postać 52340878500000; wcześniejsze źródło PR4 podawało 523408785. W pakiecie zachowano dokładną wartość z aktualnego odpisu.
 - Proponowany w PR4 model umowy: przyjęcie e-mailem sprzedawcy. Wymaga decyzji D4 i uzgodnienia z faktycznym pobraniem płatności, wiadomościami i czasem przyjęcia. To nie twierdzenie o wdrożonym backendzie. Inny spójny model jest możliwy po równoczesnej zmianie tekstów i procesu.
 - Koszt zwykłego odesłania po stronie klienta to propozycja, dopuszczalna po prawidłowej informacji przed zakupem. Można zaoferować darmowy zwrot. Koszty ustawowej reklamacji ponosi sprzedawca niezależnie od tej decyzji.
 - Proporcjonalny zwrot części kompletu i brak wstecznego naliczania darmowej dostawy są jawnie **propozycją polityki**, nie twierdzeniem o bezwzględnym nakazie dzielenia zestawów. Ustawowe pełne odstąpienie pozostaje zachowane.
-- Dodatkowa gwarancja, godziny obsługi, stałe zobowiązanie do ADR, analityka i newsletter są wyborami. Double opt-in opisano jako rekomendację dowodową, nie ogólny wymóg ustawowy. Rzeczywisty kontakt i telefon wymagają uzupełnienia.
+- Dodatkowa gwarancja, godziny obsługi, stałe zobowiązanie do ADR, analityka i newsletter są wyborami. Double opt-in opisano jako rekomendację dowodową, nie ogólny wymóg ustawowy. Kontakt i telefon są już potwierdzone przez właściciela.
 - Nie żąda się zgody RODO na wykonanie zamówienia ani marketingu jako warunku zakupu. Bez opcjonalnych technologii nie należy tworzyć fikcyjnego banera. Wzór odstąpienia jest dobrowolny; nie wymaga PESEL, skanu dokumentu ani konta klienta.
+
+## Uzupełnienie po odpowiedziach właściciela — 14.11.2026
+
+- Uzupełniono rzeczywiste teksty regulaminu, dostawy, zwrotów, odstąpienia, prywatności, cookies i GPSR. [Dane w JSON](legal-draft/dane-potwierdzone.json) są źródłem do dalszej integracji; `legalApproved=false`, brak akceptacji produkcyjnej.
+- **Materiał:** korpusy wszystkich obecnych ozdób — PLA (polilaktyd), z potwierdzenia właściciela, nie z fotografii. Bez eksponowania technologii wykonania, deklaracji ekologicznych, certyfikacji czy składu dodatków. Parametry uzupełniono z odczytu źródeł projektu „3d projekt”: VASE R02B 83,803 × 83,803 × 87 mm; STAR/ARAN B01 102,064 × 98,870 × 4,85 mm; jednostronny MEDALLION/STAGE2 B01 103,800 × 106,892 × 4,85 mm. STAR i MEDALLION: integralne oczko Ø3,20 mm. Są to gabaryty modeli, bez dokładanych zawieszek, nie pomiary gotowych sztuk. Ścieżki i hashe źródeł w pakiecie JSON. Nie wykorzystano SOLIS, HELIX OPEN, wcześniejszego FULL SOFT R03B ani dwustronnego MEDALLION D01; nie przeniesiono fizycznego PASS VASE V01B na R02B.
+- **Fakturowanie:** Subiekt 123, faktura e-mailem, księgowość wewnętrzna. [Regulamin Subiekt 123, wersja 15.01.2026](https://pdf.kicdn.pl/20260115/Regulamin_aplikacji_Subiekt_123.pdf) wskazuje InsERT S.A. i umowę powierzenia. To potwierdzenie operatora usługi, nie weryfikacja przyjętej umowy na koncie ani wdrożenia integracji. Przed Live sprawdzić właściwe zasady e-faktur/KSeF i faktyczne dostarczanie dokumentów.
+- **Kontakt RODO:** właściciel wybrał obsługę spraw danych bez tytułu IOD po omówieniu konfliktu interesów. [Stanowisko UODO](https://uodo.gov.pl/pl/664/4153) wyklucza łączenie IOD z zarządzaniem administratorem. Nie stwierdzamy braku obowiązku IOD dla całej spółki na podstawie samego sklepu; pozostaje odrębna ocena, bez audytu zasobów działalności rachunkowej.
+- **Cookies:** z kodu odczytano pf_cookie_consent (brak TTL, wersji/czasu), pf_checkout_customer (sesyjne, /api/, Secure/HttpOnly/Strict, tylko ścieżka Live), pf_winter_sandbox (sesyjne; uprawnienie testera 4 h). Domyślny okres cookies GA4 z [dokumentacji Google](https://support.google.com/analytics/answer/11397207?hl=pl) nie został przedstawiony jako pomiar tej witryny. Brevo ładuje zasoby niezależnie od GA; wymaga odrębnego audytu. Stan koszyka sprawdzono wyszukiwaniem cookie/storage w kodzie własnym, bez przypisywania fikcyjnych nazw.
+- **Dane zamówień:** opisano faktyczne pola Checkout, SQLite i webhooka. Baza nie zapisuje numeru/CVC karty ani całego payloadu webhooka. Brak jeszcze przepływu danych klienta do realizacji wysyłek, automatycznego potwierdzenia umowy/faktur i pełnej retencji. Godzinny czas sesji Stripe nie jest retencją zamówienia.
+- **Katalog:** matryca GPSR zawiera dokładne 12 istniejących SKU, slugi i colorId. Pięć nazw kolorów pozostaje spójnych z decyzją właściciela, ale Cappuccino nie aktywuje dodatkowych SKU. Materiał w pakiecie prawnym nie zmienia automatycznie flag akceptacji katalogu ani przypisania zdjęć.
 
 ## Prawo i źródła urzędowe sprawdzane 14.11.2026
 
@@ -52,7 +62,11 @@ Odczytano `git show` dla [źródeł PR4, commit f6e218fe9cfa2772e805b9e62b8d86ae
 
 ## Weryfikacja lokalna i przekazanie
 
-**PASS:** 8 stron HTML, 57 lokalnych odwołań; 40 pomiarów ekranowych (8 × 5 szerokości) bez overflow; 8 kontroli print i wygenerowanych wydruków A4. Obejrzano zrzut indeksu na 390 px oraz formularza w emulacji print. To weryfikacja projektu dokumentów, nie akceptacja prawna ani test checkoutu. Pierwsze uruchomienie headless w sandboxie zakończyło się timeoutem; kontrola w osobnym procesie po eskalacji zakończyła się powodzeniem.
+**Aktualizacja danych — PASS:** 8 dokumentów HTML, 61 lokalnych odwołań; JSON pakietu poprawny. Ponowiono 40 pomiarów (320/360/390/430/1100 px) bez poziomego overflow oraz 8 kontroli wydruku A4. Formularz odstąpienia nadal mieści się na jednej stronie. Obejrzano aktualny indeks mobile i formularz w emulacji print; nie jest to pełna inspekcja wszystkich stron PDF.
+
+**Kontrole sklepu — PASS:** `render_store --check`, publication (16 stron / 581 odwołań, zachowany formularz Brevo, hero i układ), pricing 4/4, config registry, store gate, render EOL, consent, config i composition. Pierwsze wywołanie publication bez wskazania metadanych trafiło do repozytorium nadrzędnego i zakończyło się błędem odczytu; poprawione wywołanie z `GIT_DIR` i `GIT_WORK_TREE` właściwego repo zakończyło się PASS. Nie zmieniło danych repozytorium nadrzędnego. Uruchomienie headless w sandboxie nie wystartowało; istniejący test w osobnym profilu poza sandboxem zakończył się PASS.
+
+**Pierwotna weryfikacja układu (przed uzupełnieniem danych): PASS:** 8 stron HTML, 57 lokalnych odwołań; 40 pomiarów ekranowych (8 × 5 szerokości) bez overflow; 8 kontroli print i wygenerowanych wydruków A4. Obejrzano zrzut indeksu na 390 px oraz formularza w emulacji print. To weryfikacja projektu dokumentów, nie akceptacja prawna ani test checkoutu. Pierwsze uruchomienie headless w sandboxie zakończyło się timeoutem; kontrola w osobnym procesie po eskalacji zakończyła się powodzeniem.
 
 Wyniki: [kontrola struktury i linków](legal-draft/qa/links.json), [układ i druk](legal-draft/qa/layout.json). Polecenia z `C:/sklep/form`:
 
@@ -63,6 +77,6 @@ node --experimental-websocket docs/legal-draft/verify-layout.mjs
 
 Kontrola lokalna obejmuje zagnieżdżenie HTML, ID, pliki i kotwice, znacznik projektu/noindex, brak skryptów/formularzy/osadzonych zasobów zewnętrznych. Nie jest testem dostępności wszystkich linków urzędowych. Kontrola układu korzysta z osobnego procesu headless Chrome i nowego profilu tymczasowego, bez przeglądarki/CUA użytkownika: 320/360/390/430/1100 px, `scrollWidth <= clientWidth`, widoczny status, brak żądań sieciowych, emulacja print i generowanie A4. Zrzuty print nie są renderami stron PDF; nie zaliczać ich jako pełnej inspekcji każdego wydruku.
 
-Pakiet nie jest podlinkowany z witryny. Odczytany `scripts/build_release.py` wybiera HTML z katalogu głównego, nie z `docs/legal-draft`. Nie uruchamiano build/deploy. Przy wdrożeniu zachować ten zakres; ręczna kopia całego repo może ujawnić szkice, a noindex nie jest kontrolą dostępu.
+Pakiet nie jest podlinkowany z witryny. Odczytany `scripts/build_release.py` wybiera HTML z katalogu głównego, nie z `docs/legal-draft`. Pakiet pozostaje poza publicznym buildem; tej aktualizacji nie wdrażano. Przy wdrożeniu zachować ten zakres; ręczna kopia całego repo może ujawnić szkice, a noindex nie jest kontrolą dostępu.
 
 Do integracji gotowy jest **wewnętrzny pakiet do akceptacji**. Braki i wybory właściciela są w [D1–D7](legal-draft/index.html#dane). Po ich rozstrzygnięciu uzgodnić dokumenty z rzeczywistą obsługą zamówień i doręczaniem potwierdzenia, ponownie sprawdzić prawo, nadać wersję/datę oraz usunąć uwagi redakcyjne przed publikacją. Status stagingu, płatności na LH i InPost raportuje zadanie nadrzędne.

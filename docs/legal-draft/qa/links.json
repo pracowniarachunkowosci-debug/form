@@ -1,7 +1,7 @@
 {
   "status": "PASS",
   "html_files": 8,
-  "local_references": 57,
+  "local_references": 61,
   "checks": [
     "HTML nesting",
     "unique IDs",
