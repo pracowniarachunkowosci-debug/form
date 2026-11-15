@@ -10,6 +10,16 @@ config=Path('/home/pf26/winter26/config/test.json')
 backup_root=pub.parent.parent/'backup'
 allowed={'index.html','winter-26.html','winter-full-soft.html','winter-knitted-star.html','winter-knitted-medallion.html','winter-zestaw-4.html','winter-config.js','api/result.php'}
 sha=lambda b:hashlib.sha256(b).hexdigest()
+# The existing owner-unlocked transport also accepts the narrowly scoped R01.6 release.
+r016=D.get('release',{}).get('edition')=='R01.6'
+if r016:
+ previous=D['release']['baseline_manifest']
+ assert len(previous)==285 and sha((json.dumps(previous,indent=2)+'\n').encode())=='bd1c94d4915a657f2910e0b3e7702cc9689307fee4a0666d9fc4e026c7a152c3'
+ D['baseline']['files']=previous
+ allowed={'index.html','winter-26.html','winter-full-soft.html','winter-knitted-star.html','winter-knitted-medallion.html','winter-zestaw-4.html'}
+asset_prefix='assets/winter26-r016/' if r016 else 'assets/winter26-r015/'
+backup_prefix='r016-' if r016 else 'r015-'
+expected_files=D['release']['files'] if r016 else 285
 old={r['path']:r['sha256'] for r in D['baseline']['files']}
 def need(ok,name):
  report[name]=bool(ok)
@@ -51,13 +61,17 @@ def headers(h,label):
  robots=','.join(h.get_all('X-Robots-Tag',[])).lower();cache=','.join(h.get_all('Cache-Control',[])).lower()
  need('noindex' in robots,label+'_noindex');need('noarchive' in robots,label+'_noarchive');need('no-store' in cache,label+'_no_store')
 def http_checks(manifest):
- for label,path,data in [('root','/',None),('asset','/assets/winter26-r015/ui.js',None),('checkout','/api/checkout.php',b'{}'),('webhook_get','/api/webhook.php',None),('alt_api','/api//checkout.php',b'{}')]:
+ for label,path,data in [('root','/',None),('asset','/'+asset_prefix+'ui.js',None),('checkout','/api/checkout.php',b'{}'),('webhook_get','/api/webhook.php',None),('alt_api','/api//checkout.php',b'{}')]:
   code,body,h=req(path,data=data);need(code==401,'anonymous_'+label+'_401');headers(h,'anonymous_'+label)
  code,_,_=req('/',True,wrong=True);need(code==401,'wrong_password_401')
  code,body,_=req('/api/webhook.php',data=b'{}',ctype='application/json');need(code==400 and json.loads(body).get('error')=='SIGNATURE','unsigned_webhook_400_SIGNATURE')
  for i,path in enumerate(['/config/test.json','/runtime/database/sandbox.sqlite','/winter26/config/test.json','/.htpasswd','/api/_common.php']):
   code,_,_=req(path,True);need(code in (403,404),'private_probe_'+str(i)+'_denied')
- for path in ['index.html','winter-26.html','winter-zestaw-4.html','winter-config.js','winter-full-soft.html','winter-knitted-star.html','winter-knitted-medallion.html','assets/winter26-r015/ui.js']:
+ paths=['index.html','winter-26.html','winter-zestaw-4.html','winter-config.js','winter-full-soft.html','winter-knitted-star.html','winter-knitted-medallion.html',asset_prefix+'ui.js']
+ if r016:
+  paths+=['winter-foto-r016.html',asset_prefix+'variant-media.js',asset_prefix+'gallery.js']
+  code,_,h=req('/winter-foto-r016.html');need(code==401,'anonymous_review_401');headers(h,'anonymous_review')
+ for path in paths:
   code,body,h=req('/'+path,True);need(code==200 and sha(body)==manifest[path],'authenticated_'+path.replace('/','_')+'_hash');headers(h,'authenticated_'+path.replace('/','_'))
  code,_,_=req('/api/test-access.php',True,urllib.parse.urlencode({'token':D['credentials']['tester_token']}).encode());need(code==303,'tester_login')
  code,body,_=req('/api/status.php',True);status=json.loads(body)
@@ -86,7 +100,7 @@ try:
  need(before['mode']=='test' and before['integrity']=='ok' and before['databaseMode']=='0o600','private_sqlite_test_mode')
  action=D['action'];assert action in ('deploy','verify','rollback')
  if action=='rollback':
-  deployment=D['deployment'];backup=Path(deployment['rollback_directory']);need(backup.parent==backup_root and backup.name.startswith('r015-') and backup.resolve()==backup,'rollback_directory_scoped')
+  deployment=D['deployment'];backup=Path(deployment['rollback_directory']);need(backup.parent==backup_root and backup.name.startswith(backup_prefix) and backup.resolve()==backup,'rollback_directory_scoped')
   new={r['path']:r['sha256'] for r in json.loads((backup/'release-manifest.json').read_text())}
   need(inventory(pub)==new,'no_drift_before_rollback');names=[n for n in new if new[n]!=old.get(n)]
   need(restore(names),'rollback_all_original_hashes');need(snapshot()==before,'rollback_database_unchanged');report['rolled_back']=True
@@ -96,19 +110,19 @@ try:
   raw=base64.b64decode(D['archive'],validate=True);need(sha(raw)==release['archive_sha256'],'archive_transport_sha256')
   z=zipfile.ZipFile(io.BytesIO(raw));rows=D['manifest'];new={r['path']:r['sha256'] for r in rows}
   need(sha((json.dumps(rows,indent=2)+'\n').encode())==release['manifest_sha256'],'manifest_transport_sha256')
-  need(len(new)==len(rows)==285 and set(z.namelist())==set(new) and len(z.namelist())==len(new),'manifest_inventory')
+  need(len(new)==len(rows)==expected_files and set(z.namelist())==set(new) and len(z.namelist())==len(new),'manifest_inventory')
   need(all(safe_name(n) for n in new) and set(old)<=set(new),'safe_paths_no_deletions')
   need(all((i.external_attr>>16)&0o170000==0o100000 and i.file_size<40*1024**2 for i in z.infolist()),'regular_bounded_files')
   need(all(sha(z.read(r['path']))==r['sha256'] and len(z.read(r['path']))==r['bytes'] for r in rows),'all_archive_hashes')
   delta=[n for n in new if new[n]!=old.get(n)]
-  need({n for n in delta if n in old}==allowed and all(n in allowed or n.startswith('assets/winter26-r015/') for n in delta),'visual_only_allowlist')
+  need({n for n in delta if n in old}==allowed and all(n in allowed or n.startswith(asset_prefix) or (r016 and n=='winter-foto-r016.html') for n in delta),'visual_only_allowlist')
   need(all(new[n]==h for n,h in old.items() if n not in allowed),'protected_backend_security_legal_data_unchanged')
   # Compare every executable block, including short echo tags. Only CRLF/LF
   # differs between the verified Windows-era baseline and canonical release.
   php_blocks=lambda b:re.findall(rb'<\?(?:php|=).*?\?>',b.replace(b'\r\n',b'\n'),re.S)
   need(php_blocks((pub/'api/result.php').read_bytes())==php_blocks(z.read('api/result.php')),'result_php_logic_unchanged')
   backup_root.mkdir(exist_ok=True,mode=0o700);need(backup_root.resolve()==backup_root,'backup_root_scoped')
-  backup=backup_root/('r015-'+time.strftime('%Y%m%d-%H%M%S'));backup.mkdir(mode=0o700)
+  backup=backup_root/(backup_prefix+time.strftime('%Y%m%d-%H%M%S'));backup.mkdir(mode=0o700)
   for n in old:
    dest=backup/n;dest.parent.mkdir(parents=True,exist_ok=True,mode=0o700);shutil.copy2(pub/n,dest)
   need(all(sha((backup/n).read_bytes())==h for n,h in old.items()),'full_rollback_copy_verified')
@@ -121,13 +135,13 @@ try:
   for n in order:
    target=pub/n;target.parent.mkdir(parents=True,exist_ok=True,mode=0o755)
    tmp=backup/('incoming-'+sha(n.encode())[:20]);tmp.write_bytes(z.read(n));tmp.chmod(0o644);os.replace(tmp,target);changed.append(n)
-  need(inventory(pub)==new,'all_285_deployed_hashes')
+  need(inventory(pub)==new,'all_deployed_hashes' if r016 else 'all_285_deployed_hashes')
   http_checks(new)
   need(snapshot()==before,'all_tables_orders_stock_events_config_unchanged_after_deploy')
   report.update(deployed=True,rollback_directory=str(backup),archive_sha256=release['archive_sha256'],orderStates=before['orderStates'],files=len(new),source_commit=release['source_commit'])
  else:
   rows=D['manifest'];new={r['path']:r['sha256'] for r in rows}
-  need(inventory(pub)==new,'all_285_deployed_hashes');http_checks(new)
+  need(inventory(pub)==new,'all_deployed_hashes' if r016 else 'all_285_deployed_hashes');http_checks(new)
   need(snapshot()==before,'all_tables_orders_stock_events_config_unchanged_after_verify')
   report.update(verified=True,orderStates=before['orderStates'],files=len(new))
 except Exception as e:

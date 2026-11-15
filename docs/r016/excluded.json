@@ -1,0 +1,32 @@
+[
+  {
+    "id": "WEB018",
+    "modelId": "knitted-star",
+    "colorId": "white",
+    "role": "main",
+    "sourceFile": "winter26-id263-main-codex.jpg",
+    "sourceSha256": "ceda8bb79aae3b5d55e65d6f4a93e985d20eb416c0b0a11ddd4da620a7b7f1c6",
+    "ownerStatus": "REJECTED_QUALITY",
+    "galleryDisposition": "REJECTED_QUALITY"
+  },
+  {
+    "id": "WEB016",
+    "modelId": "knitted-medallion",
+    "colorId": "marble",
+    "role": "gallery",
+    "sourceFile": "winter26-id261-main-codex.jpg",
+    "sourceSha256": "71834ab0cfb8ef9d2a58f6941004fb1d01065df34a5ee6b71a183a7eb2d8aa22",
+    "ownerStatus": "OWNER COLOR CONFIRMED",
+    "galleryDisposition": "ARCHIVED_BY_OWNER"
+  },
+  {
+    "id": "full-soft-piaskowy-main",
+    "modelId": "full-soft",
+    "colorId": "cappuccino",
+    "role": "main",
+    "sourceFile": "PF_W26_FULL-SOFT_piaskowy_ciemne-tlo_1x1_2000.webp",
+    "sourceSha256": "da13bde42f36c41fd0045d6b56e25fae67c9bd3c80bfd841d074eda3d23d93f6",
+    "ownerStatus": "UNCONFIRMED",
+    "galleryDisposition": "PROPOSED"
+  }
+]
