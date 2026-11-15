@@ -23,8 +23,13 @@ for row in baseline:
     name=row['path']
     source=ROOT/('ops/p0/public/'+name if name in ('.htaccess','robots.txt') else 'winter-26.html' if name=='index.html' else name)
     data=source.read_bytes()
-    if source.suffix in ('.html','.css','.js','.cjs','.php','.json','.svg','.xml','.txt') or name=='.htaccess':
-        data=data.replace(b'\r\n',b'\n')
+    if name not in modified and sha(data)!=row['sha256']:
+        # Preserve the accepted release's exact EOL bytes, including existing PHP CRLF.
+        # Only a hash-matching source representation may be packaged; no historic ZIP reads.
+        if source.suffix in ('.html','.css','.js','.cjs','.php','.json','.svg','.xml','.txt') or name=='.htaccess':
+            lf=data.replace(b'\r\n',b'\n')
+            candidates=[lf,lf.replace(b'\n',b'\r\n')]
+            data=next((b for b in candidates if sha(b)==row['sha256']),data)
     if name not in modified:assert sha(data)==row['sha256'], 'Protected source differs: '+name
     public[name]=data
 public['api/_reservations.php']=(ROOT/'api/_reservations.php').read_bytes().replace(b'\r\n',b'\n')
