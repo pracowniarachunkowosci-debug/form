@@ -75,6 +75,13 @@ def http_checks(manifest):
   code,_,h=req('/winter-foto-r016.html');need(code==401,'anonymous_review_401');headers(h,'anonymous_review')
  for path in paths:
   code,body,h=req('/'+path,True);need(code==200 and sha(body)==manifest[path],'authenticated_'+path.replace('/','_')+'_hash');headers(h,'authenticated_'+path.replace('/','_'))
+  if photo_correction and path==asset_prefix+'variant-media.js':
+   media=json.loads(body.decode('utf-8').split('=',1)[1].strip().rstrip(';'))
+   need(not any(m['id']=='knitted-star-white-scene-3' for m in media),'http_rejected_star_frame_absent')
+   need(not any(m['colorId']=='white' and m['modelId'] in ('knitted-star','knitted-medallion') for m in media),'http_corrected_white_galleries_empty')
+   for model,products,lifestyle in [('knitted-star',3,2),('knitted-medallion',1,3)]:
+    frames=[m for m in media if m['modelId']==model and m['colorId']=='marble']
+    need(sum(m['role']!='lifestyle' for m in frames)==products and sum(m['role']=='lifestyle' for m in frames)==lifestyle and all(m['colorConfirmed'] for m in frames),'http_'+model+'_marble_confirmed_counts')
  code,_,_=req('/api/test-access.php',True,urllib.parse.urlencode({'token':D['credentials']['tester_token']}).encode());need(code==303,'tester_login')
  code,body,_=req('/api/status.php',True);status=json.loads(body)
  with sqlite3.connect('file:'+str(db)+'?mode=ro',uri=True) as c:stock=dict(c.execute('SELECT sku,n FROM stock'))
