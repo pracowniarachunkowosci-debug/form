@@ -19,7 +19,7 @@ with zipfile.ZipFile(archive) as z:
   if n in ('.htaccess','robots.txt'):b=old
   else:
    b=(ROOT/('winter-26.html' if n=='index.html' else n)).read_bytes()
-   if n.endswith(('.html','.js','.css','.svg','.php','.json','.txt','.xml')):b=b.replace(b'\r\n',b'\n')
+   if sha(b)!=r['sha256'] and n.endswith(('.html','.js','.css','.svg','.php','.json','.txt','.xml')):b=b.replace(b'\r\n',b'\n')
   if n!=changed:assert sha(b)==r['sha256'],('Protected file changed',n)
   blobs[n]=b
 old={r['path']:r['sha256'] for r in rows}
