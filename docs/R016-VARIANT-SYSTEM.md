@@ -82,4 +82,4 @@ matching, role preservation, exclusions and exact owner approval matching.
 Existing composition/checkout behavior tests pass. Real local browser interaction
 checks cover both tabs for 12 variants at desktop and mobile sizes, changing card
 images/links, missing frames, board controls in test mode and responsive layout.
-Deployment evidence and real pf26 browser acceptance are recorded separately.
+[Deployment evidence and real pf26 browser acceptance](R016-STAGING-ACCEPTANCE.md) include the full matrix, actual screenshots, immutable manifests and preserved database checks.
