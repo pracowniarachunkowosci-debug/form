@@ -6,6 +6,10 @@
 Dotychczasowy Basic Auth i dostęp testera pozostają bez zmian. PR #28 pozostaje
 draftem; nie wykonano merge ani publikacji produkcyjnej.
 
+Poniższe liczby i zrzuty dokumentują pierwotne wydanie R01.6.
+[Późniejsza korekta właściciela: STAR/MEDALLION Marble i odrzucenie rozmytego kadru](R016-PHOTO-CORRECTION.md)
+aktualizuje rejestr i macierz; nie zmienia historycznego dowodu tego wdrożenia.
+
 ## Co działa
 
 Próbki na kartach są rzeczywistymi przyciskami wyboru typu radio, dostępnymi

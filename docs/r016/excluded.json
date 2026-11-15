@@ -1,5 +1,15 @@
 [
   {
+    "id": "knitted-star-white-scene-3",
+    "modelId": "knitted-star",
+    "colorId": "marble",
+    "role": "lifestyle",
+    "sourceFile": "PF_W26_galeria_KNITTED-STAR_03_4x5_1600x2000.webp",
+    "sourceSha256": "92b7427e7c37f4c62ddfeaf8ce96865270c50ac9e9c0c4f53249fe0345315e33",
+    "ownerStatus": "REJECTED_QUALITY",
+    "galleryDisposition": "EXCLUDED"
+  },
+  {
     "id": "WEB018",
     "modelId": "knitted-star",
     "colorId": "white",

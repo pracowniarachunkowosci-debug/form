@@ -120,8 +120,8 @@ def run(password):
         if ssh:ssh.close()
         save('connection',{'connected':False})
 
-stop=threading.Event();ui=tk.Tk();ui.title('Pracownia Form - integracja R01.5 pf26');ui.geometry('720x260')
-tk.Label(ui,text='Zatwierdzona integracja R01.5 — tylko pf26',font=('Segoe UI',12)).pack(pady=16)
+stop=threading.Event();ui=tk.Tk();ui.title('Pracownia Form - korekta fotografii R01.6');ui.geometry('720x260')
+tk.Label(ui,text='Korekta zdjec STAR i MEDALLION — tylko pf26',font=('Segoe UI',12)).pack(pady=16)
 tk.Label(ui,text='Najpierw kopia i kontrola bazy. Wdrozenie po testach, z rollbackiem.').pack()
 tk.Label(ui,text='Wpisz passphrase istniejacego klucza SSH; nie zostanie zapisana.').pack(pady=8)
 entry=tk.Entry(ui,show='*',width=48);entry.pack()

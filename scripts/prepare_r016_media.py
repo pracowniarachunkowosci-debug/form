@@ -10,6 +10,22 @@ DEST=ROOT/'assets/winter26-r016';DEST.mkdir(parents=True,exist_ok=True)
 EVIDENCE=ROOT/'docs/r016';EVIDENCE.mkdir(parents=True,exist_ok=True)
 sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
 raw=json.loads((SOURCE/'variant-media.js').read_text(encoding='utf-8').split('=',1)[1].strip().rstrip(';'))
+decisions=json.loads((EVIDENCE/'owner-decisions.json').read_text(encoding='utf-8'))['decisions']
+for decision in decisions:
+    matches=[a for a in raw if a['id']==decision['assetId']]
+    assert len(matches)==1
+    a=matches[0]
+    assert (a['modelId'],a['role'],a['sourceFile'],a['sourceSha256'])==(decision['modelId'],decision['role'],decision['sourceFile'],decision['sha256'])
+    if decision['status']=='OWNER COLOR CONFIRMED':
+        assert a['colorId']==decision['previousColorId']
+        a.update(colorId=decision['colorId'],colorConfirmed=True,ownerStatus=decision['status'])
+        a['alt']=a['alt'].replace('Biały','Marble')
+        a['note']='Właściciel potwierdził Marble w korekcie R01.6. Nazwa pliku źródłowego i rola pozostają bez zmian.'
+        a['evidence']+='; decyzja właściciela '+decision['decisionId']
+    elif decision['status']=='REJECTED_QUALITY':
+        assert a['colorId']==decision['colorId']
+        a.update(ownerStatus='REJECTED_QUALITY',galleryDisposition='EXCLUDED')
+    else:raise AssertionError('Unexpected owner decision')
 media=[];excluded=[]
 for a in raw:
     if not a['activeVariant'] or a['ownerStatus']=='REJECTED_QUALITY' or a['galleryDisposition'] in ('ARCHIVED_BY_OWNER','EXCLUDED'):
@@ -35,7 +51,7 @@ for a in raw:
     for key in ('src','thumb','zoom'):m[key]=urls[a[key]]
     m['srcset']=', '.join(urls[x['file']]+' '+str(x['width'])+'w' for x in a['derivatives'] if x['width']>=480)
     media.append(m)
-assert len(media)==43 and sum(m['ownerStatus']=='OWNER APPROVED' for m in media)==1
+assert len(media)==46-len(excluded) and sum(m['ownerStatus']=='OWNER APPROVED' for m in media)==1
 (DEST/'variant-media.js').write_text('// Existing audited candidates; proposals are not production approvals.\nexport const variantMedia = '+json.dumps(media,ensure_ascii=False,indent=2)+';\n',encoding='utf-8',newline='\n')
 models={'full-soft':'VASE','knitted-star':'KNITTED STAR','knitted-medallion':'KNITTED MEDALLION'}
 colors={'dual':'Dual','red-matte':'Czerwony matowy','white':'Biały','marble':'Marble'}

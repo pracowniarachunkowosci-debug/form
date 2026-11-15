@@ -144,20 +144,15 @@
     "colorId": "white",
     "color": "Biały",
     "confirmed": [],
-    "proposals": [
-      "WEB014",
-      "knitted-star-white-scene-1",
-      "knitted-star-white-scene-2",
-      "knitted-star-white-scene-3"
-    ],
+    "proposals": [],
     "reviewOnly": [],
     "roles": {
       "main": 0,
-      "gallery": 1,
+      "gallery": 0,
       "detail": 0,
-      "lifestyle": 3
+      "lifestyle": 0
     },
-    "missingAll": false
+    "missingAll": true
   },
   {
     "modelId": "knitted-star",
@@ -166,15 +161,18 @@
     "color": "Marble",
     "confirmed": [
       "knitted-star-bialy-main",
-      "WEB015"
+      "WEB014",
+      "WEB015",
+      "knitted-star-white-scene-1",
+      "knitted-star-white-scene-2"
     ],
     "proposals": [],
     "reviewOnly": [],
     "roles": {
       "main": 1,
-      "gallery": 0,
+      "gallery": 1,
       "detail": 1,
-      "lifestyle": 0
+      "lifestyle": 2
     },
     "missingAll": false
   },
@@ -216,19 +214,15 @@
     "colorId": "white",
     "color": "Biały",
     "confirmed": [],
-    "proposals": [
-      "knitted-medallion-white-scene-1",
-      "knitted-medallion-white-scene-2",
-      "knitted-medallion-white-scene-3"
-    ],
+    "proposals": [],
     "reviewOnly": [],
     "roles": {
       "main": 0,
       "gallery": 0,
       "detail": 0,
-      "lifestyle": 3
+      "lifestyle": 0
     },
-    "missingAll": false
+    "missingAll": true
   },
   {
     "modelId": "knitted-medallion",
@@ -236,7 +230,10 @@
     "colorId": "marble",
     "color": "Marble",
     "confirmed": [
-      "knitted-medallion-bialy-main"
+      "knitted-medallion-bialy-main",
+      "knitted-medallion-white-scene-1",
+      "knitted-medallion-white-scene-2",
+      "knitted-medallion-white-scene-3"
     ],
     "proposals": [],
     "reviewOnly": [],
@@ -244,7 +241,7 @@
       "main": 1,
       "gallery": 0,
       "detail": 0,
-      "lifestyle": 0
+      "lifestyle": 3
     },
     "missingAll": false
   }

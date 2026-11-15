@@ -12,13 +12,15 @@ allowed={'index.html','winter-26.html','winter-full-soft.html','winter-knitted-s
 sha=lambda b:hashlib.sha256(b).hexdigest()
 # The existing owner-unlocked transport also accepts the narrowly scoped R01.6 release.
 r016=D.get('release',{}).get('edition')=='R01.6'
+photo_correction=r016 and D['release'].get('revision')=='owner-photo-correction-20261115'
 if r016:
  previous=D['release']['baseline_manifest']
- assert len(previous)==285 and sha((json.dumps(previous,indent=2)+'\n').encode())=='bd1c94d4915a657f2910e0b3e7702cc9689307fee4a0666d9fc4e026c7a152c3'
+ count,checksum=(382,'b0b872737ea303d693e7340f6b7b0544e7441485070caba17f36402b9e2f640a') if photo_correction else (285,'bd1c94d4915a657f2910e0b3e7702cc9689307fee4a0666d9fc4e026c7a152c3')
+ assert len(previous)==count and sha((json.dumps(previous,indent=2)+'\n').encode())==checksum
  D['baseline']['files']=previous
- allowed={'index.html','winter-26.html','winter-full-soft.html','winter-knitted-star.html','winter-knitted-medallion.html','winter-zestaw-4.html'}
+ allowed={'assets/winter26-r016/variant-media.js'} if photo_correction else {'index.html','winter-26.html','winter-full-soft.html','winter-knitted-star.html','winter-knitted-medallion.html','winter-zestaw-4.html'}
 asset_prefix='assets/winter26-r016/' if r016 else 'assets/winter26-r015/'
-backup_prefix='r016-' if r016 else 'r015-'
+backup_prefix='r016-photo-' if photo_correction else 'r016-' if r016 else 'r015-'
 expected_files=D['release']['files'] if r016 else 285
 old={r['path']:r['sha256'] for r in D['baseline']['files']}
 def need(ok,name):
@@ -115,6 +117,7 @@ try:
   need(all((i.external_attr>>16)&0o170000==0o100000 and i.file_size<40*1024**2 for i in z.infolist()),'regular_bounded_files')
   need(all(sha(z.read(r['path']))==r['sha256'] and len(z.read(r['path']))==r['bytes'] for r in rows),'all_archive_hashes')
   delta=[n for n in new if new[n]!=old.get(n)]
+  if photo_correction:need(set(new)==set(old) and set(delta)==allowed,'single_media_mapping_only')
   need({n for n in delta if n in old}==allowed and all(n in allowed or n.startswith(asset_prefix) or (r016 and n=='winter-foto-r016.html') for n in delta),'visual_only_allowlist')
   need(all(new[n]==h for n,h in old.items() if n not in allowed),'protected_backend_security_legal_data_unchanged')
   # Compare every executable block, including short echo tags. Only CRLF/LF

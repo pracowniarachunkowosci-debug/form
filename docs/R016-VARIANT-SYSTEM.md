@@ -25,7 +25,7 @@ links and reset the selected gallery frame when model/color changes.
 
 The preparation uses the 46 previously audited R01.4/R01.5 records and existing
 exports. It does not repeat the full-session audit or generate/retouch photographs.
-43 records remain: 5 confirmed frames and 38 proposals. The source originals and
+After the owner's correction, 42 records remain: 11 confirmed frames and 31 proposals. The source originals and
 all reused derivatives are SHA-256 checked; roles are retained exactly.
 
 Two candidates (WEB006 and WEB022, VASE White) remain **review-only** because the
@@ -41,18 +41,20 @@ smoother geometry from silently replacing the approved VASE shape.
 | VASE | Marble | 0 | 9 | main, gallery, detail, lifestyle |
 | KNITTED STAR | Dual | 0 | 0 | missing |
 | KNITTED STAR | Red matte | 0 | 4 | main, gallery, lifestyle |
-| KNITTED STAR | White | 0 | 4 | gallery, lifestyle; no main promotion |
-| KNITTED STAR | Marble | 2 | 0 | main, detail |
+| KNITTED STAR | White | 0 | 0 | missing; previous frames confirmed as Marble |
+| KNITTED STAR | Marble | 5 | 0 | main, gallery, detail, 2 lifestyle |
 | KNITTED MEDALLION | Dual | 0 | 0 | missing |
 | KNITTED MEDALLION | Red matte | 0 | 0 | missing |
-| KNITTED MEDALLION | White | 0 | 3 | lifestyle only |
-| KNITTED MEDALLION | Marble | 1 | 0 | main |
+| KNITTED MEDALLION | White | 0 | 0 | missing; previous frames confirmed as Marble |
+| KNITTED MEDALLION | Marble | 4 | 0 | main, 3 lifestyle |
 
 Counts are existing export records, not a claim of independent photographic shots:
 some details were already separately exported crops. Only the exact VASE Dual
-main photo retains OWNER APPROVED. The other four confirmed frames retain
+main photo retains OWNER APPROVED. The other ten included confirmed frames retain
 OWNER COLOR CONFIRMED. STAR WEB018 remains REJECTED_QUALITY; MEDALLION WEB016
 remains ARCHIVED_BY_OWNER. Cappuccino remains inactive. Originals are preserved.
+The blurred third STAR lifestyle frame is also REJECTED_QUALITY, exactly as
+identified by the owner's screenshot. [Correction record](R016-PHOTO-CORRECTION.md).
 
 [Complete matrix](r016/matrix.json), [provenance and hashes](r016/media-provenance.json),
 [preserved exclusions](r016/excluded.json).

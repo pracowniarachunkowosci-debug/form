@@ -42,11 +42,11 @@ for r in rows:
 old=git('show',base+':winter-zestaw-4.html').decode();new=blobs['winter-zestaw-4.html'].decode()
 assert re.search(r'id="winter-options">(.*?)</script>',old,re.S).group(1)==re.search(r'id="winter-options">(.*?)</script>',new,re.S).group(1)
 media=json.loads(blobs['assets/winter26-r016/variant-media.js'].decode().split('=',1)[1].strip().rstrip(';'))
-assert len(media)==43 and sum(m['ownerStatus']=='OWNER APPROVED' for m in media)==1
-assert sum(m['colorConfirmed'] for m in media)==5
+assert len(media)==42 and sum(m['ownerStatus']=='OWNER APPROVED' for m in media)==1
+assert sum(m['colorConfirmed'] for m in media)==11
 for m in media:
  assert m['ownerStatus'] in ('OWNER APPROVED','OWNER COLOR CONFIRMED','PROPOSAL')
- assert m['id'] not in ('WEB018','WEB016') and m['colorId']!='cappuccino'
+ assert m['id'] not in ('WEB018','WEB016','knitted-star-white-scene-3') and m['colorId']!='cappuccino'
  assert sha(blobs[m['zoom'].lstrip('/')])==m['sourceSha256']
 for n,b in blobs.items():
  assert not re.search(r'(?i)(?:^|/)(?:\.git|\.env|config|runtime|tests?|docs|scripts)(?:/|$)|\.(?:sqlite|db|dpapi|pem|key|zip)$',n)
@@ -63,6 +63,6 @@ with zipfile.ZipFile(OUT/'winter26-r016-staging.zip') as z:
 old={r['path']:r['sha256'] for r in rows}
 delta=[{'path':r['path'],'change':'modified' if r['path'] in old else 'added','sha256':r['sha256']} for r in manifest if old.get(r['path'])!=r['sha256']]
 assert {d['path'] for d in delta if d['change']=='modified'}==modified
-release={'edition':'R01.6','target':'https://pf26.uber.space','base':base,'source_commit':git('rev-parse','HEAD').decode().strip(),'source_dirty':bool(git('status','--porcelain')),'archive_sha256':sha((OUT/'winter26-r016-staging.zip').read_bytes()),'manifest_sha256':sha((OUT/'manifest.json').read_bytes()),'files':len(manifest),'changed':delta,'deleted':[],'protectedFilesUnchanged':True,'baseline_manifest':rows,'baseline_manifest_sha256':previous['manifest_sha256'],'photoCounts':{'records':43,'ownerApproved':1,'colorConfirmedAdditional':4,'proposals':38,'reviewOnly':2}}
+release={'edition':'R01.6','target':'https://pf26.uber.space','base':base,'source_commit':git('rev-parse','HEAD').decode().strip(),'source_dirty':bool(git('status','--porcelain')),'archive_sha256':sha((OUT/'winter26-r016-staging.zip').read_bytes()),'manifest_sha256':sha((OUT/'manifest.json').read_bytes()),'files':len(manifest),'changed':delta,'deleted':[],'protectedFilesUnchanged':True,'baseline_manifest':rows,'baseline_manifest_sha256':previous['manifest_sha256'],'photoCounts':{'records':len(media),'ownerApproved':1,'colorConfirmedAdditional':sum(m['colorConfirmed'] for m in media)-1,'proposals':sum(m['ownerStatus']=='PROPOSAL' for m in media),'reviewOnly':sum(m['reviewOnly'] for m in media)}}
 (OUT/'release.json').write_text(json.dumps(release,indent=2)+'\n',encoding='utf-8',newline='\n')
 print(json.dumps({k:v for k,v in release.items() if k not in ('changed','baseline_manifest')},indent=2))

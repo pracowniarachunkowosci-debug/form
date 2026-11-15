@@ -16,12 +16,18 @@ for(const model of models)for(const color of colors){
     if(card){assert.equal(card.modelId,model);assert.equal(card.colorId,color);assert.equal(card.role,'main')}
   }
 }
-assert.equal(media.length,43);
+assert.equal(media.length,42);
 assert.deepEqual(media.filter(m=>ownerApprovalFor(m)).map(m=>m.id),['full-soft-czerwono-czarny-main']);
-assert(!media.some(m=>['WEB018','WEB016'].includes(m.id)||m.colorId==='cappuccino'));
+assert(!media.some(m=>['WEB018','WEB016','knitted-star-white-scene-3'].includes(m.id)||m.colorId==='cappuccino'));
 assert.equal(selectCardPhoto(media,'full-soft','white',{allowProposals:true}),null,'White gallery frame must not be promoted to main; uncertain-geometry candidate is review-only');
 assert.equal(selectCardPhoto(media,'knitted-star','white',{allowProposals:true}),null,'Existing gallery role remains gallery');
-assert.equal(selectGallery(media,'knitted-star','marble',{allowProposals:true}).lifestyle.length,0,'White arrangements never substitute for Marble');
+assert.equal(selectGallery(media,'knitted-star','marble').lifestyle.length,2,'Owner-confirmed Marble arrangements, excluding the exact blurred third frame');
+assert.equal(selectGallery(media,'knitted-star','marble').product.length,3,'Confirmed gallery role joins the existing Marble main/detail without promotion');
+assert.equal(selectGallery(media,'knitted-medallion','marble').lifestyle.length,3);
+assert.equal(media.filter(m=>m.colorConfirmed).length,11);
+for(const model of ['knitted-star','knitted-medallion']){
+ const white=selectGallery(media,model,'white',{allowProposals:true});assert.equal(white.product.length+white.lifestyle.length,0,'Corrected Marble frames must not remain in White');
+}
 assert.equal(selectGallery(media,'full-soft','red-matte').product.length,0,'Production-safe default excludes proposals');
 assert.equal(selectGallery(media,'full-soft','red-matte',{allowProposals:true}).product.length,3,'Protected preview exposes existing candidates');
 for(const [model,color] of [['knitted-star','dual'],['knitted-medallion','dual'],['knitted-medallion','red-matte']]){
