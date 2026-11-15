@@ -41,7 +41,7 @@ $mixed=$mockInput;unset($mixed['selections']);$mixed['packs']=[array_fill(0,2,$m
 $mixedQuote=quote($mixed,$mockPolicy);mock_check($mixedQuote['total']===23400&&$mixedQuote['shipping']===0,'2+4 aggregates free delivery');
 mock_rejected('BAD_REQUEST',fn()=>quote($mockInput+['pickup_address'=>'Client invented address'],$mockPolicy));
 mock_rejected('BAD_REQUEST',fn()=>quote($mockInput+['inpost_points_mock'=>true],$mockPolicy));
-$mockDb=database(['db_file'=>':memory:']);$mockDb->exec("INSERT INTO stock VALUES('full-soft:marble',80)");
+$mockDb=database(['db_file'=>':memory:']);reservation_migrate($mockDb);$mockDb->exec("INSERT INTO stock VALUES('full-soft:marble',80)");
 foreach(['TESTOFF'=>'PICKUP_POINT','TESTBAD'=>'PICKUP_POINT','TESTERROR'=>'POINTS_UNAVAILABLE','TESTBROKEN'=>'POINTS_UNAVAILABLE'] as $id=>$kind){
     $bad=quote(array_merge($mockInput,['pickup_point'=>$id]),$mockPolicy);
     mock_rejected($kind,fn()=>order($mockDb,$mockInput['requestId'],$bad,null,fn($id)=>lookup_point($mockCfg,$id)));

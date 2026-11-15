@@ -30,7 +30,7 @@ foreach([5=>1849,6=>0,8=>0] as $n=>$fee){
     $in=$locker;unset($in['selections']);$in['packs']=$n===5?[array_fill(0,4,$slot),[$slot]]:($n===6?[array_fill(0,4,$slot),array_fill(0,2,$slot)]:[array_fill(0,8,$slot)]);
     ensure(quote($in,$p)['shipping']===$fee,'combined threshold');
 }
-$db=database(['db_file'=>':memory:']);$db->exec("INSERT INTO stock VALUES('full-soft:marble',8)");
+$db=database(['db_file'=>':memory:']);reservation_migrate($db);$db->exec("INSERT INTO stock VALUES('full-soft:marble',8)");
 fails('POINTS_UNAVAILABLE',fn()=>order($db,$one['requestId'],$single,null,fn()=>point_unavailable()));
 ensure((int)$db->query('SELECT COUNT(*) FROM orders')->fetchColumn()===0&&(int)$db->query('SELECT n FROM stock')->fetchColumn()===8,'no reservation when InPost down');
 $order=order($db,$one['requestId'],$single,null,$fixture);

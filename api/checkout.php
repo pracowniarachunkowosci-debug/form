@@ -8,7 +8,7 @@ endpoint(function(){
     $q=quote($in,policy(),$live?$cfg['approvalVersion']:null);$db=database($cfg);
     if(!ledger_ok($db,$cfg['mode']))unavailable();
     $owner=null;if($live){$owner=visitor_id();rate($db,$cfg,$owner,$in['requestId']);}
-    $o=order($db,$in['requestId'],$q,$owner,fn($id)=>lookup_point($cfg,$id));
-    $s=stripe_session($cfg,$o);bind_session($db,$o,$s);
+    $o=order($db,$in['requestId'],$q,$owner,fn($id)=>lookup_point($cfg,$id),$cfg);
+    $s=stripe_session($cfg,$o,$db);
     return ['orderId'=>$o['id'],'url'=>$s['url'],'totalGrosz'=>json_decode($o['quote'],true)['total']];
 });

@@ -35,7 +35,7 @@ if(file_exists($cfg['db_file'])){
 }else{
     if(PHP_SAPI!=='cli'||$action!=='create')throw new RuntimeException('Create the explicit local probe first');
     $file=fopen($cfg['db_file'],'x');if(!$file)throw new RuntimeException('New database required');fclose($file);
-    $db=database($cfg);tx($db,function()use($db){
+    $db=database($cfg);reservation_migrate($db);tx($db,function()use($db){
         $db->exec("INSERT INTO store_meta VALUES ('mode','test'),('purpose','local-stripe-sandbox-probe')");
         foreach(['full-soft:marble','knitted-star:red-matte','knitted-medallion:white']as $sku)$db->prepare('INSERT INTO stock VALUES (?,20)')->execute([$sku]);
     });
@@ -80,18 +80,19 @@ if($action==='create'){
     else $input+=['packs'=>[[$s,$m],[$v,$s,$m,$v]],'delivery_method'=>'locker','pickup_point'=>'TEST01A'];
     if(isset($argv[3])){
         $prior=row($db,'SELECT * FROM orders WHERE id=?',[$argv[3]]);
-        if(!$prior || $prior['state']!=='reserved')throw new RuntimeException('Only own pending probe may be resumed');
+        if(!$prior || !in_array($prior['state'],['reserved','reconcile'],true))throw new RuntimeException('Only own pending probe may be resumed');
         $input['requestId']=$request=$prior['req'];
     }
     $q=quote($input,policy());
     // Synthetic test point only, independent of real InPost network services.
-    $o=order($db,$request,$q,null,fn($id)=>['id'=>$id,'address'=>'TEST / MOCK — Punkt testowy, ulica Testowa 1, 00-000 Miasto Testowe']);
+    // Existing probe ledger must be explicitly migrated/backed up before a new probe.
+    $o=order($db,$request,$q,null,fn($id)=>['id'=>$id,'address'=>'TEST / MOCK — Punkt testowy, ulica Testowa 1, 00-000 Miasto Testowe'],$cfg);
     $before=json_encode(stock($db));$again=order($db,$request,$q,null,fn()=>throw new RuntimeException('Retry must reuse persisted point'));
     if($again['id']!==$o['id'] || $before!==json_encode(stock($db)))throw new RuntimeException('Reservation idempotency failed');
-    $session=stripe_session($cfg,$o);bind_session($db,$o,$session);
-    // Force the same actual API request also when resuming a cached order.
+    $session=stripe_session($cfg,$o,$db);
+    // Repeating the customer request reuses the persisted operation/session, not a fresh POST.
     $retryOrder=$o;$retryOrder['url']=null;
-    $repeat=stripe_session($cfg,$retryOrder);
+    $repeat=stripe_session($cfg,$retryOrder,$db);
     if($session['id']!==$repeat['id'])throw new RuntimeException('Stripe idempotency failed');
     $session=probe_get($cfg,$session['id']);
     echo json_encode(['scenario'=>$scenario,'orderId'=>$o['id'],'sessionId'=>$session['id'],

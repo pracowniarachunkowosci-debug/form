@@ -1,0 +1,11 @@
+[Unit]
+Description=WINTER26 pf26 Sandbox reconcile every minute
+
+[Timer]
+OnCalendar=*-*-* *:*:00
+AccuracySec=1s
+Persistent=true
+Unit=pf26-reconcile.service
+
+[Install]
+WantedBy=default.target

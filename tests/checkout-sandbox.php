@@ -34,6 +34,7 @@ $multiLines=checkout_params(['id'=>'w26_test','quote'=>json_encode($cart),'creat
 check(array_column(array_column($multiLines['line_items'],'price_data'),'unit_amount')===[8400,15000],'Stripe preserves both pack prices');
 unset($_SERVER['HTTP_HOST']);expect_problem('UNAVAILABLE',fn()=>configuration());
 $db=database(['db_file'=>':memory:']);
+reservation_migrate($db);
 foreach([$v=>3,$m=>1,$s=>1]as $k=>$n)$db->prepare('INSERT INTO stock VALUES (?,?)')->execute([$k.':marble',$n]);
 $q=quote($q2,$p);$o=order($db,$q2['requestId'],$q);
 check(available($db,$v)===2 && available($db,$m)===0,'reserved all SKUs');

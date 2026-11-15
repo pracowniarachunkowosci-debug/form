@@ -24,7 +24,7 @@ $tmp=sys_get_temp_dir().'/pf-gate-'.bin2hex(random_bytes(8));$root=$tmp.'/www';$
 try{
   $_SERVER['DOCUMENT_ROOT']=$root;$_SERVER['HTTPS']='on';$_SERVER['HTTP_HOST']='pracowniaform.com';
   putenv('PF_LIVE_CONFIG');$file=$private.'/winter26-live.json';$path=$private.'/stock.sqlite';
-  $db=database(['db_file'=>$path]);ensure(!ledger_ok($db,'live'),'unknown ledger must be closed');
+  $db=database(['db_file'=>$path]);reservation_migrate($db);ensure(!ledger_ok($db,'live'),'unknown ledger must be closed');
   $db->exec("INSERT INTO store_meta VALUES('mode','test')");ensure(!ledger_ok($db,'live'),'test stock refused for real orders');
   $db->exec("UPDATE store_meta SET value='live' WHERE name='mode'");
   $c=['origin'=>'https://pracowniaform.com','mode'=>'live','smallOrderCourierGrosz'=>1500,'approvalVersion'=>'unused','db_file'=>realpath($path),

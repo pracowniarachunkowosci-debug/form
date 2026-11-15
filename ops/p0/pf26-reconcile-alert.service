@@ -1,0 +1,10 @@
+[Unit]
+Description=Signal WINTER26 reconcile failure to external email monitoring
+
+[Service]
+Type=oneshot
+ExecStart=/bin/bash /var/www/virtual/pf26/winter26/app/scripts/reconcile-notify.sh failure
+TimeoutStartSec=10
+UMask=0077
+StandardOutput=null
+StandardError=null

@@ -1,0 +1,27 @@
+# Uberspace pf26 staging only. Caddy enforces HTTPS before Apache.
+Options -Indexes -MultiViews
+DirectoryIndex index.html
+AcceptPathInfo Off
+AddType image/avif .avif
+AddType image/webp .webp
+AuthType Basic
+AuthName "Pracownia Form Sandbox"
+AuthBasicProvider file
+AuthUserFile "/var/www/virtual/pf26/winter26/auth/.htpasswd"
+<RequireAll>
+    Require expr "%{HTTP_HOST} == 'pf26.uber.space'"
+    <RequireAny>
+        Require expr "%{REQUEST_METHOD} == 'POST' && %{REQUEST_URI} == '/api/webhook.php' && %{QUERY_STRING} == '' && %{PATH_INFO} == '' && %{THE_REQUEST} =~ m#^POST /api/webhook[.]php HTTP/[0-9.]+$#"
+        Require valid-user
+    </RequireAny>
+</RequireAll>
+<FilesMatch "^(?:[.]|_.*[.]php$|seed-test[.]php$|prepare-live[.]php$)">
+    Require all denied
+</FilesMatch>
+Header onsuccess unset X-Robots-Tag
+Header always set X-Robots-Tag "noindex, noarchive"
+Header onsuccess unset Cache-Control
+Header always set Cache-Control "no-store"
+Header always set X-Content-Type-Options "nosniff"
+
+ErrorDocument 401 "Authentication required"

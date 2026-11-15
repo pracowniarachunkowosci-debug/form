@@ -2,6 +2,7 @@
 declare(strict_types=1);
 require_once __DIR__.'/_live.php';
 require_once __DIR__.'/_inpost.php';
+require_once __DIR__.'/_reservations.php';
 final class StoreError extends RuntimeException {
     function __construct(public string $kind, public int $status, string $msg) { parent::__construct($msg); }
 }
@@ -117,10 +118,11 @@ function existing_order(array $old,array $q,?string $owner): array {
        array_column($stored['packs'],'members')!==array_column($q['packs'],'members') ||
        ($stored['delivery_method']??'courier')!==$q['delivery_method'] || ($stored['pickup_point']??null)!==$q['pickup_point'])
         problem('REQUEST_CONFLICT',409,'Identyfikator już oznacza inne zamówienie lub dostawę.');
-    if($old['state']!=='reserved')problem('FINISHED',409,'Ta próba została zakończona.');
+    if(!in_array($old['state'],['reserved','reconcile'],true))problem('FINISHED',409,'Ta próba została zakończona.');
     return $old;
 }
-function order(PDO $db,string $req,array $q,?string $owner=null,?callable $resolve=null): array {
+function order(PDO $db,string $req,array $q,?string $owner=null,?callable $resolve=null,?array $stripeCfg=null): array {
+    if($stripeCfg!==null)reservation_require_schema($db);
     if($old=row($db,'SELECT * FROM orders WHERE req=?',[$req]))return existing_order($old,$q,$owner);
     if($q['delivery_method']==='locker'){
         if($resolve===null)point_unavailable();
@@ -129,13 +131,15 @@ function order(PDO $db,string $req,array $q,?string $owner=null,?callable $resol
         if(($point['id']??null)!==$q['pickup_point'] || !is_string($point['address']??null) || $point['address']==='')point_unavailable();
         $q['pickup_address']=$point['address'];
     }
-    return tx($db,function() use($db,$req,$q,$owner){
+    return tx($db,function() use($db,$req,$q,$owner,$stripeCfg){
         if($old=row($db,'SELECT * FROM orders WHERE req=?',[$req]))return existing_order($old,$q,$owner);
         foreach($q['items'] as $k=>$n){ $s=$db->prepare('UPDATE stock SET n=n-? WHERE sku=? AND n>=?'); $s->execute([$n,$k,$n]);
           if($s->rowCount()!==1) problem('STOCK',409,'Brakuje wybranego wariantu. Odśwież dostępność.'); }
         $id='w26_'.bin2hex(random_bytes(12));$now=time();
         $db->prepare("INSERT INTO orders(id,req,quote,created,owner,state) VALUES(?,?,?,?,?,'reserved')")->execute([$id,$req,json_encode($q,JSON_THROW_ON_ERROR),$now,$owner]);
-        return row($db,'SELECT * FROM orders WHERE id=?',[$id]);
+        $o=row($db,'SELECT * FROM orders WHERE id=?',[$id]);
+        if($stripeCfg!==null)reservation_prepare($db,$o,$stripeCfg,$now);
+        return $o;
     });
 }
 function checkout_params(array $o,string $origin,bool $live=false): array {
@@ -162,25 +166,8 @@ function checkout_params(array $o,string $origin,bool $live=false): array {
     'success_url'=>$origin.'/api/result.php','cancel_url'=>$origin.'/api/result.php?cancel=1',
     'expires_at'=>(int)$o['created']+3600];
 }
-function stripe_session(array $cfg,array $o): array {
-    if(time()>=(int)$o['created']+3600) problem('RECONCILE',409,'Sesja wygasła. Sprawdź stan próby w Sandbox.');
-    if($o['url'])return ['url'=>$o['url'],'id'=>$o['sid']];
-    $curl=curl_init('https://api.stripe.com/v1/checkout/sessions');
-    curl_setopt_array($curl,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>4,CURLOPT_TIMEOUT=>14,
-       CURLOPT_POSTFIELDS=>http_build_query(checkout_params($o,$cfg['origin'],($cfg['mode']??'test')==='live'),'','&',PHP_QUERY_RFC3986),
-       CURLOPT_HTTPHEADER=>['Stripe-Version: 2026-02-25.clover','Authorization: Bearer '.$cfg['stripe_key'],'Idempotency-Key: '.$o['id'],'Content-Type: application/x-www-form-urlencoded']]);
-    $raw=curl_exec($curl); $status=curl_getinfo($curl,CURLINFO_RESPONSE_CODE);
-    $s=is_string($raw)?json_decode($raw,true):null;
-    if($status!==200 || !is_array($s)) {error_log('WINTER26 Stripe HTTP '.(int)$status.' order '.$o['id']); problem('STRIPE_UNAVAILABLE',503,'Nie utworzono potwierdzonej sesji. Ponów tę samą próbę.');}
-    $q=json_decode($o['quote'],true);
-    $live=($cfg['mode']??'test')==='live';
-    if(($s['livemode']??null)!==$live || !preg_match($live?'/^cs_live_[A-Za-z0-9]+$/D':'/^cs_test_[A-Za-z0-9]+$/D',$s['id']??'') ||
-        !str_starts_with($s['url']??'','https://checkout.stripe.com/') || ($s['client_reference_id']??null)!==$o['id'] ||
-        ($s['amount_total']??null)!==$q['total'] || ($s['currency']??'')!=='pln') unavailable();
-    return $s;
-}
 function bind_session(PDO $db,array $o,array $s): void {
-    $q=$db->prepare("UPDATE orders SET sid=?,url=? WHERE id=? AND (sid IS NULL OR sid=?) AND state='reserved'");
+    $q=$db->prepare("UPDATE orders SET sid=?,url=? WHERE id=? AND (sid IS NULL OR sid=?) AND state IN ('reserved','reconcile','pending','paid')");
     $q->execute([$s['id'],$s['url'],$o['id'],$s['id']]); if(!$q->rowCount()) problem('FINISHED',409,'Ta próba została zakończona.');
 }
 function verify_signature(string $raw,string $header,string $secret,int $now): bool {
@@ -190,6 +177,7 @@ function verify_signature(string $raw,string $header,string $secret,int $now): b
     $want=hash_hmac('sha256',$ts.'.'.$raw,$secret);foreach($v1 as $sig){if(hash_equals($want,$sig))return true;}return false;
 }
 function apply_event(PDO $db,array $e,bool $live=false): void {
+    reservation_require_schema($db);
     $kind=$e['type']??'';if(!in_array($kind,['checkout.session.completed','checkout.session.expired','checkout.session.async_payment_succeeded','checkout.session.async_payment_failed'],true))return;
     $s=$e['data']['object']??[];if(($e['livemode']??null)!==$live||($s['livemode']??null)!==$live||!preg_match('/^evt_[A-Za-z0-9]+$/D',$e['id']??'')||
        ($s['object']??'')!=='checkout.session')problem('EVENT',400,'Nieprawidłowe zdarzenie.');
@@ -206,11 +194,14 @@ function apply_event(PDO $db,array $e,bool $live=false): void {
         $state=$o['state'];$next=$state;
         if(in_array($kind,['checkout.session.completed','checkout.session.async_payment_succeeded'],true) && ($s['payment_status']??'')==='paid'){
             if(in_array($state,['released','review'],true)) $next='review'; else $next='paid';
-        }elseif($kind==='checkout.session.completed' && $state==='reserved')$next='pending';
-        elseif(in_array($kind,['checkout.session.expired','checkout.session.async_payment_failed'],true) && in_array($state,['pending','reserved'],true)){
-            foreach($q['items'] as $k=>$n)$db->prepare('UPDATE stock SET n=n+? WHERE sku=?')->execute([$n,$k]);$next='released';
+        }elseif($kind==='checkout.session.completed' && in_array($state,['reserved','reconcile'],true))$next='pending';
+        elseif(in_array($kind,['checkout.session.expired','checkout.session.async_payment_failed'],true) && reservation_held($state)){
+            if(($s['payment_status']??'')!=='unpaid')problem('EVENT_MISMATCH',409,'Niezgodny stan płatności.');
+            reservation_release($db,$o,'WEBHOOK_RELEASE',time());$next='released';
         }
         $db->prepare('UPDATE orders SET state=?, sid=?, pi=COALESCE(?,pi) WHERE id=?')->execute([$next,$s['id'],$s['payment_intent']??null,$id]);
         $db->prepare('INSERT INTO events(id) VALUES(?)')->execute([$e['id']]);
+        reservation_history($db,$id,'WEBHOOK',time(),['event'=>$e['id'],'kind'=>$kind,'state'=>$next]);
+        reservation_observed($db,$id,$next,time());
     });
 }

@@ -1,0 +1,16 @@
+[Unit]
+Description=WINTER26 pf26 Sandbox reservation reconciliation
+OnFailure=pf26-reconcile-alert.service
+StartLimitIntervalSec=0
+
+[Service]
+Type=oneshot
+WorkingDirectory=/var/www/virtual/pf26/winter26/app
+ExecStart=/bin/bash -lc 'exec /bin/bash /var/www/virtual/pf26/winter26/app/scripts/reconcile-tick.sh'
+TimeoutStartSec=110
+TimeoutStopSec=5
+KillMode=control-group
+UMask=0077
+StandardOutput=null
+StandardError=journal
+SyslogIdentifier=pf26-reconcile
