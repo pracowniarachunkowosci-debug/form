@@ -5,12 +5,15 @@ from pathlib import Path
 _POLICY = json.loads((Path(__file__).resolve().parents[1] / "data/winter26-pricing-pl.json").read_text(encoding="utf-8"))
 
 
-def quote(packs, code=None):
+def quote(packs, code=None, delivery_method="courier"):
     """One sequence of registered model IDs per selected pack; a single has one slot.
 
     Keep explicit pack boundaries: four separate singles are not a quartet.
     Caller validates SKU/stock separately. Never supply money from the browser.
     """
+    fees = {"courier": _POLICY["smallOrderCourierGrosz"], "locker": _POLICY["smallOrderLockerGrosz"]}
+    if delivery_method not in fees:
+        raise ValueError("Nieobsługiwana metoda dostawy.")
     if code is not None and (not isinstance(code, str) or code.strip()):
         raise ValueError("Ten kod nie jest aktywny.")
     if not isinstance(packs, (list, tuple)) or not packs:
@@ -28,6 +31,6 @@ def quote(packs, code=None):
             raise ValueError("Nieobsługiwana liczba ozdób w zestawie.")
         count += size
     merchandise = regular - discount
-    shipping = 0 if count >= _POLICY["freeCourierFromOrnaments"] else _POLICY["smallOrderCourierGrosz"]
+    shipping = 0 if count >= _POLICY["freeCourierFromOrnaments"] else fees[delivery_method]
     return {"regularGrosz": regular, "discountGrosz": discount, "merchandiseGrosz": merchandise,
-            "shippingGrosz": shipping, "totalGrosz": None if shipping is None else merchandise + shipping}
+            "shippingGrosz": shipping, "totalGrosz": merchandise + shipping}

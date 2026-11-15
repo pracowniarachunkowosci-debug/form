@@ -156,7 +156,9 @@ body { overflow-wrap: break-word; }
  .product-heading { flex-direction: row; flex-wrap: wrap; }
  .product-heading h3 { font-size: 16px; }
  .sets-section { padding-block: 35px 50px; }
- .sets-grid { grid-template-columns: 1fr; gap: 35px; margin-top: 32px; }
+ .sets-grid { grid-template-columns: minmax(0, 1fr); gap: 35px; margin-top: 32px; }
+ .sets-grid article { min-width: 0; }
+ .set-number { float: none; display: block; max-width: 100%; margin-bottom: 16px; font-size: clamp(40px, 12vw, 64px); }
  .fulfilment { grid-template-columns: 1fr; gap: 25px; padding-block: 60px; }
  .archive-link { padding-bottom: 50px; }
 }

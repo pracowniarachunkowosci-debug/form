@@ -1,0 +1,864 @@
+{
+  "target": "https://pf26.uber.space",
+  "base": "ec8495f5716b001d43e81f078e7de2b97f16718d",
+  "source_commit": "18dee14ef2c5eab3006d8acf4b11a93a6c0aabef",
+  "source_dirty": false,
+  "archive_sha256": "b799986fa9da9bba42e4275ddbb18812ae38f9dc2d57bd8df7d19ab144a32807",
+  "manifest_sha256": "bd1c94d4915a657f2910e0b3e7702cc9689307fee4a0666d9fc4e026c7a152c3",
+  "files": 285,
+  "changed": [
+    {
+      "path": "api/result.php",
+      "change": "modified",
+      "sha256": "10f636afa29ec8581f65111a92124db92a53a51077a14809d9aee8e4b99e573d"
+    },
+    {
+      "path": "assets/winter26-r015/approval-state.js",
+      "change": "added",
+      "sha256": "e8aed152f09a73bad3a11430e38314a22bc56e33d116cec7b45646d1067f7141"
+    },
+    {
+      "path": "assets/winter26-r015/approval.css",
+      "change": "added",
+      "sha256": "5e94a73585ab5cb4663bc9e773a223db9e623fdaa1a901364deca3fca9c81303"
+    },
+    {
+      "path": "assets/winter26-r015/catalog.js",
+      "change": "added",
+      "sha256": "67339b2cae3692903a448f200b8c6c9ffa88ac9eb8c6e2c948b66da121b1ab0f"
+    },
+    {
+      "path": "assets/winter26-r015/full-soft-1120.avif",
+      "change": "added",
+      "sha256": "118d928c53cfe46f50daeb9ac84888fafb6fb43693a4b448e6442faeedc0d533"
+    },
+    {
+      "path": "assets/winter26-r015/full-soft-1120.webp",
+      "change": "added",
+      "sha256": "610e772544103609674b76176a52f19e83801655f051990f9257f9ff526d9a3a"
+    },
+    {
+      "path": "assets/winter26-r015/full-soft-360.avif",
+      "change": "added",
+      "sha256": "5a0c81334890f5b9e0002391f7c6a1fac575bc16a82851c126b98a25ed2d08e2"
+    },
+    {
+      "path": "assets/winter26-r015/full-soft-360.webp",
+      "change": "added",
+      "sha256": "e09c766e12836f50eef443c38f07970c9f5c0c416138cfca64e95a7665dddfe6"
+    },
+    {
+      "path": "assets/winter26-r015/full-soft-680.avif",
+      "change": "added",
+      "sha256": "2b3eb0b857e7bd224efcbcb1a106ad3653a48f5b07c5bbd28461cc966fb827f6"
+    },
+    {
+      "path": "assets/winter26-r015/full-soft-680.webp",
+      "change": "added",
+      "sha256": "b00d5ee0094b15719fc46377d727869c3c5cd8265974c5c550f252d0d939b7ac"
+    },
+    {
+      "path": "assets/winter26-r015/full-soft-side-292.avif",
+      "change": "added",
+      "sha256": "eaee892965d0e059af31c3da923e553c555b4cadeb6b7b104e3abf4d7ecb3b54"
+    },
+    {
+      "path": "assets/winter26-r015/full-soft-side-292.webp",
+      "change": "added",
+      "sha256": "9aa5ecfea6cfb57c815a92c33042327c843b9085c229fc35edb9246d1976a1b7"
+    },
+    {
+      "path": "assets/winter26-r015/gallery-state.js",
+      "change": "added",
+      "sha256": "a0e8f375bf0dfeb83ea9a4d5a1c1d75b78f1bed1eb09c06f4dbc1100e4231780"
+    },
+    {
+      "path": "assets/winter26-r015/gallery.css",
+      "change": "added",
+      "sha256": "4e488c2d1c2ebc207c6e3baaf60a05bd63bfdf6ff96d2be164940ea00fe6963d"
+    },
+    {
+      "path": "assets/winter26-r015/gallery.js",
+      "change": "added",
+      "sha256": "950d2e24e2ca0873b8affb8e1977aad6f3590552f6e4992f159c72a5b9c49b1a"
+    },
+    {
+      "path": "assets/winter26-r015/integration.css",
+      "change": "added",
+      "sha256": "8c0026b6e10f5231fbf1c5577b83adb9234446b3227420bd400d23324cc06f10"
+    },
+    {
+      "path": "assets/winter26-r015/medallion-detail-1120.avif",
+      "change": "added",
+      "sha256": "9c2ab432a6c6f80f8cf588196bacf2519f50eb38f770dddedafd5c9e37642d02"
+    },
+    {
+      "path": "assets/winter26-r015/medallion-detail-1120.webp",
+      "change": "added",
+      "sha256": "3193dbc7c1c7f66cdaeb414e942b41933f2efa2454f05b36991726d794fe6ccb"
+    },
+    {
+      "path": "assets/winter26-r015/medallion-detail-360.avif",
+      "change": "added",
+      "sha256": "3ced1a05e3aca07ae81f7136b732377657dffc3dc2909b13c471162986543cba"
+    },
+    {
+      "path": "assets/winter26-r015/medallion-detail-360.webp",
+      "change": "added",
+      "sha256": "e260d198ee43f03cf5e231f6b9d762d8312403f0e186f4f2d753215cf0d7c7f2"
+    },
+    {
+      "path": "assets/winter26-r015/medallion-detail-680.avif",
+      "change": "added",
+      "sha256": "d2f92042b6a3c2939743ad80814df84758a31fe9ea72f13ddc72f8ed64d6b4d6"
+    },
+    {
+      "path": "assets/winter26-r015/medallion-detail-680.webp",
+      "change": "added",
+      "sha256": "f1a0f27eacbd7d2e7e0d4516a8349e2360d89b4c051a6061709f037751ec1b29"
+    },
+    {
+      "path": "assets/winter26-r015/medallion-loop-264.avif",
+      "change": "added",
+      "sha256": "6e1199c432a6bbdaf1157eb23ee0a6036c298e2cc16e3bb80c10f70f45761f89"
+    },
+    {
+      "path": "assets/winter26-r015/medallion-loop-264.webp",
+      "change": "added",
+      "sha256": "5aae9ef4d9cff756589fd0a892fb92c2a10ac98afa4589c8d57378451e6ff854"
+    },
+    {
+      "path": "assets/winter26-r015/r01.css",
+      "change": "added",
+      "sha256": "6cdedbc3e022bd17348f633bfddb8082b9ee716679e1a799b44d8c5712084f66"
+    },
+    {
+      "path": "assets/winter26-r015/r012.css",
+      "change": "added",
+      "sha256": "e496495cd8522d31ced2e73e490efc675c47be49ae8e9b70087ce87a75bbd5f6"
+    },
+    {
+      "path": "assets/winter26-r015/r013.css",
+      "change": "added",
+      "sha256": "d36d1ab1a8f9fb9eb442b54cd145604c7b76597564e06354dce9436fb80ae55d"
+    },
+    {
+      "path": "assets/winter26-r015/star-1120.avif",
+      "change": "added",
+      "sha256": "2a62bdce0e7b7753c3404f99403ccdfe6acb767e0b49928cf70809028db52012"
+    },
+    {
+      "path": "assets/winter26-r015/star-1120.webp",
+      "change": "added",
+      "sha256": "96ec9a00ff69da90d685c608185d159c6bdea4799a9ef11f21558bb2c98e5297"
+    },
+    {
+      "path": "assets/winter26-r015/star-360.avif",
+      "change": "added",
+      "sha256": "7f5dab934c1669447c3347008942d4292492e9d8f65a54ca3749a9fd03a9775f"
+    },
+    {
+      "path": "assets/winter26-r015/star-360.webp",
+      "change": "added",
+      "sha256": "15efa0a98985f48a7adecae01ab4bc3d6e14fe617610bf8344ac9514ebe4871d"
+    },
+    {
+      "path": "assets/winter26-r015/star-680.avif",
+      "change": "added",
+      "sha256": "dc836da9c8be4896c9b9747328fda8fafb6ec453fce18f7a880c585a7c63623e"
+    },
+    {
+      "path": "assets/winter26-r015/star-680.webp",
+      "change": "added",
+      "sha256": "84a18deadc942ae320e393ed39c32f619421276446b6cd84c6c32f40b43f9663"
+    },
+    {
+      "path": "assets/winter26-r015/star-loop-326.avif",
+      "change": "added",
+      "sha256": "b0f8e0cb3f8cf70504db058dc61f5ed7cf48a0ef03c5f24421bd7afa1dd83d58"
+    },
+    {
+      "path": "assets/winter26-r015/star-loop-326.webp",
+      "change": "added",
+      "sha256": "af7fba9b5b1794e4d5f3fe9fee2412de9c93f0a66dafdfae0b31b45d8a1043bc"
+    },
+    {
+      "path": "assets/winter26-r015/ui.js",
+      "change": "added",
+      "sha256": "f5c2b1395a9610f52c9bb8ae2713ee2766bbd7943c84580fdaa19f88ca2b77bd"
+    },
+    {
+      "path": "assets/winter26-r015/variant-media.js",
+      "change": "added",
+      "sha256": "5daa23397cdf379195c95c9aaaeb86f7b5c9c0bf85b0ce5eb675e402067fe5bc"
+    },
+    {
+      "path": "assets/winter26-r015/variants/WEB015-1440.webp",
+      "change": "added",
+      "sha256": "8cd445c166d3e05c4f815ce789d64050063222ffdcbbf457d66bbf001831780f"
+    },
+    {
+      "path": "assets/winter26-r015/variants/WEB015-180.webp",
+      "change": "added",
+      "sha256": "77b2a5bf976187b54fbda333e713117b1c959292eb585cd04362d995dd621680"
+    },
+    {
+      "path": "assets/winter26-r015/variants/WEB015-480.webp",
+      "change": "added",
+      "sha256": "553a79e8046cc11c7185f9927f31510d58954245a699d89f250f7ce10b1cb1d8"
+    },
+    {
+      "path": "assets/winter26-r015/variants/WEB015-960.webp",
+      "change": "added",
+      "sha256": "9263d2bd5843bbb5cda5f9ae0ac85a043bdbb5521dd873f5c3bbebc7b610648b"
+    },
+    {
+      "path": "assets/winter26-r015/variants/WEB015.jpg",
+      "change": "added",
+      "sha256": "bbf49713a1ef86d5f5c966faa03387da1323d7cdd1cf44a862a1944816d4944d"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-bialy-nakrapiany-top-1440.webp",
+      "change": "added",
+      "sha256": "68f064d88eba576e294c80a83d90d651562032993ab1d82b2f480912a14e1c4c"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-bialy-nakrapiany-top-180.webp",
+      "change": "added",
+      "sha256": "284974cbf4af2a30ed8d2f7bdef49f9a094f0cf51847175a6f0236f854224a74"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-bialy-nakrapiany-top-480.webp",
+      "change": "added",
+      "sha256": "336b5e973174250eead8c6da653de71e8beef5abfd9e44fc52a45d0f307eecda"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-bialy-nakrapiany-top-960.webp",
+      "change": "added",
+      "sha256": "a83979ecc7cc8f1a79eb4993f05a6d6bc680aafa5ca9a44154be0a369075ef55"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-bialy-nakrapiany-top.webp",
+      "change": "added",
+      "sha256": "d4069b0fc6e1e6dc856d0413bc8d96fcef652538cc64480f817d5aad5fd9be35"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-czerwono-czarny-main-1440.webp",
+      "change": "added",
+      "sha256": "4dfa22197a75ab1e33e90c3703dbef7b38cfa0a837e9ea2eecc8b80ceb41b548"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-czerwono-czarny-main-180.webp",
+      "change": "added",
+      "sha256": "4f10b1a2a8a32b86494ce08f903f9120cd45f7a6abd569f7a254bcf02b36920c"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-czerwono-czarny-main-480.webp",
+      "change": "added",
+      "sha256": "1306a0664270c821733d644ba748c7d718deb820be7f8b8ead53d1ed4f5a7892"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-czerwono-czarny-main-960.webp",
+      "change": "added",
+      "sha256": "2638cba717186cc89e7b6f8641b06ec4384f35485183c61838722d4880d2c7cc"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-czerwono-czarny-main.webp",
+      "change": "added",
+      "sha256": "12cfc47cc2d188b6a19142bc114422a680a6c681e0d66a5005d214e6c656e859"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-1-1440.webp",
+      "change": "added",
+      "sha256": "e725b977e0c51af12b8b2a2442624e8336a7f9922ac0dba3ec9151aba058534c"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-1-180.webp",
+      "change": "added",
+      "sha256": "11f29c334f3c64f8f8b261d9cc69dd9707b17995f516a95f12df5b6381d163e5"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-1-480.webp",
+      "change": "added",
+      "sha256": "62527685c54de1f8de405632fd874a1dcc8d87b73ff0676be8f936ddc5a535d2"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-1-960.webp",
+      "change": "added",
+      "sha256": "f8a6246e1a6f8157ac9236e8d687e9b08a144102f923e774cac3ebad575aadcf"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-1.webp",
+      "change": "added",
+      "sha256": "579d9f67361e8983bf726411b1e6c451a7a6f53a1bb1cc28a88e8a9470e31aa8"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-2-1440.webp",
+      "change": "added",
+      "sha256": "c2c15569bb4358dda9c7e1758af537c2a67f0401f5cf9f468e3d8ed319fc3a6f"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-2-180.webp",
+      "change": "added",
+      "sha256": "73bcfbe4577feb74768b072338b06180104c96e780309c40bb5c9ac754405c9e"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-2-480.webp",
+      "change": "added",
+      "sha256": "5f9cc5a8aea610d44081846364756d2b738601f24bcd7975e345ce69156f9ee1"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-2-960.webp",
+      "change": "added",
+      "sha256": "b5fd80f0d6cf36e8dd61a730ab270f84927a27dc1ebda53c97d5f965c821c864"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-2.webp",
+      "change": "added",
+      "sha256": "bfb834f679af84eab9772aeec02cba22517d7d256139ae2b673778011acd7254"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-3-1440.webp",
+      "change": "added",
+      "sha256": "716f449c9afa985d48074fafcc042f7f8cbdfd68281e52e5ce78a0161552a268"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-3-180.webp",
+      "change": "added",
+      "sha256": "3826b238af660187389f1cca9dd2df55d578a17be507898a247415f07f6eadbf"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-3-480.webp",
+      "change": "added",
+      "sha256": "c6aa1df1236b80652e9f2a5dee501e54cd7225437b7836d0e3b9993377540bb9"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-3-960.webp",
+      "change": "added",
+      "sha256": "ecdb4f930c55e545ad168a1b870a2d39c80cd0666020ba5f765bdaef18cb744b"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-3.webp",
+      "change": "added",
+      "sha256": "4cf3e46c813cba9bde270bb13a8db21f264aed57b098868a5bc91fcfb54d5fd1"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-4-1440.webp",
+      "change": "added",
+      "sha256": "1e585a66ad839404f1d9d4fc871a8bd1dba4766b766733ca62e3d1e481f4bae1"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-4-180.webp",
+      "change": "added",
+      "sha256": "99608cbfe8170001cb1e1b8020f8f1764518646865e692514a4bfb486c43b08d"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-4-480.webp",
+      "change": "added",
+      "sha256": "ecda22bf3fd5d426dc2ceb84ca0517bb1b6df4330fd067e43f7751b5d71b53f1"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-4-960.webp",
+      "change": "added",
+      "sha256": "dce9080f1103f94d5a1d2f740ad7fca17f0b59e6e9c71e9ac8a4b8ea5cdaaaf8"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-dual-scene-4.webp",
+      "change": "added",
+      "sha256": "33661ad1b6a0262a2f409887377a76884d7a4bc80bc6efff3b4a6ea2fdf5f0e1"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-1-1440.webp",
+      "change": "added",
+      "sha256": "10ab92caf0db00a1f5acb3e0c463d746b538b3f1cd6626dc6eeb107dc4e20124"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-1-180.webp",
+      "change": "added",
+      "sha256": "97a1966c78c6d8fab759bff0516d5eafeaa9340798d911b7098be30fc734b682"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-1-480.webp",
+      "change": "added",
+      "sha256": "eaebdc9e597ba515ea9443228532843808826768da42f7f46881efcce76d09ef"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-1-960.webp",
+      "change": "added",
+      "sha256": "cb659ed6c49bf9d64396bf04deaa7d58397c7f6626e1a7c542fc936d141cc8b1"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-1.webp",
+      "change": "added",
+      "sha256": "5ecb659b016d0b1cfa8ea26b46a69ff6ed8f082b76980044f654504948029f2d"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-2-1440.webp",
+      "change": "added",
+      "sha256": "ca23021b93b1ec9653bc5f0c166ebaff2852b0df4f02a9577731afb594ce67ec"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-2-180.webp",
+      "change": "added",
+      "sha256": "ce1f4427b2da1e6f403d70d5b4b7646cc9a9d0fc990c4a5a99d9aa17cf9c2542"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-2-480.webp",
+      "change": "added",
+      "sha256": "7b757cb814782e88c918daed419f5b68bd6ae038f9e47ca37c82a3c9aff35442"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-2-960.webp",
+      "change": "added",
+      "sha256": "0f8081a191b441e115ba4341faedacaca004bd265b5b8f3ac6de1de6ea807058"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-2.webp",
+      "change": "added",
+      "sha256": "e97664504cf35659bbd70b0dadc339df85c9159c7714b316ef82961b6fe71b06"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-3-1440.webp",
+      "change": "added",
+      "sha256": "6e5c010c8492a950d02709ec73336c7093b0fd43d3280a59e6019415dfd90472"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-3-180.webp",
+      "change": "added",
+      "sha256": "a357d1a5cb709aa54bf300bca6a4fed992c1dbcda21d5ed5f3d95606620d6650"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-3-480.webp",
+      "change": "added",
+      "sha256": "7a83d7f197a7bc43e210f941f2a68fe4587243a6335b014980390d469b209497"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-3-960.webp",
+      "change": "added",
+      "sha256": "6fb22bad90d53617f3d1bff0743aa358a40da948b0c4ae48ad44b35b3b68df76"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-3.webp",
+      "change": "added",
+      "sha256": "c7ae7c10be980c0e1f01df5776d19ba306984bc3bf5f97e10b6a2984e43e7ce4"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-4-1440.webp",
+      "change": "added",
+      "sha256": "78ad99dbc5b75c529f17850e63faeac5c1145c2d7f24981ec6dd904da9ab66e1"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-4-180.webp",
+      "change": "added",
+      "sha256": "3cc8d6f239177e6073330420527255f7100a84085260675d818969ea3564e129"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-4-480.webp",
+      "change": "added",
+      "sha256": "053aff32700f4418e94a4acd010ee807e54845a82078eeb45834b2c1b0d974d3"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-4-960.webp",
+      "change": "added",
+      "sha256": "860a547cd5f41256435abcb016944411477061ed6683a04ef9d90efe9ae0c3a4"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-marble-scene-4.webp",
+      "change": "added",
+      "sha256": "c83bd4d20cc01dabc0d6c75c759553a5c43c3b549b56a93d77c6657ce8276f11"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-1-1440.webp",
+      "change": "added",
+      "sha256": "90ad08a121dd9fa02ff90efed1ff6ff5a9f0c7abfe146d4fd71dc62517e70df7"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-1-180.webp",
+      "change": "added",
+      "sha256": "adc3ed10f4a1aba5f21d07d12453e6aef257afa7a237fa5d4352ed88039654bc"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-1-480.webp",
+      "change": "added",
+      "sha256": "3fa92c484ac541edc1b308091dcc56706defb9defa23eb3e35f87abc8acc7af3"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-1-960.webp",
+      "change": "added",
+      "sha256": "47c731d9bf3574408a545273ef4d03b6681f33ce5c12eeed72bb9084a298a42c"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-1.webp",
+      "change": "added",
+      "sha256": "f6e93b626af7d3b93c65c2962ff958f66915dc087f6098066eee75c4b7d0362e"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-2-1440.webp",
+      "change": "added",
+      "sha256": "c32877250b8b26ee339e0a76a937ac49d9ba6cf5c0179576c88e7aa9d3224588"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-2-180.webp",
+      "change": "added",
+      "sha256": "588b851e51ae80a3e4a3de0ca35364ea0a65d7a48b66eb60a4138e9970032f7a"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-2-480.webp",
+      "change": "added",
+      "sha256": "dee9187089b88155581574c545f13f4bd26233e2afb28d373c8ad873e6cd295d"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-2-960.webp",
+      "change": "added",
+      "sha256": "23929347b76f79a086928b83733a2f9522d5638739d51c7807a395d5c132e12d"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-2.webp",
+      "change": "added",
+      "sha256": "227d256eb46aab430020cb13ed417fff29f08669293a265e4b7c3b3680cbeaeb"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-3-1440.webp",
+      "change": "added",
+      "sha256": "56ea17e43429e2209d7686e671ef62e22ba863eb34a04d9f9cb83b1aafa85ee4"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-3-180.webp",
+      "change": "added",
+      "sha256": "4c64819064629ad31e11366a50891300d6afaccf1d84c4ec1828b025bfcf7758"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-3-480.webp",
+      "change": "added",
+      "sha256": "f22bed6761e955e883280a4c374085fa896230e71d3556fa464f0dd0d9550b79"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-3-960.webp",
+      "change": "added",
+      "sha256": "1134503d3782989cb9657b4f206cbebe737875b0b158af1aa2e56cdb663f4952"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-3.webp",
+      "change": "added",
+      "sha256": "199efed59872fe08b76231f8e381c71abf7dfc5cdf0f470d5a66eb1c89e5babc"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-4-1440.webp",
+      "change": "added",
+      "sha256": "ee092b9c49ceec8abca7b3b62761d426fdb5e4a5e2318c548551944d7d7e6f6e"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-4-180.webp",
+      "change": "added",
+      "sha256": "3bee312f79902baadbbdf247745ecdfaf3656f8bb4415b18fbdda3d2a8b755cc"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-4-480.webp",
+      "change": "added",
+      "sha256": "f79998a68b57ff4579f87a58c1461c2b35cd929eb6ed4b228e36014ffe5a60b7"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-4-960.webp",
+      "change": "added",
+      "sha256": "9b63bf7bff3d091f83dc9aec951833b926b73aa1eec5caf7adb5ec49d935341c"
+    },
+    {
+      "path": "assets/winter26-r015/variants/full-soft-red-matte-scene-4.webp",
+      "change": "added",
+      "sha256": "13c28d67855c9179b2a08eae13d262ff8fcb70dd3c59ed2786d669e9261d10a0"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-bialy-main-1440.webp",
+      "change": "added",
+      "sha256": "5d14bb6f6be498d85da9ef332739d5d80a15293f2042000354105a21e727fb9b"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-bialy-main-180.webp",
+      "change": "added",
+      "sha256": "c65e742399971bbff0973b12f8e6cb64889a021b9b661cb920c4a2287b61158f"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-bialy-main-480.webp",
+      "change": "added",
+      "sha256": "9cdcd9582644039b60d1287942e1d0b0d5dcdd9a7a83fe377579bf0649e71739"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-bialy-main-960.webp",
+      "change": "added",
+      "sha256": "be37009a8777a550cd7b58c665f3d62ff3c3f62d66b899483e8c724d04e7d1fe"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-bialy-main.webp",
+      "change": "added",
+      "sha256": "a2e76cb5e8fff9cb09d4053578d95e5d70a4eae2c9351b0720533d4cbc61a542"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-1-1440.webp",
+      "change": "added",
+      "sha256": "8d7c4da33e2b13416b5eda1a198b5dda1834e0a6a7f5a8f7b8975eb1dc90ff83"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-1-180.webp",
+      "change": "added",
+      "sha256": "d5eb99aaab43622a362231fc264e387b443115a4ee153e867768595713331fa5"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-1-480.webp",
+      "change": "added",
+      "sha256": "0c695bc4fa11183141c42cab80cf4b25ae5ae5ff3effc4de1b2b0296a97c1359"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-1-960.webp",
+      "change": "added",
+      "sha256": "33cee84607cd3a8b3fb59262403f5fa5d3dcde2ee4fe3a26a8bca08f9ac78347"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-1.webp",
+      "change": "added",
+      "sha256": "b3ff909678115b5a97bffa56073b861773c9cde1243953b0f7909352003522c3"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-2-1440.webp",
+      "change": "added",
+      "sha256": "c3a61fafc8cd27cc464dac3e3d516f73bd0f0e323946978676a59c584a82f58b"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-2-180.webp",
+      "change": "added",
+      "sha256": "037a3dfe622bc0812d242d711d41022b52bd06bf2e82a86ff69cbd7339de248c"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-2-480.webp",
+      "change": "added",
+      "sha256": "d37e78ea92a24d3b3d8b159bdff1d9036ba02451b13199d4d23337c5ace8f97b"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-2-960.webp",
+      "change": "added",
+      "sha256": "48dffa924fb57b722c940a18c1437acbdfd9011732355f8cb35103574e6d0b09"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-2.webp",
+      "change": "added",
+      "sha256": "72dedaa5757a012c1760d7c72224fdf0f51d9080d5cc8f1d6ea356a872717425"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-3-1440.webp",
+      "change": "added",
+      "sha256": "c1e2428e88a817ce2ddbecf79ff39ffd73743e7aa5f0a94fb24251af646178c9"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-3-180.webp",
+      "change": "added",
+      "sha256": "3dc4859e8b3e32b1d29e4861eee12d6dba2fcecb4d014881589408045886320d"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-3-480.webp",
+      "change": "added",
+      "sha256": "3f67cf24989d157499e7546983fb2a7c7e4750b598732ed2364e778befa8c8be"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-3-960.webp",
+      "change": "added",
+      "sha256": "88dffaf296348cbc85ada0a4d1e2b6630d1ebcd70a33f4338225346564373fb3"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-medallion-white-scene-3.webp",
+      "change": "added",
+      "sha256": "c80d5ac86aa2e0d76007db8ede51a52d9a8f83f32dc199a4ef920083c50ff64f"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-bialy-main-1440.webp",
+      "change": "added",
+      "sha256": "7b87257cce25d81387414b1d6a87543fa727cf58288f6669475758790ef7fb13"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-bialy-main-180.webp",
+      "change": "added",
+      "sha256": "e30fdff40c96e0f6574dd0dc2c7f594b130109f095e5dd47389f6ceebfdee4cf"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-bialy-main-480.webp",
+      "change": "added",
+      "sha256": "fd2cc4d98c2d89439d9eab2ecf60fa0999aba2711bd553ad222b45cda82c1bb6"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-bialy-main-960.webp",
+      "change": "added",
+      "sha256": "d57dbe1105a5c90270fb2ec8433f833343987f483228255faac84dd4a22a2461"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-bialy-main.webp",
+      "change": "added",
+      "sha256": "1bdab99a099a7de2b523cd1d077ac022950af5022fabba62cc3ea316ad80414d"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-red-matte-scene-4-1440.webp",
+      "change": "added",
+      "sha256": "a9d4bbe8ce2754f45d4b3dfb86d4e9049c6bc5275fd41ea8a097fd1683019d9d"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-red-matte-scene-4-180.webp",
+      "change": "added",
+      "sha256": "b578b4ecc341eacf9011ca5f637cc5d197999d7752ec11a6abd7fa9da4924536"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-red-matte-scene-4-480.webp",
+      "change": "added",
+      "sha256": "f4b7a7cdd524d1e1105c544f1d89605d892e496d599ad6296850e5ec842e766e"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-red-matte-scene-4-960.webp",
+      "change": "added",
+      "sha256": "e9c257e169b1cc081acac4e7389e7db0d3b1cfb337e473f7f09ae42487b4adcd"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-red-matte-scene-4.webp",
+      "change": "added",
+      "sha256": "65d95eca02946bfa16fef73a9013e1855d1a544dae4e70d6d1024b97a0a37341"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-red-matte-scene-5-1440.webp",
+      "change": "added",
+      "sha256": "f7a61d5dd9002cb9163e78d03f6de0fb285e0be45f1024515adfd65f3459a70c"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-red-matte-scene-5-180.webp",
+      "change": "added",
+      "sha256": "e1b2725eedbf675e86157727139f5978df094cfa6606aa418ed277cab5abbd56"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-red-matte-scene-5-480.webp",
+      "change": "added",
+      "sha256": "c4ce461b0c424baa33dee68246450c318f1ae7fc223ff26da91a3ebc435ed001"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-red-matte-scene-5-960.webp",
+      "change": "added",
+      "sha256": "2a8bf3d245310962f6715a719c867c7c030284644dfad9df52157e77310c283a"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-red-matte-scene-5.webp",
+      "change": "added",
+      "sha256": "be50a16d6a8d9c4fd8292500eb8ee420320ad3d7df961d897e991c814ec27c7c"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-1-1440.webp",
+      "change": "added",
+      "sha256": "37423600630d930d64ce34908d643c12add3dadfa148e269deb55c6a38bbe2a9"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-1-180.webp",
+      "change": "added",
+      "sha256": "134c097d78796ccd7bb655d0470de14f345e4c59f84c1c5fabfdde1ac2cdf065"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-1-480.webp",
+      "change": "added",
+      "sha256": "81b84ee21f3b1f3cec553ceb9da192d53c9633923a89d73b3f252acaaffeeba6"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-1-960.webp",
+      "change": "added",
+      "sha256": "3d8d98219309f845e0b70e9fc0c5e523e22ae21435b1e36d1fd0483541a2bb05"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-1.webp",
+      "change": "added",
+      "sha256": "1aea407ab9f1af7109a0693eb60f54891ebef55e3b8751e807fa12d45b9e407b"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-2-1440.webp",
+      "change": "added",
+      "sha256": "020964bad9afc0d0a5bde7e5a2117eb00b82cb34fecbe5721f4ffc4a10cde1e5"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-2-180.webp",
+      "change": "added",
+      "sha256": "6c8745943dffc2ad43449d59b9d89f29aee52b42523de679f48df2d2b34d59c5"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-2-480.webp",
+      "change": "added",
+      "sha256": "66ae38f585fe53f3807a543c049f6923af8208b1a0df854b84a0a4c1172d2812"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-2-960.webp",
+      "change": "added",
+      "sha256": "7796d54da2331416afcde26d72a6482a18505737b232730e86f5af4d0c7a8660"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-2.webp",
+      "change": "added",
+      "sha256": "3189df4d68bdab8b1c63dbe7a0a5aa7ec02b4234bb72ccd0197ca0afea6fa6a2"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-3-1440.webp",
+      "change": "added",
+      "sha256": "0fa12e18682d416ecfcdcbdf7abbcf2af69f373fff42b3e132bff817ef144932"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-3-180.webp",
+      "change": "added",
+      "sha256": "39ef28928dd61e6778fca09077e8d9a2da795fdb0c998e018fc38294e9dfaf50"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-3-480.webp",
+      "change": "added",
+      "sha256": "3d607b39811e34d5cb1f75fb2c8037910810f340444c8c9dbb5852970671e81d"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-3-960.webp",
+      "change": "added",
+      "sha256": "17d80f8cefaea0d179d517c094e12274d459435ed605647014e8d46f88ac76b0"
+    },
+    {
+      "path": "assets/winter26-r015/variants/knitted-star-white-scene-3.webp",
+      "change": "added",
+      "sha256": "92b7427e7c37f4c62ddfeaf8ce96865270c50ac9e9c0c4f53249fe0345315e33"
+    },
+    {
+      "path": "index.html",
+      "change": "modified",
+      "sha256": "23baf90d22b3296c8da6b20f0b7ac3339bec2716a55ecc921bae810bb6ad2db3"
+    },
+    {
+      "path": "winter-26.html",
+      "change": "modified",
+      "sha256": "23baf90d22b3296c8da6b20f0b7ac3339bec2716a55ecc921bae810bb6ad2db3"
+    },
+    {
+      "path": "winter-config.js",
+      "change": "modified",
+      "sha256": "75320db98515b7b648746c558aaa39fdaac149c31c60af00ca798245f624bcbe"
+    },
+    {
+      "path": "winter-full-soft.html",
+      "change": "modified",
+      "sha256": "1f5d907bac0c4a2de5ce91c343a477ff732d3bec73c022075069f808e8895583"
+    },
+    {
+      "path": "winter-knitted-medallion.html",
+      "change": "modified",
+      "sha256": "ab911b31e44844f75c3b97545fd9e28cc0735fdec6386afba7baba4790ac7df8"
+    },
+    {
+      "path": "winter-knitted-star.html",
+      "change": "modified",
+      "sha256": "2ec8d79fa6485c3723d0ef2be2786c621d923920f6794a4721e000a53b2c9422"
+    },
+    {
+      "path": "winter-zestaw-4.html",
+      "change": "modified",
+      "sha256": "191f9510eefb207becddf77b9653be0df518160a1ee4206b537e03da7c709104"
+    }
+  ],
+  "deleted": [],
+  "protectedFilesUnchanged": true,
+  "rootOverlay": "index.html <- winter-26.html",
+  "photoCounts": {
+    "lifestyle": 20,
+    "confirmedProduct": 5,
+    "ownerApproved": 1
+  }
+}

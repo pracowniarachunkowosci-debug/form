@@ -4,6 +4,22 @@ declare(strict_types=1);
 require_once __DIR__.'/../api/_common.php';
 function ensure(bool $ok,string $msg):void {if(!$ok)throw new RuntimeException($msg);}
 function rejected(callable $f,string $kind='UNAVAILABLE'):void {try{$f();}catch(StoreError $e){ensure($e->kind===$kind,$e->kind);return;}throw new RuntimeException('expected failure: '.$kind);}
+ensure(under('/srv/shop','/srv/shop'),'containment includes the root itself');
+ensure(under('/srv/shop/terms.html','/srv/shop/'),'containment includes descendants with trailing root separator');
+ensure(!under('/srv/shop-other/terms.html','/srv/shop'),'containment excludes sibling prefixes');
+ensure(!under('/srv','/srv/shop'),'containment excludes the parent');
+if(DIRECTORY_SEPARATOR==='\\'){
+  ensure(under('C:\\SHOP\\WWW','c:/shop/www'),'Windows root equality ignores case and separator style');
+  ensure(under('C:\\SHOP\\www\\terms.html','c:/shop/www'),'Windows descendants accept mixed separators and case');
+  ensure(!under('C:\\SHOP\\www-other\\terms.html','c:/shop/www'),'Windows sibling prefix is outside');
+  ensure(!under('C:\\SHOP','c:/shop/www'),'Windows parent is outside');
+  ensure(!under('D:\\SHOP\\www\\terms.html','c:/shop/www'),'another Windows drive is outside');
+}else{
+  ensure(!under('/srv/SHOP/terms.html','/srv/shop'),'POSIX paths remain case-sensitive');
+  ensure(!under('/srv/shop\\terms.html','/srv/shop'),'POSIX backslash is not a directory separator');
+  ensure(under('/srv/shop\\archive/terms.html','/srv/shop\\archive'),'POSIX backslash remains part of a directory name');
+  ensure(!under('/srv/shop/archive/terms.html','/srv/shop\\archive'),'POSIX literal backslash differs from slash');
+}
 $tmp=sys_get_temp_dir().'/pf-gate-'.bin2hex(random_bytes(8));$root=$tmp.'/www';$private=$tmp.'/.pf-private';mkdir($root.'/data',0700,true);mkdir($root.'/api',0700);mkdir($private,0700);
 try{
   $_SERVER['DOCUMENT_ROOT']=$root;$_SERVER['HTTPS']='on';$_SERVER['HTTP_HOST']='pracowniaform.com';
@@ -11,7 +27,7 @@ try{
   $db=database(['db_file'=>$path]);ensure(!ledger_ok($db,'live'),'unknown ledger must be closed');
   $db->exec("INSERT INTO store_meta VALUES('mode','test')");ensure(!ledger_ok($db,'live'),'test stock refused for real orders');
   $db->exec("UPDATE store_meta SET value='live' WHERE name='mode'");
-  $c=['origin'=>'https://pracowniaform.com','mode'=>'live','smallOrderCourierGrosz'=>1500,'approvalVersion'=>'unused','db_file'=>$path,
+  $c=['origin'=>'https://pracowniaform.com','mode'=>'live','smallOrderCourierGrosz'=>1500,'approvalVersion'=>'unused','db_file'=>realpath($path),
     'stripe_key'=>'sk_live_'.str_repeat('x',28),'webhook_secret'=>'whsec_'.str_repeat('x',24),'abuse_hmac'=>bin2hex(random_bytes(32)),
     'termsUrl'=>'/terms.html','returnsUrl'=>'/returns.html','privacyUrl'=>'/privacy.html','dispatchNotice'=>'Treść testu terminów','sellerName'=>'Syntetyczny sprzedawca',
     'sellerContact'=>'Kontakt syntetyczny','returnsSummary'=>'Opis próbny procedury zwrotów','complaintsSummary'=>'Opis próbny procedury reklamacji'];
@@ -34,8 +50,8 @@ try{
   file_put_contents($file,json_encode($c));file_put_contents($root.'/terms.html','changed fixture',FILE_APPEND);
   rejected(fn()=>live_config());ensure(live_config(true)['mode']==='live','pending webhook must survive new release');
   $make=['requestId'=>'12345678-1234-4321-8123-123456789abc','code'=>'','selections'=>array_fill(0,6,['modelId'=>'full-soft','colorId'=>'marble'])];
-  $ver=$cfg['approvalVersion'];rejected(fn()=>quote($make,policy(),1500,$ver),'TERMS');
-  $q=quote($make+['approvalVersion'=>$ver,'termsAccepted'=>true],policy(),1500,$ver);ensure($q['total']===22000 && $q['shipping']===0,'6 at full price with courier');
+  $ver=$cfg['approvalVersion'];rejected(fn()=>quote($make,policy(),$ver),'TERMS');
+  $q=quote($make+['approvalVersion'=>$ver,'termsAccepted'=>true],policy(),$ver);ensure($q['total']===22000 && $q['shipping']===0,'6 at full price with courier');
   $db->exec("INSERT INTO stock VALUES('full-soft:marble',6)");$owner='owner-key';
   rate($db,$cfg,$owner,$make['requestId']);$o=order($db,$make['requestId'],$q,$owner);
   $params=checkout_params($o,$c['origin'],true);ensure(count($params['line_items'])===1 && !str_contains($params['line_items'][0]['price_data']['product_data']['name'],'TEST'),'live line item');

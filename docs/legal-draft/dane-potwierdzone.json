@@ -1,0 +1,160 @@
+{
+  "status": "DO AKCEPTACJI / NIEPUBLIKOWANE",
+  "updatedAt": "2026-11-14",
+  "legalApproved": false,
+  "productionPublicationApproved": false,
+  "source": "Odpowiedzi właściciela w rozmowie 14.11.2026; bieżący odpis KRS i katalog repozytorium.",
+  "entity": {
+    "legalName": "PRACOWNIA RACHUNKOWOŚCI spółka z ograniczoną odpowiedzialnością",
+    "brand": "Pracownia Form",
+    "rolesConfirmed": [
+      "seller",
+      "dataController",
+      "manufacturer"
+    ],
+    "nip": "8943197084",
+    "krs": "0000997294",
+    "regonAsReturnedByKrs": "52340878500000",
+    "shareCapitalPLN": 5000,
+    "address": {
+      "street": "Trawowa",
+      "building": "19",
+      "unit": "1",
+      "postalCode": "54-614",
+      "city": "Wrocław",
+      "country": "PL"
+    },
+    "email": "kontakt@pracowniaform.com",
+    "phone": "+48504853962",
+    "returnsAndComplaintsAtSameAddress": true
+  },
+  "registry": {
+    "url": "https://api-krs.ms.gov.pl/api/krs/OdpisAktualny/0000997294?rejestr=P&format=json",
+    "retrievedAt": "2026-11-14",
+    "lastEntryDate": "2026-07-07",
+    "lastEntryNumber": 11
+  },
+  "products": {
+    "models": [
+      {
+        "name": "VASE",
+        "slug": "full-soft",
+        "geometryVersion": "FULL VASE R02B / 12 fałd",
+        "nominalBodyBoundingBoxMm": [
+          83.803,
+          83.803,
+          87.0
+        ],
+        "dimensionsBasis": "CAD/3MF/STL; integralne oczka wliczone, dokładane kapturki i sznurki wyłączone; nie jest to pomiar gotowej sztuki",
+        "mountingGeometry": "Szyjka Ø12 mm; oszacowany otwór po slicingu około Ø10,89 mm. Osobny kapturek i sznurek nie mają potwierdzonej specyfikacji.",
+        "finishedProductMeasured": false,
+        "physicalSafetyAndMountingApproved": false,
+        "sources": [
+          {
+            "path": "C:\\Users\\lsolt\\OneDrive\\Dokumenty\\ChatGPT\\3d projekt\\WINTER26_VASE_SILK_A3_BATCH2\\FULL_VASE_R02B_12F_SILK_A3_BATCH2.3mf",
+            "sha256": "cad78e0cd2d47576e3b30c28ecd16cc100b75af40676e5ae2cd7928ad359e8e1"
+          },
+          {
+            "path": "C:\\Users\\lsolt\\OneDrive\\Dokumenty\\ChatGPT\\3d projekt\\WINTER26_VASE_SILK_A3_BATCH2\\FINAL_GUI_VALIDATION.json",
+            "sha256": "7eaf279330c83a63edce5a72a99987b717581c47d9f080d787df4cd5cf23a8cd"
+          }
+        ]
+      },
+      {
+        "name": "KNITTED STAR",
+        "slug": "knitted-star",
+        "geometryVersion": "KNITTED STAR / ARAN B01",
+        "nominalBodyBoundingBoxMm": [
+          102.06412506103516,
+          98.86959075927734,
+          4.849987506866455
+        ],
+        "dimensionsBasis": "CAD/3MF/STL; integralne oczka wliczone, dokładane kapturki i sznurki wyłączone; nie jest to pomiar gotowej sztuki",
+        "mountingGeometry": "Integralne oczko, nominalny otwór Ø3,20 mm. Specyfikacja dokładanej pętli/sznurka wymaga potwierdzenia.",
+        "finishedProductMeasured": false,
+        "physicalSafetyAndMountingApproved": false,
+        "sources": [
+          {
+            "path": "C:\\Users\\lsolt\\OneDrive\\Dokumenty\\ChatGPT\\3d projekt\\WINTER26_KNITTED_STAR_BATCH2\\KNITTED_STAR_2PCS_COLORFIL_WHITE_A4.3mf",
+            "sha256": "b77f7a7bfd6f07b0f76bbf211b687f0f7ea337c380d8c7774732f7f1ff23b952"
+          },
+          {
+            "path": "C:\\Users\\lsolt\\OneDrive\\Dokumenty\\ChatGPT\\3d projekt\\WINTER26_R04_CAD_B01\\qa\\ARAN_GEOMETRY.json",
+            "sha256": "8288d3569b34e7d2d582fdc42061122c888da463b86e6d2dada4d265d983f523"
+          },
+          {
+            "path": "C:\\Users\\lsolt\\OneDrive\\Dokumenty\\ChatGPT\\3d projekt\\WINTER26_R04_CAD_B01\\qa\\ARAN_DIMENSIONS.json",
+            "sha256": "5ba795f27a74e3fcc9797a31414b58aa6f9f63766477bc55c7e27091ce3de40c"
+          }
+        ]
+      },
+      {
+        "name": "KNITTED MEDALLION",
+        "slug": "knitted-medallion",
+        "geometryVersion": "KNITTED MEDALLION / STAGE2 B01, jednostronny",
+        "nominalBodyBoundingBoxMm": [
+          103.79969024658203,
+          106.8924560546875,
+          4.849926471710205
+        ],
+        "dimensionsBasis": "CAD/3MF/STL; integralne oczka wliczone, dokładane kapturki i sznurki wyłączone; nie jest to pomiar gotowej sztuki",
+        "mountingGeometry": "Integralne oczko, nominalny otwór Ø3,20 mm. Płaski tył i jednostronny relief. Specyfikacja dokładanej pętli/sznurka wymaga potwierdzenia.",
+        "finishedProductMeasured": false,
+        "physicalSafetyAndMountingApproved": false,
+        "sources": [
+          {
+            "path": "C:\\Users\\lsolt\\OneDrive\\Dokumenty\\ChatGPT\\3d projekt\\WINTER26_R04_CAD_STAGE2_B01\\models\\PF_W26_R04_MEDALLION_110_B01.stl",
+            "sha256": "20b9a72c7716be23733e2e3da397f231e6b854e9790e8ad0ad9a68407aba6952"
+          },
+          {
+            "path": "C:\\Users\\lsolt\\OneDrive\\Dokumenty\\ChatGPT\\3d projekt\\WINTER26_R04_CAD_STAGE2_B01\\qa\\MEDALLION_GEOMETRY.json",
+            "sha256": "bdbb17cd836297f668d432ba6cf022f16c84fdb560298fd5980d4d1a42db4dad"
+          },
+          {
+            "path": "C:\\Users\\lsolt\\OneDrive\\Dokumenty\\ChatGPT\\3d projekt\\WINTER26_R04_CAD_STAGE2_B01\\qa\\MEDALLION_DIMENSIONS.json",
+            "sha256": "e834a35f0ea543ccafcd37eb45cd9db054a94c1f54822dbc65c5d48345326ddd"
+          }
+        ]
+      }
+    ],
+    "bodyMaterialConfirmed": "PLA (polilaktyd)",
+    "materialSource": "owner_confirmation",
+    "additivesAndHangingComponentsNotConfirmed": true,
+    "safetyAssessmentApproved": false,
+    "targetColors": [
+      "Czerwony",
+      "Biały",
+      "Biały nakrapiany (Marble)",
+      "Czarno-czerwony (Black / Red)",
+      "Cappuccino"
+    ],
+    "newSkusActivated": false
+  },
+  "shipping": {
+    "startDate": "2026-12-01",
+    "paidBeforeStart": "dispatch_on_start_date",
+    "paidOnOrAfterStart": {
+      "minBusinessDays": 2,
+      "maxBusinessDays": 3,
+      "countFrom": "payment_received"
+    },
+    "guaranteedDeliveryDate": false,
+    "singleParcelPolicyApproved": false
+  },
+  "invoicing": {
+    "document": "invoice",
+    "software": "Subiekt 123",
+    "vendor": "InsERT S.A.",
+    "delivery": "email",
+    "bookkeeping": "internal",
+    "integrationVerified": false
+  },
+  "privacy": {
+    "contactEmail": "kontakt@pracowniaform.com",
+    "handledBy": "owner",
+    "ownerPublishedAsDpo": false,
+    "dpoObligationAssessed": false,
+    "retentionApproved": false
+  },
+  "protectedScope": "Wyłącznie dokumenty i roboczy storefront Pracowni Form; bez dostępu do zasobów działalności rachunkowej, zmian hostingu/DNS, merge, publikacji lub Stripe Live."
+}

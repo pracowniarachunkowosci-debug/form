@@ -17,5 +17,6 @@
   },
   "featuredSetSize": 6,
   "freeCourierFromOrnaments": 6,
-  "smallOrderCourierGrosz": null
+  "smallOrderCourierGrosz": 2049,
+  "smallOrderLockerGrosz": 1849
 }

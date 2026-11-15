@@ -1,0 +1,10 @@
+Dzień dobry,
+aktualizacja wyłącznie test.pracowniaform.com / vhost 1711054 / serwer533947.
+
+Za osobną zgodą właściciela zakończyliśmy DNS-01 w Let's Encrypt i import przez SSL > Własny. Panel potwierdził włączenie SSL. Certyfikat ma tylko SAN test.pracowniaform.com, wystawcę YR1 i ważność do 12.02.2027 10:52:59 UTC. Zewnętrzny test SSL potwierdził IP 195.2.223.12, poprawną nazwę i pełny zaufany łańcuch; numer seryjny jest zgodny z wydanym certyfikatem. HTTPS pustego WWW zwraca 403. Nie dodawaliśmy www.test. Testowy TXT DNS-01 usunięto, istniejące DNS pozostały bez zmian. Prosimy nie nadpisywać zainstalowanego certyfikatu.
+
+Pozostała blokada uruchomienia: prywatny katalog konfiguracji i SQLite dla PHP-FPM. Podtrzymujemy prośbę o dedykowaną ścieżkę poza WSZYSTKIMI webrootami, np. <HOME>/.pf-private/pf-stage-20261114. Potrzebujemy: (1) config/ z odczytem, bez zapisu przez runtime; (2) data/ z prawem tworzenia/odczytu/zapisu/usuwania tylko dla FPM tego stagingu, także journal/WAL/SHM SQLite; (3) minimalnego przejścia przez katalogi nadrzędne; (4) bezpiecznego sposobu dostarczania plików poza WWW oraz per-vhost PF_TEST_CONFIG lub wspieranego wskaźnika do prywatnego JSON. Prosimy potwierdzić izolację od innych vhostów i trwałość/backup. Bez nadawania zapisu całego HOME, chmod 777, wyłączania separacji czy zmian globalnych. Jeśli tego nie można zapewnić w Orange, prosimy o konkretny wspierany wariant i jego zakres do decyzji, bez samodzielnej zmiany pakietu. MySQL nie rozwiązuje przechowania kluczy Stripe ani hasła DB.
+
+Prosimy nadal wyjaśnić routing HTTP-01 i wspierany sposób odnawiania/importowania własnego certyfikatu, lecz nie ponawiać instalatora ani nie zmieniać obecnego SSL bez uzgodnienia. Bez sekretów w odpowiedzi. Nie wgrano aplikacji, bazy ani konfiguracji runtime.
+
+Bezwzględnie nie zmieniać zasobów Pracowni Rachunkowości, domeny głównej pracowniaform.com, innych vhostów, poczty, DNS, głównego FTP ani konfiguracji wspólnej. Zgłoszenie pozostaje otwarte.

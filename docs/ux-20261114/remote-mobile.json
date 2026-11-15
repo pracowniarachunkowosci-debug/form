@@ -1,0 +1,46 @@
+[
+  {
+    "colorTargets": [
+      48,
+      57,
+      48,
+      48
+    ],
+    "paletteInSelectedCard": true,
+    "scrollWidth": 305,
+    "width": 320
+  },
+  {
+    "colorTargets": [
+      48,
+      57,
+      48,
+      48
+    ],
+    "paletteInSelectedCard": true,
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "colorTargets": [
+      48,
+      57,
+      48,
+      48
+    ],
+    "paletteInSelectedCard": true,
+    "scrollWidth": 375,
+    "width": 390
+  },
+  {
+    "colorTargets": [
+      48,
+      57,
+      48,
+      48
+    ],
+    "paletteInSelectedCard": true,
+    "scrollWidth": 415,
+    "width": 430
+  }
+]

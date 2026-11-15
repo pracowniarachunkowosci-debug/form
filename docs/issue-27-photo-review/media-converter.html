@@ -1,0 +1,6 @@
+<!doctype html><meta charset="utf-8"><title>WINTER 26 preview media converter</title><p>Generating local preview derivatives…</p><pre id=log></pre><script>
+const assets=["WEB001", "WEB002", "WEB003", "WEB004", "WEB005", "WEB006", "WEB007", "WEB008", "WEB009", "WEB010", "WEB011", "WEB012", "WEB013", "WEB014", "WEB015", "WEB016", "WEB017", "WEB018", "WEB019", "WEB020", "WEB021", "WEB022", "WEB023", "WEB024", "WEB025", "WEB026"], sizes=[360,680,1120], log=document.querySelector('#log');
+function say(x){log.textContent+=x+'\n';}
+async function one(id){const image=new Image(); image.src='assets/'+id+'.jpg'; await image.decode(); for(const w of sizes){const h=Math.round(image.naturalHeight*w/image.naturalWidth); const canvas=document.createElement('canvas'); canvas.width=w; canvas.height=h; canvas.getContext('2d').drawImage(image,0,0,w,h); for(const [type,ext,quality] of [['image/webp','webp',.82],['image/avif','avif',.6]]){const url=canvas.toDataURL(type,quality); if(!url.startsWith('data:'+type)){say(id+' '+ext+' unsupported'); continue} const a=document.createElement('a'); a.href=url; a.download=id+'-'+w+'.'+ext; a.textContent=id+'-'+w+'.'+ext; a.className='derivative'; document.body.append(a);}} say(id+' done')}
+(async()=>{for(const id of assets) await one(id); say('DONE')})();
+</script>

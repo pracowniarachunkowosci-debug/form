@@ -1,0 +1,20 @@
+{
+  "source_commit": "d8198ded71980c9aa702241a227b24157fd1e969",
+  "source_dirty": false,
+  "archive": "pracownia-form-lh.zip",
+  "archive_sha256": "99d3fd90d228249c7cccbd2e56a0475c927d1c233cb026f714635574fdc6857d",
+  "archive_bytes": 9210320,
+  "manifest_sha256": "d82af1e985891c164ad23dd38504589cc9edc82e2e953e6cde53c93cc81abda8",
+  "files": 125,
+  "uploaded_by_this_build": false,
+  "target": "Uberspace 8 / pf26.uber.space / Sandbox only",
+  "application_baseline": "9cb6100e6368c125e9fc6cbde6958496838c490d",
+  "application_changes_since_baseline": false,
+  "checkout_suites": [
+    "checkout-sandbox",
+    "checkout-live-gates",
+    "checkout-locker"
+  ],
+  "checkout_suites_passed": true,
+  "php_lint_passed": true
+}

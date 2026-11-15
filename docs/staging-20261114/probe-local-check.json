@@ -1,0 +1,37 @@
+{
+  "php_lint": "PASS",
+  "cases": [
+    {
+      "case": "anonymous_get",
+      "status": 404,
+      "pass": true
+    },
+    {
+      "case": "anonymous_post",
+      "status": 404,
+      "pass": true
+    },
+    {
+      "case": "wrong_token",
+      "status": 404,
+      "pass": true
+    },
+    {
+      "case": "wrong_host",
+      "status": 404,
+      "pass": true
+    },
+    {
+      "case": "expired",
+      "status": 404,
+      "pass": true
+    },
+    {
+      "case": "non_fpm_scope_stopped",
+      "status": 200,
+      "pass": true
+    }
+  ],
+  "scope": "local CLI diagnostic gates only; remote HTTP cases recorded separately",
+  "local_http_attempt": "sandbox denied socket; not counted as PASS"
+}

@@ -1,0 +1,17 @@
+{
+  "tester_login": true,
+  "one_scoped_sandbox_endpoint": true,
+  "two_own_paid_events": true,
+  "resend_accepted_0": true,
+  "resend_accepted_1": true,
+  "paid_redelivery_stock_unchanged": true,
+  "new_cancellation_checkout": true,
+  "reservation_decrements_once": true,
+  "checkout_request_idempotency": true,
+  "retry_no_second_stock_decrement": true,
+  "changed_request_rejected": true,
+  "own_unpaid_session_only": true,
+  "cancel_return_page": true,
+  "own_session_expired": true,
+  "signed_expired_event_releases_stock": true
+}

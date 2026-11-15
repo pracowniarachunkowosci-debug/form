@@ -1,0 +1,35 @@
+# STAGING ONLY: test.pracowniaform.com / vhost 1711054.
+# Render @PRIVATE_AUTH_FILE@ to an operator-approved path outside ALL webroots.
+# Install and test this file BEFORE uploading any application file.
+# This template is not deployed and must never be copied to another vhost.
+Options -Indexes -MultiViews
+DirectoryIndex index.html
+AcceptPathInfo Off
+AddType image/avif .avif
+AddType image/webp .webp
+SSLRequireSSL
+
+AuthType Basic
+AuthName "Pracownia Form staging"
+AuthBasicProvider file
+AuthUserFile "@PRIVATE_AUTH_FILE@"
+
+# All technical-host aliases are denied, including with valid Basic credentials.
+# Only the exact POST callback may bypass Basic Auth. Stripe's signature is still
+# mandatory in api/webhook.php, before opening SQLite or processing any event.
+<RequireAll>
+    Require expr "%{HTTP_HOST} == 'test.pracowniaform.com'"
+    <RequireAny>
+        Require expr "%{REQUEST_METHOD} == 'POST' && %{REQUEST_URI} == '/api/webhook.php' && %{QUERY_STRING} == '' && %{PATH_INFO} == '' && %{THE_REQUEST} =~ m#^POST /api/webhook[.]php HTTP/[0-9.]+$#"
+        Require valid-user
+    </RequireAny>
+</RequireAll>
+
+# Internal includes, CLI seed/production tools and dotfiles are never HTTP APIs.
+<FilesMatch "^(?:[.]|_.*[.]php$|seed-test[.]php$|prepare-live[.]php$)">
+    Require all denied
+</FilesMatch>
+
+Header always set X-Robots-Tag "noindex, nofollow, noarchive"
+Header always set Cache-Control "private, no-store"
+Header always set X-Content-Type-Options "nosniff"

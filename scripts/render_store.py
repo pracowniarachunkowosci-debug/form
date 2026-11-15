@@ -46,7 +46,7 @@ def card(p,n):
 </article>'''
 def sets():
     size=pricing['featuredSetSize']; regular=pricing['setGrossGrosz']
-    featured=f'<article><span class="set-number">Polecamy · 0{size}</span><h3>Komplet sześciu ozdób</h3><p>Dwie VASE, dwie gwiazdy i dwa medaliony — albo Twój własny wybór. Kurier w Polsce w cenie.</p><a class="set-link" href="{entry(size)}">Skomponuj 6 szt. · {pln(regular[str(size)])} ↗</a></article>'
+    featured=f'<article><span class="set-number">Polecamy · 0{size}</span><h3>Komplet sześciu ozdób</h3><p>Dwie VASE, dwie gwiazdy i dwa medaliony — albo Twój własny wybór. Dostawa w Polsce w cenie.</p><a class="set-link" href="{entry(size)}">Skomponuj 6 szt. · {pln(regular[str(size)])} ↗</a></article>'
     links=' '.join(f'<a class="set-link" href="{entry(s["size"])}">{s["size"]} szt. · {pln(s["grossGrosz"])} ↗</a>' for s in options['sizes'] if s['size']!=size)
     return '<div class="sets-grid">'+featured+'<article><span class="set-number">WINTER 26</span><h3>Pozostałe kompozycje</h3><p>Ceny brutto. Poniżej sześciu ozdób dostawa płatna osobno.</p><div class="set-entries">'+links+'</div></article></div>'
 catalog_path=ROOT/'winter-26.html'
@@ -94,7 +94,7 @@ def detail(p,n):
         head=head.replace('content="index, follow"','content="noindex, follow"')
     if link:
         head=head.replace('Kolekcja w przygotowaniu · sprzedaż nieaktywna','Kolekcja WINTER 26')
-        head=head.replace('WINTER 26 — przedsprzedaż <span>Przedsprzedaż wkrótce · nadania planujemy od 23.11.2026</span>', 'WINTER 26 <span>Zakupy aktywne w przedsprzedaży</span>')
+        head=head.replace('WINTER 26 — przedsprzedaż <span>Przedsprzedaż wkrótce · nadania planujemy od 01.12.2026</span>', 'WINTER 26 <span>Zakupy aktywne w przedsprzedaży</span>')
     specs=facts([('Materiał',material_notice(p)),('Kolor',p['color'] if 'variants' not in p else None),('Wymiary',p['dimensions']),
                  ('SKU',p['sku'] if 'variants' not in p else None),('Stan fizyczny',p['stock'] if 'variants' not in p else None),('Ilość','1 zestaw' if p['type']=='zestaw' else '1 sztuka')])
     safety_rows=facts([(label,p['gpsr'][key]) for label,key in [('Producent','producer'),('Adres','address'),('E-mail','email'),

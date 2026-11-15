@@ -1,0 +1,113 @@
+{
+  "scope": "Owner R01.6 correction: all previously White STAR and MEDALLION photos are Marble. No new role or production-photo approval.",
+  "originalsPreserved": true,
+  "noRoleChanges": true,
+  "onlyOneOwnerApproved": true,
+  "decisions": [
+    {
+      "decisionId": "R016-COLOR-WEB014-20261115",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "WEB014",
+      "modelId": "knitted-star",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "gallery",
+      "sourceFile": "winter26-id259-main-codex.jpg",
+      "sha256": "9bcf3f8ff2fe4b6793aa72e01ab185820d67c7090b4a095a2f58cdd82110faea",
+      "roleChanged": false,
+      "includeInGallery": true
+    },
+    {
+      "decisionId": "R016-COLOR-knitted-star-white-scene-1-20261115",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "knitted-star-white-scene-1",
+      "modelId": "knitted-star",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "lifestyle",
+      "sourceFile": "PF_W26_galeria_KNITTED-STAR_01_4x5_1600x2000.webp",
+      "sha256": "1aea407ab9f1af7109a0693eb60f54891ebef55e3b8751e807fa12d45b9e407b",
+      "roleChanged": false,
+      "includeInGallery": true
+    },
+    {
+      "decisionId": "R016-COLOR-knitted-star-white-scene-2-20261115",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "knitted-star-white-scene-2",
+      "modelId": "knitted-star",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "lifestyle",
+      "sourceFile": "PF_W26_galeria_KNITTED-STAR_02_4x5_1600x2000.webp",
+      "sha256": "3189df4d68bdab8b1c63dbe7a0a5aa7ec02b4234bb72ccd0197ca0afea6fa6a2",
+      "roleChanged": false,
+      "includeInGallery": true
+    },
+    {
+      "decisionId": "R016-COLOR-knitted-star-white-scene-3-20261115",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "knitted-star-white-scene-3",
+      "modelId": "knitted-star",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "lifestyle",
+      "sourceFile": "PF_W26_galeria_KNITTED-STAR_03_4x5_1600x2000.webp",
+      "sha256": "92b7427e7c37f4c62ddfeaf8ce96865270c50ac9e9c0c4f53249fe0345315e33",
+      "roleChanged": false,
+      "includeInGallery": false
+    },
+    {
+      "decisionId": "R016-COLOR-knitted-medallion-white-scene-1-20261115",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "knitted-medallion-white-scene-1",
+      "modelId": "knitted-medallion",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "lifestyle",
+      "sourceFile": "PF_W26_galeria_KNITTED-MEDALLION_01_4x5_1600x2000.webp",
+      "sha256": "b3ff909678115b5a97bffa56073b861773c9cde1243953b0f7909352003522c3",
+      "roleChanged": false,
+      "includeInGallery": true
+    },
+    {
+      "decisionId": "R016-COLOR-knitted-medallion-white-scene-2-20261115",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "knitted-medallion-white-scene-2",
+      "modelId": "knitted-medallion",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "lifestyle",
+      "sourceFile": "PF_W26_galeria_KNITTED-MEDALLION_02_4x5_1600x2000.webp",
+      "sha256": "72dedaa5757a012c1760d7c72224fdf0f51d9080d5cc8f1d6ea356a872717425",
+      "roleChanged": false,
+      "includeInGallery": true
+    },
+    {
+      "decisionId": "R016-COLOR-knitted-medallion-white-scene-3-20261115",
+      "status": "OWNER COLOR CONFIRMED",
+      "assetId": "knitted-medallion-white-scene-3",
+      "modelId": "knitted-medallion",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "lifestyle",
+      "sourceFile": "PF_W26_galeria_KNITTED-MEDALLION_03_4x5_1600x2000.webp",
+      "sha256": "c80d5ac86aa2e0d76007db8ede51a52d9a8f83f32dc199a4ef920083c50ff64f",
+      "roleChanged": false,
+      "includeInGallery": true
+    },
+    {
+      "decisionId": "R016-QUALITY-STAR-SCENE03-20261115",
+      "status": "REJECTED_QUALITY",
+      "assetId": "knitted-star-white-scene-3",
+      "modelId": "knitted-star",
+      "previousColorId": "white",
+      "colorId": "marble",
+      "role": "lifestyle",
+      "sourceFile": "PF_W26_galeria_KNITTED-STAR_03_4x5_1600x2000.webp",
+      "sha256": "92b7427e7c37f4c62ddfeaf8ce96865270c50ac9e9c0c4f53249fe0345315e33",
+      "roleChanged": false,
+      "includeInGallery": false,
+      "reason": "Owner identified the blurred third lifestyle photo by screenshot; red ribbon and orange, ornament out of focus."
+    }
+  ]
+}

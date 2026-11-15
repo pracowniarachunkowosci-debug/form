@@ -1,0 +1,20 @@
+Dzień dobry,
+aktualizacja dotyczy wyłącznie test.pracowniaform.com (vhost 1711054, serwer533947, IP 195.2.223.12, /public_html/pf-stage-20261114/www).
+
+FTPS konta serwer533947_pfstage14 działa w WinSCP: listing, upload i usuwanie plików potwierdzone. Prosimy nie traktować wcześniejszego 425 jako bieżącej blokady tej sesji.
+
+Chroniona tokenem sonda uruchomiona przez HTTP potwierdziła PHP-FPM (fpm-fcgi), PHP 8.5.12, PDO SQLite i cURL. HOME oraz realpath odpowiadają katalogowi konta według Państwa dokumentacji; DOCUMENT_ROOT odpowiada właściwemu stagingowi. open_basedir jest pusty, separacja w panelu pozostaje włączona. Kontrolne utworzenie losowego katalogu/pliku, zapis, odczyt i usunięcie wewnątrz WWW działa. Próby mkdir HOME/.pf-private oraz losowego katalogu obok public_html kończą się Permission denied. Odmowę otrzymuje proces PHP-FPM, a nie klient FTP. is_writable(HOME)=true nie przekłada się na skuteczny mkdir.
+
+Zgodnie z decyzją właściciela prosimy o utworzenie dedykowanego prywatnego katalogu dla tego vhosta poza WSZYSTKIMI webrootami (również domeną techniczną) i nadanie minimalnych uprawnień jego procesowi PHP-FPM. Prosimy wskazać bezpieczny sposób dostarczenia prywatnej konfiguracji przy obecnym, ograniczonym koncie FTPS i braku SSH. Czy oferujecie per-vhost environment variables lub private config path? Prosimy nie używać chmod 777, nie wyłączać separacji ani nie rozluźniać ustawień globalnych. Jeżeli rozwiązanie wymaga szerszych zmian, najpierw prosimy o opis do zatwierdzenia.
+
+SSL: A/TXT hosta są zgodne na 1.1.1.1, 8.8.8.8 i obu autorytatywnych OVH; brak AAAA i CAA hosta/apex. Zwykły plik oraz plik w /.well-known/ dają 200, lecz /.well-known/acme-challenge/probe.txt daje 404 mimo obecności na FTP (0644/0755), także przy --resolve do IP LH. Czy istnieje centralny alias/webroot ACME? Prosimy ustalić przyczynę odmowy instalatora Let's Encrypt.
+
+Przygotowujemy alternatywę DNS-01 wyłącznie dla test.pracowniaform.com. Formularz „Własny” tego vhosta udostępnia certyfikat, klucz prywatny i CA. Prosimy potwierdzić:
+1) przyjęcie zewnętrznego Let's Encrypt z SAN tylko test.pracowniaform.com oraz układ leaf / private key / intermediate chain;
+2) czy import „Własny” wymaga www.test.pracowniaform.com (obecnie NXDOMAIN), mimo braku tej nazwy w certyfikacie;
+3) czy własny certyfikat wymaga ręcznej wymiany po każdym odnowieniu i czy jest dostępny wspierany mechanizm ponownego importu.
+Nie prosimy teraz o dodawanie www, rekordów DNS ani instalowanie certyfikatu. Nie przesyłamy kluczy ani wartości challenge.
+
+Wszystkie sondy i własne pliki/katalogi testowe usunięto; WWW jest ponownie pusty. Nie wgrano aplikacji, bazy ani sekretów.
+
+Bezwzględnie nie zmieniać zasobów Pracowni Rachunkowości: plików, baz, domen, DNS, poczty, certyfikatów ani konfiguracji. Bez zmian domeny głównej pracowniaform.com, ustawień globalnych i głównego konta FTP. Zgłoszenie prosimy pozostawić otwarte.

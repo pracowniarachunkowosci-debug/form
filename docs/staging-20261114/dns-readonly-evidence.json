@@ -1,0 +1,438 @@
+[
+  {
+    "timeUtc": "2026-11-14T09:55:27.038879+00:00",
+    "server": "1.1.1.1",
+    "name": "test.pracowniaform.com",
+    "queryType": "A",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": [
+      {
+        "name": "test.pracowniaform.com",
+        "type": "A",
+        "ttl": 3600,
+        "value": "195.2.223.12"
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.042957+00:00",
+    "server": "1.1.1.1",
+    "name": "test.pracowniaform.com",
+    "queryType": "AAAA",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.047021+00:00",
+    "server": "1.1.1.1",
+    "name": "test.pracowniaform.com",
+    "queryType": "TXT",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": [
+      {
+        "name": "test.pracowniaform.com",
+        "type": "TXT",
+        "ttl": 3600,
+        "value": [
+          "lh.pl"
+        ]
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.048032+00:00",
+    "server": "1.1.1.1",
+    "name": "test.pracowniaform.com",
+    "queryType": "CAA",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.048032+00:00",
+    "server": "1.1.1.1",
+    "name": "pracowniaform.com",
+    "queryType": "CAA",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.049195+00:00",
+    "server": "1.1.1.1",
+    "name": "pracowniaform.com",
+    "queryType": "NS",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": [
+      {
+        "name": "pracowniaform.com",
+        "type": "NS",
+        "ttl": 3600,
+        "value": "ns106.ovh.net"
+      },
+      {
+        "name": "pracowniaform.com",
+        "type": "NS",
+        "ttl": 3600,
+        "value": "dns106.ovh.net"
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.050417+00:00",
+    "server": "8.8.8.8",
+    "name": "test.pracowniaform.com",
+    "queryType": "A",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": [
+      {
+        "name": "test.pracowniaform.com",
+        "type": "A",
+        "ttl": 3600,
+        "value": "195.2.223.12"
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.050417+00:00",
+    "server": "8.8.8.8",
+    "name": "test.pracowniaform.com",
+    "queryType": "AAAA",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.111691+00:00",
+    "server": "8.8.8.8",
+    "name": "test.pracowniaform.com",
+    "queryType": "TXT",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": [
+      {
+        "name": "test.pracowniaform.com",
+        "type": "TXT",
+        "ttl": 3600,
+        "value": [
+          "lh.pl"
+        ]
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.144727+00:00",
+    "server": "8.8.8.8",
+    "name": "test.pracowniaform.com",
+    "queryType": "CAA",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.154071+00:00",
+    "server": "8.8.8.8",
+    "name": "pracowniaform.com",
+    "queryType": "CAA",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.155073+00:00",
+    "server": "8.8.8.8",
+    "name": "pracowniaform.com",
+    "queryType": "NS",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": [
+      {
+        "name": "pracowniaform.com",
+        "type": "NS",
+        "ttl": 3600,
+        "value": "dns106.ovh.net"
+      },
+      {
+        "name": "pracowniaform.com",
+        "type": "NS",
+        "ttl": 3600,
+        "value": "ns106.ovh.net"
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.240117+00:00",
+    "server": "1.1.1.1",
+    "name": "dns106.ovh.net",
+    "queryType": "A",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": [
+      {
+        "name": "dns106.ovh.net",
+        "type": "A",
+        "ttl": 2204,
+        "value": "5.196.41.1"
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.273269+00:00",
+    "server": "1.1.1.1",
+    "name": "ns106.ovh.net",
+    "queryType": "A",
+    "rcode": 0,
+    "authoritative": false,
+    "answers": [
+      {
+        "name": "ns106.ovh.net",
+        "type": "A",
+        "ttl": 3600,
+        "value": "5.135.65.21"
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.337819+00:00",
+    "server": "5.196.41.1",
+    "name": "test.pracowniaform.com",
+    "queryType": "A",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": [
+      {
+        "name": "test.pracowniaform.com",
+        "type": "A",
+        "ttl": 3600,
+        "value": "195.2.223.12"
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.337819+00:00",
+    "server": "5.196.41.1",
+    "name": "test.pracowniaform.com",
+    "queryType": "AAAA",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.338816+00:00",
+    "server": "5.196.41.1",
+    "name": "test.pracowniaform.com",
+    "queryType": "TXT",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": [
+      {
+        "name": "test.pracowniaform.com",
+        "type": "TXT",
+        "ttl": 3600,
+        "value": [
+          "lh.pl"
+        ]
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.339815+00:00",
+    "server": "5.196.41.1",
+    "name": "test.pracowniaform.com",
+    "queryType": "CAA",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.341011+00:00",
+    "server": "5.196.41.1",
+    "name": "pracowniaform.com",
+    "queryType": "CAA",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.341011+00:00",
+    "server": "5.196.41.1",
+    "name": "pracowniaform.com",
+    "queryType": "NS",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": [
+      {
+        "name": "pracowniaform.com",
+        "type": "NS",
+        "ttl": 3600,
+        "value": "dns106.ovh.net"
+      },
+      {
+        "name": "pracowniaform.com",
+        "type": "NS",
+        "ttl": 3600,
+        "value": "ns106.ovh.net"
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.341676+00:00",
+    "server": "5.135.65.21",
+    "name": "test.pracowniaform.com",
+    "queryType": "A",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": [
+      {
+        "name": "test.pracowniaform.com",
+        "type": "A",
+        "ttl": 3600,
+        "value": "195.2.223.12"
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.342300+00:00",
+    "server": "5.135.65.21",
+    "name": "test.pracowniaform.com",
+    "queryType": "AAAA",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.394549+00:00",
+    "server": "5.135.65.21",
+    "name": "test.pracowniaform.com",
+    "queryType": "TXT",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": [
+      {
+        "name": "test.pracowniaform.com",
+        "type": "TXT",
+        "ttl": 3600,
+        "value": [
+          "lh.pl"
+        ]
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.394549+00:00",
+    "server": "5.135.65.21",
+    "name": "test.pracowniaform.com",
+    "queryType": "CAA",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.394549+00:00",
+    "server": "5.135.65.21",
+    "name": "pracowniaform.com",
+    "queryType": "CAA",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T09:55:27.397824+00:00",
+    "server": "5.135.65.21",
+    "name": "pracowniaform.com",
+    "queryType": "NS",
+    "rcode": 0,
+    "authoritative": true,
+    "answers": [
+      {
+        "name": "pracowniaform.com",
+        "type": "NS",
+        "ttl": 3600,
+        "value": "ns106.ovh.net"
+      },
+      {
+        "name": "pracowniaform.com",
+        "type": "NS",
+        "ttl": 3600,
+        "value": "dns106.ovh.net"
+      }
+    ]
+  },
+  {
+    "timeUtc": "2026-11-14T10:11:19.657470+00:00",
+    "server": "1.1.1.1",
+    "name": "www.test.pracowniaform.com",
+    "queryType": "A",
+    "rcode": 3,
+    "authoritative": false,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T10:11:19.813922+00:00",
+    "server": "8.8.8.8",
+    "name": "www.test.pracowniaform.com",
+    "queryType": "A",
+    "rcode": 3,
+    "authoritative": false,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T10:11:19.934339+00:00",
+    "server": "5.196.41.1",
+    "name": "www.test.pracowniaform.com",
+    "queryType": "A",
+    "rcode": 3,
+    "authoritative": true,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T10:11:19.994869+00:00",
+    "server": "5.135.65.21",
+    "name": "www.test.pracowniaform.com",
+    "queryType": "A",
+    "rcode": 3,
+    "authoritative": true,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T10:45:21.243618+00:00",
+    "server": "1.1.1.1",
+    "name": "_acme-challenge.test.pracowniaform.com",
+    "queryType": "TXT",
+    "rcode": 3,
+    "authoritative": false,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T10:45:21.246617+00:00",
+    "server": "8.8.8.8",
+    "name": "_acme-challenge.test.pracowniaform.com",
+    "queryType": "TXT",
+    "rcode": 3,
+    "authoritative": false,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T10:45:21.250192+00:00",
+    "server": "5.196.41.1",
+    "name": "_acme-challenge.test.pracowniaform.com",
+    "queryType": "TXT",
+    "rcode": 3,
+    "authoritative": true,
+    "answers": []
+  },
+  {
+    "timeUtc": "2026-11-14T10:45:21.252191+00:00",
+    "server": "5.135.65.21",
+    "name": "_acme-challenge.test.pracowniaform.com",
+    "queryType": "TXT",
+    "rcode": 3,
+    "authoritative": true,
+    "answers": []
+  }
+]

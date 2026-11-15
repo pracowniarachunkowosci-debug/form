@@ -47,7 +47,7 @@ def catalog_data(store, media, pricing):
     sizes = {1:pricing['singleGrossGrosz'], **{int(k):v for k,v in pricing['setGrossGrosz'].items()}}
     assert sorted(sizes) == [1,2,4,6,8] and all(type(v) is int and v > 0 for v in sizes.values())
     threshold = pricing['freeCourierFromOrnaments']
-    return dict(models=models, featured=pricing['featuredSetSize'], freeFrom=threshold,
+    return dict(models=models, featured=pricing['featuredSetSize'], freeFrom=threshold, smallOrderLockerGrosz=pricing['smallOrderLockerGrosz'],
                 sizes=[dict(size=n, grossGrosz=sizes[n], shippingGrosz=0 if n>=threshold else pricing['smallOrderCourierGrosz']) for n in sorted(sizes)])
 
 def controls(p, data):
@@ -65,26 +65,45 @@ def config_scripts(data):
 BUILDER = '''<section id="kompozycja" class="atelier" aria-labelledby="atelier-title">
 <header class="atelier-intro"><p class="eyebrow">WINTER 26 &nbsp; / &nbsp; Kompozycje</p>
 <h1 id="atelier-title">Skomponuj swój zestaw</h1>
-<p>Wybierz wzory i wykończenia. Możesz powtarzać swoje ulubione ozdoby. Od sześciu sztuk kurier w Polsce jest w cenie.</p></header>
+<p>Wybierz wzory i wykończenia. Możesz powtarzać swoje ulubione ozdoby. Od sześciu sztuk dostawa w Polsce jest w cenie.</p></header>
 <div data-builder hidden>
+<nav class="atelier-steps" data-steps aria-label="Etapy komponowania"></nav>
+<section data-stage="1" aria-label="Rozmiar zestawu" tabindex="-1">
 <fieldset class="size-picker"><legend>Wielkość zestawu</legend><div data-sizes></div></fieldset>
+<p class="help">Wybierz liczbę ozdób. W kolejnym kroku dobierzesz model i kolor każdej z nich.</p>
+<button type="button" class="ink-button" data-start>Wybierz modele i kolory →</button></section>
 <div class="compose-layout"><div class="workspace">
-<p class="eyebrow">01 &nbsp; / &nbsp; Układ zestawu</p><h2>Twoje bombki</h2>
-<p class="help">Wybierz miejsce, które chcesz uzupełnić lub zmienić. <a href="#sklad">Podsumowanie ↓</a></p>
+<section data-stage="2" aria-label="Komponowanie zestawu" tabindex="-1">
+<p class="eyebrow">02 &nbsp; / &nbsp; Komponowanie</p><h2>Twoje bombki</h2>
+<p class="help">Każda bombka potrzebuje modelu i koloru. Dotknij numeru, aby ją zmienić.</p>
+<p data-compose-count role="status" aria-live="polite"></p>
 <div data-slots class="slots" role="group" aria-label="Miejsca w zestawie"></div>
-<div class="edit-position"><p class="eyebrow" data-edit-title></p>
+<div class="edit-position" tabindex="-1"><h3 data-edit-title></h3><p data-edit-status role="status"></p>
 <fieldset><legend>Wybierz model</legend><div data-models class="model-grid"></div></fieldset>
-<p class="help">Kadry przedstawiają formę. Nie pokazują wszystkich wykończeń.</p>
-<fieldset><legend>Wybierz kolor</legend><div data-colors></div></fieldset>
-<button class="ink-button" data-next type="button">Następna bombka →</button></div></div>
-<aside class="composition" id="sklad" aria-label="Podsumowanie zestawu"><p class="eyebrow">02 &nbsp; / &nbsp; Kompozycja</p><h2>Twój zestaw</h2>
+<p class="help">Zdjęcia pokazują formę. Próbki kolorów są poglądowe.</p>
+<div data-color-home><fieldset data-color-field><legend>Wybierz kolor</legend><div data-colors></div></fieldset></div>
+<div class="position-nav"><button class="reset-set" data-prev type="button">← Poprzednia</button><button class="ink-button" data-next type="button">Następna bombka →</button></div>
+<button type="button" class="reset-set" data-review>Przejdź do podsumowania</button></div></section></div>
+<aside class="composition" id="sklad" data-stage="3" tabindex="-1" aria-label="Podsumowanie zestawu"><p class="eyebrow">03 &nbsp; / &nbsp; Podsumowanie</p><h2>Twój zestaw</h2>
 <p class="count" data-count aria-live="polite" aria-atomic="true"></p>
 <div class="progress-line" aria-hidden="true"><span></span></div><p data-summary-note></p>
-<ul data-summary></ul><div class="pack-actions"><button type="button" class="ink-button" data-add-pack>Dodaj kolejną kompozycję</button></div>
+<ul data-issues aria-label="Wybory do uzupełnienia"></ul><ul data-summary hidden></ul><div class="pack-actions"><button type="button" class="reset-set" data-add-pack>Dodaj kolejną kompozycję</button></div>
 <section class="basket" aria-labelledby="basket-title"><h3 id="basket-title">Twój koszyk</h3>
-<ul data-basket></ul><p data-totals aria-live="polite"></p></section>
+<ul data-basket></ul>
+<fieldset class="delivery-picker" data-delivery-picker hidden><legend>Dostawa w Polsce</legend>
+<label><input type="radio" data-delivery-courier name="delivery-method" value="courier" checked> <span>Kurier na adres · <strong data-courier-fee></strong></span></label>
+<label><input type="radio" data-delivery-locker name="delivery-method" value="locker" disabled> <span>Paczkomat® InPost · <strong data-locker-fee></strong></span></label>
+<div data-locker-panel hidden>
+<p data-point-summary class="point-receipt" aria-live="polite"></p>
+<button type="button" class="ink-button" data-open-map hidden>Wybierz Paczkomat na mapie</button>
+<label class="locker-id" for="locker-id">Kod automatu Paczkomat®</label>
+<div class="locker-search"><input id="locker-id" data-point-id type="text" maxlength="32" autocapitalize="characters" spellcheck="false" autocomplete="off" aria-describedby="point-help"><button class="reset-set" data-find-point type="button">Sprawdź kod</button></div>
+<p id="point-help" class="help">Wpisz oznaczenie z automatu, np. WRO01M. Przed płatnością pokażemy jego adres.</p>
+<a class="text-link" data-locker-directory href="https://inpost.pl/znajdz-paczkomat" target="_blank" rel="noopener noreferrer" hidden>Znajdź kod w lokalizatorze InPost ↗</a>
+<p data-point-status role="status" aria-live="polite"></p></div></fieldset>
+<p data-totals aria-live="polite"></p></section>
 <button type="button" class="reset-set" data-reset>Wyczyść wybór</button>
-<div class="coupon-entry"><label for="winter-coupon">Kod rabatowy <small>(opcjonalnie)</small></label>
+<div class="coupon-entry" hidden><label for="winter-coupon">Kod rabatowy <small>(opcjonalnie)</small></label>
 <div><input id="winter-coupon" data-coupon type="text" maxlength="64" autocapitalize="characters" spellcheck="false" aria-describedby="coupon-status"><button type="button" class="reset-set" data-apply-code>Sprawdź kod</button></div>
 <p id="coupon-status" data-coupon-status role="status" aria-live="polite"></p></div>
 <section data-live-facts hidden aria-label="Przed złożeniem zamówienia"><p><strong>Warunki zakupu</strong></p>
@@ -95,7 +114,11 @@ BUILDER = '''<section id="kompozycja" class="atelier" aria-labelledby="atelier-t
 <p data-payment-status role="status" aria-live="polite">Zakupy uruchomimy po potwierdzeniu dostępności.</p>
 <button type="button" data-checkout class="ink-button" hidden>Przejdź do płatności testowej</button>
 <a href="index.html#preorder" data-notify class="text-link">Powiadom mnie o sprzedaży ↗</a>
-<small>Samo ułożenie kompozycji nie rezerwuje ozdób. Planowany początek nadań: 23 listopada 2026 r.</small></aside></div>
+<small>Samo ułożenie kompozycji nie rezerwuje ozdób. Planowany początek nadań: 1 grudnia 2026 r.</small></aside></div>
+<div class="atelier-sticky"><span data-sticky-copy aria-live="polite"></span><button type="button" class="ink-button" data-sticky-action>Dalej</button></div>
+<dialog class="locker-map" data-map-dialog aria-labelledby="locker-map-title"><header><h2 id="locker-map-title">Wybierz Paczkomat®</h2>
+<button type="button" class="ink-button" data-close-map autofocus>Zamknij mapę</button></header>
+<p data-map-status role="status"></p><div data-map-host></div></dialog>
 <dialog class="atelier-confirm" aria-labelledby="change-question"><h2 id="change-question"></h2>
 <form method="dialog"><button class="ink-button" value="cancel" autofocus>Zachowaj wybór</button><button class="reset-set" value="ok" data-confirm-ok></button></form></dialog>
 </div><noscript>Do komponowania zestawu włącz JavaScript. Możesz też przejść do listy premierowej.</noscript></section>'''

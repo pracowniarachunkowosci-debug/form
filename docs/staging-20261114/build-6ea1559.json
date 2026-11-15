@@ -1,0 +1,11 @@
+{
+  "source_commit": "6ea1559be02bb1a090c3c70f6af3a03d562eb7ca",
+  "source_dirty": false,
+  "archive": "pracownia-form-lh.zip",
+  "archive_sha256": "e4afe0c2f97a8885dff70442cf479779ea5c79bb93e635676020c3cb5aaf851d",
+  "archive_bytes": 9210312,
+  "manifest_sha256": "ebe49645be03605e77a371150324a505158fc19805f8796bc97d2050ccc3e814",
+  "files": 125,
+  "deployment_target": "LH Orange",
+  "uploaded_by_this_build": false
+}

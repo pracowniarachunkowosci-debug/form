@@ -30,7 +30,7 @@ function live_approval(array $c,string $root): string {
     // Fingerprint the commercially meaningful public release, safety/legal content and customer-facing operator data. Never hash a secret into a browser field.
     $files=array_unique(array_merge($legal,$listing,[$catalogPath,$pricingPath,$root.'/winter-config.js',$root.'/winter-zestaw-4.html'],glob($root.'/api/*.php')?:[]));
     $hash=hash_init('sha256');foreach($files as $file){if(!is_readable($file))unavailable();hash_update($hash,basename($file).':'.hash_file('sha256',$file)."\n");}
-    $fields=['origin','smallOrderCourierGrosz','termsUrl','returnsUrl','privacyUrl','dispatchNotice','sellerName','sellerContact','returnsSummary','complaintsSummary','productInfo','approvedVariants','operationalChecks'];
+    $fields=['origin','termsUrl','returnsUrl','privacyUrl','dispatchNotice','sellerName','sellerContact','returnsSummary','complaintsSummary','productInfo','approvedVariants','operationalChecks'];
     foreach($fields as $f)hash_update($hash,$f.':'.json_encode($c[$f],JSON_THROW_ON_ERROR)."\n");return hash_final($hash);
 }
 function live_config(bool $callbackOnly=false): array {
@@ -43,8 +43,7 @@ function live_config(bool $callbackOnly=false): array {
     if(!$db||$path!==$db||under($db,$root)||!is_file($db)||!is_writable($db)||!is_writable(dirname($db))||
        !extension_loaded('pdo_sqlite')||!extension_loaded('curl'))unavailable();
     if($callbackOnly)return $c; // Honour outstanding sessions/webhooks even if new purchases are paused.
-    if(!preg_match('/^[a-f0-9]{64}$/D',$c['abuse_hmac']??'')||!is_int($c['smallOrderCourierGrosz']??null)||
-       $c['smallOrderCourierGrosz']<1||$c['smallOrderCourierGrosz']>100000)unavailable();
+    if(!preg_match('/^[a-f0-9]{64}$/D',$c['abuse_hmac']??''))unavailable();
     $version=live_approval($c,$root);if(!hash_equals($version,$c['approvedReleaseSha256']??''))unavailable();
     $c['approvalVersion']=$version;return $c;
 }
@@ -64,12 +63,15 @@ function rate(PDO $db,array $cfg,string $id,string $request): void {
         if(!hash_equals($id,$existing['owner']??''))problem('REQUEST_CONFLICT',409,'Użyj nowej próby zamówienia.');
         return;
     }
-    tx($db,function()use($db,$cfg,$id){
+    // REMOTE_ADDR is supplied by the web server, never by request headers.
+    $ip=hash_hmac('sha256',$_SERVER['REMOTE_ADDR']??'unknown',$cfg['abuse_hmac']);
+    rate_buckets($db,[[$id,3],[$ip,20]]);
+}
+function rate_buckets(PDO $db,array $limits): void {
+    tx($db,function()use($db,$limits){
         $bucket=(int)floor(time()/600);
         $db->prepare('DELETE FROM attempts WHERE bucket<?')->execute([$bucket-1]);
-        // REMOTE_ADDR is supplied by the web server, never by request headers.
-        $ip=hash_hmac('sha256',$_SERVER['REMOTE_ADDR']??'unknown',$cfg['abuse_hmac']);
-        foreach([[$id,3],[$ip,20]] as [$k,$limit]){
+        foreach($limits as [$k,$limit]){
             $db->prepare('INSERT INTO attempts(identity,bucket,n) VALUES(?,?,1) ON CONFLICT(identity,bucket) DO UPDATE SET n=n+1')->execute([$k,$bucket]);
             if((int)row($db,'SELECT n FROM attempts WHERE identity=? AND bucket=?',[$k,$bucket])['n']>$limit)problem('RATE',429,'Zbyt wiele prób. Spróbuj za kilka minut.');
         }

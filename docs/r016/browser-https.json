@@ -1,0 +1,84 @@
+{
+  "target": "https://pf26.uber.space",
+  "date": "2026-11-15",
+  "method": "Actual Chrome UI interactions through CUA; result aggregates recorded from successful tool output. Not a fabricated per-action trace.",
+  "cardToProduct": {
+    "desktopWidth": 1440,
+    "mobileWidth": 390,
+    "variantsPerWidth": 12,
+    "passedTransitions": 24,
+    "selectedColorAndDestinationMatch": true
+  },
+  "galleries": {
+    "desktopWidth": 1440,
+    "mobileWidth": 390,
+    "variantsPerWidth": 12,
+    "tabsPerVariant": 2,
+    "passedStates": 48,
+    "exactAssetAndAllThumbnailMatches": true,
+    "missingStateClearsPreviousImage": true
+  },
+  "responsiveWidths": [
+    320,
+    360,
+    390,
+    430,
+    1280,
+    1440
+  ],
+  "responsiveEvidence": "Owner matrix local browser checks and gallery width observations; complete live interaction sweeps at 390 and 1440.",
+  "visualEvidence": {
+    "cardSelection": [
+      "VASE Dual",
+      "VASE red matte"
+    ],
+    "productGallery": [
+      "VASE Dual",
+      "VASE red matte",
+      "VASE White",
+      "VASE Marble",
+      "KNITTED MEDALLION Marble"
+    ],
+    "lifestyleGallery": [
+      "VASE red matte"
+    ],
+    "zoomNextAndEscape": true
+  },
+  "limitation": "Browser connection timed out during final board screenshot. No final HTTPS board screenshot is claimed. Physical-phone owner acceptance pending.",
+  "newPayments": 0,
+  "newOwnerApprovals": 0,
+  "screenshots": [
+    {
+      "file": "screenshots/cards-dual-desktop.jpg",
+      "sha256": "fc1399059e6d16c083514735705d229408b0ee635f1fe454c4c89b20eaaeb624"
+    },
+    {
+      "file": "screenshots/cards-red-desktop.jpg",
+      "sha256": "5ec7dd66cfaffdae94f8a2a28c1197fce627f704d028ed17b07f5fe40f4b4008"
+    },
+    {
+      "file": "screenshots/medallion-marble-mobile.jpg",
+      "sha256": "0a684b758b40da0a7068ea1c778267f57d64618d6c7ff792c4f459d10dd51852"
+    },
+    {
+      "file": "screenshots/vase-dual-mobile.jpg",
+      "sha256": "3cae53a54cdfd7e78749ddbb4640e05ea4bf47df98c36189bb4a70da7cd49e62"
+    },
+    {
+      "file": "screenshots/vase-marble-mobile.jpg",
+      "sha256": "9556fb651a86cd199a35ea8bb31f009d28df10488b75b653fa600e6e4eaa2309"
+    },
+    {
+      "file": "screenshots/vase-red-lifestyle-mobile.jpg",
+      "sha256": "ecb1ea5b6349239399e7550f779f0d1dc49fd2a30bc32e4f921057da9798f006"
+    },
+    {
+      "file": "screenshots/vase-red-mobile.jpg",
+      "sha256": "de85ac7617c6f3bb0f38850be0bfdc2e7d0a6e6bec7ebfb27cc1f14ef976c281"
+    },
+    {
+      "file": "screenshots/vase-white-mobile.jpg",
+      "sha256": "2d6083ccc08a36b1ed1e8b060755889710a54971bc0ad8d7084c616495650a6f"
+    }
+  ]
+}

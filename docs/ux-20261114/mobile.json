@@ -1,0 +1,94 @@
+[
+  {
+    "colorTargets": [
+      {
+        "height": 48,
+        "width": 115.671875
+      },
+      {
+        "height": 57.1875,
+        "width": 115.671875
+      },
+      {
+        "height": 48,
+        "width": 115.671875
+      },
+      {
+        "height": 48,
+        "width": 115.671875
+      }
+    ],
+    "paletteInSelectedCard": true,
+    "scrollWidth": 305,
+    "width": 320
+  },
+  {
+    "colorTargets": [
+      {
+        "height": 48,
+        "width": 133.671875
+      },
+      {
+        "height": 57.1875,
+        "width": 133.671875
+      },
+      {
+        "height": 48,
+        "width": 133.671875
+      },
+      {
+        "height": 48,
+        "width": 133.671875
+      }
+    ],
+    "paletteInSelectedCard": true,
+    "scrollWidth": 345,
+    "width": 360
+  },
+  {
+    "colorTargets": [
+      {
+        "height": 48,
+        "width": 147.171875
+      },
+      {
+        "height": 57.1875,
+        "width": 147.171875
+      },
+      {
+        "height": 48,
+        "width": 147.171875
+      },
+      {
+        "height": 48,
+        "width": 147.171875
+      }
+    ],
+    "paletteInSelectedCard": true,
+    "scrollWidth": 375,
+    "width": 390
+  },
+  {
+    "colorTargets": [
+      {
+        "height": 48,
+        "width": 165.171875
+      },
+      {
+        "height": 57.1875,
+        "width": 165.171875
+      },
+      {
+        "height": 48,
+        "width": 165.171875
+      },
+      {
+        "height": 48,
+        "width": 165.171875
+      }
+    ],
+    "paletteInSelectedCard": true,
+    "scrollWidth": 415,
+    "width": 430
+  }
+]

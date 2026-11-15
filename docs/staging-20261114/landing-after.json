@@ -1,0 +1,30 @@
+[
+  {
+    "client": 305,
+    "float": "none",
+    "missingLoadedImages": [],
+    "scroll": 305,
+    "width": 320
+  },
+  {
+    "client": 345,
+    "float": "none",
+    "missingLoadedImages": [],
+    "scroll": 345,
+    "width": 360
+  },
+  {
+    "client": 375,
+    "float": "none",
+    "missingLoadedImages": [],
+    "scroll": 375,
+    "width": 390
+  },
+  {
+    "client": 415,
+    "float": "none",
+    "missingLoadedImages": [],
+    "scroll": 415,
+    "width": 430
+  }
+]

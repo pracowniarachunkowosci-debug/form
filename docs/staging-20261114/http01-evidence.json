@@ -1,0 +1,82 @@
+[
+  {
+    "utc": "2026-11-14T10:02:20.183463+00:00",
+    "url": "http://test.pracowniaform.com/",
+    "pinned": false,
+    "headers": "HTTP/1.1 403 Forbidden\nDate: Sat, 14 Nov 2026 10:02:16 GMT\nContent-Type: text/html; charset=iso-8859-1\nContent-Length: 239\nConnection: keep-alive\nServer: Apache\n\n",
+    "body": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<title>403 Forbidden</title>\n</head><body>\n<h1>Forbidden</h1>\n<p>You don't have permission to access this resource.</p>\n</body></html>\n",
+    "phase": "uploaded",
+    "status": 403,
+    "remote_ip": "195.2.223.12",
+    "redirects": 0
+  },
+  {
+    "utc": "2026-11-14T10:02:20.343901+00:00",
+    "url": "http://test.pracowniaform.com/",
+    "pinned": true,
+    "headers": "HTTP/1.1 403 Forbidden\nDate: Sat, 14 Nov 2026 10:02:16 GMT\nContent-Type: text/html; charset=iso-8859-1\nContent-Length: 239\nConnection: keep-alive\nServer: Apache\n\n",
+    "body": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<title>403 Forbidden</title>\n</head><body>\n<h1>Forbidden</h1>\n<p>You don't have permission to access this resource.</p>\n</body></html>\n",
+    "phase": "uploaded",
+    "status": 403,
+    "remote_ip": "195.2.223.12",
+    "redirects": 0
+  },
+  {
+    "utc": "2026-11-14T10:02:20.528309+00:00",
+    "url": "http://test.pracowniaform.com/.well-known/acme-challenge/probe.txt",
+    "pinned": false,
+    "headers": "HTTP/1.1 404 Not Found\nDate: Sat, 14 Nov 2026 10:02:17 GMT\nContent-Type: text/html; charset=iso-8859-1\nContent-Length: 236\nConnection: keep-alive\nServer: Apache\n\n",
+    "body": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL was not found on this server.</p>\n</body></html>\n",
+    "phase": "uploaded",
+    "status": 404,
+    "remote_ip": "195.2.223.12",
+    "redirects": 0
+  },
+  {
+    "utc": "2026-11-14T10:02:20.699682+00:00",
+    "url": "http://test.pracowniaform.com/.well-known/acme-challenge/probe.txt",
+    "pinned": true,
+    "headers": "HTTP/1.1 404 Not Found\nDate: Sat, 14 Nov 2026 10:02:17 GMT\nContent-Type: text/html; charset=iso-8859-1\nContent-Length: 236\nConnection: keep-alive\nServer: Apache\n\n",
+    "body": "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01//EN\" \"http://www.w3.org/TR/html4/strict.dtd\">\n<html><head>\n<title>404 Not Found</title>\n</head><body>\n<h1>Not Found</h1>\n<p>The requested URL was not found on this server.</p>\n</body></html>\n",
+    "phase": "uploaded",
+    "status": 404,
+    "remote_ip": "195.2.223.12",
+    "redirects": 0
+  },
+  {
+    "phase": "cleanup",
+    "path": "/.well-known/acme-challenge/probe.txt",
+    "status": 404,
+    "curl_exit": 0
+  },
+  {
+    "phase": "cleanup",
+    "path": "/.well-known/pf-root-20261114-a71c.txt",
+    "status": 404,
+    "curl_exit": 0
+  },
+  {
+    "phase": "cleanup",
+    "path": "/pf-root-20261114-a71c.txt",
+    "status": 404,
+    "curl_exit": 0
+  },
+  {
+    "phase": "cleanup",
+    "path": "/pf-runtime-20261114-a71c.php",
+    "status": 404,
+    "curl_exit": 0
+  },
+  {
+    "phase": "cleanup",
+    "path": "/pf-private-check-20261114-b82d.php",
+    "status": 404,
+    "curl_exit": 0
+  },
+  {
+    "phase": "cleanup",
+    "path": "/pf-private-check-20261114-c93e.php",
+    "status": 404,
+    "curl_exit": 0
+  }
+]

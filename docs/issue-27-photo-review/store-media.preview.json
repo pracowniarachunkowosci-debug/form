@@ -1,0 +1,497 @@
+{
+  "preview": true,
+  "automatic_assignment_allowed": false,
+  "activeCatalogUntouched": true,
+  "targetColors": [
+    {
+      "id": "red-matte",
+      "label": "Czerwony",
+      "displayHex": "#9f3b35",
+      "status": "propozycja"
+    },
+    {
+      "id": "white",
+      "label": "Biały",
+      "displayHex": "#f3f0e8",
+      "status": "propozycja"
+    },
+    {
+      "id": "marble",
+      "label": "Biały nakrapiany (Marble)",
+      "displayHex": "#d8d2c6",
+      "status": "propozycja"
+    },
+    {
+      "id": "dual",
+      "label": "Czarno-czerwony (Black / Red)",
+      "displayHex": "#252723",
+      "status": "propozycja"
+    },
+    {
+      "id": "cappuccino",
+      "label": "Cappuccino",
+      "displayHex": "#b18c73",
+      "status": "propozycja"
+    }
+  ],
+  "models": [
+    {
+      "id": "full-soft",
+      "name": "VASE",
+      "slug": "full-soft",
+      "skuPrefix": "PF-W26-VASE",
+      "existingSkuConvention": "PF-W26-VASE-<COLOR_ID>"
+    },
+    {
+      "id": "knitted-star",
+      "name": "KNITTED STAR",
+      "slug": "knitted-star",
+      "skuPrefix": "PF-W26-STAR",
+      "existingSkuConvention": "PF-W26-STAR-<COLOR_ID>"
+    },
+    {
+      "id": "knitted-medallion",
+      "name": "KNITTED MEDALLION",
+      "slug": "knitted-medallion",
+      "skuPrefix": "PF-W26-MED",
+      "existingSkuConvention": "PF-W26-MED-<COLOR_ID>"
+    }
+  ],
+  "media": [
+    {
+      "assetId": "WEB009",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "dual",
+      "colorLabel": "Czarno-czerwony (Black / Red)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Spiralna bombka VASE w ciemnym, dwukolorowym wykończeniu, ujęcie główne.",
+      "source": "assets/WEB009.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB009.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB011",
+      "sourceRole": "main",
+      "recommendedSiteRole": "gallery",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "dual",
+      "colorLabel": "Czarno-czerwony (Black / Red)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Spiralna bombka VASE w zbliżeniu, ujęcie główne.",
+      "source": "assets/WEB011.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB011.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB023",
+      "sourceRole": "gallery",
+      "recommendedSiteRole": "lifestyle",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "dual",
+      "colorLabel": "Czarno-czerwony (Black / Red)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Ciemna spiralna bombka VASE w zimowej aranżacji.",
+      "source": "assets/WEB023.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB023.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB013",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "red-matte",
+      "colorLabel": "Czerwony",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Czerwona spiralna bombka VASE na ciemnym tle, ujęcie główne.",
+      "source": "assets/WEB013.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB013.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB006",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "white",
+      "colorLabel": "Biały",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Gładka spiralna bombka VASE na ciemnym tle, ujęcie główne.",
+      "source": "assets/WEB006.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB006.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB022",
+      "sourceRole": "gallery",
+      "recommendedSiteRole": "lifestyle",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "white",
+      "colorLabel": "Biały",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Jasna spiralna bombka VASE w zimowej aranżacji.",
+      "source": "assets/WEB022.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB022.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB005",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "marble",
+      "colorLabel": "Biały nakrapiany (Marble)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Jasna nakrapiana bombka VASE na ciemnym tle, ujęcie główne.",
+      "source": "assets/WEB005.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB005.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB001",
+      "sourceRole": "main",
+      "recommendedSiteRole": "gallery",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "marble",
+      "colorLabel": "Biały nakrapiany (Marble)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Jasna nakrapiana bombka VASE na ciemnym tle, ujęcie główne.",
+      "source": "assets/WEB001.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB001.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB019",
+      "sourceRole": "detail",
+      "recommendedSiteRole": "detail",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "marble",
+      "colorLabel": "Biały nakrapiany (Marble)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Zbliżenie nakrapianej powierzchni spiralnej bombki VASE.",
+      "source": "assets/WEB019.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB019.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB020",
+      "sourceRole": "detail",
+      "recommendedSiteRole": "detail",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "marble",
+      "colorLabel": "Biały nakrapiany (Marble)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Zbliżenie spiralnej powierzchni bombki VASE.",
+      "source": "assets/WEB020.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB020.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB008",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "cappuccino",
+      "colorLabel": "Cappuccino",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Ciepła beżowa spiralna bombka VASE na ciemnym tle, ujęcie główne.",
+      "source": "assets/WEB008.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB008.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB024",
+      "sourceRole": "gallery",
+      "recommendedSiteRole": "lifestyle",
+      "modelId": "full-soft",
+      "model": "VASE",
+      "colorId": "cappuccino",
+      "colorLabel": "Cappuccino",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Beżowa spiralna bombka VASE w zimowej aranżacji.",
+      "source": "assets/WEB024.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB024.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB017",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "knitted-star",
+      "model": "KNITTED STAR",
+      "colorId": "red-matte",
+      "colorLabel": "Czerwony",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Ażurowa gwiazda KNITTED STAR na ciemnym tle, ujęcie główne.",
+      "source": "assets/WEB017.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB017.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB014",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "knitted-star",
+      "model": "KNITTED STAR",
+      "colorId": "white",
+      "colorLabel": "Biały",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Ażurowa gwiazda KNITTED STAR na złotym sznurku, ujęcie główne.",
+      "source": "assets/WEB014.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB014.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB015",
+      "sourceRole": "detail",
+      "recommendedSiteRole": "detail",
+      "modelId": "knitted-star",
+      "model": "KNITTED STAR",
+      "colorId": "white",
+      "colorLabel": "Biały",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Zbliżenie ażurowej gwiazdy KNITTED STAR na sznurku.",
+      "source": "assets/WEB015.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB015.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB025",
+      "sourceRole": "gallery",
+      "recommendedSiteRole": "lifestyle",
+      "modelId": "knitted-star",
+      "model": "KNITTED STAR",
+      "colorId": "white",
+      "colorLabel": "Biały",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Ażurowa gwiazda KNITTED STAR w zimowej aranżacji.",
+      "source": "assets/WEB025.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB025.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    },
+    {
+      "assetId": "WEB018",
+      "sourceRole": "main",
+      "recommendedSiteRole": "main",
+      "modelId": "knitted-star",
+      "model": "KNITTED STAR",
+      "colorId": "marble",
+      "colorLabel": "Biały nakrapiany (Marble)",
+      "kind": "fotografia",
+      "status": "preview-do-akceptacji",
+      "approved": false,
+      "alt": "Ażurowa gwiazda KNITTED STAR w zbliżeniu, ujęcie główne.",
+      "source": "assets/WEB018.jpg",
+      "srcset": {
+        "webp": [],
+        "avif": [],
+        "jpeg": [
+          "assets/WEB018.jpg"
+        ]
+      },
+      "derivativeStatus": "NOT RUN / BLOCKED — local WebP/AVIF encoder unavailable",
+      "note": "Kandydat wizualny; nie wpisywać do variants[].photoAsset przed akceptacją."
+    }
+  ],
+  "missing": [
+    {
+      "modelId": "knitted-star",
+      "colorId": "dual",
+      "label": "Czarno-czerwony (Black / Red)",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-star",
+      "colorId": "cappuccino",
+      "label": "Cappuccino",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-medallion",
+      "colorId": "dual",
+      "label": "Czarno-czerwony (Black / Red)",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-medallion",
+      "colorId": "red-matte",
+      "label": "Czerwony",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-medallion",
+      "colorId": "white",
+      "label": "Biały",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-medallion",
+      "colorId": "marble",
+      "label": "Biały nakrapiany (Marble)",
+      "reason": "Brak fotografii głównej w handoffie"
+    },
+    {
+      "modelId": "knitted-medallion",
+      "colorId": "cappuccino",
+      "label": "Cappuccino",
+      "reason": "Brak fotografii głównej w handoffie"
+    }
+  ]
+}

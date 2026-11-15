@@ -1,0 +1,82 @@
+{
+  "utc": "2026-11-14T10:37:51.548248+00:00",
+  "transport": "HTTP; temporary diagnostic header token; no application secrets",
+  "results": [
+    {
+      "case": "anonymous_get",
+      "http_status": 404,
+      "body": {
+        "status": "not_found"
+      }
+    },
+    {
+      "case": "anonymous_post",
+      "http_status": 404,
+      "body": {
+        "status": "not_found"
+      }
+    },
+    {
+      "case": "wrong_token",
+      "http_status": 404,
+      "body": {
+        "status": "not_found"
+      }
+    },
+    {
+      "case": "authorized_fpm_test",
+      "http_status": 200,
+      "body": {
+        "actor": "PHP-FPM",
+        "open_basedir_configured": false,
+        "script_matches_expected_vhost": true,
+        "document_root_matches_script": true,
+        "documented_account_realpath_matches": true,
+        "home_present": true,
+        "home_relation": "documented_account",
+        "www_is_writable": true,
+        "account_is_writable": true,
+        "pdo_sqlite": true,
+        "curl": true,
+        "www_control": {
+          "created": true,
+          "realpath_matches": true,
+          "is_writable": true,
+          "file_created": true,
+          "write_read_match": true,
+          "file_removed": true,
+          "directory_removed": true,
+          "result": "pass"
+        },
+        "outside_public_html": true,
+        "private_candidate": {
+          "created": false,
+          "realpath_matches": false,
+          "is_writable": false,
+          "file_created": false,
+          "write_read_match": false,
+          "file_removed": false,
+          "directory_removed": false,
+          "result": "permission_denied"
+        },
+        "outside_random_sibling": {
+          "created": false,
+          "realpath_matches": false,
+          "is_writable": false,
+          "file_created": false,
+          "write_read_match": false,
+          "file_removed": false,
+          "directory_removed": false,
+          "result": "permission_denied"
+        },
+        "test_status": "completed"
+      }
+    }
+  ],
+  "cleanup": {
+    "script_removed_http_status": 404,
+    "www_listing_empty": true,
+    "owned_temp_artifacts_removed": true,
+    "outside_directories_created": false
+  }
+}

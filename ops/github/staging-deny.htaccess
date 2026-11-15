@@ -1,0 +1,8 @@
+# Quarantine only. Install and verify BEFORE application bytes.
+# No exceptions: also denies PHP, assets, webhook, HTTP and alternate hosts.
+# Requires Apache 2.4 AllowOverride AuthConfig/FileInfo/Options, mod_headers.
+Options -Indexes
+Require all denied
+Header always set X-Robots-Tag "noindex, nofollow, noarchive"
+Header always set Cache-Control "private, no-store"
+ErrorDocument 403 "PF staging quarantine"

@@ -1,0 +1,248 @@
+[
+  {
+    "modelId": "full-soft",
+    "model": "VASE",
+    "colorId": "dual",
+    "color": "Dual",
+    "confirmed": [
+      "full-soft-czerwono-czarny-main"
+    ],
+    "proposals": [
+      "full-soft-czerwono-czarny-top",
+      "full-soft-miedziano-szary-main",
+      "full-soft-miedziano-szary-top",
+      "WEB009",
+      "WEB011",
+      "full-soft-dual-scene-1",
+      "full-soft-dual-scene-2",
+      "full-soft-dual-scene-3",
+      "full-soft-dual-scene-4"
+    ],
+    "reviewOnly": [],
+    "roles": {
+      "main": 1,
+      "gallery": 5,
+      "detail": 0,
+      "lifestyle": 4
+    },
+    "missingAll": false
+  },
+  {
+    "modelId": "full-soft",
+    "model": "VASE",
+    "colorId": "red-matte",
+    "color": "Czerwony matowy",
+    "confirmed": [],
+    "proposals": [
+      "full-soft-czerwony-main",
+      "full-soft-czerwony-top",
+      "WEB013",
+      "full-soft-red-matte-scene-1",
+      "full-soft-red-matte-scene-2",
+      "full-soft-red-matte-scene-3",
+      "full-soft-red-matte-scene-4"
+    ],
+    "reviewOnly": [],
+    "roles": {
+      "main": 1,
+      "gallery": 2,
+      "detail": 0,
+      "lifestyle": 4
+    },
+    "missingAll": false
+  },
+  {
+    "modelId": "full-soft",
+    "model": "VASE",
+    "colorId": "white",
+    "color": "Biały",
+    "confirmed": [
+      "full-soft-bialy-nakrapiany-top"
+    ],
+    "proposals": [
+      "WEB006",
+      "WEB022"
+    ],
+    "reviewOnly": [
+      "WEB006",
+      "WEB022"
+    ],
+    "roles": {
+      "main": 1,
+      "gallery": 1,
+      "detail": 0,
+      "lifestyle": 1
+    },
+    "missingAll": false
+  },
+  {
+    "modelId": "full-soft",
+    "model": "VASE",
+    "colorId": "marble",
+    "color": "Marble",
+    "confirmed": [],
+    "proposals": [
+      "full-soft-bialy-nakrapiany-main",
+      "WEB005",
+      "WEB001",
+      "WEB019",
+      "WEB020",
+      "full-soft-marble-scene-1",
+      "full-soft-marble-scene-2",
+      "full-soft-marble-scene-3",
+      "full-soft-marble-scene-4"
+    ],
+    "reviewOnly": [],
+    "roles": {
+      "main": 1,
+      "gallery": 2,
+      "detail": 2,
+      "lifestyle": 4
+    },
+    "missingAll": false
+  },
+  {
+    "modelId": "knitted-star",
+    "model": "KNITTED STAR",
+    "colorId": "dual",
+    "color": "Dual",
+    "confirmed": [],
+    "proposals": [],
+    "reviewOnly": [],
+    "roles": {
+      "main": 0,
+      "gallery": 0,
+      "detail": 0,
+      "lifestyle": 0
+    },
+    "missingAll": true
+  },
+  {
+    "modelId": "knitted-star",
+    "model": "KNITTED STAR",
+    "colorId": "red-matte",
+    "color": "Czerwony matowy",
+    "confirmed": [],
+    "proposals": [
+      "knitted-star-czerwony-main",
+      "WEB017",
+      "knitted-star-red-matte-scene-4",
+      "knitted-star-red-matte-scene-5"
+    ],
+    "reviewOnly": [],
+    "roles": {
+      "main": 1,
+      "gallery": 1,
+      "detail": 0,
+      "lifestyle": 2
+    },
+    "missingAll": false
+  },
+  {
+    "modelId": "knitted-star",
+    "model": "KNITTED STAR",
+    "colorId": "white",
+    "color": "Biały",
+    "confirmed": [],
+    "proposals": [],
+    "reviewOnly": [],
+    "roles": {
+      "main": 0,
+      "gallery": 0,
+      "detail": 0,
+      "lifestyle": 0
+    },
+    "missingAll": true
+  },
+  {
+    "modelId": "knitted-star",
+    "model": "KNITTED STAR",
+    "colorId": "marble",
+    "color": "Marble",
+    "confirmed": [
+      "knitted-star-bialy-main",
+      "WEB014",
+      "WEB015",
+      "knitted-star-white-scene-1",
+      "knitted-star-white-scene-2"
+    ],
+    "proposals": [],
+    "reviewOnly": [],
+    "roles": {
+      "main": 1,
+      "gallery": 1,
+      "detail": 1,
+      "lifestyle": 2
+    },
+    "missingAll": false
+  },
+  {
+    "modelId": "knitted-medallion",
+    "model": "KNITTED MEDALLION",
+    "colorId": "dual",
+    "color": "Dual",
+    "confirmed": [],
+    "proposals": [],
+    "reviewOnly": [],
+    "roles": {
+      "main": 0,
+      "gallery": 0,
+      "detail": 0,
+      "lifestyle": 0
+    },
+    "missingAll": true
+  },
+  {
+    "modelId": "knitted-medallion",
+    "model": "KNITTED MEDALLION",
+    "colorId": "red-matte",
+    "color": "Czerwony matowy",
+    "confirmed": [],
+    "proposals": [],
+    "reviewOnly": [],
+    "roles": {
+      "main": 0,
+      "gallery": 0,
+      "detail": 0,
+      "lifestyle": 0
+    },
+    "missingAll": true
+  },
+  {
+    "modelId": "knitted-medallion",
+    "model": "KNITTED MEDALLION",
+    "colorId": "white",
+    "color": "Biały",
+    "confirmed": [],
+    "proposals": [],
+    "reviewOnly": [],
+    "roles": {
+      "main": 0,
+      "gallery": 0,
+      "detail": 0,
+      "lifestyle": 0
+    },
+    "missingAll": true
+  },
+  {
+    "modelId": "knitted-medallion",
+    "model": "KNITTED MEDALLION",
+    "colorId": "marble",
+    "color": "Marble",
+    "confirmed": [
+      "knitted-medallion-bialy-main",
+      "knitted-medallion-white-scene-1",
+      "knitted-medallion-white-scene-2",
+      "knitted-medallion-white-scene-3"
+    ],
+    "proposals": [],
+    "reviewOnly": [],
+    "roles": {
+      "main": 1,
+      "gallery": 0,
+      "detail": 0,
+      "lifestyle": 3
+    },
+    "missingAll": false
+  }
+]

@@ -1,0 +1,26 @@
+{
+  "headers_before": {
+    "status": 401,
+    "x_robots_tag": "",
+    "cache_control": "",
+    "noindex": false,
+    "noarchive": false,
+    "no_store": false
+  },
+  "headers_after": {
+    "status": 401,
+    "x_robots_tag": "",
+    "cache_control": "",
+    "noindex": false,
+    "noarchive": false,
+    "no_store": false
+  },
+  "headers_local_error_document": {
+    "status": 401,
+    "x_robots_tag": "noindex, noarchive",
+    "cache_control": "no-store",
+    "noindex": true,
+    "noarchive": true,
+    "no_store": true
+  }
+}

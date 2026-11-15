@@ -1,6 +1,7 @@
 <?php
 declare(strict_types=1);
 require_once __DIR__.'/_live.php';
+require_once __DIR__.'/_inpost.php';
 final class StoreError extends RuntimeException {
     function __construct(public string $kind, public int $status, string $msg) { parent::__construct($msg); }
 }
@@ -14,7 +15,13 @@ function endpoint(callable $fn): never {
     catch(Throwable $e) { error_log('WINTER26 checkout: '.get_class($e)); send_json(['error'=>'UNAVAILABLE','message'=>'Usługa płatności jest niedostępna.'],503); }
 }
 function method(string $m): void { if(($_SERVER['REQUEST_METHOD']??'')!==$m){header('Allow: '.$m);problem('METHOD',405,'Nieobsługiwana metoda.');} }
-function under(string $file,string $root): bool { return $file===$root || str_starts_with($file,rtrim($root,'/').'/'); }
+function under(string $file,string $root): bool {
+    if(DIRECTORY_SEPARATOR==='\\'){
+        $file=strtolower(str_replace('\\','/',$file));
+        $root=strtolower(str_replace('\\','/',$root));
+    }
+    return $file===$root || str_starts_with($file,rtrim($root,'/').'/');
+}
 function config_path(string $mode,string $root): string {
     $env=$mode==='live'?'PF_LIVE_CONFIG':'PF_TEST_CONFIG';
     // LH without environment-variable support: sibling directory outside this site's WWW root.
@@ -30,8 +37,7 @@ function configuration(): array {
         !str_contains(substr($origin,8),'.') || in_array(substr($origin,8),['pracowniaform.com','www.pracowniaform.com'],true) ||
         $origin!=='https://'.strtolower($_SERVER['HTTP_HOST']??'') || ($_SERVER['HTTPS']??'off')==='off') unavailable();
     if(!preg_match('/^sk_test_[A-Za-z0-9]+$/D',$cfg['stripe_key']??'') || !preg_match('/^whsec_[A-Za-z0-9]+$/D',$cfg['webhook_secret']??'') ||
-       !preg_match('/^[a-f0-9]{64}$/D',$cfg['login_sha256']??'') || !is_int($cfg['smallOrderCourierGrosz']??null) ||
-       $cfg['smallOrderCourierGrosz']<=0 || $cfg['smallOrderCourierGrosz']>100000) unavailable();
+       !preg_match('/^[a-f0-9]{64}$/D',$cfg['login_sha256']??'')) unavailable();
     $dir=realpath(dirname($cfg['db_file']??''));
     if(!$dir || under($dir,$root) || !is_writable($dir) || !str_starts_with($cfg['db_file'],'/') ||
        is_link($cfg['db_file']) || !extension_loaded('pdo_sqlite') || !extension_loaded('curl')) unavailable();
@@ -61,9 +67,9 @@ function valid_key(string $key,array $p): bool {
     return count($pair)===2 && in_array($pair[0],$p['eligibleModelIds'],true)
       && in_array($pair[1],['dual','red-matte','white','marble'],true);
 }
-function quote(array $in,array $p,int $small,?string $version=null): array {
+function quote(array $in,array $p,?string $version=null): array {
     if($version!==null && (($in['termsAccepted']??null)!==true || !hash_equals($version,is_string($in['approvalVersion']??null)?$in['approvalVersion']:'')))problem('TERMS',422,'Odśwież zamówienie i zaakceptuj aktualne warunki.');
-    if(array_diff(array_keys($in),$version===null?['selections','packs','code','requestId']:['selections','packs','code','requestId','termsAccepted','approvalVersion']) || !is_string($in['requestId']??null) ||
+    if(array_diff(array_keys($in),array_merge(['selections','packs','code','requestId','delivery_method','pickup_point'],$version===null?[]:['termsAccepted','approvalVersion'])) || !is_string($in['requestId']??null) ||
        !preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/iD',$in['requestId'])) problem('BAD_REQUEST',422,'Nieprawidłowe dane zamówienia.');
     if(!is_string($in['code']??'') || trim($in['code']??'')!=='') problem('NO_PROMOTION',422,'Nie ma teraz aktywnej promocji.');
     if(array_key_exists('selections',$in)===array_key_exists('packs',$in))problem('BAD_REQUEST',422,'Wybierz kompozycję albo listę kompozycji.');
@@ -82,8 +88,12 @@ function quote(array $in,array $p,int $small,?string $version=null): array {
         if(!is_int($price)||$price<=0||$p['currency']!=='PLN')unavailable();
         $packRows[]=['size'=>$n,'members'=>$members,'items'=>$groups,'merchandise'=>$price];$count+=$n;$subtotal+=$price;
     }
-    $delivery=$count>=$p['freeCourierFromOrnaments']?0:$small;
-    return ['size'=>$count,'packs'=>$packRows,'items'=>$items,'ordered'=>$ordered,'merchandise'=>$subtotal,'shipping'=>$delivery,'total'=>$subtotal+$delivery,'acceptedRelease'=>$version];
+    $method=array_key_exists('delivery_method',$in)?$in['delivery_method']:'courier';
+    if(!in_array($method,['locker','courier'],true))problem('DELIVERY_METHOD',422,'Wybierz sposób dostawy.');
+    if($method==='courier' && array_key_exists('pickup_point',$in))problem('DELIVERY_METHOD',422,'Przy dostawie kurierem nie podawaj punktu odbioru.');
+    $id=$method==='locker'?point_id($in['pickup_point']??null):null;
+    $delivery=$count>=$p['freeCourierFromOrnaments']?0:delivery_rates($p)[$method];
+    return ['size'=>$count,'packs'=>$packRows,'items'=>$items,'ordered'=>$ordered,'merchandise'=>$subtotal,'delivery_method'=>$method,'pickup_point'=>$id,'shipping'=>$delivery,'total'=>$subtotal+$delivery,'acceptedRelease'=>$version];
 }
 function database(array $cfg): PDO {
     $db=new PDO('sqlite:'.$cfg['db_file'],null,null,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC]);
@@ -101,14 +111,26 @@ function tx(PDO $db,callable $fn): mixed {
 }
 function row(PDO $db,string $sql,array $args): ?array {$s=$db->prepare($sql);$s->execute($args);return $s->fetch()?:null;}
 function stock(PDO $db): object { $a=[]; foreach($db->query('SELECT sku,n FROM stock') as $r) $a[$r['sku']]=(int)$r['n'];return (object)$a; }
-function order(PDO $db,string $req,array $q,?string $owner=null): array {
+function existing_order(array $old,array $q,?string $owner): array {
+    $stored=json_decode($old['quote'],true,512,JSON_THROW_ON_ERROR);
+    if($old['owner']!==$owner || $stored['acceptedRelease']!==$q['acceptedRelease'] ||
+       array_column($stored['packs'],'members')!==array_column($q['packs'],'members') ||
+       ($stored['delivery_method']??'courier')!==$q['delivery_method'] || ($stored['pickup_point']??null)!==$q['pickup_point'])
+        problem('REQUEST_CONFLICT',409,'Identyfikator już oznacza inne zamówienie lub dostawę.');
+    if($old['state']!=='reserved')problem('FINISHED',409,'Ta próba została zakończona.');
+    return $old;
+}
+function order(PDO $db,string $req,array $q,?string $owner=null,?callable $resolve=null): array {
+    if($old=row($db,'SELECT * FROM orders WHERE req=?',[$req]))return existing_order($old,$q,$owner);
+    if($q['delivery_method']==='locker'){
+        if($resolve===null)point_unavailable();
+        // Do not wait for an external service under a write lock or reserve stock before validation.
+        $point=$resolve($q['pickup_point']);
+        if(($point['id']??null)!==$q['pickup_point'] || !is_string($point['address']??null) || $point['address']==='')point_unavailable();
+        $q['pickup_address']=$point['address'];
+    }
     return tx($db,function() use($db,$req,$q,$owner){
-        $old=row($db,'SELECT * FROM orders WHERE req=?',[$req]);
-        if($old){
-            if($old['owner']!==$owner || json_decode($old['quote'],true)['acceptedRelease']!==$q['acceptedRelease'] || array_column(json_decode($old['quote'],true)['packs'],'members')!==array_column($q['packs'],'members')) problem('REQUEST_CONFLICT',409,'Identyfikator już oznacza inny skład zamówienia.');
-            if($old['state']!=='reserved') problem('FINISHED',409,'Ta próba została zakończona.');
-            return $old;
-        }
+        if($old=row($db,'SELECT * FROM orders WHERE req=?',[$req]))return existing_order($old,$q,$owner);
         foreach($q['items'] as $k=>$n){ $s=$db->prepare('UPDATE stock SET n=n-? WHERE sku=? AND n>=?'); $s->execute([$n,$k,$n]);
           if($s->rowCount()!==1) problem('STOCK',409,'Brakuje wybranego wariantu. Odśwież dostępność.'); }
         $id='w26_'.bin2hex(random_bytes(12));$now=time();
@@ -119,18 +141,23 @@ function order(PDO $db,string $req,array $q,?string $owner=null): array {
 function checkout_params(array $o,string $origin,bool $live=false): array {
     $q=json_decode($o['quote'],true);$prefix=$live?'':'TEST • ';
     $names=['full-soft'=>'VASE','knitted-star'=>'Gwiazda','knitted-medallion'=>'Medalion'];$colors=['dual'=>'dual','red-matte'=>'czerwony matowy','white'=>'biały','marble'=>'marble'];
+    $locker=($q['delivery_method']??'courier')==='locker';
+    $meta=['orderId'=>$o['id'],'delivery_method'=>$locker?'locker':'courier'];
+    if($locker)$meta+=['pickup_point'=>$q['pickup_point'],'pickup_address'=>$q['pickup_address']];
+    $label=$locker?'Paczkomat® InPost '.$q['pickup_point']:'Kurier InPost';
     $lines=[];
     foreach($q['packs'] as $pack){
         $labels=[];foreach($pack['items'] as $sku=>$n){[$m,$c]=explode(':',$sku);$labels[]=$n.' × '.$names[$m].' ('.$colors[$c].')';}
         $lines[]=['quantity'=>1,'price_data'=>['currency'=>'pln','unit_amount'=>$pack['merchandise'],'product_data'=>[
-            'description'=>implode('; ',$labels),'name'=>$prefix.'WINTER 26 • '.($pack['size']===1?'1 ozdoba':'zestaw '.$pack['size'].' ozdób').($q['shipping']===0?' • kurier w cenie':'')]]];
+            'description'=>implode('; ',$labels),'name'=>$prefix.'WINTER 26 • '.($pack['size']===1?'1 ozdoba':'zestaw '.$pack['size'].' ozdób').($q['shipping']===0?' • '.$label.' w cenie':'')]]];
     }
-    // The sole courier method is a separately itemised fixed charge. The expected
-    // grand total is deterministic even before Stripe collects the Polish address.
-    if($q['shipping']>0)$lines[]=['quantity'=>1,'price_data'=>['currency'=>'pln','unit_amount'=>$q['shipping'],'product_data'=>['name'=>$prefix.'Kurier InPost']]];
-    return ['mode'=>'payment','client_reference_id'=>$o['id'],'metadata'=>['orderId'=>$o['id']],
-    'payment_intent_data'=>['metadata'=>['orderId'=>$o['id']]],'payment_method_types'=>['card','blik'],
-    'shipping_address_collection'=>['allowed_countries'=>['PL']],'phone_number_collection'=>['enabled'=>'true'],
+    if($q['shipping']>0)$lines[]=['quantity'=>1,'price_data'=>['currency'=>'pln','unit_amount'=>$q['shipping'],'product_data'=>['name'=>$prefix.$label]]];
+    $details=$locker?['name_collection'=>['individual'=>['enabled'=>'true','optional'=>'false']]]:
+        ['shipping_address_collection'=>['allowed_countries'=>['PL']]];
+    if($locker)$details['custom_text']=['submit'=>['message'=>$label.' — '.$q['pickup_address']]];
+    return $details+['mode'=>'payment','client_reference_id'=>$o['id'],'metadata'=>$meta,
+    'payment_intent_data'=>['metadata'=>$meta],'payment_method_types'=>['card','blik'],
+    'phone_number_collection'=>['enabled'=>'true'],
     'line_items'=>$lines,
     'success_url'=>$origin.'/api/result.php','cancel_url'=>$origin.'/api/result.php?cancel=1',
     'expires_at'=>(int)$o['created']+3600];
@@ -141,7 +168,7 @@ function stripe_session(array $cfg,array $o): array {
     $curl=curl_init('https://api.stripe.com/v1/checkout/sessions');
     curl_setopt_array($curl,[CURLOPT_POST=>true,CURLOPT_RETURNTRANSFER=>true,CURLOPT_CONNECTTIMEOUT=>4,CURLOPT_TIMEOUT=>14,
        CURLOPT_POSTFIELDS=>http_build_query(checkout_params($o,$cfg['origin'],($cfg['mode']??'test')==='live'),'','&',PHP_QUERY_RFC3986),
-       CURLOPT_HTTPHEADER=>['Authorization: Bearer '.$cfg['stripe_key'],'Idempotency-Key: '.$o['id'],'Content-Type: application/x-www-form-urlencoded']]);
+       CURLOPT_HTTPHEADER=>['Stripe-Version: 2026-02-25.clover','Authorization: Bearer '.$cfg['stripe_key'],'Idempotency-Key: '.$o['id'],'Content-Type: application/x-www-form-urlencoded']]);
     $raw=curl_exec($curl); $status=curl_getinfo($curl,CURLINFO_RESPONSE_CODE);
     $s=is_string($raw)?json_decode($raw,true):null;
     if($status!==200 || !is_array($s)) {error_log('WINTER26 Stripe HTTP '.(int)$status.' order '.$o['id']); problem('STRIPE_UNAVAILABLE',503,'Nie utworzono potwierdzonej sesji. Ponów tę samą próbę.');}
@@ -171,7 +198,9 @@ function apply_event(PDO $db,array $e,bool $live=false): void {
         if(row($db,'SELECT id FROM events WHERE id=?',[$e['id']]))return;
         $o=row($db,'SELECT * FROM orders WHERE id=?',[$id]);if(!$o)problem('EVENT_ORDER',409,'Nie znaleziono zamówienia.');
         $q=json_decode($o['quote'],true);
-        if(($s['metadata']['orderId']??'')!==$id || ($s['mode']??'')!=='payment' || ($s['amount_total']??null)!==$q['total'] ||
+        if((($q['delivery_method']??'courier')==='locker' &&
+            (($s['metadata']['delivery_method']??null)!=='locker'||($s['metadata']['pickup_point']??null)!==$q['pickup_point'])) ||
+           ($s['metadata']['orderId']??'')!==$id || ($s['mode']??'')!=='payment' || ($s['amount_total']??null)!==$q['total'] ||
            ($s['currency']??'')!=='pln' || !preg_match($live?'/^cs_live_[A-Za-z0-9]+$/D':'/^cs_test_[A-Za-z0-9]+$/D',$s['id']??'') ||
            ($o['sid']!==null && $o['sid']!==$s['id']))problem('EVENT_MISMATCH',409,'Niezgodność danych płatności.');
         $state=$o['state'];$next=$state;

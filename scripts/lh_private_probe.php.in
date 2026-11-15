@@ -1,0 +1,79 @@
+<?php
+declare(strict_types=1);
+// Temporary staging diagnostic template, never part of the application release.
+ini_set('display_errors', '0');
+header('Cache-Control: no-store, max-age=0');
+header('X-Robots-Tag: noindex, nofollow, noarchive');
+header('Content-Type: application/json; charset=utf-8');
+$token = $_SERVER['HTTP_X_PF_PROBE_TOKEN'] ?? '';
+if (($_SERVER['HTTP_HOST'] ?? '') !== 'test.pracowniaform.com'
+    || ($_SERVER['REQUEST_METHOD'] ?? '') !== 'POST'
+    || time() > @EXPIRES_UNIX@
+    || !hash_equals('@TOKEN_SHA256@', hash('sha256', $token))) {
+    http_response_code(404);
+    echo '{"status":"not_found"}';
+    exit;
+}
+// LH documents /home/platne/<server>/public_html; validate, do not infer from a substring.
+$account = '@DOCUMENTED_ACCOUNT_ROOT@';
+$webroot = $account . '/public_html';
+$expected = $webroot . '/pf-stage-20261114/www';
+$actual = realpath(__DIR__);
+$document = realpath($_SERVER['DOCUMENT_ROOT'] ?? '');
+$home = getenv('HOME');
+$homeReal = is_string($home) && $home !== '' ? @realpath($home) : false;
+$basedir = (string) ini_get('open_basedir');
+$out = [
+    'actor' => PHP_SAPI === 'fpm-fcgi' ? 'PHP-FPM' : 'unexpected_sapi',
+    'open_basedir_configured' => $basedir !== '',
+    'script_matches_expected_vhost' => $actual === $expected,
+    'document_root_matches_script' => $document === $actual,
+    'documented_account_realpath_matches' => @realpath($account) === $account,
+    'home_present' => $home !== false && $home !== '',
+    'home_relation' => $homeReal === false ? 'unavailable' : ($homeReal === $account ? 'documented_account' : ($homeReal === $actual ? 'vhost_webroot' : 'other_not_disclosed')),
+    'www_is_writable' => is_writable(__DIR__),
+    'account_is_writable' => @is_writable($account),
+    'pdo_sqlite' => extension_loaded('pdo_sqlite'),
+    'curl' => extension_loaded('curl'),
+];
+if (PHP_SAPI !== 'fpm-fcgi' || $actual !== $expected || $document !== $expected || @realpath($account) !== $account) {
+    $out['test_status'] = 'stopped_scope_mismatch';
+    echo json_encode($out);
+    exit;
+}
+function safeError(): string {
+    $message = (string) (error_get_last()['message'] ?? '');
+    if (str_contains($message, 'Permission denied')) return 'permission_denied';
+    if (str_contains($message, 'open_basedir restriction')) return 'open_basedir_denied';
+    if (str_contains($message, 'Read-only file system')) return 'read_only_filesystem';
+    return 'operation_failed';
+}
+function testOwnedDirectory(string $parent, string $basename): array {
+    $dir = $parent . '/' . $basename;
+    $result = ['created' => false, 'realpath_matches' => false, 'is_writable' => false,
+        'file_created' => false, 'write_read_match' => false, 'file_removed' => false, 'directory_removed' => false];
+    if (file_exists($dir) || is_link($dir)) return $result + ['result' => 'preexisting_untouched'];
+    error_clear_last();
+    if (!@mkdir($dir, 0700)) return $result + ['result' => safeError()];
+    $result['created'] = true;
+    $result['realpath_matches'] = realpath($dir) === $dir;
+    $result['is_writable'] = is_writable($dir);
+    $file = $dir . '/probe-' . bin2hex(random_bytes(8)) . '.txt';
+    $handle = @fopen($file, 'x');
+    if ($handle !== false) {
+        $result['file_created'] = true;
+        $marker = 'PF-DIAGNOSTIC-NONSECRET';
+        $written = fwrite($handle, $marker);
+        fclose($handle);
+        $result['write_read_match'] = $written === strlen($marker) && file_get_contents($file) === $marker;
+        $result['file_removed'] = unlink($file);
+    }
+    if (scandir($dir) === ['.', '..']) $result['directory_removed'] = rmdir($dir);
+    return $result + ['result' => $result['write_read_match'] && $result['directory_removed'] ? 'pass' : 'failed'];
+}
+$out['www_control'] = testOwnedDirectory($actual, 'pf-probe-' . bin2hex(random_bytes(8)));
+$out['outside_public_html'] = true; // exact documented account, sibling of public_html
+$out['private_candidate'] = testOwnedDirectory($account, '.pf-private');
+$out['outside_random_sibling'] = testOwnedDirectory($account, '.pf-probe-' . bin2hex(random_bytes(8)));
+$out['test_status'] = 'completed';
+echo json_encode($out, JSON_UNESCAPED_SLASHES);

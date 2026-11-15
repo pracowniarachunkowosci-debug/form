@@ -18,7 +18,7 @@ class PricingTests(unittest.TestCase):
                     q = quote(packs,code)
                     self.assertEqual(q["merchandiseGrosz"],price)
                     self.assertEqual(q["discountGrosz"],0)
-                    self.assertEqual(q["totalGrosz"],price if n>=6 else None)
+                    self.assertEqual(q["totalGrosz"],price if n>=6 else price+2049)
                 with self.assertRaises(ValueError):
                     quote(packs,CODE)
 
@@ -27,7 +27,12 @@ class PricingTests(unittest.TestCase):
         self.assertEqual(quote([[STAR]*4, [MED]*2])["totalGrosz"],23400)
         self.assertEqual(quote([[VASE],[VASE]])["merchandiseGrosz"],10000)
         self.assertEqual(quote([[VASE,VASE]])["merchandiseGrosz"],8400)
-        self.assertIsNone(quote([[STAR]*4,[VASE]])["shippingGrosz"])
+        self.assertEqual(quote([[STAR]*4,[VASE]])["shippingGrosz"], 2049)
+        self.assertEqual(quote([[STAR]],delivery_method="locker")["totalGrosz"],6849)
+        self.assertEqual(quote([[STAR]*4,[VASE]],delivery_method="locker")["shippingGrosz"],1849)
+        self.assertEqual(quote([[STAR]*4,[MED]*2],delivery_method="locker")["totalGrosz"],23400)
+        with self.assertRaises(ValueError):
+            quote([[STAR]],delivery_method="invalid")
 
     def test_bad_code_size_or_model(self):
         for packs, code in [([[VASE]*6], "INVALID"), ([[STAR]*3], None), ([["helix", STAR]], None),

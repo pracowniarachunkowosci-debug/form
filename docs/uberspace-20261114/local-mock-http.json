@@ -1,0 +1,5 @@
+{
+  "passed": true,
+  "scope": "local loopback only; InPost MOCK; no Stripe calls",
+  "suite": "inpost-mock-http"
+}
