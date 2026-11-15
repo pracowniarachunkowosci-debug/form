@@ -6,7 +6,8 @@ sha=lambda b:hashlib.sha256(b).hexdigest()
 git=lambda *args:subprocess.check_output(['git',*args],cwd=ROOT)
 e=ROOT/'docs/r015-20261115';previous=json.loads((e/'release.json').read_text());rows=json.loads((e/'manifest.json').read_text())
 assert sha((e/'manifest.json').read_bytes().replace(b'\r\n',b'\n'))==previous['manifest_sha256']
-archive=ROOT/'.artifacts/r015-release/winter26-r015-staging.zip'
+saved=ROOT/'.artifacts/r016-backup/r015-public.zip'
+archive=saved if saved.exists() else ROOT/'.artifacts/r015-release/winter26-r015-staging.zip'
 assert sha(archive.read_bytes())==previous['archive_sha256']
 verification=json.loads((ROOT/'.artifacts/r015-session/verify-before-r016.json').read_text())
 assert verification['verified'] and verification['all_285_deployed_hashes'] and verification['all_tables_orders_stock_events_config_unchanged_after_verify']
@@ -17,7 +18,12 @@ with zipfile.ZipFile(archive) as z:
   n=r['path'];old=z.read(n);assert sha(old)==r['sha256']
   if n in modified:
    p=ROOT/('winter-26.html' if n=='index.html' else n);blobs[n]=p.read_bytes().replace(b'\r\n',b'\n')
-  else:blobs[n]=old
+  elif n in ('.htaccess','robots.txt'):blobs[n]=old
+  else:
+   current=(ROOT/n).read_bytes()
+   if sha(current)!=r['sha256']:current=current.replace(b'\r\n',b'\n')
+   assert sha(current)==r['sha256'],('Protected source differs',n)
+   blobs[n]=current
  # Keep a verified local R01.5 rollback package before transport metadata changes.
  backup=ROOT/'.artifacts/r016-backup';backup.mkdir(exist_ok=True)
  (backup/'r015-public.zip').write_bytes(archive.read_bytes())
