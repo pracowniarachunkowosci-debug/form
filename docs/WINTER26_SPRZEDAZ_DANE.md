@@ -2,7 +2,7 @@
 
 **11 listopada 2026 · materiał wewnętrzny dla Codexa, nie regulamin dla klienta.** Przygotowuje zamówienia testowe i wersję do odbioru przez właściciela. Nie potwierdza stanów magazynowych, akceptacji prawnej ani uruchomienia Stripe Live.
 
-> **Aktualizacja 14.11.2026:** poniżej zachowano historyczny materiał z 11 listopada. Nowsze potwierdzenia właściciela (start nadań **1 grudnia**, 2–3 dni robocze dla późniejszych płatności, adres zwrotów, telefon, producent, PLA, Subiekt 123) znajdują się w [bieżącym pakiecie danych](legal-draft/index.html#dane). Mają pierwszeństwo przed dawnymi datami i polami „do potwierdzenia” w tym materiale.
+> **Aktualizacja 19.11.2026:** poniżej zachowano historyczny materiał z 11 listopada. Późniejsza decyzja właściciela z 16.11.2026 zastępuje wcześniejsze informacje o kurierze, dacie 1 grudnia i terminie 2–3 dni. Aktualnie: wyłącznie Paczkomat InPost — 18,49 zł przy 1–5 ozdobach, bezpłatnie od 6 sztuk; nadanie zazwyczaj w ciągu 3 dni roboczych, maksymalnie w ciągu 7 dni roboczych od potwierdzenia płatności. Dane zwrotów, kontaktu, producenta, PLA i Subiekt 123 pozostają w [bieżącym pakiecie danych](legal-draft/index.html#dane).
 
 ## Nie zaczynaj dokumentów od zera
 
