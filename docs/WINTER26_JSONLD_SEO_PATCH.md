@@ -1,7 +1,7 @@
 # WINTER 26 — plan uporządkowanych danych dla ofert Google
 
 **Status: specyfikacja techniczna do wdrożenia; nie wdrożono na produkcji.**  
-Źródło bieżącego audytu: fragment JSON-LD strony `/sklep/winter-knitted-star.html` przekazany przez właściciela 19.11.2026.
+Źródło audytu: fragment JSON-LD strony `/sklep/winter-knitted-star.html` przekazany przez właściciela 19.11.2026.
 
 ## 1. Stan obecnego znacznika KNITTED STAR
 
@@ -18,7 +18,7 @@ Brakuje:
 - `Offer.hasMerchantReturnPolicy`;
 - `Offer.shippingDetails`.
 
-W `Offer.description` występuje również stary tekst: „Nadanie maksymalnie w ciągu 7 dni roboczych od potwierdzenia płatności”. Jest niespójny z aktualną decyzją operacyjną: zamówienia opłacone przed 01.12.2026 nadajemy 01.12.2026, a opłacone od 01.12.2026 — w ciągu 2–3 dni roboczych od płatności. Treść widoczna dla klienta i opis w JSON-LD muszą zostać uzgodnione; nie wolno zmienić wyłącznie znacznika, pozostawiając sprzeczną obietnicę na stronie.
+W `Offer.description` jest informacja o nadaniu maksymalnie w ciągu 7 dni roboczych od potwierdzenia płatności. To odpowiada zatwierdzonemu maksymalnemu terminowi. Treść widoczna dla klienta powinna dodatkowo komunikować typowy czas realizacji: „Zamówienia nadajemy zazwyczaj w ciągu 3 dni roboczych, maksymalnie w ciągu 7 dni roboczych od potwierdzenia płatności”. Nie zmieniać tego na termin 2–3 dni ani na stałą datę 1 grudnia.
 
 ## 2. Wspólna polityka zwrotów
 
@@ -53,20 +53,20 @@ W każdej ofercie odwołać się do wspólnej polityki:
 }
 ```
 
-## 3. Wspólne usługi dostawy — dokładny próg ilościowy
+## 3. Jedyna metoda dostawy — Paczkomat InPost
 
-Dostawa zależy od liczby ozdób w całym zamówieniu, a nie od wartości koszyka. Google obsługuje `numItems` w `ShippingConditions` typu `ShippingService`; nie należy zastępować tego progiem wartości zamówienia.
+**Decyzja właściciela z 16.11.2026: Paczkomat InPost pozostaje jedyną metodą dostawy. Kurier InPost został wycofany.**
 
-Zdefiniować pod `Organization.hasShippingService` dwie usługi:
+Dostawa zależy od łącznej liczby ozdób w całym zamówieniu, a nie od wartości koszyka. Google obsługuje `numItems` w `ShippingConditions` typu `ShippingService`; nie zastępować tego progiem wartości zamówienia.
 
-### Kurier InPost
+Zdefiniować pod `Organization.hasShippingService` jeden obiekt:
 
 ```json
 {
   "@type": "ShippingService",
-  "@id": "https://pracowniaform.com/#shipping-courier",
-  "name": "Kurier InPost",
-  "fulfillmentType": "https://schema.org/FulfillmentTypeDelivery",
+  "@id": "https://pracowniaform.com/#shipping-locker",
+  "name": "Paczkomat InPost",
+  "fulfillmentType": "https://schema.org/FulfillmentTypeCollectionPoint",
   "shippingConditions": [
     {
       "@type": "ShippingConditions",
@@ -82,7 +82,7 @@ Zdefiniować pod `Organization.hasShippingService` dwie usługi:
       },
       "shippingRate": {
         "@type": "MonetaryAmount",
-        "value": 20.49,
+        "value": 18.49,
         "currency": "PLN"
       }
     },
@@ -107,39 +107,40 @@ Zdefiniować pod `Organization.hasShippingService` dwie usługi:
 }
 ```
 
-### Paczkomat InPost
-
-Analogiczny obiekt z:
-- `@id`: `https://pracowniaform.com/#shipping-locker`;
-- `name`: `Paczkomat InPost`;
-- `fulfillmentType`: `https://schema.org/FulfillmentTypeCollectionPoint`;
-- stawka 1–5 ozdób: `18.49 PLN`;
-- stawka od 6 ozdób: `0 PLN`.
-
-W obu usługach `shippingConditions.numItems` opisuje liczbę sztuk, nie liczbę pozycji koszyka.
-
-### Odwołania w każdej ofercie
+W każdej ofercie dodaj jedno odwołanie:
 
 ```json
-"shippingDetails": [
-  {
-    "@type": "OfferShippingDetails",
-    "hasShippingService": {
-      "@id": "https://pracowniaform.com/#shipping-courier"
-    }
-  },
-  {
-    "@type": "OfferShippingDetails",
-    "hasShippingService": {
-      "@id": "https://pracowniaform.com/#shipping-locker"
-    }
+"shippingDetails": {
+  "@type": "OfferShippingDetails",
+  "hasShippingService": {
+    "@id": "https://pracowniaform.com/#shipping-locker"
   }
-]
+}
 ```
 
-Nie wpisywać `deliveryTime`, `handlingTime` ani `transitTime` bez potwierdzonego, stałego czasu przewozu i sposobu obsługi wszystkich wyjątków. Samo „2–3 dni robocze do nadania” nie jest czasem doręczenia do klienta. Jeżeli później zostanie zatwierdzony wiarygodny przedział, można dodać go do globalnej usługi dostawy.
+`ShippingConditions.numItems` opisuje liczbę ozdób łącznie, nie liczbę pozycji koszyka. Zestawy 2 + 4 oznaczają 6 sztuk i kwalifikują się do bezpłatnej dostawy.
 
-## 4. Miejsce implementacji
+Nie twórz obiektu dla kuriera ani nie pozostawiaj kuriera jako alternatywnej metody w JSON-LD, widocznej stronie dostawy lub opisie checkoutu.
+
+## 4. Czas nadania — nie mylić z czasem przewozu
+
+Decyzja właściciela z 16.11.2026:
+- typowy czas komunikowany klientowi: zazwyczaj 3 dni robocze;
+- maksymalny termin nadania: 7 dni roboczych od potwierdzenia płatności.
+
+To czas przygotowania i nadania, nie gwarantowany czas doręczenia przez InPost.
+
+Widoczny tekst strony i `Offer.description` powinny być spójne. Zalecane brzmienie:
+
+„Zamówienia nadajemy zazwyczaj w ciągu 3 dni roboczych, maksymalnie w ciągu 7 dni roboczych od potwierdzenia płatności.”
+
+Nie używać:
+- daty startu 1 grudnia jako ogólnej zasady;
+- obietnicy nadania w 2–3 dni robocze;
+- niepotwierdzonego czasu doręczenia;
+- `deliveryTime`, `handlingTime` ani `transitTime`, dopóki ich semantyka i dokładny zakres nie zostaną potwierdzone dla aktualnego procesu. Nie kodować typowych 3 dni jako minimalnego terminu gwarantowanego.
+
+## 5. Miejsce implementacji
 
 Google zaleca standardową politykę zwrotów i dostawy na poziomie `Organization`, a z poziomu `Offer` — odwołania przez `@id`. Wspólne obiekty powinny być zdefiniowane na jednej kanonicznej stronie/znaczniku Organization, a oferty powinny się do nich odwoływać.
 
@@ -150,12 +151,12 @@ Przed wdrożeniem trzeba odzyskać właściwe źródła produkcyjne:
 - pełny plik strony `/sklep/winter-knitted-medallion.html`;
 - istniejący kanoniczny znacznik `Organization` z `https://pracowniaform.com/#organization` (np. ze strony głównej lub strony polityk).
 
-Następnie dodać wspólne obiekty Organization, odwołania w obu ofertach i uzgodnić widoczne opisy dostawy/zwrotów. Zachować pozostałe dane Product, Offer, ItemPage i BreadcrumbList bez niepotrzebnego przepisywania.
+Następnie dodać wspólne obiekty Organization, odwołanie do polityki zwrotów i jedynej metody dostawy w obu ofertach oraz uzgodnić widoczne opisy dostawy/zwrotów. Zachować pozostałe dane Product, Offer, ItemPage i BreadcrumbList bez niepotrzebnego przepisywania.
 
-## 5. Walidacja i publikacja
+## 6. Walidacja i publikacja
 
 1. Walidować składnię JSON-LD i relacje `@id`.
-2. Sprawdzić zgodność tekstów widocznych na stronie z polityką i stawkami w znacznikach.
+2. Sprawdzić zgodność tekstów widocznych na stronie z polityką, stawką i terminem nadania.
 3. Uruchomić Google Rich Results Test dla obu adresów.
 4. Po zatwierdzonym wdrożeniu uruchomić sprawdzenie adresów w Search Console i poprosić o ponowne indeksowanie / weryfikację.
 5. Oczekiwać na ponowne pobranie stron przez Google; zniknięcie ostrzeżeń nie następuje natychmiast.
