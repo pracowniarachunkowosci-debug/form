@@ -1,9 +1,9 @@
 {
   "status": "DO AKCEPTACJI / NIEPUBLIKOWANE",
-  "updatedAt": "2026-11-14",
+  "updatedAt": "2026-11-19",
   "legalApproved": false,
   "productionPublicationApproved": false,
-  "source": "Odpowiedzi właściciela w rozmowie 14.11.2026; bieżący odpis KRS i katalog repozytorium.",
+  "source": "Odpowiedzi właściciela 14.11.2026; decyzje właściciela dot. dostawy i czasu nadania 16.11.2026; decyzja D2 dot. kosztu zwykłego zwrotu 19.11.2026; bieżący odpis KRS i katalog repozytorium.",
   "entity": {
     "legalName": "PRACOWNIA RACHUNKOWOŚCI spółka z ograniczoną odpowiedzialnością",
     "brand": "Pracownia Form",
@@ -43,7 +43,7 @@
         "nominalBodyBoundingBoxMm": [
           83.803,
           83.803,
-          87.0
+          87
         ],
         "dimensionsBasis": "CAD/3MF/STL; integralne oczka wliczone, dokładane kapturki i sznurki wyłączone; nie jest to pomiar gotowej sztuki",
         "mountingGeometry": "Szyjka Ø12 mm; oszacowany otwór po slicingu około Ø10,89 mm. Osobny kapturek i sznurek nie mają potwierdzonej specyfikacji.",
@@ -131,13 +131,14 @@
     "newSkusActivated": false
   },
   "shipping": {
-    "startDate": "2026-12-01",
-    "paidBeforeStart": "dispatch_on_start_date",
-    "paidOnOrAfterStart": {
-      "minBusinessDays": 2,
-      "maxBusinessDays": 3,
-      "countFrom": "payment_received"
-    },
+    "destinationCountry": "PL",
+    "method": "inpost_paczkomat_only",
+    "customerShippingPLN": 18.49,
+    "freeShippingFromOrnaments": 6,
+    "dispatchTypicalBusinessDays": 3,
+    "dispatchMaximumBusinessDays": 7,
+    "dispatchCountFrom": "payment_confirmation",
+    "customerFacingDispatchWording": "Zamówienia nadajemy zazwyczaj w ciągu 3 dni roboczych, maksymalnie w ciągu 7 dni roboczych od potwierdzenia płatności.",
     "guaranteedDeliveryDate": false,
     "singleParcelPolicyApproved": false
   },
@@ -156,5 +157,12 @@
     "dpoObligationAssessed": false,
     "retentionApproved": false
   },
-  "protectedScope": "Wyłącznie dokumenty i roboczy storefront Pracowni Form; bez dostępu do zasobów działalności rachunkowej, zmian hostingu/DNS, merge, publikacji lub Stripe Live."
+  "protectedScope": "Wyłącznie dokumenty i roboczy storefront Pracowni Form; bez dostępu do zasobów działalności rachunkowej, zmian hostingu/DNS, merge, publikacji lub Stripe Live.",
+  "returns": {
+    "withdrawalWindowDays": 14,
+    "ordinaryWithdrawalReturnShippingCostPayer": "buyer",
+    "ordinaryWithdrawalReturnShippingCostCondition": "buyer_must_be_informed_before_contract",
+    "nonConformityComplaintReturnShippingCostPayer": "seller",
+    "partialReturnsForSets": "pending_owner_decision"
+  }
 }
