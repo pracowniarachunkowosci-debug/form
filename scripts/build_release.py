@@ -39,13 +39,15 @@ if not php:
     sys.exit('PHP CLI with curl and PDO SQLite is required to verify this release (set PF_PHP_BIN).')
 for source in sorted((ROOT/'api').glob('*.php')):
     subprocess.run([php,'-l',str(source)],check=True,cwd=ROOT,stdout=subprocess.DEVNULL)
-for suite in ('tests/checkout-sandbox.php','tests/checkout-live-gates.php','tests/checkout-locker.php'):
+for suite in ('tests/checkout-sandbox.php','tests/checkout-live-gates.php','tests/checkout-locker.php','tests/checkout-status.php'):
     subprocess.run([php,suite],check=True,cwd=ROOT)
 subprocess.run(['node','tests/inpost-mock-ui.cjs'],check=True,cwd=ROOT,env={**os.environ,'PF_PHP_BIN':php})
+for suite in ('tests/checkout-status-ui.cjs','tests/checkout-retry-ui.cjs','tests/checkout-basket-lock-ui.cjs'):
+    subprocess.run(['node',suite],check=True,cwd=ROOT)
 # Only program sources and public catalogs: no private configuration, databases or test drivers.
 backend = sorted((ROOT/'api').glob('*.php'))
 catalogs = [ROOT/'data/winter26-pricing-pl.json', ROOT/'data/winter26-products.json']
-files = sorted([*backend, *catalogs, *ROOT.glob('*.html'), *ROOT.glob('*.css'), ROOT/'script.js', ROOT/'store-gallery.js', ROOT/'winter-config.js', ROOT/'favicon.svg', ROOT/'robots.txt', ROOT/'sitemap.xml', *[p for p in (ROOT/'assets').rglob('*') if p.is_file()]], key=lambda p: p.relative_to(ROOT).as_posix())
+files = sorted([*backend, *catalogs, *ROOT.glob('*.html'), *ROOT.glob('*.css'), ROOT/'script.js', ROOT/'store-gallery.js', ROOT/'winter-config.js', ROOT/'winter-payment-result.js', ROOT/'favicon.svg', ROOT/'robots.txt', ROOT/'sitemap.xml', *[p for p in (ROOT/'assets').rglob('*') if p.is_file()]], key=lambda p: p.relative_to(ROOT).as_posix())
 allowed_assets = {'.avif', '.webp', '.jpg', '.jpeg', '.png', '.svg', '.woff', '.woff2'}
 assert all(p.suffix.lower() in allowed_assets for p in files if 'assets' in p.relative_to(ROOT).parts)
 blobs = {p.relative_to(ROOT).as_posix(): payload(p) for p in files}

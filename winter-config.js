@@ -400,7 +400,7 @@ if (typeof document !== 'undefined') {
         expectedTotal=attempt.total;
       }
       const btn=get('[data-checkout]'), payment=get('[data-payment-status]');
-      btn.hidden=!commerceOpen();get('[data-notify]').hidden=commerceOpen();
+      btn.hidden=!commerceOpen()&&!attempt;get('[data-notify]').hidden=commerceOpen()||Boolean(attempt);
       btn.textContent=localMockDemo?'Zapisz lokalną próbę, bez płatności':live?'Przejdź do płatności: '+(total===null?'':money(total)):'Przejdź do płatności';
       btn.disabled=busy||Boolean(attempt?.blocked);btn.setAttribute('data-ready',String(Boolean(ready&&lockerAvailable&&!pointRequired&&(!dispatchRequired||Boolean(dispatchQuote))&&total!==null&&!codeField.value.trim()&&(!termsRequired||acceptance.checked))));
       if(!ready)btn.textContent='Uzupełnij wybór: '+issues.length+' do poprawy';
@@ -410,14 +410,14 @@ if (typeof document !== 'undefined') {
       payment.textContent=!commerceOpen()?(serviceNotice||(['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname)?'Przyjmowanie nowych zamówień jest chwilowo wstrzymane.':'Możesz ułożyć zestaw. Aby wykonać zakup Sandbox, zaloguj się jako tester.')):
         busy?'Przygotowujemy płatność…':(live?'Zamówienie z obowiązkiem zapłaty potwierdzisz w następnym kroku na stronie Stripe. ':'Zakup testowy, bez pobrania pieniędzy. ')+(!ready?'Wskażemy Ci brakujący wybór.':!lockerAvailable?(pointsNotice||'Walidacja punktów InPost jest niedostępna. Spróbuj ponownie później.'):pointRequired?'Wybierz punkt odbioru.':total===null?'Nie udało się ustalić kosztu dostawy. Spróbuj ponownie później.':codeField.value.trim()?'Usuń nieaktywny kod, aby przejść dalej.':termsRequired&&!acceptance.checked?'Zapoznaj się z regulaminem i zaakceptuj go.':'Sprawdź skład i kwotę przed przejściem do płatności.');
       if(!busy&&checkoutMessage)payment.textContent=checkoutMessage;
-      if(attempt)payment.textContent+=' Pokazujemy zapisane zamówienie. Edycja jest zablokowana do wyjaśnienia wyniku płatności.';
+      if(attempt&&attempt.blocked!=='ORDER_PAID')payment.textContent+=' Pokazujemy zapisane zamówienie. Edycja jest zablokowana do wyjaśnienia wyniku płatności.';
       if(attempt&&!attempt.blocked)btn.textContent='Ponów sprawdzenie płatności';
       if(attempt?.blocked)btn.textContent=attempt.blocked==='ORDER_PAID'?'Zamówienie opłacone':'Płatność wymaga sprawdzenia';
       const sticky=get('[data-sticky-action]');sticky.disabled=busy||Boolean(attempt?.blocked);sticky.textContent=step===1?'Wybierz modele':step===2?next.textContent:btn.hidden?(['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname)?'Sprzedaż wstrzymana':'Dostęp testera'):btn.textContent;
       get('[data-sticky-copy]').textContent='Wybrano '+summary(data,all,!commerceOpen()).done+' z '+count+(count===1?' ozdoby':' ozdób')+' · '+money(total??merchandise);
       document.body?.setAttribute('data-step',String(step));
       document.dispatchEvent?.(new CustomEvent('pf:composition',{detail:{step,size,active,model:slot.model,color:slot.color,done:summary(data,all,!commerceOpen()).done,count,total,merchandise,shipping,commerceMode,busy}}));
-      sticky.onclick=()=>{if(step===1)goStep(2);else if(step===2)next.onclick();else if(commerceOpen())btn.onclick();else{const missing=firstMissing();if(missing)editSlot(missing.pack,missing.index);else if(!['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname))location.assign('/api/test-access.php')}};
+      sticky.onclick=()=>{if(step===1)goStep(2);else if(step===2)next.onclick();else if(commerceOpen()||attempt)btn.onclick();else{const missing=firstMissing();if(missing)editSlot(missing.pack,missing.index);else if(!['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname))location.assign('/api/test-access.php')}};
       get('[data-reset]').disabled=!groups.length;
       get('[data-reset]').onclick=()=>confirmEdit('Wyczyścić wszystkie wybory w zestawie?', 'Wyczyść',yes=>{
         if(yes&&!attempt){slots=Array.from({length:size},empty);active=0;draw();get('[data-slots]').children[0].focus()}
@@ -432,8 +432,9 @@ if (typeof document !== 'undefined') {
       if(attempt)for(const control of [locker,mockSelect,mapButton,get('[data-find-point]'),get('[data-add-pack]'),get('[data-reset]'),get('[data-prev]'),get('[data-next]')])control.disabled=true;
     }
     get('[data-checkout]').onclick=async()=>{
-      if(!commerceOpen()||busy||get('[data-checkout]').disabled)return;
-      if(attempt){await submitCheckout();return;}
+      if(busy||get('[data-checkout]').disabled)return;
+      if(attempt){const state=await checkOrderStatus();if(attempt&&commerceOpen()&&['reserved','reconcile','NOT_FOUND'].includes(state))await submitCheckout();return;}
+      if(!commerceOpen())return;
       const missing=firstMissing();if(missing){editSlot(missing.pack,missing.index,true);return;}
       if(!lockerAvailable){goStep(3);get('[data-payment-status]').focus?.();return;}
       if(delivery==='locker'&&!selectedPoint){goStep(3);const target=mockPoints?mockSelect:pointInput;target.focus?.();target.scrollIntoView?.({block:'center',behavior:'instant'});return;}
@@ -451,6 +452,21 @@ if (typeof document !== 'undefined') {
       attempt.payload.requestId=attempt.id;saveAttempt();
       await submitCheckout();
     };
+    async function checkOrderStatus(){
+      if(!attempt||busy)return;
+      const checkingAttempt=attempt;busy=true;draw();
+      try{
+        const res=await fetch('/api/order-status.php',{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({requestId:attempt.id})});
+        const json=await res.json();if(attempt!==checkingAttempt)return;
+        if(!res.ok){if(json.error==='NOT_FOUND')return 'NOT_FOUND';throw new Error(json.message||'Nie udało się sprawdzić statusu zamówienia.');}
+        if(!['paid','pending','released','review','reserved','reconcile'].includes(json.state)||typeof json.message!=='string')throw new Error('Nie potwierdzono statusu zamówienia.');
+        checkoutMessage=json.message;
+        if(json.state==='released'){attempt=null;dispatchQuote=null;dispatchSignature='';dispatchId=null;acceptance.checked=false;}
+        else{attempt.blocked=json.state==='paid'?'ORDER_PAID':json.state==='review'?'PAYMENT_REVIEW':null;attempt.message=json.message;}
+        saveAttempt();return json.state;
+      }catch{checkoutMessage='Nie udało się sprawdzić statusu zamówienia. Zachowano tę samą próbę; nie rozpoczynaj nowej płatności.';}
+      finally{busy=false;draw();}
+    }
     async function submitCheckout(){
       const submitted=attempt;
       const checkoutTotal=attempt.total, orderPacks=attempt.payload.packs||[attempt.payload.selections];
@@ -460,6 +476,10 @@ if (typeof document !== 'undefined') {
           body:JSON.stringify(attempt.payload)});
         const json=await res.json();
         if(attempt!==submitted)return; // A restored page may already be showing a newer saved operation.
+        if(res.ok&&json.state==='paid'){
+          attempt.blocked='ORDER_PAID';checkoutMessage='Zamówienie opłacone. Płatność została potwierdzona. Nie płać ponownie.';
+          attempt.message=checkoutMessage;saveAttempt();busy=false;draw();return;
+        }
         if(!res.ok&&['ATTEMPT_RELEASED','DISPATCH_CHANGED'].includes(json.error)){
           // DISPATCH_CHANGED is returned only before creation; existing-order mismatch is REQUEST_CONFLICT.
           attempt=null;saveAttempt();dispatchQuote=null;dispatchSignature='';dispatchId=null;acceptance.checked=false;
@@ -534,9 +554,9 @@ if (typeof document !== 'undefined') {
     if(typeof window!=='undefined')window.addEventListener?.('pageshow',event=>{
       if(event.persisted){
         const latest=readAttempt();if(latest){attempt=latest;checkoutMessage=latest.message||'Sprawdź wynik zapisanego zamówienia.';}
-        busy=false;draw(); // BFCache can restore the page during the Stripe redirect.
+        busy=false;draw();checkOrderStatus(); // BFCache status lookup never starts checkout.
       }
     });
-    draw();availability();
+    draw();availability();checkOrderStatus();
   }
 }

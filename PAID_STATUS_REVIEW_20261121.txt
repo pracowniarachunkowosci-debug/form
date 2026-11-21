@@ -1,0 +1,129 @@
+WINTER 26 — diagnostyka PAID, 21.11.2026
+
+Zakres: osobny branch codex/winter26-paid-status-20261121 na b920309.
+Bez nowych zakupów, Stripe API, wdrożenia, wznowienia sprzedaży, zmian bazy,
+stanów, konfiguracji serwera i produkcji. Dostęp SSH odblokowany lokalnie.
+
+ŹRÓDŁO PRAWDY I DOWODY
+Ponowny odczyt rzeczywistych plików Uberspace z obu katalogów:
+  aktualny: /var/www/virtual/pf26/winter26/app/public
+  zachowany kandydat: /var/www/virtual/pf26/winter26/releases/b920309-20261121/public
+Dowody lokalne: C:/sklep/winter26-paid-status-evidence/paid-diagnostic.json
+Pakiet odniesienia: C:/sklep/winter26-staging-acceptance-20261121/staging-b920309-review.zip
+Manifest poprzedniego wdrożenia: C:/sklep/winter26-staging-deploy-b920309/release-prepared.json
+GitHub nie był używany jako dowód wersji serwera.
+
+Zamówienie, referencja skrótu: 5bc414ce8e88, 6849 groszy.
+2026-11-21 17:20:09 CET: RESERVED -> CREATE_ATTEMPT -> CREATE_RESULT HTTP 200
+-> SESSION_OBSERVED open/reserved.
+2026-11-21 17:21:50 CET: WEBHOOK checkout.session.completed -> paid.
+Zdarzenie obecne także w tabeli events. SID istnieje i ma prefiks cs_test_.
+PI istnieje. W raporcie JSON zapisano skróty SID/PI, bez ich pełnych wartości.
+checkout_operations: terminal, uncertain=0, attempts=1, checks=1,
+lease_until=0, last_code=SESSION_PAID.
+Łącznie orders=8, events=11, VASE Dual=16. W trakcie diagnostyki bez zmian.
+Nie znaleziono osobnych plików logów w stagingowym runtime; dowód webhooka
+pochodzi z reservation_history oraz events, nie z hipotetycznego logu HTTP.
+
+PRZEPŁYW I PRZYCZYNA
+1. Stripe kończy istniejącą sesję TEST. Webhook poprawnie zapisuje paid i PI.
+2. api/result.php nie odczytuje SQLite ani statusu zamówienia. Wyświetla jedynie
+   statyczną informację o powrocie; jego success_url nie zawiera identyfikatora.
+3. Powrót do konfiguratora przywraca tę samą próbę z sessionStorage. To jest
+   prawidłowe zabezpieczenie idempotencji, a nie powód do kasowania requestId.
+4. Kliknięcie ponowienia w b920309 wysyłało ponownie checkout.php zamiast
+   osobnego odczytu statusu. Stary existing_order odrzuca paid jako FINISHED 409
+   z dokładnym tekstem „Ta próba została zakończona.” Frontend pokazywał message
+   i zostawiał możliwość ponownego sprawdzenia tego samego żądania.
+5. Odczyt rzeczywistego opłaconego rekordu i wykonanie wyłącznie czystej funkcji
+   existing_order (bez DB handle / Stripe) dało:
+   - pliki aktualnego/starego wydania: FINISHED 409, dokładnie ten komunikat;
+   - zachowany kandydat b920309: ORDER_PAID 409, informacja o opłaceniu.
+   Zatem źródłem konkretnego komunikatu jest backend starego wydania.
+
+ROZBIEŻNOŚĆ PODCZAS WDROŻENIA
+FPM ma opcache.revalidate_path=Off, validate_timestamps=On,
+revalidate_freq=2, realpath_cache_ttl=120. checkout.php i result.php skopiowano
+bez zmiany treści i mtime. Hash checkout.php w obu katalogach:
+1e839872dbd5aa13e0d0d0c70b0ff6c6a64fc16f35e59a98c98d5b482b32cbf2
+mtime=1794780383.648508. Przy zachowaniu klucza ścieżki OPcache może wykonać
+stary skompilowany punkt wejścia z __DIR__ wskazującym poprzedni katalog.
+Dokumentacja PHP: https://www.php.net/manual/en/opcache.configuration.php
+Nowy, wcześniej niecache'owany endpoint diagnostyczny ładował nowe pliki;
+nie dowodziło to wersji właściwego checkout.php. Odczekanie TTL nie wystarcza.
+To mocno uzasadniony mechanizm rozbieżności. Nie mamy historycznego zrzutu
+pamięci FPM konkretnego błędnego requestu, więc nie przedstawiamy go jako
+bezpośrednio zarejestrowanego śladu wykonania tego requestu.
+
+POPRAWKA
+- api/_order_status.php: wyłącznie SELECT, SQLite OPEN_READONLY + query_only.
+- api/order-status.php: odczyt przez POST z requestId w body, kontrola Origin,
+  testera / właściciela, trybu bazy; bez sales_admission, DDL i Stripe.
+  Nie zwraca SID, PI, URL płatności ani danych osobowych. Status dostępny również
+  przy wyciszeniu zakupów. Brak lub cudzy identyfikator: ta sama odpowiedź 404.
+- api/result.php + winter-payment-result.js: prawdziwy status po powrocie,
+  ręcznym odświeżeniu, ponownym kliknięciu i pageshow; paid jest potwierdzeniem.
+- winter-config.js: automatyczny odczyt po odtworzeniu próby i BFCache;
+  paid blokuje płacenie, pending tylko sprawdza status, review blokuje płacenie,
+  released odblokowuje dopiero świadomą nową próbę. Błąd sieci zachowuje próbę.
+  Odczyt statusu sam nigdy nie wywołuje checkout.php.
+- api/checkout.php: gdy webhook wygra wyścig i guard zgłosi ORDER_PAID,
+  endpoint zwraca pozytywny wynik paid (200), bez przekierowania do Stripe.
+- scripts/build_release.py: dołącza nowy JS i regresje do procesu wydania.
+
+WERYFIKACJA
+PASS: checkout-sandbox.php, checkout-live-gates.php, checkout-locker.php.
+PASS: checkout-status.php (uruchamia także pending/retry/reconciliation).
+PASS: checkout-status-ui.cjs, checkout-retry-ui.cjs, checkout-basket-lock-ui.cjs.
+PASS: PHP syntax, node --check obu skryptów, git diff --check.
+Testy obejmują paid/pending/released/review, potwierdzenie paid w trakcie
+checkoutu, return/reload/reopen/BFCache, brak drugiej sesji / zamówienia,
+brak wywołania Stripe przy paid, brak zwolnienia paid po spóźnionym expiry,
+idempotentny webhook i rzeczywistą odmowę zapisu przez readonly SQLite.
+Nowy helper uruchomiono jednorazowo w pamięci CLI na Uberspace, na istniejącym
+paid, bez instalowania pliku. Wynik: state=paid i pozytywne potwierdzenie.
+Chrome: rzeczywisty kontroler powrotu i fragment zmienionego result.php,
+z odczytaną powyżej odpowiedzią, w izolowanym lokalnym serwerze testowym:
+„Zamówienie opłacone. Płatność została potwierdzona. Nie płać ponownie.”
+Potwierdzone także po reload i przycisku sprawdzenia. To lokalny test UI,
+nie wdrożony HTTP E2E na Uberspace. Screenshot: paid-confirmed.jpg w dowodach.
+Kontrole render_store --check, check_render_eol, check_publication,
+check_store_composition nadal nie przechodzą. Render/publication/composition
+ponownie uruchomione na niezmienionym b920309 wykazują te same błędy.
+Pełny build uruchomiony po commitowaniu poprawki zatrzymuje się na tym samym
+render_store.py:56 (brak oczekiwanego product-card). Nie zbudowano wydania.
+
+PLAN PONOWNEGO ODBIORU — BEZ NOWYCH ZAKUPÓW
+1. Pozostawić staging wyciszony i webhook dostępny. Sprawdzić hashe, symlink,
+   TEST i odrębną bazę oraz niezmienione 8 zamówień / 11 zdarzeń / 16 VASE Dual.
+2. Przygotować nowy manifest na aktualnych plikach stagingu. Zakres rozszerza
+   poprzednie cztery pliki o checkout.php, result.php, _order_status.php,
+   order-status.php i winter-payment-result.js. Nie używać starego pakietu
+   trzech/czterech plików ani pełnego repo jako obrazu stagingu.
+3. Przed kolejnym przełączeniem rozwiązać izolację ścieżek OPcache. Preferować
+   unikalną, wersjonowaną ścieżkę rzeczywistych punktów wejścia PHP (także
+   checkout/result/webhook), z routingiem tylko dla stagingu. Alternatywę
+   opcache.revalidate_path=1 rozważyć tylko po potwierdzeniu zakresu per-site.
+   Nie używać wspólnego resetu/restartu. Sam kolejny symlink + 130 s nie jest
+   zaakceptowaną metodą weryfikacji. Zmiana routingu wymaga osobnego planu.
+4. Po odrębnej akceptacji wdrożenia zweryfikować rzeczywisty punkt wejścia
+   HTTP i załadowane helpery w tej samej ścieżce, nie osobny nowy probe.php.
+5. Z zachowaną próbą testera otworzyć result/configurator, odświeżyć, wrócić
+   historią i sprawdzić ponownie. Oczekiwać paid HTTP 200, pozytywnego tekstu,
+   braku aktywnego przycisku zapłaty oraz braku POST checkout po odczycie paid.
+6. Porównać zamówienia, SID/PI, operacje, events i stany przed/po. Bez nowego
+   zamówienia, sesji, obciążenia i zwolnienia stanów. Pending/released/review
+   nadal testować wyłącznie na izolowanych fixtures, nie zmieniać realnego paid.
+7. Nie wznawiać sprzedaży automatycznie. Bez merge i zmian produkcji.
+
+OGRANICZENIA
+Po usunięciu sessionStorage / w innej karcie bez zapisanej próby nie da się
+bezpiecznie wskazać zamówienia na obecnym nieidentyfikującym success_url.
+UI wtedy nie zgaduje paid ani nie proponuje płacenia ponownie; wskazuje kontakt
+ze sklepem. Obsługa bez zapisanej próby wymaga osobnego bezpiecznego mechanizmu
+identyfikacji. Pełny HTTP odbiór poprawki na Uberspace pozostaje niewykonany,
+zgodnie z zakazem wdrożenia. Staging pozostaje poprzednim wydaniem i paused.
+Zgodność wszystkich czterech plików zachowanego pakietu i katalogu kandydata
+potwierdzona ponownie: package-comparison.json. Końcowy final-safety-read.json
+potwierdza niezmienność produkcyjnego dowiązania, 460 plików, konfiguracji i bazy,
+wyciszenie stagingu, dostępność webhooka i niezmienione dane testowe.
