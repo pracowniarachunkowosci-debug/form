@@ -78,11 +78,17 @@ if (typeof document !== 'undefined') {
     root.hidden=false;
     const get=s=>root.querySelector(s),empty=()=>({model:null,color:null});
     const query=new URLSearchParams(location.search),request=Number(query.get('size'));
-    let commerceMode='closed', busy=false, attempt=null, smallShipping=null, liveInfo=null, expectedTotal=null;
+    let commerceMode='closed', busy=false, attempt=null, checkoutMessage='', smallShipping=null, liveInfo=null, expectedTotal=null;
     const commerceOpen=()=>commerceMode!=='closed';
     const acceptance=get('[data-accept-terms]');acceptance.onchange=()=>draw();
     let delivery='locker', lockerAvailable=false, lockerFee=null, geoToken='', selectedPoint=null;
     let pointsEnvironment=null, pointsNotice='', serviceNotice='';
+    // Keep the exact submitted request across network failures and return navigation.
+    const attemptStorage='pf-w26-checkout-attempt-v1';
+    try{const saved=JSON.parse(sessionStorage.getItem(attemptStorage)||'null');
+      if(saved&&saved.payload&&typeof saved.id==='string'&&saved.payload.requestId===saved.id&&Number.isInteger(saved.total))attempt=saved;
+    }catch{/* Storage unavailable: retain this page's in-memory operation. */}
+    function saveAttempt(){try{if(attempt)sessionStorage.setItem(attemptStorage,JSON.stringify(attempt));else sessionStorage.removeItem(attemptStorage)}catch{}}
     let termsRequired=false, dispatchRequired=false, dispatchQuote=null, dispatchSignature='', dispatchSeq=0, dispatchLoading=false, dispatchError='', dispatchId=null;
     const mockNotice='TEST / MOCK, bez połączenia z InPost';
     let mockPoints=false, localMockDemo=false;
@@ -202,6 +208,7 @@ if (typeof document !== 'undefined') {
       return {...(packs.length===1?{selections:packs[0]}:{packs}),delivery_method:delivery,...(delivery==='locker'&&selectedPoint?{pickup_point:selectedPoint.id}:{}),code:'',...(termsRequired?{termsAccepted:true,approvalVersion:liveInfo.approvalVersion}:{})};
     }
     async function refreshDispatch(force=false){
+      if(attempt)return; // Never replace an unresolved checkout operation.
       if(!dispatchRequired||step!==3||firstMissing()||(delivery==='locker'&&!selectedPoint))return;
       const input=dispatchContents(),signature=JSON.stringify(input);
       if(!force&&signature===dispatchSignature)return;
@@ -367,14 +374,17 @@ if (typeof document !== 'undefined') {
       const btn=get('[data-checkout]'), payment=get('[data-payment-status]');
       btn.hidden=!commerceOpen();get('[data-notify]').hidden=commerceOpen();
       btn.textContent=localMockDemo?'Zapisz lokalną próbę, bez płatności':live?'Przejdź do płatności: '+(total===null?'':money(total)):'Przejdź do płatności';
-      btn.disabled=busy;btn.setAttribute('data-ready',String(Boolean(ready&&lockerAvailable&&!pointRequired&&(!dispatchRequired||Boolean(dispatchQuote))&&total!==null&&!codeField.value.trim()&&(!termsRequired||acceptance.checked))));
+      btn.disabled=busy||Boolean(attempt?.blocked);btn.setAttribute('data-ready',String(Boolean(ready&&lockerAvailable&&!pointRequired&&(!dispatchRequired||Boolean(dispatchQuote))&&total!==null&&!codeField.value.trim()&&(!termsRequired||acceptance.checked))));
       if(!ready)btn.textContent='Uzupełnij wybór: '+issues.length+' do poprawy';
       else if(!lockerAvailable)btn.textContent='Paczkomat chwilowo niedostępny';
       else if(pointRequired)btn.textContent='Wybierz punkt odbioru';
       else if(dispatchRequired&&!dispatchQuote)btn.textContent=dispatchLoading?'Potwierdzamy termin…':'Sprawdź termin nadania';
       payment.textContent=!commerceOpen()?(serviceNotice||(['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname)?'Przyjmowanie nowych zamówień jest chwilowo wstrzymane.':'Możesz ułożyć zestaw. Aby wykonać zakup Sandbox, zaloguj się jako tester.')):
         busy?'Przygotowujemy płatność…':(live?'Zamówienie z obowiązkiem zapłaty potwierdzisz w następnym kroku na stronie Stripe. ':'Zakup testowy, bez pobrania pieniędzy. ')+(!ready?'Wskażemy Ci brakujący wybór.':!lockerAvailable?(pointsNotice||'Walidacja punktów InPost jest niedostępna. Spróbuj ponownie później.'):pointRequired?'Wybierz punkt odbioru.':total===null?'Nie udało się ustalić kosztu dostawy. Spróbuj ponownie później.':codeField.value.trim()?'Usuń nieaktywny kod, aby przejść dalej.':termsRequired&&!acceptance.checked?'Zapoznaj się z regulaminem i zaakceptuj go.':'Sprawdź skład i kwotę przed przejściem do płatności.');
-      const sticky=get('[data-sticky-action]');sticky.disabled=busy;sticky.textContent=step===1?'Wybierz modele':step===2?next.textContent:btn.hidden?(['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname)?'Sprzedaż wstrzymana':'Dostęp testera'):btn.textContent;
+      if(!busy&&checkoutMessage)payment.textContent=checkoutMessage;
+      if(attempt&&!attempt.blocked)btn.textContent='Ponów sprawdzenie płatności';
+      if(attempt?.blocked)btn.textContent=attempt.blocked==='ORDER_PAID'?'Zamówienie opłacone':'Płatność wymaga sprawdzenia';
+      const sticky=get('[data-sticky-action]');sticky.disabled=busy||Boolean(attempt?.blocked);sticky.textContent=step===1?'Wybierz modele':step===2?next.textContent:btn.hidden?(['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname)?'Sprzedaż wstrzymana':'Dostęp testera'):btn.textContent;
       get('[data-sticky-copy]').textContent='Wybrano '+summary(data,all,!commerceOpen()).done+' z '+count+(count===1?' ozdoby':' ozdób')+' · '+money(total??merchandise);
       document.body?.setAttribute('data-step',String(step));
       document.dispatchEvent?.(new CustomEvent('pf:composition',{detail:{step,size,active,model:slot.model,color:slot.color,done:summary(data,all,!commerceOpen()).done,count,total,merchandise,shipping,commerceMode,busy}}));
@@ -386,6 +396,7 @@ if (typeof document !== 'undefined') {
     }
     get('[data-checkout]').onclick=async()=>{
       if(!commerceOpen()||busy||get('[data-checkout]').disabled)return;
+      if(attempt){await submitCheckout();return;}
       const missing=firstMissing();if(missing){editSlot(missing.pack,missing.index,true);return;}
       if(!lockerAvailable){goStep(3);get('[data-payment-status]').focus?.();return;}
       if(delivery==='locker'&&!selectedPoint){goStep(3);const target=mockPoints?mockSelect:pointInput;target.focus?.();target.scrollIntoView?.({block:'center',behavior:'instant'});return;}
@@ -397,13 +408,24 @@ if (typeof document !== 'undefined') {
       const acceptanceProof=termsRequired?{termsAccepted:acceptance.checked,approvalVersion:liveInfo.approvalVersion}:{};
       const destination={delivery_method:delivery,...(delivery==='locker'?{pickup_point:selectedPoint.id}:{})};
       const signature=JSON.stringify([contents,checkoutTotal,acceptanceProof,destination]);
-      if(!attempt||attempt.signature!==signature)attempt={signature,id:dispatchRequired?dispatchId:crypto.randomUUID()};
+      attempt={signature,id:dispatchRequired?dispatchId:crypto.randomUUID(),total:checkoutTotal,
+        payload:{...contents,...destination,code:codeField.value.trim(),...acceptanceProof,...(dispatchRequired?{dispatchToken:dispatchQuote.token}:{})}};
+      attempt.payload.requestId=attempt.id;saveAttempt();
+      await submitCheckout();
+    };
+    async function submitCheckout(){
+      const checkoutTotal=attempt.total, orderPacks=attempt.payload.packs||[attempt.payload.selections];
       busy=true;draw();
       try{
         const res=await fetch('/api/checkout.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','Accept':'application/json'},
-          body:JSON.stringify({...contents,...destination,code:codeField.value.trim(),requestId:attempt.id,...acceptanceProof,...(dispatchRequired?{dispatchToken:dispatchQuote.token}:{})})});
+          body:JSON.stringify(attempt.payload)});
         const json=await res.json();
-        if(!res.ok&&json.error==='DISPATCH_CHANGED'){dispatchQuote=null;dispatchSignature='';attempt=null;acceptance.checked=false;}
+        if(!res.ok&&['ATTEMPT_RELEASED','DISPATCH_CHANGED'].includes(json.error)){
+          // DISPATCH_CHANGED is returned only before creation; existing-order mismatch is REQUEST_CONFLICT.
+          attempt=null;saveAttempt();dispatchQuote=null;dispatchSignature='';dispatchId=null;acceptance.checked=false;
+        }
+        if(!res.ok&&['ORDER_PAID','PAYMENT_REVIEW'].includes(json.error)){attempt.blocked=json.error;saveAttempt();}
+        if(!res.ok&&json.error==='PAYMENT_PENDING'){checkoutMessage=json.message;}
         if(!res.ok)throw new Error(json.message||'Próba nie została przyjęta. Sprawdź dostępność i spróbuj ponownie.');
         if(!Number.isInteger(checkoutTotal)||json.totalGrosz!==checkoutTotal)throw new Error('Kwota zamówienia uległa zmianie. Wróć do wyboru i sprawdź podsumowanie.');
         if(localMockDemo){
@@ -414,8 +436,12 @@ if (typeof document !== 'undefined') {
         if(next.origin!=='https://checkout.stripe.com')throw new Error('Nie można otworzyć strony płatności.');
         try{if(typeof window!=='undefined')window.PF_RECORD_CHECKOUT?.(json.orderId,orderPacks,orderPacks.reduce((sum,p)=>sum+priceFor(p),0),commerceMode==='live');}catch{/* Optional analytics cannot block checkout. */}
         location.assign(next.href);
-      }catch(e){busy=false;draw();get('[data-payment-status]').textContent=e instanceof Error?e.message:'Nie udało się rozpocząć próby.'}
-    };
+      }catch(e){
+        busy=false;checkoutMessage=e instanceof Error?e.message:'Nie udało się sprawdzić płatności.';
+        if(attempt&&!attempt.blocked)checkoutMessage+=' Ponowienie sprawdzi tę samą próbę, bez tworzenia nowego zamówienia.';
+        draw();
+      }
+    }
     async function availability(){
       try{
         const res=await fetch('/api/status.php',{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});

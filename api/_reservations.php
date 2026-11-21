@@ -245,9 +245,10 @@ function reservation_reconcile(PDO $db,array $cfg,string $id,?callable $transpor
 }
 function stripe_session(array $cfg,array $o,?PDO $db=null,?callable $transport=null,?int $now=null): array {
     if($db===null)unavailable(); // The unsafe, untracked transport is no longer callable.
+    checkout_state(row($db,'SELECT * FROM orders WHERE id=?',[$o['id']])??$o);
     $now??=time();reservation_reconcile($db,$cfg,$o['id'],$transport,$now);
     $fresh=row($db,'SELECT * FROM orders WHERE id=?',[$o['id']]);
-    if(in_array($fresh['state'],['paid','released','review','pending'],true))problem('FINISHED',409,'Ta próba została zakończona lub płatność jest przetwarzana.');
+    checkout_state($fresh);
     if($fresh['state']==='reserved' && is_string($fresh['url']) && $now<(int)$fresh['created']+3600)return ['id'=>$fresh['sid'],'url'=>$fresh['url']];
     problem('RECONCILE',409,'Sprawdzamy wynik tej próby płatności. Ponów tę samą próbę za chwilę; nie składaj nowej.');
 }

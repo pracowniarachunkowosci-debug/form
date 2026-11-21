@@ -133,9 +133,19 @@ function existing_order(array $old,array $q,?string $owner): array {
        array_column($stored['packs'],'members')!==array_column($q['packs'],'members') ||
        ($stored['delivery_method']??'courier')!==$q['delivery_method'] || ($stored['pickup_point']??null)!==$q['pickup_point'])
         problem('REQUEST_CONFLICT',409,'Identyfikator już oznacza inne zamówienie lub dostawę.');
-    if(isset($stored['dispatch']) && (!is_string($q['dispatchToken']??null)||!hash_equals($stored['dispatchToken'],$q['dispatchToken'])))problem('DISPATCH_CHANGED',409,'Ponowienie musi zachować przyjęty termin nadania.');
-    if(!in_array($old['state'],['reserved','reconcile'],true))problem('FINISHED',409,'Ta próba została zakończona.');
+    if(isset($stored['dispatch']) && (!is_string($q['dispatchToken']??null)||!hash_equals($stored['dispatchToken'],$q['dispatchToken'])))problem('REQUEST_CONFLICT',409,'Ponowienie musi zachować przyjęty termin nadania.');
+    checkout_state($old);
     return $old;
+}
+function checkout_state(array $o): void {
+    switch($o['state']){
+        case 'reserved': case 'reconcile': return;
+        case 'released': problem('ATTEMPT_RELEASED',409,'Poprzednia próba została bezpiecznie zakończona. Możesz rozpocząć nową próbę zakupu.');
+        case 'paid': problem('ORDER_PAID',409,'To zamówienie jest już opłacone. Nie rozpoczynaj kolejnej płatności.');
+        case 'pending': problem('PAYMENT_PENDING',409,'Płatność jest przetwarzana. Sprawdź ponownie jej wynik za chwilę; nie rozpoczynaj nowej płatności.');
+        case 'review': problem('PAYMENT_REVIEW',409,'Wynik płatności wymaga sprawdzenia przez sklep. Skontaktuj się z nami; nie płać ponownie.');
+        default: problem('RECONCILE',409,'Sprawdzamy wynik tej próby. Ponów tę samą próbę za chwilę.');
+    }
 }
 function order(PDO $db,string $req,array $q,?string $owner=null,?callable $resolve=null,?array $stripeCfg=null): array {
     if($stripeCfg!==null)reservation_require_schema($db);

@@ -15,12 +15,12 @@ foreach([null,false,0,1,'true','mock',[],['url'=>'https://example.invalid']] as 
     mock_rejected('POINTS_CONFIG',fn()=>lookup_point(['mode'=>'live','inpost_points_mock'=>$flag],'TEST01M'));
 }
 foreach(['live','unknown',null] as $mode)mock_rejected('POINTS_CONFIG',fn()=>lookup_point(['mode'=>$mode,'inpost_points_mock'=>true],'TEST01M'));
-foreach(['inpost_points_token','inpost_geowidget_token'] as $key)
+foreach(['inpost_points_token','inpost_geowidget_token','inpost_environment'] as $key)
     mock_rejected('POINTS_CONFIG',fn()=>lookup_point($mockCfg+[$key=>'never-use-this-token'],'TEST01M'));
 $savedHost=$_SERVER['HTTP_HOST']??null;$_SERVER['HTTP_HOST']='pracowniaform.com';
 try{mock_rejected('POINTS_CONFIG',fn()=>lookup_point($mockCfg,'TEST01M'));}
 finally{if($savedHost===null)unset($_SERVER['HTTP_HOST']);else $_SERVER['HTTP_HOST']=$savedHost;}
-foreach(['test','live'] as $mode)mock_rejected('PICKUP_POINT',fn()=>lookup_point(['mode'=>$mode,'inpost_points_token'=>'synthetic-token'],'TEST01M'));
+foreach(['test','live'] as $mode)mock_rejected('PICKUP_POINT',fn()=>lookup_point(['mode'=>$mode,'inpost_environment'=>'production','inpost_points_token'=>'synthetic-token','inpost_points_verified'=>true],'TEST01M'));
 $firstPoint=lookup_point($mockCfg,' test01m ');$secondPoint=lookup_point($mockCfg,'TEST02M');
 mock_check($firstPoint['id']==='TEST01M'&&$secondPoint['id']==='TEST02M'&&$firstPoint['address']!==$secondPoint['address'],'manual normalization and distinct selections');
 mock_check(str_contains($firstPoint['address'],inpost_mock_notice()),'canonical address carries durable provenance');
@@ -64,3 +64,6 @@ $mockParams=checkout_params($mockOrder,'https://test.invalid');
 mock_check($mockParams['metadata']['pickup_point']==='TEST01M'&&$mockParams['metadata']['pickup_address']===$firstPoint['address'],'payment metadata retains canonical provenance');
 mock_check(str_contains($mockParams['custom_text']['submit']['message'],inpost_mock_notice()),'checkout explicitly discloses mock');
 echo "PASS: MOCK Points explicit opt-in, Live/malformed/token guards, TEST-only fixtures/errors, prices/2+4, canonical order address, courier switch and idempotency. No network.\n";
+
+mock_check(!inpost_settings(['mode'=>'live','inpost_environment'=>'production','inpost_points_token'=>'synthetic-token'])['locker_available'],'Live token alone is not acceptance of real validation');
+mock_check(inpost_settings(['mode'=>'live','inpost_environment'=>'production','inpost_points_token'=>'synthetic-token','inpost_points_verified'=>true,'inpost_geowidget_token'=>'synthetic-public'])['geowidget_token']==='synthetic-public','Verified directory exposes only separate public map token');
