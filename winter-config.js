@@ -4,7 +4,9 @@ function variantFor(data, slot) {
   return data.models.find(m => m.id === slot.model)?.variants.find(v => v.colorId === slot.color);
 }
 function eligible(v, slots, index, data, otherSlots=[]) {
-  if (!v || !v.available || !v.sku || !Number.isInteger(v.stock) || v.stock < 1) return false;
+  if (!v || !v.available || !v.sku) return false;
+  if (data.fulfillmentMode === 'made_to_order') return true;
+  if (!Number.isInteger(v.stock) || v.stock < 1) return false;
   return slots.filter((s,i) => i !== index && variantFor(data,s)?.sku === v.sku).length + otherSlots.filter(s=>variantFor(data,s)?.sku===v.sku).length < v.stock;
 }
 function summary(data,slots,preview=false,otherSlots=[]) {
@@ -24,7 +26,11 @@ function missingChoice(data,slot,slots,index,preview=false,others=[]) {
   if(!v)return 'Wybierz wykończenie';
   return !preview&&!eligible(v,slots,index,data,others)?'Wybierz dostępny kolor':'';
 }
-if (typeof module !== 'undefined') module.exports={variantFor,eligible,summary,missingChoice};
+function previewFor(data,slot,previews=typeof window!=='undefined'?window.PF_VARIANT_PREVIEWS:null){
+  if(previews)return previews[slot.model+':'+slot.color]||null;
+  const v=variantFor(data,slot);return v?.photo?{src:v.photo.thumb||v.photo.image,alt:v.photo.alt||v.label}:null;
+}
+if (typeof module !== 'undefined') module.exports={variantFor,eligible,summary,missingChoice,previewFor};
 if (typeof document !== 'undefined') {
   const data=JSON.parse(document.querySelector('#winter-options').textContent);
   const el=(tag,txt,cls)=>{const n=document.createElement(tag);if(txt!=null)n.textContent=txt;if(cls)n.className=cls;return n};
@@ -75,14 +81,16 @@ if (typeof document !== 'undefined') {
     let commerceMode='closed', busy=false, attempt=null, smallShipping=null, liveInfo=null, expectedTotal=null;
     const commerceOpen=()=>commerceMode!=='closed';
     const acceptance=get('[data-accept-terms]');acceptance.onchange=()=>draw();
-    let delivery='courier', lockerAvailable=false, lockerFee=null, geoToken='', selectedPoint=null;
-    const mockNotice='TEST / MOCK — bez połączenia z InPost';
+    let delivery='locker', lockerAvailable=false, lockerFee=null, geoToken='', selectedPoint=null;
+    let pointsEnvironment=null, pointsNotice='', serviceNotice='';
+    let termsRequired=false, dispatchRequired=false, dispatchQuote=null, dispatchSignature='', dispatchSeq=0, dispatchLoading=false, dispatchError='', dispatchId=null;
+    const mockNotice='TEST / MOCK, bez połączenia z InPost';
     let mockPoints=false, localMockDemo=false;
     let pointSeq=0, mapSeq=0, mapTimer=null, sdk=null, checking=false, pointMessage='';
-    const courier=get('[data-delivery-courier]'), locker=get('[data-delivery-locker]'), pointInput=get('[data-point-id]');
+    const locker=get('[data-delivery-locker]'), pointInput=get('[data-point-id]');
     const mapDialog=get('[data-map-dialog]'), mapButton=get('[data-open-map]'), mapHost=get('[data-map-host]');
     const mockBanner=el('p',null,'point-receipt'), mockPicker=el('label'), mockSelect=el('select');
-    mockBanner.append(el('small','Dostawa testowa — bez nadania przesyłki.'));mockBanner.hidden=true;mockBanner.setAttribute('data-points-mock-notice','');
+    const pointsMessage=el('small');mockBanner.append(pointsMessage);mockBanner.hidden=true;mockBanner.setAttribute('data-points-notice','');
     mockPicker.append(el('span','Wybierz punkt odbioru'),mockSelect);mockPicker.hidden=true;
     mockPicker.style.flexWrap='wrap';mockSelect.style.maxWidth='100%';mockSelect.style.width='100%';mockSelect.style.minHeight='44px';mockSelect.style.font='inherit';
     mockSelect.setAttribute('data-test-point-picker','');mockSelect.setAttribute('aria-label','Wybierz testowy punkt odbioru');
@@ -94,7 +102,7 @@ if (typeof document !== 'undefined') {
       delivery=method;checking=false;pointSeq++;pointMessage='';acceptance.checked=false;
       draw();
     }
-    courier.onchange=()=>setMethod('courier');locker.onchange=()=>setMethod('locker');
+    locker.onchange=()=>setMethod('locker');
     function resetPoint(){
       pointSeq++;checking=false;selectedPoint=null;pointMessage='';acceptance.checked=false;draw();
     }
@@ -102,10 +110,10 @@ if (typeof document !== 'undefined') {
     async function checkPoint(){
       if(delivery!=='locker'||!lockerAvailable||busy)return;
       const id=normalizePoint(pointInput.value),seq=++pointSeq;selectedPoint=null;acceptance.checked=false;
-      if(!validId(id)){checking=false;pointMessage='Wpisz kod automatu Paczkomat®.';draw();return}
+      if(!validId(id)){checking=false;pointMessage='Wpisz kod automatu Paczkomat.';draw();return}
       checking=true;pointMessage='Sprawdzamy punkt odbioru…';draw();
       try{
-        const res=await fetch('api/pickup-point.php?id='+encodeURIComponent(id),{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
+        const res=await fetch('/api/pickup-point.php?id='+encodeURIComponent(id),{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
         const result=await res.json().catch(()=>null);
         if(seq!==pointSeq||delivery!=='locker')return;
         if(!res.ok||!result||result.id!==id||typeof result.address!=='string'||!result.address.trim()||
@@ -122,7 +130,8 @@ if (typeof document !== 'undefined') {
     function loadMapSdk(){
       if(mockPoints)return Promise.reject(new Error(mockNotice));
       if(sdk)return sdk;
-      const host=commerceMode==='test'?'https://sandbox-easy-geowidget-sdk.easypack24.net':'https://geowidget.inpost.pl';
+      const host={sandbox:'https://sandbox-easy-geowidget-sdk.easypack24.net',production:'https://geowidget.inpost.pl'}[pointsEnvironment];
+      if(!host)return Promise.reject(new Error('points environment'));
       sdk=new Promise((resolve,reject)=>{
         const script=el('script'),css=el('link');css.rel='stylesheet';css.href=host+'/inpost-geowidget.css';
         script.src=host+'/inpost-geowidget.js';script.async=true;script.referrerPolicy='strict-origin-when-cross-origin';
@@ -144,9 +153,13 @@ if (typeof document !== 'undefined') {
         const widget=el('inpost-geowidget');
         for(const [key,val] of Object.entries({token:geoToken,language:'pl',country:'PL',config:'parcelCollect'}))widget.setAttribute(key,val);
         widget.addEventListener('inpost.geowidget.init',event=>{
-          const api=event.detail?.api;if(seq!==mapSeq||!mapDialog.open||typeof api?.addPointSelectedCallback!=='function')return;
+          const api=event.detail?.api;if(seq!==mapSeq||!mapDialog.open)return;
+          if(typeof api?.addPointSelectedCallback!=='function'||typeof api?.changePointsType!=='function'){
+            clearTimeout(timer);mapHost.replaceChildren();mapStatus.textContent=trouble;return;
+          }
+          // Official FilterPointsType: PARCEL_LOCKER. Never silently show an unfiltered picker.
+          try{api.changePointsType('PARCEL_LOCKER');}catch{clearTimeout(timer);mapHost.replaceChildren();mapStatus.textContent=trouble;return;}
           clearTimeout(timer);mapStatus.textContent='';
-          api.changePointsType?.('PARCEL_LOCKER');
           api.addPointSelectedCallback(point=>{
             if(seq!==mapSeq||!mapDialog.open||!validId(normalizePoint(point?.name)))return;
             mapDialog.close();pointInput.value=normalizePoint(point.name);checkPoint();
@@ -184,6 +197,24 @@ if (typeof document !== 'undefined') {
       if(pack!==slots){const i=saved.indexOf(pack);if(i<0)return;if(slots.some(s=>s.model))saved[i]=slots;else saved.splice(i,1);slots=pack;size=pack.length;}
       active=index;step=2;draw();const editor=get(missing&&nameOf(slots[index])?'[data-colors]':'.edit-position');editor.setAttribute('tabindex','-1');editor.focus?.({preventScroll:true});editor.scrollIntoView?.({block:missing?'center':'start',behavior:'instant'});
     }
+    function dispatchContents(){
+      const packs=quotedPacks().map(p=>p.map(s=>({modelId:s.model,colorId:s.color})));
+      return {...(packs.length===1?{selections:packs[0]}:{packs}),delivery_method:delivery,...(delivery==='locker'&&selectedPoint?{pickup_point:selectedPoint.id}:{}),code:'',...(termsRequired?{termsAccepted:true,approvalVersion:liveInfo.approvalVersion}:{})};
+    }
+    async function refreshDispatch(force=false){
+      if(!dispatchRequired||step!==3||firstMissing()||(delivery==='locker'&&!selectedPoint))return;
+      const input=dispatchContents(),signature=JSON.stringify(input);
+      if(!force&&signature===dispatchSignature)return;
+      dispatchSignature=signature;dispatchQuote=null;dispatchError='';dispatchLoading=true;dispatchId=crypto.randomUUID();attempt=null;acceptance.checked=false;
+      const seq=++dispatchSeq;draw();
+      try{
+        const r=await fetch('/api/dispatch-quote.php',{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json'},body:JSON.stringify({...input,requestId:dispatchId})});
+        const q=await r.json();if(seq!==dispatchSeq)return;
+        if(!r.ok||![3,7].includes(q.maxBusinessDays)||!['ready','made_to_order','mixed'].includes(q.kind)||typeof q.text!=='string'||!/^\d{10}\.[a-f0-9]{64}\.[a-f0-9]{64}$/.test(q.token||'')||!Number.isInteger(q.expiresAt))throw new Error(q.message||'Nie można potwierdzić terminu nadania.');
+        dispatchQuote=q;
+      }catch(e){if(seq===dispatchSeq)dispatchError=e.message||'Nie można potwierdzić terminu nadania.';}
+      finally{if(seq===dispatchSeq){dispatchLoading=false;draw();}}
+    }
     const issueFor=(slot,i,pack)=>missingChoice(data,slot,pack,i,!commerceOpen(),quotedPacks().filter(p=>p!==pack).flat());
     function firstMissing(){for(const pack of quotedPacks())for(let i=0;i<pack.length;i++)if(issueFor(pack[i],i,pack))return {pack,index:i};return null;}
     get('[data-start]').onclick=()=>goStep(2);get('[data-review]').onclick=()=>goStep(3);
@@ -216,7 +247,7 @@ if (typeof document !== 'undefined') {
       root.inert=busy;
       for(let n=1;n<=3;n++)get('[data-stage="'+n+'"]').hidden=step!==n;
       get('.workspace').hidden=step!==2;
-      get('[data-steps]').replaceChildren(...['Rozmiar','Komponowanie','Podsumowanie'].map((label,i)=>{const b=el('li');b.append(el('span','0'+(i+1)),el('span',label));b.setAttribute('aria-current',step===i+1?'step':'false');return b}));
+      get('[data-steps]').replaceChildren(...['Liczba ozdób','Modele i wykończenia','Podsumowanie'].map((label,i)=>{const b=el('li');b.append(el('span','0'+(i+1)),el('span',label));b.setAttribute('aria-current',step===i+1?'step':'false');return b}));
       const previous=saved.flat();
       get('[data-sizes]').replaceChildren(...data.sizes.map(({size:n,grossGrosz})=>{const face=el('span',null,'size-face');if(n===data.featured)face.append(el('em','Wybór pracowni'));face.append(el('b',String(n)),el('span',n===1?'ozdoba':n<5?'ozdoby':'ozdób'),el('small',money(grossGrosz)));return radio('size',n,face,n===size,()=>{
         const lost=slots.slice(n).filter(s=>s.model).length;
@@ -224,21 +255,21 @@ if (typeof document !== 'undefined') {
           if(yes){slots=Array.from({length:n},(_,i)=>slots[i]||empty());size=n;active=Math.min(active,n-1)}
           draw();focusRadio('size',size);
         };
-        if(lost)confirmEdit('Usunąć wybory z miejsc poza nowym zestawem?', 'Zmień rozmiar',resize);
+        if(lost)confirmEdit('Usunąć wybory z miejsc poza nowym zestawem?', 'Zmień liczbę ozdób',resize);
         else resize(true);
       })}));
       get('[data-slots]').replaceChildren(...slots.map((slot,i)=>{
         const b=el('button',null,'slot');b.type='button';b.setAttribute('aria-pressed',String(i===active));
-        const model=data.models.find(m=>m.id===slot.model),v=variantFor(data,slot),src=v?.photo?.thumb||model?.thumb;
+        const model=data.models.find(m=>m.id===slot.model),v=variantFor(data,slot),src=previewFor(data,slot)?.src;
         b.append(el('small',String(i+1).padStart(2,'0'),'slot-number'));
         if(src)b.append(picture(src));else b.append(el('span','＋','slot-mark'));
         b.append(el('strong',nameOf(slot)||'Wybierz model','slot-model'),el('small',model?(v?.label||'Wybierz wykończenie'):'','slot-finish'));
         const issue=issueFor(slot,i,slots);b.setAttribute('data-complete',String(!issue));b.append(el('span',issue||'','slot-state'));
-        b.setAttribute('aria-label','Bombka '+(i+1)+': '+(nameOf(slot)||'puste miejsce')+(v?' / '+v.label:'')+' — '+(issue||'wybrane model i wykończenie'));
+        b.setAttribute('aria-label','Ozdoba '+(i+1)+': '+(nameOf(slot)||'puste miejsce')+(v?' / '+v.label:'')+', '+(issue||'wybrane model i wykończenie'));
         b.onclick=()=>editSlot(slots,i);return b;
       }));
       const slot=slots[active],model=data.models.find(m=>m.id===slot.model);
-      get('[data-edit-title]').textContent='Bombka '+String(active+1).padStart(2,'0')+' / '+String(size).padStart(2,'0');
+      get('[data-edit-title]').textContent='Ozdoba '+String(active+1).padStart(2,'0')+' / '+String(size).padStart(2,'0');
       get('[data-edit-status]').textContent=issueFor(slot,active,slots)||'Model i kolor wybrane. Możesz przejść dalej.';
       const colorField=get('[data-color-field]');
       get('[data-models]').replaceChildren(...data.models.map(m=>{
@@ -260,19 +291,19 @@ if (typeof document !== 'undefined') {
       }));
       const next=get('[data-next]');next.disabled=false;next.textContent=active===size-1?'Podsumowanie':'Następna ozdoba';
       next.onclick=()=>{if(issueFor(slots[active],active,slots)){editSlot(slots,active,true);return;}if(active===size-1)goStep(3);else editSlot(slots,active+1)};
-      const prev=get('[data-prev]');prev.disabled=step===1;prev.textContent=step===3?'Edytuj kompozycję':active===0?'Zmień rozmiar':'Poprzednia ozdoba';prev.onclick=()=>{if(step===3)goStep(2);else if(active>0)editSlot(slots,active-1);else goStep(1)};
+      const prev=get('[data-prev]');prev.disabled=step===1;prev.textContent=step===3?'Edytuj zestaw':active===0?'Zmień liczbę ozdób':'Poprzednia ozdoba';prev.onclick=()=>{if(step===3)goStep(2);else if(active>0)editSlot(slots,active-1);else goStep(1)};
       const {done,groups}=summary(data,slots,!commerceOpen(),previous);
       const models=groups.reduce((count,group)=>count+group.count,0);
       get('[data-count]').textContent='Modele: '+models+'/'+size+' · Kolory: '+done+'/'+size;
-      get('[data-compose-count]').textContent=done+' z '+size+' ozdób skonfigurowanych';
+      get('[data-compose-count]').textContent='Wybrano '+done+' z '+size+(size===1?' ozdoby':' ozdób');
       get('.progress-line span').style.width=((models+done)/(2*size)*100)+'%';
-      get('[data-summary-note]').textContent=done===size?'Kompozycja kompletna.':'Uzupełnij wskazane pozycje. Każda bombka potrzebuje modelu i koloru.';
+      get('[data-summary-note]').textContent=done===size?'Wszystkie ozdoby mają wybrany model i wykończenie.':'Uzupełnij wskazane pozycje. Wybierz model i wykończenie dla każdej wskazanej ozdoby.';
       get('[data-summary]').replaceChildren(...groups.map(g=>{const li=el('li');li.append(el('strong',g.name),el('span',g.label+' · '+g.count+' szt.'));return li}));
       const packs=quotedPacks(), all=packs.flat(), count=all.length;
       const merchandise=packs.reduce((sum,p)=>sum+priceFor(p),0);
       const ready=summary(data,all,!commerceOpen()).done===count;
       const issues=[];
-      packs.forEach((pack,pi)=>pack.forEach((s,i)=>{const reason=issueFor(s,i,pack);if(reason){const li=el('li'),b=el('button',(packs.length>1?'Zestaw '+(pi+1)+' · ':'')+'Bombka '+(i+1)+(nameOf(s)?' · '+nameOf(s):'')+': '+reason,'issue-link');b.type='button';b.onclick=()=>editSlot(pack,i,true);li.append(b);issues.push(li)}}));
+      packs.forEach((pack,pi)=>pack.forEach((s,i)=>{const reason=issueFor(s,i,pack);if(reason){const li=el('li'),b=el('button',(packs.length>1?'Zestaw '+(pi+1)+' · ':'')+'Ozdoba '+(i+1)+(nameOf(s)?' · '+nameOf(s):'')+': '+reason,'issue-link');b.type='button';b.onclick=()=>editSlot(pack,i,true);li.append(b);issues.push(li)}}));
       get('[data-issues]').replaceChildren(...issues);get('[data-issues]').hidden=!issues.length;
       const add=get('[data-add-pack]');add.disabled=busy||done!==size||saved.length+1>=10;
       add.onclick=()=>{
@@ -282,60 +313,72 @@ if (typeof document !== 'undefined') {
       };
       get('[data-basket]').replaceChildren(...packs.map((p,i)=>{
         const li=el('li',null,'r015-pack'),current=p===slots;
-        const heading=el('div',null,'summary-set-price');heading.append(el('span',p.length+' '+(p.length===1?'ozdoba':'ozdób')+' w Twojej kompozycji'),el('strong',money(priceFor(p))));li.append(heading);
+        const heading=el('div',null,'summary-set-price');heading.append(el('span',p.length+' '+(p.length===1?'ozdoba':p.length<5?'ozdoby':'ozdób')+' w zestawie'),el('strong',money(priceFor(p))));li.append(heading);
         const items=el('ol',null,'summary-items');p.forEach((s,j)=>{
-          const item=el('li'),v=variantFor(data,s),m=data.models.find(m=>m.id===s.model),src=v?.photo?.thumb||m?.thumb;
-          const top=el('div',null,'summary-card-head'),edit=el('button','Edytuj','text-button');edit.type='button';edit.setAttribute('aria-label','Edytuj bombkę '+(j+1)+(packs.length>1?' w zestawie '+(i+1):''));edit.onclick=()=>editSlot(p,j);
+          const item=el('li'),v=variantFor(data,s),m=data.models.find(m=>m.id===s.model),src=previewFor(data,s)?.src;
+          const top=el('div',null,'summary-card-head'),edit=el('button','Edytuj','text-button');edit.type='button';edit.setAttribute('aria-label','Edytuj ozdobę '+(j+1)+(packs.length>1?' w zestawie '+(i+1):''));edit.onclick=()=>editSlot(p,j);
           top.append(el('span','Ozdoba '+String(j+1).padStart(2,'0'),'item-index'),edit);item.append(top);
-          const photo=el('div',null,'summary-card-photo');if(src)photo.append(picture(src,m?.name||''));item.append(photo);
+          const photo=el('div',null,'summary-card-photo');if(src){photo.append(picture(src,previewFor(data,s)?.alt||''));}else photo.append(el('p',s.color?'Zdjęcie tego wykończenia w przygotowaniu':'Wybierz wykończenie.','caption'));item.append(photo);
           const copy=el('div',null,'summary-card-copy');copy.append(el('h3',m?.name||'Wybierz model'));const reason=issueFor(s,j,p),finish=el('p',null,reason?'item-incomplete':'summary-finish');if(!reason)finish.append(el('i',null,'swatch '+s.color));finish.append(el('span',reason||v.label));copy.append(finish);item.append(copy);items.append(item);
         });li.append(items);
-        const remove=el('button','Usuń kompozycję','text-button');remove.type='button';remove.setAttribute('aria-label','Usuń pozycję '+(i+1)+' z koszyka');remove.onclick=()=>{if(current)removeCurrent();else{saved.splice(i,1);acceptance.checked=false;draw()}};
+        const remove=el('button','Usuń zestaw','text-button');remove.type='button';remove.setAttribute('aria-label','Usuń pozycję '+(i+1)+' z koszyka');remove.onclick=()=>{if(current)removeCurrent();else{saved.splice(i,1);acceptance.checked=false;draw()}};
         if(p.some(s=>s.model))li.append(remove);return li;
       }));
       const free=count>=data.freeFrom;
-      const shipping=free?0:delivery==='locker'?lockerFee:(commerceOpen()?smallShipping:data.sizes[0].shippingGrosz);
-      const shippingName=delivery==='locker'?'Paczkomat® InPost':'Kurier InPost';
+      const shipping=free?0:lockerFee??data.smallOrderLockerGrosz;
+      const shippingName='Paczkomat InPost';
       const pointRequired=delivery==='locker'&&!selectedPoint;
       get('[data-delivery-picker]').hidden=!commerceOpen();
-      courier.checked=delivery==='courier';locker.checked=delivery==='locker';locker.disabled=!lockerAvailable;
-      get('[data-courier-fee]').textContent=free?'w cenie':smallShipping===null?'brak wyceny':money(smallShipping);
+      locker.checked=true;locker.disabled=!lockerAvailable;
       get('[data-locker-fee]').textContent=(!lockerAvailable?'obecnie niedostępny':free?'w cenie':money(lockerFee));
-      mockBanner.hidden=!mockPoints||!commerceOpen();mockPicker.hidden=!mockPoints;
+      pointsMessage.textContent=mockPoints?'Test Paczkomatu (MOCK). Rzeczywista walidacja punktów InPost nie jest uruchomiona. Bez nadania przesyłki.':pointsNotice;
+      mockBanner.hidden=(!mockPoints&&!pointsNotice)||!commerceOpen();mockPicker.hidden=!mockPoints;
       mockSelect.disabled=busy||checking;mockSelect.value=normalizePoint(pointInput.value);
       get('[data-locker-panel]').hidden=delivery!=='locker';mapButton.hidden=mockPoints||!geoToken;
       mapButton.textContent=selectedPoint?'Zmień Paczkomat na mapie':'Wybierz Paczkomat na mapie';
-      get('[data-locker-directory]').hidden=mockPoints||commerceMode!=='live';
+      get('[data-locker-directory]').hidden=mockPoints||pointsEnvironment!=='production';
       get('.locker-id').hidden=mockPoints;get('.locker-search').hidden=mockPoints;get('#point-help').hidden=mockPoints;
-      get('[data-point-summary]').textContent=selectedPoint?'Wybrany automat: '+selectedPoint.id+' · '+selectedPoint.address.replace(mockNotice+' — ',''):'';
+      get('[data-point-summary]').textContent=selectedPoint?'Wybrany automat: '+selectedPoint.id+' · '+selectedPoint.address.replace(mockNotice+', ',''):'';
       get('[data-point-status]').textContent=pointMessage;
-      get('[data-find-point]').disabled=checking||!pointInput.value.trim();
+      get('[data-find-point]').disabled=checking||!lockerAvailable||!pointInput.value.trim();
       const total=shipping==null?null:merchandise+shipping;
       get('[data-totals]').textContent=[count+' szt. · Ozdoby: '+money(merchandise)+' brutto',
         shipping===0?shippingName+' w Polsce w cenie':shipping==null?'Dostawa płatna osobno':shippingName+': '+money(shipping),
         total===null?'':'Razem: '+money(total)].filter(Boolean).join(' · ');
       expectedTotal=total;
-      const live=commerceMode==='live';get('[data-live-facts]').hidden=!live;
-      if(live){
+      const live=commerceMode==='live';get('[data-live-facts]').hidden=!termsRequired;
+      if(termsRequired){
         const picked=[...new Set(all.map(s=>s.model).filter(Boolean))];
         get('[data-live-products]').replaceChildren(...picked.map(id=>{
           const p=liveInfo.productInfo[id];
-          return el('p',p.name+' · '+p.material+' · '+p.dimensions+'. Producent: '+p.producer+', '+p.address+' · '+p.email+'. '+p.warnings);
+          const copy=window.PF_PRODUCT_COPY?.[id];
+          return el('p',(copy?copy.displayName+' · Materiał: '+copy.material+' · Wymiary: '+copy.dimensions+' · Masa korpusu: '+copy.mass+' · Zawieszenie: '+copy.attachment:p.name+' · '+p.material+' · '+p.dimensions)+'. Producent: '+p.producer+', '+p.address+' · '+p.email+'. '+p.warnings);
         }));
+      }
+      if(dispatchRequired){
+        const eligibleForDispatch=ready&&!pointRequired;
+        const sig=eligibleForDispatch?JSON.stringify(dispatchContents()):'';
+        if(sig!==dispatchSignature){dispatchQuote=null;dispatchError='';dispatchSeq++;dispatchLoading=false;dispatchSignature='';acceptance.checked=false;}
+        const label=dispatchQuote?.text||(dispatchLoading?'Potwierdzamy termin nadania…':dispatchError||(!ready?'Wybierz model i wykończenie każdej ozdoby, aby sprawdzić termin nadania.':pointRequired?'Wybierz punkt odbioru, aby sprawdzić termin nadania.':'Sprawdzamy termin nadania.'));
+        get('[data-dispatch-summary]').textContent=label;
+        if(termsRequired)get('[data-live-dispatch]').textContent=label;
+        if(eligibleForDispatch&&step===3&&sig!==dispatchSignature)queueMicrotask(()=>refreshDispatch());
       }
       const btn=get('[data-checkout]'), payment=get('[data-payment-status]');
       btn.hidden=!commerceOpen();get('[data-notify]').hidden=commerceOpen();
-      btn.textContent=localMockDemo?'Zapisz lokalną próbę — bez płatności':live?'Przejdź do płatności — '+(total===null?'':money(total)):'Przejdź do płatności';
-      btn.disabled=busy;btn.setAttribute('data-ready',String(Boolean(ready&&!pointRequired&&total!==null&&!codeField.value.trim()&&(!live||acceptance.checked))));
-      if(!ready)btn.textContent='Uzupełnij wybór — '+issues.length+' do poprawy';
+      btn.textContent=localMockDemo?'Zapisz lokalną próbę, bez płatności':live?'Przejdź do płatności: '+(total===null?'':money(total)):'Przejdź do płatności';
+      btn.disabled=busy;btn.setAttribute('data-ready',String(Boolean(ready&&lockerAvailable&&!pointRequired&&(!dispatchRequired||Boolean(dispatchQuote))&&total!==null&&!codeField.value.trim()&&(!termsRequired||acceptance.checked))));
+      if(!ready)btn.textContent='Uzupełnij wybór: '+issues.length+' do poprawy';
+      else if(!lockerAvailable)btn.textContent='Paczkomat chwilowo niedostępny';
       else if(pointRequired)btn.textContent='Wybierz punkt odbioru';
-      payment.textContent=!commerceOpen()?'Możesz ułożyć kompozycję. Aby wykonać zakup Sandbox, zaloguj się jako tester.':
-        busy?'Przygotowujemy płatność…':(live?'Zamówienie z obowiązkiem zapłaty potwierdzisz w następnym kroku na stronie Stripe. ':'Zakup testowy — bez pobrania pieniędzy. ')+(!ready?'Wskażemy Ci brakujący wybór.':pointRequired?'Wybierz punkt odbioru.':total===null?'Nie udało się ustalić kosztu dostawy. Spróbuj ponownie później.':codeField.value.trim()?'Usuń nieaktywny kod, aby przejść dalej.':live&&!acceptance.checked?'Zapoznaj się z regulaminem i zaakceptuj go.':'Sprawdź skład i kwotę przed przejściem do płatności.');
-      const sticky=get('[data-sticky-action]');sticky.disabled=busy;sticky.textContent=step===1?'Wybierz modele':step===2?next.textContent:btn.hidden?'Dostęp testera':btn.textContent;
-      get('[data-sticky-copy]').textContent=summary(data,all,!commerceOpen()).done+' z '+count+' ozdób skonfigurowanych · '+money(total??merchandise);
+      else if(dispatchRequired&&!dispatchQuote)btn.textContent=dispatchLoading?'Potwierdzamy termin…':'Sprawdź termin nadania';
+      payment.textContent=!commerceOpen()?(serviceNotice||(['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname)?'Przyjmowanie nowych zamówień jest chwilowo wstrzymane.':'Możesz ułożyć zestaw. Aby wykonać zakup Sandbox, zaloguj się jako tester.')):
+        busy?'Przygotowujemy płatność…':(live?'Zamówienie z obowiązkiem zapłaty potwierdzisz w następnym kroku na stronie Stripe. ':'Zakup testowy, bez pobrania pieniędzy. ')+(!ready?'Wskażemy Ci brakujący wybór.':!lockerAvailable?(pointsNotice||'Walidacja punktów InPost jest niedostępna. Spróbuj ponownie później.'):pointRequired?'Wybierz punkt odbioru.':total===null?'Nie udało się ustalić kosztu dostawy. Spróbuj ponownie później.':codeField.value.trim()?'Usuń nieaktywny kod, aby przejść dalej.':termsRequired&&!acceptance.checked?'Zapoznaj się z regulaminem i zaakceptuj go.':'Sprawdź skład i kwotę przed przejściem do płatności.');
+      const sticky=get('[data-sticky-action]');sticky.disabled=busy;sticky.textContent=step===1?'Wybierz modele':step===2?next.textContent:btn.hidden?(['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname)?'Sprzedaż wstrzymana':'Dostęp testera'):btn.textContent;
+      get('[data-sticky-copy]').textContent='Wybrano '+summary(data,all,!commerceOpen()).done+' z '+count+(count===1?' ozdoby':' ozdób')+' · '+money(total??merchandise);
       document.body?.setAttribute('data-step',String(step));
       document.dispatchEvent?.(new CustomEvent('pf:composition',{detail:{step,size,active,model:slot.model,color:slot.color,done:summary(data,all,!commerceOpen()).done,count,total,merchandise,shipping,commerceMode,busy}}));
-      sticky.onclick=()=>{if(step===1)goStep(2);else if(step===2)next.onclick();else if(commerceOpen())btn.onclick();else{const missing=firstMissing();if(missing)editSlot(missing.pack,missing.index);else location.assign('/api/test-access.php')}};
+      sticky.onclick=()=>{if(step===1)goStep(2);else if(step===2)next.onclick();else if(commerceOpen())btn.onclick();else{const missing=firstMissing();if(missing)editSlot(missing.pack,missing.index);else if(!['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname))location.assign('/api/test-access.php')}};
       get('[data-reset]').disabled=!groups.length;
       get('[data-reset]').onclick=()=>confirmEdit('Wyczyścić wszystkie wybory w zestawie?', 'Wyczyść',yes=>{
         if(yes){slots=Array.from({length:size},empty);active=0;draw();get('[data-slots]').children[0].focus()}
@@ -344,36 +387,41 @@ if (typeof document !== 'undefined') {
     get('[data-checkout]').onclick=async()=>{
       if(!commerceOpen()||busy||get('[data-checkout]').disabled)return;
       const missing=firstMissing();if(missing){editSlot(missing.pack,missing.index,true);return;}
+      if(!lockerAvailable){goStep(3);get('[data-payment-status]').focus?.();return;}
       if(delivery==='locker'&&!selectedPoint){goStep(3);const target=mockPoints?mockSelect:pointInput;target.focus?.();target.scrollIntoView?.({block:'center',behavior:'instant'});return;}
+      if(dispatchRequired&&(!dispatchQuote||(!attempt&&dispatchQuote.expiresAt<Math.floor(Date.now()/1000)))){if(!dispatchLoading)await refreshDispatch(true);return;}
       if(expectedTotal===null||codeField.value.trim())return;
-      if(commerceMode==='live'&&!acceptance.checked){acceptance.focus();return;}
+      if(termsRequired&&!acceptance.checked){acceptance.focus();return;}
       const orderPacks=quotedPacks().map(p=>p.map(s=>({modelId:s.model,colorId:s.color})));
       const contents=orderPacks.length===1?{selections:orderPacks[0]}:{packs:orderPacks}, checkoutTotal=expectedTotal;
-      const acceptanceProof=commerceMode==='live'?{termsAccepted:acceptance.checked,approvalVersion:liveInfo.approvalVersion}:{};
+      const acceptanceProof=termsRequired?{termsAccepted:acceptance.checked,approvalVersion:liveInfo.approvalVersion}:{};
       const destination={delivery_method:delivery,...(delivery==='locker'?{pickup_point:selectedPoint.id}:{})};
       const signature=JSON.stringify([contents,checkoutTotal,acceptanceProof,destination]);
-      if(!attempt||attempt.signature!==signature)attempt={signature,id:crypto.randomUUID()};
+      if(!attempt||attempt.signature!==signature)attempt={signature,id:dispatchRequired?dispatchId:crypto.randomUUID()};
       busy=true;draw();
       try{
-        const res=await fetch('api/checkout.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','Accept':'application/json'},
-          body:JSON.stringify({...contents,...destination,code:codeField.value.trim(),requestId:attempt.id,...acceptanceProof})});
+        const res=await fetch('/api/checkout.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','Accept':'application/json'},
+          body:JSON.stringify({...contents,...destination,code:codeField.value.trim(),requestId:attempt.id,...acceptanceProof,...(dispatchRequired?{dispatchToken:dispatchQuote.token}:{})})});
         const json=await res.json();
+        if(!res.ok&&json.error==='DISPATCH_CHANGED'){dispatchQuote=null;dispatchSignature='';attempt=null;acceptance.checked=false;}
         if(!res.ok)throw new Error(json.message||'Próba nie została przyjęta. Sprawdź dostępność i spróbuj ponownie.');
         if(!Number.isInteger(checkoutTotal)||json.totalGrosz!==checkoutTotal)throw new Error('Kwota zamówienia uległa zmianie. Wróć do wyboru i sprawdź podsumowanie.');
         if(localMockDemo){
           if(json.local_demo!==true||!/^w26_[a-f0-9]{24}$/.test(json.orderId||''))throw new Error('Nie potwierdzono zapisu lokalnej próby.');
-          busy=false;draw();get('[data-payment-status]').textContent=mockNotice+' — zapisano '+json.orderId+'. Bez płatności, Stripe i nadania przesyłki.';return;
+          busy=false;draw();get('[data-payment-status]').textContent=mockNotice+', zapisano '+json.orderId+'. Bez płatności, Stripe i nadania przesyłki.';return;
         }
         const next=new URL(json.url);
         if(next.origin!=='https://checkout.stripe.com')throw new Error('Nie można otworzyć strony płatności.');
+        try{if(typeof window!=='undefined')window.PF_RECORD_CHECKOUT?.(json.orderId,orderPacks,orderPacks.reduce((sum,p)=>sum+priceFor(p),0),commerceMode==='live');}catch{/* Optional analytics cannot block checkout. */}
         location.assign(next.href);
       }catch(e){busy=false;draw();get('[data-payment-status]').textContent=e instanceof Error?e.message:'Nie udało się rozpocząć próby.'}
     };
     async function availability(){
       try{
-        const res=await fetch('api/status.php',{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
+        const res=await fetch('/api/status.php',{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
         if(!res.ok||!res.headers.get('content-type')?.includes('application/json'))return;
         const info=await res.json();
+        if(typeof info.notice==='string'&&info.notice.length<500){serviceNotice=info.notice;draw();}
         if(!['test','live'].includes(info.mode)||info.available!==true||info.currency!=='PLN'||info.freeCourierFromOrnaments!==data.freeFrom||typeof info.stock!=='object'||!info.stock)return;
         const mock=info.points_provider==='mock';
         if(info.points_provider&&!['mock','inpost'].includes(info.points_provider))return;
@@ -381,27 +429,38 @@ if (typeof document !== 'undefined') {
           if(info.mode!=='test'||info.points_notice!==mockNotice||info.geowidget_token!==null||
               !Array.isArray(info.test_points)||!info.test_points.length||info.test_points.length>20||
               !info.test_points.every(p=>p&&validId(p.id)&&p.id.startsWith('TEST')&&typeof p.label==='string'&&p.label.length<160))return;
-        }else if(info.test_points!==undefined||info.points_notice!==undefined||info.local_mock_demo!==undefined)return;
-        if(info.mode==='live'&&!validateLive(info))return;
+        }else{
+          if(info.points_provider!=='inpost'||info.test_points!==undefined||info.local_mock_demo!==undefined||
+             ![null,'production','sandbox'].includes(info.inpost_environment)||
+             typeof info.points_notice!=='string'||info.points_notice.length>500||
+             (info.locker_available===true&&!['production','sandbox'].includes(info.inpost_environment))||
+             (info.mode==='live'&&info.inpost_environment!=='production'))return;
+        }
+        const requireTerms=info.mode==='live'||info.legal_acceptance_required===true;
+        if(requireTerms&&!validateLive(info))return;
+        const onOrder=info.fulfillment_mode==='made_to_order';
+        if(onOrder&&(!Array.isArray(info.offered_variants)||!info.offered_variants.length||!info.offered_variants.every(x=>typeof x==='string')))return;
+        data.fulfillmentMode=onOrder?'made_to_order':'inventory';
         for(const model of data.models)for(const v of model.variants){
-          const n=info.stock[model.id+':'+v.colorId];
-          v.stock=Number.isInteger(n)&&n>0?n:0;v.available=v.stock>0;
+          if(onOrder){delete v.stock;v.available=info.offered_variants.includes(model.id+':'+v.colorId);}
+          else {const n=info.stock[model.id+':'+v.colorId];v.stock=Number.isInteger(n)&&n>0?n:0;v.available=v.stock>0;}
         }
         smallShipping=Number.isInteger(info.smallOrderCourierGrosz)&&info.smallOrderCourierGrosz>=0?info.smallOrderCourierGrosz:null;
         lockerFee=Number.isInteger(info.locker_amount_grosze)&&info.locker_amount_grosze>0?info.locker_amount_grosze:null;
         lockerAvailable=info.locker_available===true&&lockerFee!==null;
         mockPoints=mock;localMockDemo=mock&&info.local_mock_demo===true&&['localhost','127.0.0.1','[::1]'].includes(location.hostname);
+        pointsEnvironment=mock?null:info.inpost_environment;pointsNotice=info.points_notice||'';
         geoToken=!mockPoints&&lockerAvailable&&typeof info.geowidget_token==='string'?info.geowidget_token.trim():'';
         if(mockPoints){
           const placeholder=el('option','Wybierz testowy punkt…');placeholder.value='';
-          mockSelect.replaceChildren(placeholder,...info.test_points.filter(p=>['TEST01M','TEST02M'].includes(p.id)).map(p=>{const o=el('option',p.id+' — punkt testowy '+(p.id==='TEST01M'?'A':'B'));o.value=p.id;return o}));
+          mockSelect.replaceChildren(placeholder,...info.test_points.filter(p=>['TEST01M','TEST02M'].includes(p.id)).map(p=>{const o=el('option',p.id+', punkt testowy '+(p.id==='TEST01M'?'A':'B'));o.value=p.id;return o}));
           get('#point-help').textContent='Wybierz jeden z dwóch punktów testowych.';
         }
-        if(info.mode==='live'){
-          if(smallShipping===null)return;
+        if(requireTerms){
+          if(lockerFee===null)return;
           liveInfo=info;showLive(info);
         }
-        commerceMode=info.mode;draw();
+        termsRequired=requireTerms;dispatchRequired=info.mode==='live'||info.dispatch_required===true;commerceMode=info.mode;draw();
       }catch{/* A static catalog works without the private checkout. */}
     }
     draw();availability();

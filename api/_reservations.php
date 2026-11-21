@@ -38,7 +38,8 @@ function reservation_release(PDO $db,array $o,string $reason,int $now): bool {
     // Must be called under BEGIN IMMEDIATE, with a fresh row and authoritative evidence.
     if(!reservation_held($o['state']))return false;
     $q=json_decode($o['quote'],true,512,JSON_THROW_ON_ERROR);
-    foreach($q['items']as $sku=>$n){
+    // Fulfilment accounting is frozen in the original snapshot, never in today's config.
+    if(!production_snapshot($q))foreach($q['items']as $sku=>$n){
         $s=$db->prepare('UPDATE stock SET n=n+? WHERE sku=?');$s->execute([$n,$sku]);
         if($s->rowCount()!==1)unavailable();
     }

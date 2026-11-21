@@ -11,6 +11,15 @@ function physical_page(string $root,mixed $url): string {
 }
 function live_approval(array $c,string $root): string {
     $legal=[];foreach(['termsUrl','returnsUrl','privacyUrl']as $k)$legal[]=physical_page($root,$c[$k]??null);
+    // All six exact PDFs and their HTML sources are part of acceptedRelease.
+    // The review package is not installed automatically; missing documents keep Live closed.
+    $legalNames=['regulamin-sklepu','dostawa-i-platnosci','zwroty-i-reklamacje','formularz-odstapienia','polityka-prywatnosci','cookies-i-zgody'];
+    foreach($legalNames as $name){
+        $legal[]=physical_page($root,'/'.$name.'.html');
+        $pdf=realpath($root.'/legal-pdf/'.$name.'.pdf');
+        if(!$pdf||!under($pdf,$root)||!is_readable($pdf)||file_get_contents($pdf,false,null,0,5)!=='%PDF-')unavailable();
+        $legal[]=$pdf;
+    }
     $listing=[];$models=policy()['eligibleModelIds'];
     foreach($models as $model){
         $row=$c['productInfo'][$model]??null;if(!is_array($row))unavailable();
@@ -25,12 +34,15 @@ function live_approval(array $c,string $root): string {
     foreach(['salesApproved','sandboxPassed','sellerApproved','legalApproved'] as $k)if(($release[$k]??null)!==true)unavailable();
     $keys=[];foreach($models as $m)foreach(['dual','red-matte','white','marble']as $col)$keys[]=$m.':'.$col;
     $supplied=$c['approvedVariants']??null;if(!is_array($supplied)||count($supplied)!==count($keys)||array_diff($keys,$supplied))unavailable();
-    foreach(['sandboxCardAndBlikPassed','stockAndDispatchVerified','legalAndProductListingsReviewed','durableOrderConfirmationReady','refundsAndFulfilmentReady']as $k)
+    foreach(['sandboxCardAndBlikPassed',production_enabled($c)?'productionQueueAndDispatchVerified':'stockAndDispatchVerified','legalAndProductListingsReviewed','durableOrderConfirmationReady','refundsAndFulfilmentReady']as $k)
         if(($c['operationalChecks'][$k]??null)!==true)unavailable();
     // Fingerprint the commercially meaningful public release, safety/legal content and customer-facing operator data. Never hash a secret into a browser field.
     $files=array_unique(array_merge($legal,$listing,[$catalogPath,$pricingPath,$root.'/winter-config.js',$root.'/winter-zestaw-4.html'],glob($root.'/api/*.php')?:[]));
     $hash=hash_init('sha256');foreach($files as $file){if(!is_readable($file))unavailable();hash_update($hash,basename($file).':'.hash_file('sha256',$file)."\n");}
     $fields=['origin','termsUrl','returnsUrl','privacyUrl','dispatchNotice','sellerName','sellerContact','returnsSummary','complaintsSummary','productInfo','approvedVariants','operationalChecks'];
+    if(production_enabled($c))hash_update($hash,'fulfillment:made_to_order;term:7;policy:'.json_encode($c['production_on_order_approved'])."\n");
+    hash_update($hash,'inpost_points_verified:'.json_encode(($c['inpost_points_verified']??false)===true)."\n");
+    hash_update($hash,'inpost_environment:'.json_encode(inpost_environment($c))."\n");
     foreach($fields as $f)hash_update($hash,$f.':'.json_encode($c[$f],JSON_THROW_ON_ERROR)."\n");return hash_final($hash);
 }
 function live_config(bool $callbackOnly=false): array {
@@ -38,16 +50,21 @@ function live_config(bool $callbackOnly=false): array {
     if(!$root||!$file||under($file,$root)||!is_readable($file)||!live_host()||($_SERVER['HTTPS']??'off')==='off')unavailable();
     $c=json_decode(file_get_contents($file),true,512,JSON_THROW_ON_ERROR);
     if(!is_array($c)||($c['mode']??null)!=='live'||($c['origin']??'')!=='https://'.strtolower($_SERVER['HTTP_HOST'])||
-       !preg_match('/^sk_live_[A-Za-z0-9]+$/D',$c['stripe_key']??'')||!preg_match('/^whsec_[A-Za-z0-9]+$/D',$c['webhook_secret']??''))unavailable();
+       !preg_match('/^(?:sk|rk)_live_[A-Za-z0-9]+$/D',$c['stripe_key']??'')||!preg_match('/^whsec_[A-Za-z0-9]+$/D',$c['webhook_secret']??''))unavailable();
     $path=$c['db_file']??'';$db=realpath($path);
     if(!$db||$path!==$db||under($db,$root)||!is_file($db)||!is_writable($db)||!is_writable(dirname($db))||
        !extension_loaded('pdo_sqlite')||!extension_loaded('curl'))unavailable();
     if($callbackOnly)return $c; // Honour outstanding sessions/webhooks even if new purchases are paused.
     if(!preg_match('/^[a-f0-9]{64}$/D',$c['abuse_hmac']??''))unavailable();
+    $c['dispatch_required']=true;dispatch_key($c);
+    if(production_enabled($c)&&($c['dispatchNotice']??'')!==production_notice())unavailable();
     $version=live_approval($c,$root);if(!hash_equals($version,$c['approvedReleaseSha256']??''))unavailable();
+    $c['legal_documents']=[];
+    foreach(['regulamin-sklepu','dostawa-i-platnosci','zwroty-i-reklamacje','formularz-odstapienia','polityka-prywatnosci','cookies-i-zgody']as $name)
+        $c['legal_documents'][$name.'.pdf']=hash_file('sha256',$root.'/legal-pdf/'.$name.'.pdf');
     $c['approvalVersion']=$version;return $c;
 }
-function deployment(bool $callbackOnly=false): array {if(live_host())return live_config($callbackOnly);return configuration();}
+function deployment(bool $callbackOnly=false): array {if(live_host())return live_config($callbackOnly);return configuration($callbackOnly);}
 function ledger_ok(PDO $db,string $mode): bool {
     $r=row($db,'SELECT value FROM store_meta WHERE name=?',['mode']);return ($r['value']??null)===$mode;
 }

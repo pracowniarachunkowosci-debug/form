@@ -3,6 +3,9 @@ declare(strict_types=1);
 require_once __DIR__.'/_live.php';
 require_once __DIR__.'/_inpost.php';
 require_once __DIR__.'/_reservations.php';
+require_once __DIR__.'/_dispatch.php';
+require_once __DIR__.'/_offer.php';
+require_once __DIR__.'/_production.php';
 final class StoreError extends RuntimeException {
     function __construct(public string $kind, public int $status, string $msg) { parent::__construct($msg); }
 }
@@ -28,7 +31,7 @@ function config_path(string $mode,string $root): string {
     // LH without environment-variable support: sibling directory outside this site's WWW root.
     return getenv($env)?:dirname($root).'/.pf-private/winter26-'.$mode.'.json';
 }
-function configuration(): array {
+function configuration(bool $callbackOnly=false): array {
     $root=realpath($_SERVER['DOCUMENT_ROOT']??''); $path=realpath(config_path('test',$root?:__DIR__));
     if(!$root || !$path || under($path,$root) || !is_readable($path)) unavailable();
     $cfg=json_decode(file_get_contents($path),true,512,JSON_THROW_ON_ERROR);
@@ -42,7 +45,19 @@ function configuration(): array {
     $dir=realpath(dirname($cfg['db_file']??''));
     if(!$dir || under($dir,$root) || !is_writable($dir) || !str_starts_with($cfg['db_file'],'/') ||
        is_link($cfg['db_file']) || !extension_loaded('pdo_sqlite') || !extension_loaded('curl')) unavailable();
-    $cfg['mode']='test';return $cfg;
+    $cfg['mode']='test';
+    if(!$callbackOnly&&($cfg['staging_legal_approved']??false)===true){
+        $docs=[];$sources=[];
+        foreach(['regulamin-sklepu','dostawa-i-platnosci','zwroty-i-reklamacje','formularz-odstapienia','polityka-prywatnosci','cookies-i-zgody']as $name){
+            $pdf=$root.'/legal-pdf/'.$name.'.pdf';$html=$root.'/'.$name.'.html';
+            if(!is_readable($pdf)||!is_readable($html)||file_get_contents($pdf,false,null,0,5)!=='%PDF-')unavailable();
+            $docs[$name.'.pdf']=hash_file('sha256',$pdf);$sources[$name.'.html']=hash_file('sha256',$html);
+        }
+        if(($cfg['legal_documents']??null)!==$docs||($cfg['legal_sources']??null)!==$sources)unavailable();
+        $cfg['approvalVersion']=hash('sha256',json_encode([$docs,$sources,$cfg['productInfo']??[]],JSON_UNESCAPED_UNICODE|JSON_THROW_ON_ERROR));
+        $cfg['legal_acceptance_required']=true;
+    }
+    return $cfg;
 }
 function browser_session(): void {
     session_name('pf_winter_sandbox'); ini_set('session.use_strict_mode','1'); ini_set('session.use_only_cookies','1');
@@ -70,7 +85,7 @@ function valid_key(string $key,array $p): bool {
 }
 function quote(array $in,array $p,?string $version=null): array {
     if($version!==null && (($in['termsAccepted']??null)!==true || !hash_equals($version,is_string($in['approvalVersion']??null)?$in['approvalVersion']:'')))problem('TERMS',422,'Odśwież zamówienie i zaakceptuj aktualne warunki.');
-    if(array_diff(array_keys($in),array_merge(['selections','packs','code','requestId','delivery_method','pickup_point'],$version===null?[]:['termsAccepted','approvalVersion'])) || !is_string($in['requestId']??null) ||
+    if(array_diff(array_keys($in),array_merge(['selections','packs','code','requestId','delivery_method','pickup_point','dispatchToken'],$version===null?[]:['termsAccepted','approvalVersion'])) || !is_string($in['requestId']??null) ||
        !preg_match('/^[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}$/iD',$in['requestId'])) problem('BAD_REQUEST',422,'Nieprawidłowe dane zamówienia.');
     if(!is_string($in['code']??'') || trim($in['code']??'')!=='') problem('NO_PROMOTION',422,'Nie ma teraz aktywnej promocji.');
     if(array_key_exists('selections',$in)===array_key_exists('packs',$in))problem('BAD_REQUEST',422,'Wybierz kompozycję albo listę kompozycji.');
@@ -94,7 +109,7 @@ function quote(array $in,array $p,?string $version=null): array {
     if($method==='courier' && array_key_exists('pickup_point',$in))problem('DELIVERY_METHOD',422,'Przy dostawie kurierem nie podawaj punktu odbioru.');
     $id=$method==='locker'?point_id($in['pickup_point']??null):null;
     $delivery=$count>=$p['freeCourierFromOrnaments']?0:delivery_rates($p)[$method];
-    return ['size'=>$count,'packs'=>$packRows,'items'=>$items,'ordered'=>$ordered,'merchandise'=>$subtotal,'delivery_method'=>$method,'pickup_point'=>$id,'shipping'=>$delivery,'total'=>$subtotal+$delivery,'acceptedRelease'=>$version];
+    return ['size'=>$count,'packs'=>$packRows,'items'=>$items,'ordered'=>$ordered,'merchandise'=>$subtotal,'delivery_method'=>$method,'pickup_point'=>$id,'shipping'=>$delivery,'total'=>$subtotal+$delivery,'acceptedRelease'=>$version]+(isset($in['dispatchToken'])?['dispatchToken'=>$in['dispatchToken']]:[]);
 }
 function database(array $cfg): PDO {
     $db=new PDO('sqlite:'.$cfg['db_file'],null,null,[PDO::ATTR_ERRMODE=>PDO::ERRMODE_EXCEPTION,PDO::ATTR_DEFAULT_FETCH_MODE=>PDO::FETCH_ASSOC]);
@@ -118,6 +133,7 @@ function existing_order(array $old,array $q,?string $owner): array {
        array_column($stored['packs'],'members')!==array_column($q['packs'],'members') ||
        ($stored['delivery_method']??'courier')!==$q['delivery_method'] || ($stored['pickup_point']??null)!==$q['pickup_point'])
         problem('REQUEST_CONFLICT',409,'Identyfikator już oznacza inne zamówienie lub dostawę.');
+    if(isset($stored['dispatch']) && (!is_string($q['dispatchToken']??null)||!hash_equals($stored['dispatchToken'],$q['dispatchToken'])))problem('DISPATCH_CHANGED',409,'Ponowienie musi zachować przyjęty termin nadania.');
     if(!in_array($old['state'],['reserved','reconcile'],true))problem('FINISHED',409,'Ta próba została zakończona.');
     return $old;
 }
@@ -133,9 +149,10 @@ function order(PDO $db,string $req,array $q,?string $owner=null,?callable $resol
     }
     return tx($db,function() use($db,$req,$q,$owner,$stripeCfg){
         if($old=row($db,'SELECT * FROM orders WHERE req=?',[$req]))return existing_order($old,$q,$owner);
-        foreach($q['items'] as $k=>$n){ $s=$db->prepare('UPDATE stock SET n=n-? WHERE sku=? AND n>=?'); $s->execute([$n,$k,$n]);
+        if(!production_enabled($stripeCfg??[]))foreach($q['items'] as $k=>$n){ $s=$db->prepare('UPDATE stock SET n=n-? WHERE sku=? AND n>=?'); $s->execute([$n,$k,$n]);
           if($s->rowCount()!==1) problem('STOCK',409,'Brakuje wybranego wariantu. Odśwież dostępność.'); }
         $id='w26_'.bin2hex(random_bytes(12));$now=time();
+        if($stripeCfg!==null&&dispatch_enabled($stripeCfg))$q['dispatch']=dispatch_reserve($db,$stripeCfg,$q,$owner??'tester',$id,$now);
         $db->prepare("INSERT INTO orders(id,req,quote,created,owner,state) VALUES(?,?,?,?,?,'reserved')")->execute([$id,$req,json_encode($q,JSON_THROW_ON_ERROR),$now,$owner]);
         $o=row($db,'SELECT * FROM orders WHERE id=?',[$id]);
         if($stripeCfg!==null)reservation_prepare($db,$o,$stripeCfg,$now);
@@ -148,7 +165,7 @@ function checkout_params(array $o,string $origin,bool $live=false): array {
     $locker=($q['delivery_method']??'courier')==='locker';
     $meta=['orderId'=>$o['id'],'delivery_method'=>$locker?'locker':'courier'];
     if($locker)$meta+=['pickup_point'=>$q['pickup_point'],'pickup_address'=>$q['pickup_address']];
-    $label=$locker?'Paczkomat® InPost '.$q['pickup_point']:'Kurier InPost';
+    $label=$locker?'Paczkomat InPost '.$q['pickup_point']:'Kurier InPost';
     $lines=[];
     foreach($q['packs'] as $pack){
         $labels=[];foreach($pack['items'] as $sku=>$n){[$m,$c]=explode(':',$sku);$labels[]=$n.' × '.$names[$m].' ('.$colors[$c].')';}
@@ -158,7 +175,8 @@ function checkout_params(array $o,string $origin,bool $live=false): array {
     if($q['shipping']>0)$lines[]=['quantity'=>1,'price_data'=>['currency'=>'pln','unit_amount'=>$q['shipping'],'product_data'=>['name'=>$prefix.$label]]];
     $details=$locker?['name_collection'=>['individual'=>['enabled'=>'true','optional'=>'false']]]:
         ['shipping_address_collection'=>['allowed_countries'=>['PL']]];
-    if($locker)$details['custom_text']=['submit'=>['message'=>$label.' — '.$q['pickup_address']]];
+    if($locker)$details['custom_text']=['submit'=>['message'=>$label.', '.$q['pickup_address']]];
+    if(isset($q['dispatch']))$details['custom_text']['submit']['message']=($locker?$label.', '.$q['pickup_address'].'. ':'').$q['dispatch']['text'];
     return $details+['mode'=>'payment','client_reference_id'=>$o['id'],'metadata'=>$meta,
     'payment_intent_data'=>['metadata'=>$meta],'payment_method_types'=>['card','blik'],
     'phone_number_collection'=>['enabled'=>'true'],
