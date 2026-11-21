@@ -1,0 +1,19 @@
+PROPOSAL ONLY — not installed and not part of runtime payload.
+
+After require_once _common.php, BEFORE method validation / any DB operations,
+in each actual entrypoint checkout.php, result.php, order-status.php and webhook.php:
+
+if (function_exists('pf_gateway_probe')) pf_gateway_probe(__FILE__, __DIR__);
+
+The actual entrypoint supplies compiler-expanded __FILE__ / __DIR__. The gateway
+does not invent these values. Send an empty JSON object to the SAME public API
+route under administrative proof authorization; never submit a checkout payload.
+If an old uninstrumented entrypoint runs, the proof response is absent: FAIL.
+Proof must match the expected canonical entry, loaded function source and compiled
+state behavior. Disk hashes alone are not proof of execution.
+
+Assembling this diagnostic changes entrypoint hashes. A future deployment package
+MUST record those final hashes, retain the normal webhook auth exemption exactly,
+and test the normal path with the proof header absent. Do not apply this text or
+activate runtime-proof.json automatically. No phpinfo(), global cache reset,
+invalidation, new public debug URL, or production runtime probe is proposed.

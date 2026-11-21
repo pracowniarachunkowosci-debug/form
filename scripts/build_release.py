@@ -39,7 +39,7 @@ if not php:
     sys.exit('PHP CLI with curl and PDO SQLite is required to verify this release (set PF_PHP_BIN).')
 for source in sorted((ROOT/'api').glob('*.php')):
     subprocess.run([php,'-l',str(source)],check=True,cwd=ROOT,stdout=subprocess.DEVNULL)
-for suite in ('tests/checkout-sandbox.php','tests/checkout-live-gates.php','tests/checkout-locker.php','tests/checkout-status.php'):
+for suite in ('tests/checkout-sandbox.php','tests/checkout-live-gates.php','tests/checkout-locker.php','tests/checkout-status.php','tests/checkout-status-security.php','tests/staging-runtime-routing.php'):
     subprocess.run([php,suite],check=True,cwd=ROOT)
 subprocess.run(['node','tests/inpost-mock-ui.cjs'],check=True,cwd=ROOT,env={**os.environ,'PF_PHP_BIN':php})
 for suite in ('tests/checkout-status-ui.cjs','tests/checkout-retry-ui.cjs','tests/checkout-basket-lock-ui.cjs'):

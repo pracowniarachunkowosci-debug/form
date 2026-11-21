@@ -1,0 +1,169 @@
+WINTER 26 — audyt OPcache i statusu, 21.11.2026
+Branch: codex/winter26-status-security-20261121; baza: 6869924 (zachowana).
+Zakres: lokalna poprawka i propozycja architektury. Uberspace tylko odczyt.
+Bez wdrożenia, zakupów, zmian bazy/stanów, konfiguracji, wznowienia sprzedaży,
+restartu PHP-FPM, resetowania/inwalidacji OPcache, merge i zmian produkcji.
+
+A. POTWIERDZONE FAKTY I GRANICE DOWODÓW
+Świeży odczyt SSH: C:/sklep/winter26-status-security-evidence/runtime-audit.json
+Staging: /var/www/virtual/pf26/pf26.uber.space -> /var/www/virtual/pf26/html
+-> /var/www/virtual/pf26/winter26/app/public.
+Produkcja: /var/www/virtual/pf26/pracowniaform.com -> winter26-live/app/public
+-> /var/www/virtual/pf26/winter26-live/app/public.
+Wspólny pool www i socket /var/lib/php-fpm/${USER}/php-fpm.sock.
+Konfiguracja FPM ma niezmieniony hash
+473ffc1855cc462ac2f7869ad9cdd012afbe79b7611288aa9a681f89974ef6c6.
+FPM binary/config: 8.5.13, opcache.revalidate_path=Off, use_cwd=On,
+validate_timestamps=On, revalidate_freq=2, realpath_cache_ttl=120.
+Wynik php-fpm85 -i to odtworzona konfiguracja binarium FPM, nie introspekcja
+pamięci obsługującego request workera. Nie mylimy go z php CLI (TTL 300).
+
+W poprzednim wdrożeniu checkout.php oraz result.php zachowały mtime i treść
+przy copytree, a publiczny alias ścieżki pozostał ten sam. Diagnostyka osobnym
+nowym plikiem potwierdziła nowy _common.php, ale rzeczywisty checkout zwrócił
+komunikat starego existing_order(). Zachowany kandydat dla tego samego paid
+zwraca ORDER_PAID, stary plik FINISHED. To mocny dowód rozbieżności wykonania.
+Mechanizm OPcache jest z nim zgodny: przy revalidate_path=Off trafienie po
+kluczu ścieżki może ominąć ponowne rozwiązanie dowiązania; skompilowany
+__DIR__ starego entrypointu kieruje require do starych helperów. Niezmieniony
+mtime punktu wejścia nie wymusza nowej kompilacji. TTL realpath nie jest TTL
+shared-memory OPcache ani gwarancją zastąpienia wszystkich jego aliasów.
+Źródło: https://www.php.net/manual/en/opcache.configuration.php
+
+NIEPOTWIERDZONE BEZ NOWEJ INSTRUMENTACJI:
+- SCRIPT_FILENAME, __FILE__, __DIR__ właściwego requestu checkout.php podczas
+  incydentu dla stagingu oraz bieżącego requestu produkcyjnego;
+- dokładny klucz/alias OPcache i worker, który zwrócił FINISHED;
+- pełna mapa wewnętrznych aliasów (opcache_get_status pokazuje klucze scripts,
+  nie pełną wewnętrzną mapę aliasów).
+Nie przypisujemy wartości tych zmiennych na podstawie symlinków lub CLI.
+FPM config nie wykazuje access.log/access.format z %f. W końcówce <=128 KiB
+istniejącego /home/pf26/logs/php_error.log nie ma pasujących ścieżek aplikacji.
+Odczyt logu zwracał tylko listę ścieżek; treść z potencjalnymi danymi nie była
+eksportowana. Nie instalujemy sondy na produkcji, aby wypełnić tę lukę.
+
+B. DOCELOWY MECHANIZM — STAŁY GATEWAY, NIE RUCHOMY ALIAS PHP
+Propozycja w ops/staging-runtime/gateway.php, nie w publicznym payloadzie.
+1. Stały fizyczny docroot/router WYŁĄCZNIE pf26.uber.space. Jego gateway.php
+   ma stałą, nigdy nieprzepinaną ścieżkę i nie jest nadpisywany w wydaniach.
+2. Każde wydanie ma niepowtarzalny katalog releases/<release-id>/public.
+   Katalogi i wszystkie składowe ścieżek backendu są kanoniczne, bez symlinków.
+   Po utworzeniu nie modyfikuje się plików PHP w takim katalogu ani nie używa
+   ponownie identyfikatora wydania.
+3. Gateway na każdym request czyta zwykły prywatny active-release.json.
+   Wybór wersji nie jest plikiem PHP ani dowiązaniem. Nowy plik danych jest
+   walidowany, fsyncowany i atomowo rename w tym samym filesystemie; katalog
+   też wymaga fsync. Uprawnienia i właściciel ograniczone do operatora.
+4. Ścisła lista /api/*.php, bez path-info/traversal/zakodowanych obejść.
+   require otrzymuje unikalną absolutną ścieżkę konkretnego wydania.
+   DOCUMENT_ROOT ustawiany na ten sam release dla legal/catalog/config checks.
+   SCRIPT_FILENAME pozostaje stałym gatewayem; __FILE__/__DIR__ wewnątrz
+   entrypointu wskazują konkretne immutable wydanie. Nie porównywać ich jako
+   identycznych wartości — pełnią odmienne role.
+5. OPcache może przechowywać równocześnie A i B. Nowy request po rename
+   odczytuje B; request już rozpoczęty z A kończy się na A. Kod i schema muszą
+   zachować zgodność w tym okresie. Brak TTL, resetu czy restartu jako warunku.
+6. Static assets/HTML muszą być publikowane spójnie; zakupy pozostają paused
+   podczas przełączenia i testów. Nie przepinamy html ani domeny produkcyjnej.
+   Auth Basic, blokady prywatnych plików i dokładny wyjątek webhooka zachować.
+7. Pierwsza instalacja routera jest osobną zmianą stagingowej konfiguracji,
+   wymagającą akceptacji i dowodu SCRIPT_FILENAME. Nie wykonano jej teraz.
+   Nie dołączamy automatycznego skryptu instalującego lub zmieniającego vhost.
+   Jeśli Uberspace nie pozwala skierować wyłącznie stagingu na stały gateway,
+   operacja ma być zablokowana; potrzebny osobny backend/pool zatwierdzony
+   przez operatora, nie zmiana wspólnego PHP-FPM.
+
+DOWÓD WYKONANIA
+Przygotowany staging-only pf_gateway_probe oraz entry-hook.txt. Hook wywołuje
+sondę z WEWNĄTRZ checkout/result/order-status/webhook, po ładowaniu helperów,
+przed walidacją body i jakąkolwiek operacją DB. Ten sam publiczny endpoint,
+puste JSON {}, osobny krótkotrwały token administratora + aktywny tester,
+HTTPS, POST i host pf26.uber.space. Brak prywatnego runtime-proof.json oznacza
+brak dostępu. Nie wygenerowano tokenu i nie zainstalowano tej konfiguracji.
+Sonda nie wykonuje SQL ani Stripe. Wynik: SCRIPT_FILENAME, kompilowane
+__FILE__/__DIR__, ReflectionFunction źródeł helperów, zachowanie guardów
+paid/pending/released/review, hashe oraz klucze OPcache ograniczone do wydania.
+Brak phpinfo/env/config/sekretów i brak listy cache produkcji. Błędny lub stary
+entrypoint, brak sondy albo niezgodny wynik = FAIL; nie wolno odblokować sprzedaży.
+Dodanie hooków zmienia hashe entrypointów: końcowy deployment manifest trzeba
+zbudować po ich wstawieniu. Pakiet obecny jest review-only, nie instalatorem.
+Test lokalny A -> B -> A przeszedł także z realnym OPcache CLI, przy
+validate_timestamps=0 i revalidate_path=0; potwierdzono cache hits bez resetu.
+To dowód mechanizmu unikalnych ścieżek, nie test konfiguracji Apache Uberspace.
+
+C. AUDYT STATUSU I POPRAWKI
+6869924 miał poprawną kontrolę owner dla Live, ale Sandbox używał NULL.
+Każdy zalogowany tester znający cudzy requestId mógł poznać jego stan.
+UUIDv4 utrudnia zgadywanie, ale nie zastępuje kontroli właściciela.
+Nowy _checkout_identity.php:
+- checkout i dispatch w Sandbox korzystają z tej samej losowej tożsamości
+  144-bit w serwerowej sesji testera; token terminu nadania związany z owner;
+- odczyt statusu NIE tworzy tożsamości, używa read_and_close, sprawdza tester
+  expiry i sesję Live; brak owner kończy się 401, brak testera 403;
+- status wymaga zgodności owner, odrzuca NULL. Cudzy/brakujący request daje
+  identyczne 404. Identyfikator nie może pochodzić z body jako owner.
+- accepted body to wyłącznie requestId UUIDv4, max 256 B. SID nie jest
+  alternatywnym kluczem: sid, PaymentIntent, dodatkowe pola, złe typy, SQL-like
+  input i inne identyfikatory są odrzucane.
+- Origin, metoda POST, application/json, cookie Secure/HttpOnly/SameSite=Strict,
+  no-store/nosniff. Brak CORS. UUIDv4 ma 122 bity losowości; owner jest osobnym
+  warunkiem. Nie dodano licznika prób w bazie. Hostowy rate limit nie był audytowany.
+- odpowiedź: tylko state/message. Bez PII, SID/PI, URL Stripe, sekretów.
+- OPEN_READONLY + query_only, ograniczone oczekiwanie SQLite 1 s. Brakująca,
+  uszkodzona, zablokowana baza i niezgodny ledger zwracają ogólne 503. Nie
+  powstaje plik bazy. Brak DDL, Stripe, rezerwacji i zapisu zamówienia w statusie.
+- paid/pending/released/review zwracają HTTP 200 jako znane stany, a nie
+  nakaz nowego obciążenia. Obsługa UI z 6869924 zachowana.
+
+ISTOTNA GRANICA KOMPATYBILNOŚCI
+Wszystkie 8 istniejących zamówień testowych mają owner=NULL. Nie istnieje
+wiarygodne powiązanie z konkretną sesją, którego można dowieść samym requestId.
+Nie migrujemy ani nie przypisujemy ich automatycznie. Zwykły endpoint odmówi
+odczytu także starego paid; jego status nadal dostępny w uprawnionym odczycie
+administracyjnym. Próba ponownego checkoutu istniejącego NULL-owner zostanie
+odrzucona przez guard właściciela, bez drugiej sesji. Nowe zakupy nie są potrzebne
+do testów: używamy izolowanych fixtures z właścicielami i rzeczywistego paid
+wyłącznie w administracyjnym odczycie. Udostępnienie starego paid w customer UI
+wymaga osobno zaakceptowanego dowodu własności / wąskiej capability; nie wolno
+obchodzić tego przez dopuszczenie wszystkich testerów lub reset requestId.
+
+RÓWNIEŻ WYKRYTE W ROUTINGU PRODUKCJI (TYLKO ODCZYT)
+Aktualna allowlista .htaccess nie dopuszcza POST order-status.php ani nowego
+winter-payment-result.js. Zatem sama kopia plików nie wystarczy dla produkcji.
+Nie zmieniono allowlisty. Obecny pakiet nie jest zatwierdzony do produkcji.
+
+D. TESTY I ODBIÓR
+PASS: checkout-sandbox, live-gates, locker, status (z pending/retry/reconciliation),
+status-security, staging-runtime-routing; trzy regresje UI z 6869924;
+PHP/JS syntax i diff --check. Security test sprawdza rzeczywiste sesje PHP,
+anonimowego/nieaktualnego testera, cudzy owner Live i TEST, NULL, brakujący ID,
+odgadywanie SID, niedostępność bazy, minimalny output i niezmienne bajty SQLite.
+Żadnych zakupów ani Stripe calls. Osobny test OPcache A/B/A z cache hits PASS.
+Pełny build pozostaje blokowany starszym render_store.py product-card; patrz
+wcześniejszy raport 6869924. Nie wyłączono kontroli wydania.
+Build został ponownie uruchomiony na tym branchu; zatrzymał się na
+render_store.py:56. Końcowy odczyt final-safety-read.json potwierdza zgodność
+produkcyjnych plików, konfiguracji, bazy i dowiązania z wcześniejszym baseline,
+wyciszenie stagingu, dostępność webhooka oraz niezmienione orders/events/stock.
+
+PLAN ODBIORU PO OSOBNEJ AKCEPTACJI
+1. Ponownie odczytać hashe i routing; zachować paused, 8 orders / 11 events /
+   16 VASE Dual, aktywny webhook, osobną bazę TEST, backup API i rollback kodu.
+2. Uzgodnić wyłącznie stagingowy stały router, auth i dowód wykonania. Test
+   A/B/A z tym samym URI, niezmiennymi mtime entrypointów, różnymi compile
+   markers/helperami, kilkoma połączeniami i pracownikami. Sprawdzić wskazania
+   SCRIPT_FILENAME / __FILE__ / Reflection oraz normalną walidację webhooka.
+3. Dopiero po zgodności tras z manifestem atomowo przełączyć prywatny pointer.
+   Poprzednie katalogi zachować. Rollback do zgodnego kontraktowo wydania,
+   nigdy automatyczne przywrócenie DB. Starszy pre-gateway release nie zapewnia
+   nowego endpointu statusu, więc nie jest pełnowartościowym rollbackiem UI.
+4. Bez zakupów: test uprawnionej sesji na izolowanej bazie/fixtures, powrót,
+   reload, BFCache, retry; drugi browser owner musi dostać 404, anonimowy 401/403.
+   Stare paid admin-only pozostaje paid, SID/PI/stock nie zmieniają się.
+5. Sprawdzić webhook signature/idempotency w izolacji i dostępność jego
+   normalnej trasy. Porównać stan DB i produkcyjne hashe przed/po.
+6. Brak zgody na wznowienie sprzedaży lub wdrożenie pozostaje obowiązujący.
+
+Pakiet odbiorowy zawiera runtime proposal (11 plików), testy, dokumentację,
+gateway/hook jako oddzielne proposals oraz manifest before/after z rzeczywistego
+odczytu Uberspace. Nie zawiera sekretów, prywatnej bazy ani konfiguracji.

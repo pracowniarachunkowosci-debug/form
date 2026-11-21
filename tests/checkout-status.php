@@ -3,12 +3,13 @@ declare(strict_types=1);
 require __DIR__.'/checkout-pending.php';require_once __DIR__.'/../api/_order_status.php';
 foreach(['paid','pending','released','review'] as $state){
  [$db,$o,$t]=setup_fixture();
+ $owner=str_repeat('a',36);$db->prepare('UPDATE orders SET owner=? WHERE id=?')->execute([$owner,$o['id']]);
  if($state==='paid'){
   $e=event_fixture($o,'statuspaid','checkout.session.completed','paid');apply_event($db,$e);apply_event($db,$e);
  }else $db->prepare('UPDATE orders SET state=? WHERE id=?')->execute([$state,$o['id']]);
  $before=$db->query('SELECT total_changes()')->fetchColumn();$stock=units($db);
  for($i=0;$i<5;$i++){
-  $status=order_status_read($db,$o['req'],null);need($status['state']===$state,'status '.$state);
+  $status=order_status_read($db,$o['req'],$owner);need($status['state']===$state,'status '.$state);
   need(array_keys($status)===['state','message'],'no SID, PI, URL or customer data');
  }
  need($db->query('SELECT total_changes()')->fetchColumn()===$before,'status is read only');
