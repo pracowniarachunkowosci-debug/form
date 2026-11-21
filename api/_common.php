@@ -40,7 +40,7 @@ function configuration(bool $callbackOnly=false): array {
     if(!is_string($origin) || !preg_match('#^https://[a-z0-9.-]+$#D',$origin) ||
         !str_contains(substr($origin,8),'.') || in_array(substr($origin,8),['pracowniaform.com','www.pracowniaform.com'],true) ||
         $origin!=='https://'.strtolower($_SERVER['HTTP_HOST']??'') || ($_SERVER['HTTPS']??'off')==='off') unavailable();
-    if(!preg_match('/^sk_test_[A-Za-z0-9]+$/D',$cfg['stripe_key']??'') || !preg_match('/^whsec_[A-Za-z0-9]+$/D',$cfg['webhook_secret']??'') ||
+    if(!reservation_key_valid($cfg['stripe_key']??'',false) || !preg_match('/^whsec_[A-Za-z0-9]+$/D',$cfg['webhook_secret']??'') ||
        !preg_match('/^[a-f0-9]{64}$/D',$cfg['login_sha256']??'')) unavailable();
     $dir=realpath(dirname($cfg['db_file']??''));
     if(!$dir || under($dir,$root) || !is_writable($dir) || !str_starts_with($cfg['db_file'],'/') ||
@@ -133,9 +133,21 @@ function existing_order(array $old,array $q,?string $owner): array {
        array_column($stored['packs'],'members')!==array_column($q['packs'],'members') ||
        ($stored['delivery_method']??'courier')!==$q['delivery_method'] || ($stored['pickup_point']??null)!==$q['pickup_point'])
         problem('REQUEST_CONFLICT',409,'Identyfikator już oznacza inne zamówienie lub dostawę.');
-    if(isset($stored['dispatch']) && (!is_string($q['dispatchToken']??null)||!hash_equals($stored['dispatchToken'],$q['dispatchToken'])))problem('DISPATCH_CHANGED',409,'Ponowienie musi zachować przyjęty termin nadania.');
-    if(!in_array($old['state'],['reserved','reconcile'],true))problem('FINISHED',409,'Ta próba została zakończona.');
+    if(isset($stored['dispatch']) && (!is_string($q['dispatchToken']??null)||!hash_equals($stored['dispatchToken'],$q['dispatchToken'])))problem('REQUEST_CONFLICT',409,'Ponowienie musi zachować przyjęty termin nadania.');
+    checkout_state($old,true);
     return $old;
+}
+function checkout_state(array $o,bool $allowPendingCheck=false): void {
+    switch($o['state']){
+        case 'reserved': case 'reconcile': return;
+        case 'released': problem('ATTEMPT_RELEASED',409,'Poprzednia próba została bezpiecznie zakończona. Możesz rozpocząć nową próbę zakupu.');
+        case 'paid': problem('ORDER_PAID',409,'To zamówienie jest już opłacone. Nie rozpoczynaj kolejnej płatności.');
+        case 'pending':
+            if($allowPendingCheck)return;
+            problem('PAYMENT_PENDING',409,'Płatność jest przetwarzana. Sprawdź ponownie jej wynik za chwilę; nie rozpoczynaj nowej płatności.');
+        case 'review': problem('PAYMENT_REVIEW',409,'Wynik płatności wymaga sprawdzenia przez sklep. Skontaktuj się z nami; nie płać ponownie.');
+        default: problem('RECONCILE',409,'Sprawdzamy wynik tej próby. Ponów tę samą próbę za chwilę.');
+    }
 }
 function order(PDO $db,string $req,array $q,?string $owner=null,?callable $resolve=null,?array $stripeCfg=null): array {
     if($stripeCfg!==null)reservation_require_schema($db);

@@ -78,11 +78,22 @@ if (typeof document !== 'undefined') {
     root.hidden=false;
     const get=s=>root.querySelector(s),empty=()=>({model:null,color:null});
     const query=new URLSearchParams(location.search),request=Number(query.get('size'));
-    let commerceMode='closed', busy=false, attempt=null, smallShipping=null, liveInfo=null, expectedTotal=null;
+    let commerceMode='closed', busy=false, attempt=null, checkoutMessage='', smallShipping=null, liveInfo=null, expectedTotal=null;
     const commerceOpen=()=>commerceMode!=='closed';
     const acceptance=get('[data-accept-terms]');acceptance.onchange=()=>draw();
     let delivery='locker', lockerAvailable=false, lockerFee=null, geoToken='', selectedPoint=null;
     let pointsEnvironment=null, pointsNotice='', serviceNotice='';
+    // Keep the exact submitted request across network failures and return navigation.
+    const attemptStorage='pf-w26-checkout-attempt-v1';
+    function readAttempt(){
+      try{const saved=JSON.parse(sessionStorage.getItem(attemptStorage)||'null');
+        if(saved&&saved.payload&&typeof saved.id==='string'&&saved.payload.requestId===saved.id&&Number.isInteger(saved.total))return saved;
+      }catch{/* Storage unavailable: retain this page's in-memory operation. */}
+      return null;
+    }
+    attempt=readAttempt();
+    if(attempt)checkoutMessage=attempt.message||'Zachowano poprzednią próbę. Sprawdź jej wynik przed rozpoczęciem kolejnej płatności.';
+    function saveAttempt(){try{if(attempt)sessionStorage.setItem(attemptStorage,JSON.stringify(attempt));else sessionStorage.removeItem(attemptStorage)}catch{}}
     let termsRequired=false, dispatchRequired=false, dispatchQuote=null, dispatchSignature='', dispatchSeq=0, dispatchLoading=false, dispatchError='', dispatchId=null;
     const mockNotice='TEST / MOCK, bez połączenia z InPost';
     let mockPoints=false, localMockDemo=false;
@@ -98,24 +109,25 @@ if (typeof document !== 'undefined') {
     const normalizePoint=id=>typeof id==='string'?id.trim().toUpperCase():'';
     const validId=id=>/^[A-Z0-9][A-Z0-9_-]{2,31}$/.test(id);
     function setMethod(method){
-      if(busy||method==='locker'&&!lockerAvailable)return;
+      if(attempt||busy||method==='locker'&&!lockerAvailable)return;
       delivery=method;checking=false;pointSeq++;pointMessage='';acceptance.checked=false;
       draw();
     }
     locker.onchange=()=>setMethod('locker');
     function resetPoint(){
+      if(attempt){draw();return;}
       pointSeq++;checking=false;selectedPoint=null;pointMessage='';acceptance.checked=false;draw();
     }
     pointInput.oninput=resetPoint;
     async function checkPoint(){
-      if(delivery!=='locker'||!lockerAvailable||busy)return;
+      if(attempt||delivery!=='locker'||!lockerAvailable||busy)return;
       const id=normalizePoint(pointInput.value),seq=++pointSeq;selectedPoint=null;acceptance.checked=false;
       if(!validId(id)){checking=false;pointMessage='Wpisz kod automatu Paczkomat.';draw();return}
       checking=true;pointMessage='Sprawdzamy punkt odbioru…';draw();
       try{
         const res=await fetch('/api/pickup-point.php?id='+encodeURIComponent(id),{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
         const result=await res.json().catch(()=>null);
-        if(seq!==pointSeq||delivery!=='locker')return;
+        if(attempt||seq!==pointSeq||delivery!=='locker')return;
         if(!res.ok||!result||result.id!==id||typeof result.address!=='string'||!result.address.trim()||
             (mockPoints&&(result.provider!=='mock'||result.notice!==mockNotice||!id.startsWith('TEST')||!result.address.includes(mockNotice)))){
           throw new Error(!res.ok&&typeof result?.message==='string'?result.message:'Nie udało się potwierdzić adresu. Sprawdź kod lub wybierz inny automat.');
@@ -125,7 +137,7 @@ if (typeof document !== 'undefined') {
       finally{if(seq===pointSeq){checking=false;draw()}}
     }
     get('[data-find-point]').onclick=checkPoint;
-    mockSelect.onchange=()=>{if(busy||checking||!mockPoints)return;pointInput.value=mockSelect.value;resetPoint();if(pointInput.value)return checkPoint()};
+    mockSelect.onchange=()=>{if(attempt||busy||checking||!mockPoints)return;pointInput.value=mockSelect.value;resetPoint();if(pointInput.value)return checkPoint()};
     pointInput.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();checkPoint()}};
     function loadMapSdk(){
       if(mockPoints)return Promise.reject(new Error(mockNotice));
@@ -143,7 +155,7 @@ if (typeof document !== 'undefined') {
     mapDialog.onclose=()=>{clearTimeout(mapTimer);mapSeq++;mapHost.replaceChildren();mapButton.focus()};
     get('[data-close-map]').onclick=()=>mapDialog.close();
     mapButton.onclick=async()=>{
-      if(mockPoints||!geoToken||!lockerAvailable||delivery!=='locker'||busy)return;
+      if(attempt||mockPoints||!geoToken||!lockerAvailable||delivery!=='locker'||busy)return;
       const seq=++mapSeq,mapStatus=get('[data-map-status]');
       mapDialog.showModal();mapStatus.textContent='Ładowanie mapy InPost…';
       const trouble='Mapa nie odpowiada. Zamknij ją i wpisz kod automatu w koszyku.';
@@ -161,7 +173,7 @@ if (typeof document !== 'undefined') {
           try{api.changePointsType('PARCEL_LOCKER');}catch{clearTimeout(timer);mapHost.replaceChildren();mapStatus.textContent=trouble;return;}
           clearTimeout(timer);mapStatus.textContent='';
           api.addPointSelectedCallback(point=>{
-            if(seq!==mapSeq||!mapDialog.open||!validId(normalizePoint(point?.name)))return;
+            if(attempt||seq!==mapSeq||!mapDialog.open||!validId(normalizePoint(point?.name)))return;
             mapDialog.close();pointInput.value=normalizePoint(point.name);checkPoint();
           });
         },{once:true});
@@ -191,9 +203,9 @@ if (typeof document !== 'undefined') {
     let size=data.sizes.some(s=>s.size===request)?request:data.featured, slots=Array.from({length:size},empty), active=0;
     const saved=[];
     let step=1;
-    function goStep(n){if(busy)return;step=n;draw();const panel=get('[data-stage="'+n+'"]');panel.focus?.({preventScroll:true});panel.scrollIntoView?.({block:'start',behavior:'instant'});}
+    function goStep(n){if(busy||attempt)return;step=n;draw();const panel=get('[data-stage="'+n+'"]');panel.focus?.({preventScroll:true});panel.scrollIntoView?.({block:'start',behavior:'instant'});}
     function editSlot(pack,index,missing=false){
-      if(busy)return;
+      if(busy||attempt)return;
       if(pack!==slots){const i=saved.indexOf(pack);if(i<0)return;if(slots.some(s=>s.model))saved[i]=slots;else saved.splice(i,1);slots=pack;size=pack.length;}
       active=index;step=2;draw();const editor=get(missing&&nameOf(slots[index])?'[data-colors]':'.edit-position');editor.setAttribute('tabindex','-1');editor.focus?.({preventScroll:true});editor.scrollIntoView?.({block:missing?'center':'start',behavior:'instant'});
     }
@@ -202,6 +214,7 @@ if (typeof document !== 'undefined') {
       return {...(packs.length===1?{selections:packs[0]}:{packs}),delivery_method:delivery,...(delivery==='locker'&&selectedPoint?{pickup_point:selectedPoint.id}:{}),code:'',...(termsRequired?{termsAccepted:true,approvalVersion:liveInfo.approvalVersion}:{})};
     }
     async function refreshDispatch(force=false){
+      if(attempt)return; // Never replace an unresolved checkout operation.
       if(!dispatchRequired||step!==3||firstMissing()||(delivery==='locker'&&!selectedPoint))return;
       const input=dispatchContents(),signature=JSON.stringify(input);
       if(!force&&signature===dispatchSignature)return;
@@ -221,6 +234,7 @@ if (typeof document !== 'undefined') {
     const quotedPacks=()=>saved.length && !slots.some(s=>s.model)?[...saved]:[...saved,slots];
     const priceFor=pack=>data.sizes.find(r=>r.size===pack.length).grossGrosz;
     function removeCurrent(){
+      if(attempt)return;
       if(saved.length){slots=saved.pop();size=slots.length;}else{slots=Array.from({length:size},empty)}
       active=0;acceptance.checked=false;draw();
     }
@@ -236,6 +250,7 @@ if (typeof document !== 'undefined') {
     const nameOf=s=>data.models.find(m=>m.id===s.model)?.name;
     function focusRadio(name,value){const r=[...root.querySelectorAll('input')].find(i=>i.name===name && i.value===String(value));r?.focus({preventScroll:true});}
     function confirmEdit(text,action,done){
+      if(attempt)return;
       const dialog=get('.atelier-confirm');
       dialog.querySelector('h2').textContent=text;
       dialog.querySelector('[data-confirm-ok]').textContent=action;
@@ -244,14 +259,26 @@ if (typeof document !== 'undefined') {
       dialog.showModal();
     }
     function draw(){
+      // The submitted snapshot remains the visible basket until its outcome is known.
+      // Also restore legacy v1 attempts, which stored payload but no presentation snapshot.
+      if(attempt){
+        const packs=(attempt.payload.packs||[attempt.payload.selections]).map(p=>p.map(s=>({model:s.modelId,color:s.colorId})));
+        slots=packs.pop();saved.splice(0,saved.length,...packs);size=slots.length;active=0;step=3;
+        delivery=attempt.payload.delivery_method;
+        selectedPoint=delivery==='locker'?{id:attempt.payload.pickup_point,address:attempt.ui?.point?.address||'Adres potwierdzony w zapisanym zamówieniu'}:null;
+        pointInput.value=selectedPoint?.id||'';codeField.value=attempt.payload.code||'';
+        acceptance.checked=attempt.payload.termsAccepted===true;
+      }
       root.inert=busy;
       for(let n=1;n<=3;n++)get('[data-stage="'+n+'"]').hidden=step!==n;
       get('.workspace').hidden=step!==2;
       get('[data-steps]').replaceChildren(...['Liczba ozdób','Modele i wykończenia','Podsumowanie'].map((label,i)=>{const b=el('li');b.append(el('span','0'+(i+1)),el('span',label));b.setAttribute('aria-current',step===i+1?'step':'false');return b}));
       const previous=saved.flat();
       get('[data-sizes]').replaceChildren(...data.sizes.map(({size:n,grossGrosz})=>{const face=el('span',null,'size-face');if(n===data.featured)face.append(el('em','Wybór pracowni'));face.append(el('b',String(n)),el('span',n===1?'ozdoba':n<5?'ozdoby':'ozdób'),el('small',money(grossGrosz)));return radio('size',n,face,n===size,()=>{
+        if(attempt)return;
         const lost=slots.slice(n).filter(s=>s.model).length;
         const resize=yes=>{
+          if(attempt)return;
           if(yes){slots=Array.from({length:n},(_,i)=>slots[i]||empty());size=n;active=Math.min(active,n-1)}
           draw();focusRadio('size',size);
         };
@@ -276,7 +303,7 @@ if (typeof document !== 'undefined') {
         const tile=el('span',null,'model-face');if(m.thumb)tile.append(picture(m.thumb));
         tile.append(el('small',m.family),el('strong',m.name));
         const card=el('div',null,'model-card');card.setAttribute('data-selected',String(slot.model===m.id));
-        card.append(radio('model',m.id,tile,slot.model===m.id,id=>{slots[active]={model:id,color:null};draw();focusRadio('model',id)}));
+        card.append(radio('model',m.id,tile,slot.model===m.id,id=>{if(attempt)return;slots[active]={model:id,color:null};draw();focusRadio('model',id)}));
 
         return card;
       }));
@@ -286,6 +313,7 @@ if (typeof document !== 'undefined') {
       else colors.replaceChildren(...model.variants.map(v=>{
         const ok=!commerceOpen() || eligible(v,slots,active,data,previous);
         return radio('slot-color',v.colorId,swatch(v,!ok),slot.color===v.colorId,id=>{
+          if(attempt)return;
           if(!commerceOpen() || eligible(v,slots,active,data,previous)){slot.color=id;draw();focusRadio('slot-color',id)}
         },!ok);
       }));
@@ -307,7 +335,7 @@ if (typeof document !== 'undefined') {
       get('[data-issues]').replaceChildren(...issues);get('[data-issues]').hidden=!issues.length;
       const add=get('[data-add-pack]');add.disabled=busy||done!==size||saved.length+1>=10;
       add.onclick=()=>{
-        if(add.disabled)return;
+        if(attempt||add.disabled)return;
         saved.push(slots);slots=Array.from({length:1},empty);size=1;active=0;acceptance.checked=false;draw();
         goStep(1);
       };
@@ -321,7 +349,7 @@ if (typeof document !== 'undefined') {
           const photo=el('div',null,'summary-card-photo');if(src){photo.append(picture(src,previewFor(data,s)?.alt||''));}else photo.append(el('p',s.color?'Zdjęcie tego wykończenia w przygotowaniu':'Wybierz wykończenie.','caption'));item.append(photo);
           const copy=el('div',null,'summary-card-copy');copy.append(el('h3',m?.name||'Wybierz model'));const reason=issueFor(s,j,p),finish=el('p',null,reason?'item-incomplete':'summary-finish');if(!reason)finish.append(el('i',null,'swatch '+s.color));finish.append(el('span',reason||v.label));copy.append(finish);item.append(copy);items.append(item);
         });li.append(items);
-        const remove=el('button','Usuń zestaw','text-button');remove.type='button';remove.setAttribute('aria-label','Usuń pozycję '+(i+1)+' z koszyka');remove.onclick=()=>{if(current)removeCurrent();else{saved.splice(i,1);acceptance.checked=false;draw()}};
+        const remove=el('button','Usuń zestaw','text-button');remove.type='button';remove.setAttribute('aria-label','Usuń pozycję '+(i+1)+' z koszyka');remove.onclick=()=>{if(attempt)return;if(current)removeCurrent();else{saved.splice(i,1);acceptance.checked=false;draw()}};
         if(p.some(s=>s.model))li.append(remove);return li;
       }));
       const free=count>=data.freeFrom;
@@ -341,7 +369,7 @@ if (typeof document !== 'undefined') {
       get('[data-point-summary]').textContent=selectedPoint?'Wybrany automat: '+selectedPoint.id+' · '+selectedPoint.address.replace(mockNotice+', ',''):'';
       get('[data-point-status]').textContent=pointMessage;
       get('[data-find-point]').disabled=checking||!lockerAvailable||!pointInput.value.trim();
-      const total=shipping==null?null:merchandise+shipping;
+      const total=attempt?attempt.total:shipping==null?null:merchandise+shipping;
       get('[data-totals]').textContent=[count+' szt. · Ozdoby: '+money(merchandise)+' brutto',
         shipping===0?shippingName+' w Polsce w cenie':shipping==null?'Dostawa płatna osobno':shippingName+': '+money(shipping),
         total===null?'':'Razem: '+money(total)].filter(Boolean).join(' · ');
@@ -355,7 +383,7 @@ if (typeof document !== 'undefined') {
           return el('p',(copy?copy.displayName+' · Materiał: '+copy.material+' · Wymiary: '+copy.dimensions+' · Masa korpusu: '+copy.mass+' · Zawieszenie: '+copy.attachment:p.name+' · '+p.material+' · '+p.dimensions)+'. Producent: '+p.producer+', '+p.address+' · '+p.email+'. '+p.warnings);
         }));
       }
-      if(dispatchRequired){
+      if(dispatchRequired&&!attempt){
         const eligibleForDispatch=ready&&!pointRequired;
         const sig=eligibleForDispatch?JSON.stringify(dispatchContents()):'';
         if(sig!==dispatchSignature){dispatchQuote=null;dispatchError='';dispatchSeq++;dispatchLoading=false;dispatchSignature='';acceptance.checked=false;}
@@ -364,28 +392,48 @@ if (typeof document !== 'undefined') {
         if(termsRequired)get('[data-live-dispatch]').textContent=label;
         if(eligibleForDispatch&&step===3&&sig!==dispatchSignature)queueMicrotask(()=>refreshDispatch());
       }
+      if(attempt){
+        const text=attempt.ui?.dispatch?.text||'Obowiązuje termin nadania potwierdzony w zapisanej próbie.';
+        get('[data-dispatch-summary]').textContent=text;
+        if(termsRequired)get('[data-live-dispatch]').textContent=text;
+        get('[data-totals]').textContent=count+' szt. · Zapisane zamówienie: '+money(attempt.total)+' brutto · '+(selectedPoint?'Paczkomat '+selectedPoint.id:'Kurier');
+        expectedTotal=attempt.total;
+      }
       const btn=get('[data-checkout]'), payment=get('[data-payment-status]');
       btn.hidden=!commerceOpen();get('[data-notify]').hidden=commerceOpen();
       btn.textContent=localMockDemo?'Zapisz lokalną próbę, bez płatności':live?'Przejdź do płatności: '+(total===null?'':money(total)):'Przejdź do płatności';
-      btn.disabled=busy;btn.setAttribute('data-ready',String(Boolean(ready&&lockerAvailable&&!pointRequired&&(!dispatchRequired||Boolean(dispatchQuote))&&total!==null&&!codeField.value.trim()&&(!termsRequired||acceptance.checked))));
+      btn.disabled=busy||Boolean(attempt?.blocked);btn.setAttribute('data-ready',String(Boolean(ready&&lockerAvailable&&!pointRequired&&(!dispatchRequired||Boolean(dispatchQuote))&&total!==null&&!codeField.value.trim()&&(!termsRequired||acceptance.checked))));
       if(!ready)btn.textContent='Uzupełnij wybór: '+issues.length+' do poprawy';
       else if(!lockerAvailable)btn.textContent='Paczkomat chwilowo niedostępny';
       else if(pointRequired)btn.textContent='Wybierz punkt odbioru';
       else if(dispatchRequired&&!dispatchQuote)btn.textContent=dispatchLoading?'Potwierdzamy termin…':'Sprawdź termin nadania';
       payment.textContent=!commerceOpen()?(serviceNotice||(['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname)?'Przyjmowanie nowych zamówień jest chwilowo wstrzymane.':'Możesz ułożyć zestaw. Aby wykonać zakup Sandbox, zaloguj się jako tester.')):
         busy?'Przygotowujemy płatność…':(live?'Zamówienie z obowiązkiem zapłaty potwierdzisz w następnym kroku na stronie Stripe. ':'Zakup testowy, bez pobrania pieniędzy. ')+(!ready?'Wskażemy Ci brakujący wybór.':!lockerAvailable?(pointsNotice||'Walidacja punktów InPost jest niedostępna. Spróbuj ponownie później.'):pointRequired?'Wybierz punkt odbioru.':total===null?'Nie udało się ustalić kosztu dostawy. Spróbuj ponownie później.':codeField.value.trim()?'Usuń nieaktywny kod, aby przejść dalej.':termsRequired&&!acceptance.checked?'Zapoznaj się z regulaminem i zaakceptuj go.':'Sprawdź skład i kwotę przed przejściem do płatności.');
-      const sticky=get('[data-sticky-action]');sticky.disabled=busy;sticky.textContent=step===1?'Wybierz modele':step===2?next.textContent:btn.hidden?(['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname)?'Sprzedaż wstrzymana':'Dostęp testera'):btn.textContent;
+      if(!busy&&checkoutMessage)payment.textContent=checkoutMessage;
+      if(attempt)payment.textContent+=' Pokazujemy zapisane zamówienie. Edycja jest zablokowana do wyjaśnienia wyniku płatności.';
+      if(attempt&&!attempt.blocked)btn.textContent='Ponów sprawdzenie płatności';
+      if(attempt?.blocked)btn.textContent=attempt.blocked==='ORDER_PAID'?'Zamówienie opłacone':'Płatność wymaga sprawdzenia';
+      const sticky=get('[data-sticky-action]');sticky.disabled=busy||Boolean(attempt?.blocked);sticky.textContent=step===1?'Wybierz modele':step===2?next.textContent:btn.hidden?(['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname)?'Sprzedaż wstrzymana':'Dostęp testera'):btn.textContent;
       get('[data-sticky-copy]').textContent='Wybrano '+summary(data,all,!commerceOpen()).done+' z '+count+(count===1?' ozdoby':' ozdób')+' · '+money(total??merchandise);
       document.body?.setAttribute('data-step',String(step));
       document.dispatchEvent?.(new CustomEvent('pf:composition',{detail:{step,size,active,model:slot.model,color:slot.color,done:summary(data,all,!commerceOpen()).done,count,total,merchandise,shipping,commerceMode,busy}}));
       sticky.onclick=()=>{if(step===1)goStep(2);else if(step===2)next.onclick();else if(commerceOpen())btn.onclick();else{const missing=firstMissing();if(missing)editSlot(missing.pack,missing.index);else if(!['pracowniaform.com','www.pracowniaform.com'].includes(location.hostname))location.assign('/api/test-access.php')}};
       get('[data-reset]').disabled=!groups.length;
       get('[data-reset]').onclick=()=>confirmEdit('Wyczyścić wszystkie wybory w zestawie?', 'Wyczyść',yes=>{
-        if(yes){slots=Array.from({length:size},empty);active=0;draw();get('[data-slots]').children[0].focus()}
+        if(yes&&!attempt){slots=Array.from({length:size},empty);active=0;draw();get('[data-slots]').children[0].focus()}
       });
+      // Native disabled controls plus handler guards cover mouse, keyboard and custom galleries.
+      for(const selector of ['[data-sizes]','[data-models]','[data-colors]','[data-slots]','[data-basket]']){
+        const area=get(selector);
+        if(attempt)for(const tag of ['input','button'])for(const control of area.querySelectorAll(tag))control.disabled=true;
+      }
+      for(const control of [acceptance,pointInput,codeField])control.disabled=Boolean(attempt)||busy;
+      mapButton.disabled=Boolean(attempt)||busy;
+      if(attempt)for(const control of [locker,mockSelect,mapButton,get('[data-find-point]'),get('[data-add-pack]'),get('[data-reset]'),get('[data-prev]'),get('[data-next]')])control.disabled=true;
     }
     get('[data-checkout]').onclick=async()=>{
       if(!commerceOpen()||busy||get('[data-checkout]').disabled)return;
+      if(attempt){await submitCheckout();return;}
       const missing=firstMissing();if(missing){editSlot(missing.pack,missing.index,true);return;}
       if(!lockerAvailable){goStep(3);get('[data-payment-status]').focus?.();return;}
       if(delivery==='locker'&&!selectedPoint){goStep(3);const target=mockPoints?mockSelect:pointInput;target.focus?.();target.scrollIntoView?.({block:'center',behavior:'instant'});return;}
@@ -397,13 +445,27 @@ if (typeof document !== 'undefined') {
       const acceptanceProof=termsRequired?{termsAccepted:acceptance.checked,approvalVersion:liveInfo.approvalVersion}:{};
       const destination={delivery_method:delivery,...(delivery==='locker'?{pickup_point:selectedPoint.id}:{})};
       const signature=JSON.stringify([contents,checkoutTotal,acceptanceProof,destination]);
-      if(!attempt||attempt.signature!==signature)attempt={signature,id:dispatchRequired?dispatchId:crypto.randomUUID()};
+      attempt={signature,id:dispatchRequired?dispatchId:crypto.randomUUID(),total:checkoutTotal,
+        ui:{point:selectedPoint?{...selectedPoint}:null,dispatch:dispatchQuote?{...dispatchQuote}:null},
+        payload:{...contents,...destination,code:codeField.value.trim(),...acceptanceProof,...(dispatchRequired?{dispatchToken:dispatchQuote.token}:{})}};
+      attempt.payload.requestId=attempt.id;saveAttempt();
+      await submitCheckout();
+    };
+    async function submitCheckout(){
+      const submitted=attempt;
+      const checkoutTotal=attempt.total, orderPacks=attempt.payload.packs||[attempt.payload.selections];
       busy=true;draw();
       try{
         const res=await fetch('/api/checkout.php',{method:'POST',credentials:'same-origin',headers:{'Content-Type':'application/json','Accept':'application/json'},
-          body:JSON.stringify({...contents,...destination,code:codeField.value.trim(),requestId:attempt.id,...acceptanceProof,...(dispatchRequired?{dispatchToken:dispatchQuote.token}:{})})});
+          body:JSON.stringify(attempt.payload)});
         const json=await res.json();
-        if(!res.ok&&json.error==='DISPATCH_CHANGED'){dispatchQuote=null;dispatchSignature='';attempt=null;acceptance.checked=false;}
+        if(attempt!==submitted)return; // A restored page may already be showing a newer saved operation.
+        if(!res.ok&&['ATTEMPT_RELEASED','DISPATCH_CHANGED'].includes(json.error)){
+          // DISPATCH_CHANGED is returned only before creation; existing-order mismatch is REQUEST_CONFLICT.
+          attempt=null;saveAttempt();dispatchQuote=null;dispatchSignature='';dispatchId=null;acceptance.checked=false;
+        }
+        if(!res.ok&&['ORDER_PAID','PAYMENT_REVIEW'].includes(json.error)){attempt.blocked=json.error;saveAttempt();}
+        if(!res.ok&&json.error==='PAYMENT_PENDING'){checkoutMessage=json.message;}
         if(!res.ok)throw new Error(json.message||'Próba nie została przyjęta. Sprawdź dostępność i spróbuj ponownie.');
         if(!Number.isInteger(checkoutTotal)||json.totalGrosz!==checkoutTotal)throw new Error('Kwota zamówienia uległa zmianie. Wróć do wyboru i sprawdź podsumowanie.');
         if(localMockDemo){
@@ -414,8 +476,14 @@ if (typeof document !== 'undefined') {
         if(next.origin!=='https://checkout.stripe.com')throw new Error('Nie można otworzyć strony płatności.');
         try{if(typeof window!=='undefined')window.PF_RECORD_CHECKOUT?.(json.orderId,orderPacks,orderPacks.reduce((sum,p)=>sum+priceFor(p),0),commerceMode==='live');}catch{/* Optional analytics cannot block checkout. */}
         location.assign(next.href);
-      }catch(e){busy=false;draw();get('[data-payment-status]').textContent=e instanceof Error?e.message:'Nie udało się rozpocząć próby.'}
-    };
+      }catch(e){
+        if(attempt&&attempt!==submitted)return;
+        busy=false;checkoutMessage=e instanceof TypeError||e instanceof SyntaxError?'Nie udało się potwierdzić wyniku połączenia ze sklepem.':e instanceof Error?e.message:'Nie udało się sprawdzić płatności.';
+        if(attempt&&!attempt.blocked)checkoutMessage+=' Ponowienie sprawdzi tę samą próbę, bez tworzenia nowego zamówienia.';
+        if(attempt){attempt.message=checkoutMessage;saveAttempt();}
+        draw();
+      }
+    }
     async function availability(){
       try{
         const res=await fetch('/api/status.php',{credentials:'same-origin',cache:'no-store',headers:{Accept:'application/json'}});
@@ -463,6 +531,12 @@ if (typeof document !== 'undefined') {
         termsRequired=requireTerms;dispatchRequired=info.mode==='live'||info.dispatch_required===true;commerceMode=info.mode;draw();
       }catch{/* A static catalog works without the private checkout. */}
     }
+    if(typeof window!=='undefined')window.addEventListener?.('pageshow',event=>{
+      if(event.persisted){
+        const latest=readAttempt();if(latest){attempt=latest;checkoutMessage=latest.message||'Sprawdź wynik zapisanego zamówienia.';}
+        busy=false;draw(); // BFCache can restore the page during the Stripe redirect.
+      }
+    });
     draw();availability();
   }
 }

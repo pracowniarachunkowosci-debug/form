@@ -85,9 +85,13 @@ function reservation_curl_result(int $errno,int $status,int $requestBytes,float 
     $notSent=$status===0 && $requestBytes===0 && $pretransfer===0.0 && in_array($errno,[5,6,7,28,35,60],true);
     return ['status'=>$status,'body'=>$body,'headers'=>$headers,'not_sent'=>$notSent,'code'=>$notSent?'CONNECT_NOT_SENT':($errno?'TRANSPORT_UNKNOWN':'HTTP')];
 }
+function reservation_key_valid(string $key,bool $live): bool {
+    // Match the deployment gate: restricted keys are supported, without crossing modes.
+    return preg_match($live?'/^(?:sk|rk)_live_[A-Za-z0-9]+$/D':'/^(?:sk|rk)_test_[A-Za-z0-9]+$/D',$key)===1;
+}
 function reservation_http(array $cfg,string $method,string $path,?string $body,?string $key,string $version): array {
     $live=($cfg['mode']??'test')==='live';
-    if(!preg_match($live?'/^sk_live_[A-Za-z0-9]+$/D':'/^sk_test_[A-Za-z0-9]+$/D',$cfg['stripe_key']??''))
+    if(!reservation_key_valid($cfg['stripe_key']??'',$live))
         return ['not_sent'=>true,'status'=>0,'body'=>null,'headers'=>[],'code'=>'LOCAL_KEY'];
     $curl=null;$executing=false;$headers=[];
     try{
@@ -142,7 +146,7 @@ function reservation_apply_session(PDO $db,array $o,array $s,int $now): void {
     elseif(reservation_held($state)){
         if($s['status']==='expired') {reservation_release($db,$o,'STRIPE_EXPIRED_RELEASE',$now);$state='released';}
         elseif($s['status']==='complete')$state='pending';
-        else $state='reserved'; // Even a locally expired clock cannot release a Stripe-open session.
+        elseif($state!=='pending')$state='reserved'; // An older open observation cannot reopen a pending payment.
     }
     $pi=is_string($s['payment_intent']??null)?$s['payment_intent']:null;
     $db->prepare('UPDATE orders SET state=?,sid=?,url=COALESCE(?,url),pi=COALESCE(?,pi) WHERE id=?')
@@ -179,6 +183,9 @@ function reservation_reconcile(PDO $db,array $cfg,string $id,?callable $transpor
         if($o['sid']!==null || $knownSession!==null){
             $r=$http($cfg,'GET','/v1/checkout/sessions/'.($knownSession??$o['sid']),null,null,$op['api_version']);
             $result=($r['status']??0)===200 && is_array($r['body']??null)?['session'=>$r['body']]:['code'=>'RETRIEVE_FAILED'];
+        }elseif($o['state']==='pending'){
+            // Missing reference is an operational inconsistency, never permission to POST again.
+            $result=['code'=>'PENDING_SESSION_MISSING'];
         }else{
             $first=$op['first_attempt']===null?null:(int)$op['first_attempt'];
             $canReplay=$op['request_body']!==null && ($first===null || ($now>=$first && $now-$first<RESERVATION_REPLAY_SECONDS)) && (int)$op['attempts']<8;
@@ -190,7 +197,7 @@ function reservation_reconcile(PDO $db,array $cfg,string $id,?callable $transpor
                     $sent=tx($db,function()use($db,$id,$token,$now){
                         $op=row($db,'SELECT * FROM checkout_operations WHERE order_id=?',[$id]);
                         $order=row($db,'SELECT * FROM orders WHERE id=?',[$id]);
-                        if($op['lease_token']!==$token || !reservation_held($order['state']) || $order['sid']!==null)return false;
+                        if($op['lease_token']!==$token || !in_array($order['state'],['reserved','reconcile'],true) || $order['sid']!==null)return false;
                         $db->prepare("UPDATE checkout_operations SET status='sending',uncertain=1,first_attempt=COALESCE(first_attempt,?),attempts=attempts+1 WHERE order_id=?")->execute([$now,$id]);
                         $db->prepare("UPDATE orders SET state='reconcile' WHERE id=?")->execute([$id]);
                         reservation_history($db,$id,'CREATE_ATTEMPT',$now);return true;
@@ -245,9 +252,14 @@ function reservation_reconcile(PDO $db,array $cfg,string $id,?callable $transpor
 }
 function stripe_session(array $cfg,array $o,?PDO $db=null,?callable $transport=null,?int $now=null): array {
     if($db===null)unavailable(); // The unsafe, untracked transport is no longer callable.
-    $now??=time();reservation_reconcile($db,$cfg,$o['id'],$transport,$now);
+    $current=row($db,'SELECT * FROM orders WHERE id=?',[$o['id']])??$o;
+    checkout_state($current,true);
+    // A pending customer's explicit check retrieves the saved session immediately.
+    // The existing lease still fences simultaneous requests and webhook races.
+    $known=$current['state']==='pending'?$current['sid']:null;
+    $now??=time();reservation_reconcile($db,$cfg,$o['id'],$transport,$now,$known);
     $fresh=row($db,'SELECT * FROM orders WHERE id=?',[$o['id']]);
-    if(in_array($fresh['state'],['paid','released','review','pending'],true))problem('FINISHED',409,'Ta próba została zakończona lub płatność jest przetwarzana.');
+    checkout_state($fresh);
     if($fresh['state']==='reserved' && is_string($fresh['url']) && $now<(int)$fresh['created']+3600)return ['id'=>$fresh['sid'],'url'=>$fresh['url']];
     problem('RECONCILE',409,'Sprawdzamy wynik tej próby płatności. Ponów tę samą próbę za chwilę; nie składaj nowej.');
 }

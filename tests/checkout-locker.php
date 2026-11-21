@@ -11,9 +11,10 @@ $point=['name'=>$id,'type'=>['parcel_locker'],'status'=>'Operating','virtual'=>'
     'address_details'=>['post_code'=>'53-600','city'=>'Wrocław'],'address'=>['line1'=>'Testowa 1']];
 $fixture=fn(string $code)=>canonical_point($code,['items'=>[$point]]);
 ensure(!inpost_settings([])['locker_available'],'unconfigured locker off');
-ensure(inpost_settings(['inpost_points_token'=>'private-token'])===['locker_available'=>true,'geowidget_token'=>null],'manual point ID without map');
-ensure(inpost_settings(['inpost_points_token'=>'private-token','inpost_geowidget_token'=>'private-token'])['geowidget_token']===null,'private token never exposed');
-ensure(inpost_settings(['inpost_points_token'=>'private-token','inpost_geowidget_token'=>'public-geo'])['geowidget_token']==='public-geo','geo public only');
+$pointsCfg=['mode'=>'test','inpost_environment'=>'sandbox','inpost_points_token'=>'private-token'];
+ensure(inpost_settings($pointsCfg)['locker_available']&&inpost_settings($pointsCfg)['geowidget_token']===null,'manual point ID without map');
+ensure(inpost_settings($pointsCfg+['inpost_geowidget_token'=>'private-token'])['geowidget_token']===null,'private token never exposed');
+ensure(inpost_settings($pointsCfg+['inpost_geowidget_token'=>'public-geo'])['geowidget_token']==='public-geo','geo public only');
 fails('POINTS_UNAVAILABLE',fn()=>lookup_point([],$id));
 foreach([['status'=>'NonOperating'],['type'=>['parcel_locker','pop']],['type'=>['parcel_locker_superpop']],['virtual'=>1],
     ['country'=>'FR'],['functions'=>['parcel_send']],['name'=>'WRO02M'],['address_details'=>['city'=>'Paris','post_code'=>'75004']]]as $bad)

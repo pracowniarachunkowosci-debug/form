@@ -40,15 +40,23 @@ try{
   $c['operationalChecks']=array_fill_keys(['sandboxCardAndBlikPassed','stockAndDispatchVerified','legalAndProductListingsReviewed','durableOrderConfirmationReady','refundsAndFulfilmentReady'],true);
   file_put_contents($file,json_encode($c));rejected(fn()=>live_config());
   foreach(['terms.html','returns.html','privacy.html','model.html','winter-zestaw-4.html','winter-config.js','api/checkout.php']as $p)file_put_contents($root.'/'.$p,str_repeat("fixture\n",22));
+  mkdir($root.'/legal-pdf');
+  foreach(['regulamin-sklepu','dostawa-i-platnosci','zwroty-i-reklamacje','formularz-odstapienia','polityka-prywatnosci','cookies-i-zgody']as $name){
+      file_put_contents($root.'/'.$name.'.html',str_repeat('synthetic document ',20));
+      file_put_contents($root.'/legal-pdf/'.$name.'.pdf','%PDF- synthetic gate fixture');
+  }
   file_put_contents($root.'/data/winter26-pricing-pl.json',json_encode(policy()));$release=array_fill_keys(['salesApproved','legalApproved','sellerApproved','sandboxPassed'],true);
   file_put_contents($root.'/data/winter26-products.json',json_encode(['release'=>array_merge($release,['salesApproved'=>false])]));
   rejected(fn()=>live_approval($c,$root));
   file_put_contents($root.'/data/winter26-products.json',json_encode(['release'=>$release]));rejected(fn()=>live_config()); // no sign-off
   $c['approvedReleaseSha256']=live_approval($c,$root);file_put_contents($file,json_encode($c));
   $cfg=live_config();ensure($cfg['mode']==='live' && ledger_ok($db,'live'),'explicit sign-off only');
+  $c['stripe_key']='rk_live_'.str_repeat('x',25);file_put_contents($file,json_encode($c));
+  $restricted=live_config();ensure(reservation_key_valid($restricted['stripe_key'],true),'restricted key accepted by both deployment and transport');
   $bad=$c;$bad['stripe_key']='sk_test_'.str_repeat('x',25);file_put_contents($file,json_encode($bad));rejected(fn()=>live_config());
   file_put_contents($file,json_encode($c));file_put_contents($root.'/terms.html','changed fixture',FILE_APPEND);
   rejected(fn()=>live_config());ensure(live_config(true)['mode']==='live','pending webhook must survive new release');
+  file_put_contents($root.'/legal-pdf/cookies-i-zgody.pdf','tampered attachment',FILE_APPEND);rejected(fn()=>live_config());
   $make=['requestId'=>'12345678-1234-4321-8123-123456789abc','code'=>'','selections'=>array_fill(0,6,['modelId'=>'full-soft','colorId'=>'marble'])];
   $ver=$cfg['approvalVersion'];rejected(fn()=>quote($make,policy(),$ver),'TERMS');
   $q=quote($make+['approvalVersion'=>$ver,'termsAccepted'=>true],policy(),$ver);ensure($q['total']===22000 && $q['shipping']===0,'6 at full price with courier');
@@ -60,7 +68,19 @@ try{
       'object'=>'checkout.session','mode'=>'payment','client_reference_id'=>$o['id'],'metadata'=>['orderId'=>$o['id']],'currency'=>'pln','amount_total'=>22000,'payment_status'=>'paid']]];
   rejected(fn()=>apply_event($db,$evt,false),'EVENT');apply_event($db,$evt,true);
   ensure(row($db,'SELECT state FROM orders WHERE id=?',[$o['id']])['state']==='paid','live event flow fixture');
-  echo "PASS: real-mode gates deny missing legal docs, draft catalog, stale sign-off, mixed keys/stock and absent consent; signed-off synthetic six-item price/status verified offline. No Stripe call.\n";
+  // Separate proposal: accepted production queue replaces the old stock sign-off, never a silent bypass.
+  $mto=$c;$mto['fulfillment_mode']='made_to_order';$mto['production_on_order_approved']=true;$mto['dispatchNotice']=production_notice();
+  unset($mto['operationalChecks']['stockAndDispatchVerified']);$mto['operationalChecks']['productionQueueAndDispatchVerified']=true;
+  $mto['approvedReleaseSha256']=live_approval($mto,$root);file_put_contents($file,json_encode($mto));$onOrder=live_config();
+  ensure(production_enabled($onOrder),'Live proposal accepts explicit sign-off');dispatch_snapshot_migrate($db);
+  $input=['requestId'=>'22345678-1234-4321-8123-123456789abc','selections'=>array_fill(0,8,['modelId'=>'knitted-star','colorId'=>'red-matte']),'delivery_method'=>'locker','pickup_point'=>'FIXTURELOCKER','termsAccepted'=>true,'approvalVersion'=>$onOrder['approvalVersion']];
+  $q=quote($input,policy(),$onOrder['approvalVersion']);$preview=dispatch_preview($db,$onOrder,$q,$owner,time());$q['dispatchToken']=$preview['token'];
+  $stocksBefore=$db->query('SELECT * FROM stock')->fetchAll();$made=order($db,$input['requestId'],$q,$owner,fn($id)=>['id'=>$id,'address'=>'Adres syntetyczny'],$onOrder);
+  ensure(production_snapshot(json_decode($made['quote'],true)),'Live snapshot');ensure($stocksBefore===$db->query('SELECT * FROM stock')->fetchAll(),'No stock rows invented or changed');
+  $bad=$mto;$bad['production_on_order_approved']=false;file_put_contents($file,json_encode($bad));rejected(fn()=>live_config());
+  ensure(live_config(true)['mode']==='live','Disabling new MTO acceptance preserves callbacks');
+  $bad=$mto;$bad['dispatchNotice']='Nadanie w ciągu 3 dni roboczych.';file_put_contents($file,json_encode($bad));rejected(fn()=>live_config());
+  echo "PASS: Live gates, real-mode synthetic paid flow, explicit MTO policy/7-day sign-off, no stock requirement, stale/disabled approval rejected, callbacks preserved. No Stripe call.\n";
 }finally{
   $db=null;
   $it=new RecursiveIteratorIterator(new RecursiveDirectoryIterator($tmp,FilesystemIterator::SKIP_DOTS),RecursiveIteratorIterator::CHILD_FIRST);
