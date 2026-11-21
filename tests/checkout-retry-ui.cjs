@@ -9,9 +9,9 @@ class Element{
  querySelectorAll(tag){return this.children.flatMap(c=>[...(c.tag===tag?[c]:[]),...c.querySelectorAll(tag)])}
 }
 let uuid=0;
-async function harness(storage=new Map(),dispatch=false){
+async function harness(storage=new Map(),dispatch=false,search='?size=1&model=full-soft&color=marble'){
  const nodes={},root=new Element('main'),get=s=>nodes[s]||=new Element('div');root.querySelector=get;
- const requests=[],redirects=[],quotes=[];let finish;
+ const requests=[],redirects=[],quotes=[],events={};let finish;
  const info={mode:'test',available:true,currency:'PLN',freeCourierFromOrnaments:6,locker_available:true,locker_amount_grosze:1849,
    points_provider:'inpost',inpost_environment:'production',points_notice:'',geowidget_token:null,stock:{'full-soft:marble':20},dispatch_required:dispatch};
  const fetch=async(url,opts)=>{
@@ -25,15 +25,16 @@ async function harness(storage=new Map(),dispatch=false){
    return new Promise((resolve,reject)=>finish=(error=null)=>error==='NETWORK'?reject(new TypeError('Failed to fetch')):resolve({ok:!error,json:async()=>error?{error,message:error}:{url:'https://checkout.stripe.com/c/pay/test',totalGrosz:6849,orderId:'w26_fixture'}}));
  };
  vm.runInNewContext(js,{document:{querySelector:s=>s==='#winter-options'?{textContent:options}:root,querySelectorAll:()=>[],createElement:t=>new Element(t),head:new Element('head')},
- Intl,URL,URLSearchParams,setTimeout,clearTimeout,queueMicrotask,fetch,crypto:{randomUUID:()=>`12345678-1234-4321-8123-${String(++uuid).padStart(12,'0')}`},
+ Intl,URL,URLSearchParams,setTimeout,clearTimeout,queueMicrotask,fetch,window:{addEventListener:(name,fn)=>events[name]=fn},crypto:{randomUUID:()=>`12345678-1234-4321-8123-${String(++uuid).padStart(12,'0')}`},
  sessionStorage:{getItem:k=>storage.get(k),setItem:(k,v)=>storage.set(k,v),removeItem:k=>storage.delete(k)},
- location:{search:'?size=1&model=full-soft&color=marble',hostname:'example.test',protocol:'https:',origin:'https://example.test',href:'https://example.test/',assign:u=>redirects.push(u)}});
+ location:{search,hostname:'example.test',protocol:'https:',origin:'https://example.test',href:'https://example.test/',assign:u=>redirects.push(u)}});
  await new Promise(r=>setImmediate(r));
  get('[data-point-id]').value='TEST01M';get('[data-point-id]').oninput();await get('[data-find-point]').onclick();
  if(dispatch){get('[data-review]').onclick();await new Promise(r=>setImmediate(r));}
- return {get,requests,redirects,quotes,storage,finish:e=>finish(e),click:()=>get('[data-checkout]').onclick()};
+ return {get,requests,redirects,quotes,storage,events,root,finish:e=>finish(e),click:()=>get('[data-checkout]').onclick()};
 }
-(async()=>{
+module.exports={harness};
+if(require.main===module)(async()=>{
  const a=await harness();const first=a.click();await a.click();assert.equal(a.requests.length,1,'double click');assert(a.get('[data-checkout]').disabled);
  a.finish('NETWORK');await first;assert(!a.get('[data-checkout]').disabled);
  const retry=a.click();assert.deepEqual(a.requests[1],a.requests[0]);a.finish();await retry;assert.equal(a.redirects.length,1);

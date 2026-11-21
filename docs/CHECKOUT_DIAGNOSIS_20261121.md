@@ -1,5 +1,7 @@
 # WINTER 26 checkout — diagnoza i poprawka do przeglądu
 
+Aktualizacja drugiej recenzji: [CHECKOUT_REVIEW2_20261121.md](CHECKOUT_REVIEW2_20261121.md). Pierwsza wersja PR miała luki w sprawdzaniu `pending` i blokadzie edycji; poniższy raport historyczny nie stanowi dowodu ich poprawności. Aktualne poprawki, świeży odczyt Uberspace i testy opisuje raport drugiej recenzji.
+
 Status: draft, bez publikacji, bez merge, bez Stripe Live. Produkcyjnej bazy, stanów, konfiguracji, cen, SKU, zdjęć, dokumentów i hostingu nie zmieniano.
 
 ## Ustalenie wersji

@@ -31,7 +31,8 @@ done('expiry + fresh attempt + inventory accounting');
 foreach(['paid'=>'ORDER_PAID','pending'=>'PAYMENT_PENDING','review'=>'PAYMENT_REVIEW']as $state=>$code){
     [$db,$o,$t]=setup_fixture();$db->prepare('UPDATE orders SET state=? WHERE id=?')->execute([$state,$o['id']]);
     $input=['requestId'=>$o['req'],'selections'=>[['modelId'=>'full-soft','colorId'=>'marble']]];
-    retry_error($code,fn()=>order($db,$o['req'],quote($input,policy()),null,null,config_fixture()));
+    if($state==='pending')need(order($db,$o['req'],quote($input,policy()),null,null,config_fixture())['id']===$o['id'],'pending must reach read-only reconciliation');
+    else retry_error($code,fn()=>order($db,$o['req'],quote($input,policy()),null,null,config_fixture()));
     retry_error($code,fn()=>stripe_session(config_fixture(),$o,$db,fn()=>throw new RuntimeException('must not create'),$t));
     need(units($db)===1,'terminal check does not alter inventory');
 }
