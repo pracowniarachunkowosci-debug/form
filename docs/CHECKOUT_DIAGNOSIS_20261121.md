@@ -62,9 +62,9 @@ PASS: `php tests/checkout-sandbox.php`, `php tests/checkout-live-gates.php`, `ph
 | Restricted keys | PASS obie rodziny, odrzucenie kluczy z innego trybu i błędnego formatu |
 | Wyścig webhook/create | PASS paid/expired przed odpowiedzią, bez cofnięcia stanu |
 
-PASS: składnia 21 plików PHP w `api` i trzech głównych JS; kontrole cen, registry, store gate, consent i config.
+PASS: składnia 20 plików PHP w `api` i trzech głównych JS; kontrole cen, registry, store gate, consent i config.
 
-FAIL: pełny `python scripts/build_release.py` zatrzymuje się w `render_store.py --check` na dawnym selektorze `product-card`; `check_render_eol.py` dziedziczy ten sam błąd. `check_publication.py` oczekuje innego historycznego układu. `check_store_composition.cjs` oczekuje kuriera zamiast wdrożonego Paczkomatu. `configurator-journey.cjs` i `inpost-mock-ui.cjs` mają nieaktualne fixture'y routingu/UI. Nie wyłączono tych kontroli i nie deklaruje się pełnego PASS wydania. Nowy test UI wykonuje rzeczywisty, aktualny kontroler.
+FAIL: pełny `python scripts/build_release.py` zatrzymuje się w `render_store.py --check` na dawnym selektorze `product-card`; `check_render_eol.py` dziedziczy ten sam błąd. `check_publication.py` oczekuje innego historycznego układu. `check_store_composition.cjs` oczekuje kuriera zamiast wdrożonego Paczkomatu. `configurator-journey.cjs` i `inpost-mock-ui.cjs` mają nieaktualne fixture'y routingu/UI. Nie wyłączono tych kontroli i nie deklaruje się pełnego PASS wydania. Nowy test UI wykonuje rzeczywisty, aktualny kontroler. Wszystkie sześć powyższych niepowodzeń odtworzono również na niezmienionej bazie ce3d214 w osobnym worktree; nie zostały wprowadzone tą poprawką.
 
 Nie wykonano E2E z prawdziwym Stripe Sandbox ani płatności Live. Lokalny pakiet `scripts/build_checkout_patch.py` zawiera jedynie trzy runtime pliki i przed/po SHA-256; jest do przeglądu, nie stanowi zgody na wdrożenie.
 
