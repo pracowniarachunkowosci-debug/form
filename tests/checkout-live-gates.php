@@ -51,6 +51,8 @@ try{
   file_put_contents($root.'/data/winter26-products.json',json_encode(['release'=>$release]));rejected(fn()=>live_config()); // no sign-off
   $c['approvedReleaseSha256']=live_approval($c,$root);file_put_contents($file,json_encode($c));
   $cfg=live_config();ensure($cfg['mode']==='live' && ledger_ok($db,'live'),'explicit sign-off only');
+  $c['stripe_key']='rk_live_'.str_repeat('x',25);file_put_contents($file,json_encode($c));
+  $restricted=live_config();ensure(reservation_key_valid($restricted['stripe_key'],true),'restricted key accepted by both deployment and transport');
   $bad=$c;$bad['stripe_key']='sk_test_'.str_repeat('x',25);file_put_contents($file,json_encode($bad));rejected(fn()=>live_config());
   file_put_contents($file,json_encode($c));file_put_contents($root.'/terms.html','changed fixture',FILE_APPEND);
   rejected(fn()=>live_config());ensure(live_config(true)['mode']==='live','pending webhook must survive new release');

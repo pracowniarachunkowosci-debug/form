@@ -1,6 +1,14 @@
 <?php
 declare(strict_types=1);
 require __DIR__.'/checkout-reconciliation.php';
+foreach(['sk','rk']as $prefix)foreach([false,true]as $live){
+    $key=$prefix.($live?'_live_':'_test_').'SYNTHETIC';
+    need(reservation_key_valid($key,$live),'both authorized key families accepted');
+    need(!reservation_key_valid($key,!$live),'cross-mode key rejected');
+}
+foreach(['','pk_live_SYNTHETIC','rk_live_bad key','rk_live_','rk_live_SYNTHETIC'."\n"]as $key)
+    need(!reservation_key_valid($key,true),'malformed key rejected');
+done('regression LOCAL_KEY: restricted and secret keys, strict mode and syntax');
 function retry_error(string $code,callable $fn):void{
     try{$fn();throw new RuntimeException('expected '.$code);}catch(StoreError $e){need($e->kind===$code,'expected '.$code.', got '.$e->kind);}
 }

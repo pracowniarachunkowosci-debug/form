@@ -85,9 +85,13 @@ function reservation_curl_result(int $errno,int $status,int $requestBytes,float 
     $notSent=$status===0 && $requestBytes===0 && $pretransfer===0.0 && in_array($errno,[5,6,7,28,35,60],true);
     return ['status'=>$status,'body'=>$body,'headers'=>$headers,'not_sent'=>$notSent,'code'=>$notSent?'CONNECT_NOT_SENT':($errno?'TRANSPORT_UNKNOWN':'HTTP')];
 }
+function reservation_key_valid(string $key,bool $live): bool {
+    // Match the deployment gate: restricted keys are supported, without crossing modes.
+    return preg_match($live?'/^(?:sk|rk)_live_[A-Za-z0-9]+$/D':'/^(?:sk|rk)_test_[A-Za-z0-9]+$/D',$key)===1;
+}
 function reservation_http(array $cfg,string $method,string $path,?string $body,?string $key,string $version): array {
     $live=($cfg['mode']??'test')==='live';
-    if(!preg_match($live?'/^sk_live_[A-Za-z0-9]+$/D':'/^sk_test_[A-Za-z0-9]+$/D',$cfg['stripe_key']??''))
+    if(!reservation_key_valid($cfg['stripe_key']??'',$live))
         return ['not_sent'=>true,'status'=>0,'body'=>null,'headers'=>[],'code'=>'LOCAL_KEY'];
     $curl=null;$executing=false;$headers=[];
     try{

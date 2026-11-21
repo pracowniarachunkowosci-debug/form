@@ -40,7 +40,7 @@ function configuration(bool $callbackOnly=false): array {
     if(!is_string($origin) || !preg_match('#^https://[a-z0-9.-]+$#D',$origin) ||
         !str_contains(substr($origin,8),'.') || in_array(substr($origin,8),['pracowniaform.com','www.pracowniaform.com'],true) ||
         $origin!=='https://'.strtolower($_SERVER['HTTP_HOST']??'') || ($_SERVER['HTTPS']??'off')==='off') unavailable();
-    if(!preg_match('/^sk_test_[A-Za-z0-9]+$/D',$cfg['stripe_key']??'') || !preg_match('/^whsec_[A-Za-z0-9]+$/D',$cfg['webhook_secret']??'') ||
+    if(!reservation_key_valid($cfg['stripe_key']??'',false) || !preg_match('/^whsec_[A-Za-z0-9]+$/D',$cfg['webhook_secret']??'') ||
        !preg_match('/^[a-f0-9]{64}$/D',$cfg['login_sha256']??'')) unavailable();
     $dir=realpath(dirname($cfg['db_file']??''));
     if(!$dir || under($dir,$root) || !is_writable($dir) || !str_starts_with($cfg['db_file'],'/') ||

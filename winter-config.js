@@ -86,7 +86,9 @@ if (typeof document !== 'undefined') {
     // Keep the exact submitted request across network failures and return navigation.
     const attemptStorage='pf-w26-checkout-attempt-v1';
     try{const saved=JSON.parse(sessionStorage.getItem(attemptStorage)||'null');
-      if(saved&&saved.payload&&typeof saved.id==='string'&&saved.payload.requestId===saved.id&&Number.isInteger(saved.total))attempt=saved;
+      if(saved&&saved.payload&&typeof saved.id==='string'&&saved.payload.requestId===saved.id&&Number.isInteger(saved.total)){
+        attempt=saved;checkoutMessage=saved.message||'Zachowano poprzednią próbę. Sprawdź jej wynik przed rozpoczęciem kolejnej płatności.';
+      }
     }catch{/* Storage unavailable: retain this page's in-memory operation. */}
     function saveAttempt(){try{if(attempt)sessionStorage.setItem(attemptStorage,JSON.stringify(attempt));else sessionStorage.removeItem(attemptStorage)}catch{}}
     let termsRequired=false, dispatchRequired=false, dispatchQuote=null, dispatchSignature='', dispatchSeq=0, dispatchLoading=false, dispatchError='', dispatchId=null;
@@ -437,8 +439,9 @@ if (typeof document !== 'undefined') {
         try{if(typeof window!=='undefined')window.PF_RECORD_CHECKOUT?.(json.orderId,orderPacks,orderPacks.reduce((sum,p)=>sum+priceFor(p),0),commerceMode==='live');}catch{/* Optional analytics cannot block checkout. */}
         location.assign(next.href);
       }catch(e){
-        busy=false;checkoutMessage=e instanceof Error?e.message:'Nie udało się sprawdzić płatności.';
+        busy=false;checkoutMessage=e instanceof TypeError||e instanceof SyntaxError?'Nie udało się potwierdzić wyniku połączenia ze sklepem.':e instanceof Error?e.message:'Nie udało się sprawdzić płatności.';
         if(attempt&&!attempt.blocked)checkoutMessage+=' Ponowienie sprawdzi tę samą próbę, bez tworzenia nowego zamówienia.';
+        if(attempt){attempt.message=checkoutMessage;saveAttempt();}
         draw();
       }
     }
