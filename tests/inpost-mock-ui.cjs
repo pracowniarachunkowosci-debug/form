@@ -26,12 +26,13 @@ async function run({mixed=false,local=false,bad=null}={}){
     origin:'http://127.0.0.1:8787',href:'http://127.0.0.1:8787/winter-zestaw-4.html',assign(){throw new Error('No redirect permitted in mock UI test')}};
   const fetch=async(url,opts)=>{
     calls.push(url);assert(!/^https?:/.test(url),'all requests must be same-origin');
-    if(url==='api/status.php')return {ok:true,headers:{get:()=> 'application/json'},json:async()=>info};
-    if(url.startsWith('api/pickup-point.php?id=')){
+    if(url==='/api/status.php')return {ok:true,headers:{get:()=> 'application/json'},json:async()=>info};
+    if(url.startsWith('/api/pickup-point.php?id=')){
       const response=fixture.points[decodeURIComponent(url.split('=')[1])]||{ok:false,body:{message:notice+' — nieznany kod testowy.'}};
       return {ok:response.ok,json:async()=>response.body};
     }
-    assert.equal(url,'api/checkout.php');const body=JSON.parse(opts.body);bodies.push(body);
+    if(url==='/api/order-status.php')return {ok:true,json:async()=>({state:'pending',message:'Oczekuje na potwierdzenie.'})};
+    assert.equal(url,'/api/checkout.php');const body=JSON.parse(opts.body);bodies.push(body);
     return {ok:local,json:async()=>local?{local_demo:true,orderId:'w26_'+'a'.repeat(24),totalGrosz:body.delivery_method==='locker'?6849:7049}:{message:notice+' — kontrolowana odmowa płatności.'}};
   };
   let request=0;vm.runInNewContext(js,{document:doc,Intl,URL,URLSearchParams,location,setTimeout,clearTimeout,fetch,crypto:{randomUUID:()=> 'request-'+(++request)}});
@@ -39,7 +40,7 @@ async function run({mixed=false,local=false,bad=null}={}){
   const btn=select('[data-checkout]'),totals=select('[data-totals]'),picker=created.find(e=>e['data-test-point-picker']==='');
   assert(picker);assert.equal(head.children.length,0);
   if(bad){assert(btn.hidden);assert.equal(calls.length,1);return;}
-  const banner=created.find(e=>e['data-points-mock-notice']==='');assert(!banner.hidden);assert.match(banner.children[0].textContent,/Dostawa testowa/);
+  const banner=created.find(e=>e['data-points-notice']==='');assert(!banner.hidden);assert.match(banner.children[0].textContent,/Test Paczkomatu \(MOCK\)/);
   assert.equal(picker.children.length,3);
   const manual=async(id)=>{const field=select('[data-point-id]');field.value=id;field.oninput();await select('[data-find-point]').onclick()};
   const choose=async(id)=>{picker.value=id;await picker.onchange()};
@@ -52,20 +53,24 @@ async function run({mixed=false,local=false,bad=null}={}){
   await select('[data-open-map]').onclick();assert.equal(head.children.length,0,'no Geowidget assets');
   assert(!totals.textContent.includes(notice));assert.match(totals.textContent,mixed?/234,00/:/68,49/);
   await choose('TEST01M');assert.equal(btn['data-ready'],'true');assert(select('[data-point-summary]').textContent.includes('TEST01M'));
-  await btn.onclick();const first=bodies.at(-1);assert.equal(first.pickup_point,'TEST01M');assert(!('pickup_address' in first));assert(!('inpost_points_mock' in first));
-  await btn.onclick();assert.equal(bodies.at(-1).requestId,first.requestId,'same request on retry');
-  if(mixed){assert.deepEqual(first.packs.map(p=>p.length),[2,4]);return;}
   await choose('TEST02M');assert(select('[data-point-summary]').textContent.includes('TEST02M'));
-  await btn.onclick();assert.notEqual(bodies.at(-1).requestId,first.requestId);
+  assert.equal(bodies.length,0);
   await manual(' test01m ');assert.equal(btn['data-ready'],'true');assert.equal(select('[data-point-id]').value,'TEST01M');
   for(const id of ['bad!','TESTUNKNOWN','TESTOFF','TESTBAD','TESTBROKEN','TESTERROR']){
     await manual(id);assert.equal(btn['data-ready'],'false');assert(select('[data-point-status]').textContent);assert.equal(select('[data-point-summary]').textContent,'');
   }
-  select('[data-delivery-courier]').onchange();assert.equal(btn['data-ready'],'true');assert.match(totals.textContent,/70,49/);
-  await btn.onclick();assert.equal(bodies.at(-1).delivery_method,'courier');assert(!('pickup_point' in bodies.at(-1)));
+  assert.equal(typeof select('[data-delivery-courier]').onchange,'undefined');
+  await choose('TEST01M');
+  await btn.onclick();const first=bodies.at(-1);assert.equal(first.pickup_point,'TEST01M');assert(!('pickup_address' in first));assert(!('inpost_points_mock' in first));
   if(local)assert.match(select('[data-payment-status]').textContent,/zapisano w26_.*Bez płatności/);
+  await btn.onclick();assert.equal(bodies.at(-1).requestId,first.requestId,'same request on retry');
+  if(mixed){assert.deepEqual(first.packs.map(p=>p.length),[2,4]);return;}
+  await choose('TEST02M');
+  await btn.onclick();
+  assert.equal(bodies.at(-1).requestId,first.requestId);
+  assert.equal(bodies.at(-1).pickup_point,'TEST01M');
   assert.equal(head.children.length,0,'no external scripts or map');
 }
 Promise.all([run(),run({mixed:true}),run({local:true}),...['live','token','ids'].map(bad=>run({bad}))])
-  .then(()=>console.log('PASS: mock picker select/change/manual/errors, canonical server response, courier switch, 2+4, idempotency, local save and Live rejection. No browser/network.'))
+  .then(()=>console.log('PASS: mock picker select/change/manual/errors, canonical server response, locker-only delivery and submitted basket lock, 2+4, idempotency, local save and Live rejection. No browser/network.'))
   .catch(e=>{console.error(e);process.exitCode=1});
