@@ -6,16 +6,17 @@
   async function refresh(){
     if(busy)return;busy=true;button.disabled=true;
     try{
-      const attempt=JSON.parse(sessionStorage.getItem('pf-w26-checkout-attempt-v1')||'null');
+      const key='pf-w26-checkout-attempt-v1';
+      const saved=sessionStorage.getItem(key),attempt=JSON.parse(saved||'null');
       if(!attempt?.id){heading.textContent='Nie można ustalić statusu zamówienia';copy.textContent='Brakuje zapisanej próby w tej karcie. Skontaktuj się ze sklepem; nie płać ponownie.';return;}
       const res=await fetch('/api/order-status.php',{method:'POST',credentials:'same-origin',cache:'no-store',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({requestId:attempt.id})});
       const json=await res.json();
       const titles={paid:'Zamówienie opłacone',pending:'Płatność jest przetwarzana',released:'Próba zakończona bez płatności',review:'Płatność wymaga sprawdzenia',reserved:'Płatność nie jest potwierdzona',reconcile:'Sprawdzamy wynik płatności'};
-      if(!res.ok||!titles[json.state]||typeof json.message!=='string')throw new Error('status unavailable');
+      if(sessionStorage.getItem(key)!==saved||!res.ok||!Object.hasOwn(titles,json.state)||typeof json.message!=='string')throw new Error('status unavailable');
       heading.textContent=titles[json.state];copy.textContent=json.message;
       // Keep the original request, including for released. The configurator verifies it itself.
       attempt.blocked=json.state==='paid'?'ORDER_PAID':json.state==='review'?'PAYMENT_REVIEW':null;
-      attempt.message=json.message;try{sessionStorage.setItem('pf-w26-checkout-attempt-v1',JSON.stringify(attempt));}catch{}
+      attempt.message=json.message;try{sessionStorage.setItem(key,JSON.stringify(attempt));}catch{}
     }catch{heading.textContent='Nie potwierdzono statusu płatności';copy.textContent='Spróbuj ponownie sprawdzić status. Nie rozpoczynaj kolejnej płatności.';}
     finally{busy=false;button.disabled=false;}
   }
