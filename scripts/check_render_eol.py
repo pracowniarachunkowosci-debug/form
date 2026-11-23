@@ -10,6 +10,10 @@ with tempfile.TemporaryDirectory() as directory:
     tmp = Path(directory)
     for folder in ('data', 'scripts'):
         copytree(root / folder, tmp / folder, ignore=lambda *_: ['__pycache__'])
+    reference = Path('docs/r016/photo-correction')
+    (tmp / reference).mkdir(parents=True)
+    for name in ('release.json', 'manifest.json'):
+        (tmp / reference / name).write_bytes((root / reference / name).read_bytes())
     for eol in (b'\n', b'\r\n'):
         for source in [*root.glob('*.html'), root / 'sitemap.xml']:
             (tmp / source.name).write_bytes(source.read_bytes().replace(b'\r\n', b'\n').replace(b'\n', eol))

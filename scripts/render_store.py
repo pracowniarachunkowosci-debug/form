@@ -6,6 +6,12 @@ from config_catalog import catalog_data, controls, config_scripts, BUILDER
 from store_gate import checkout_link
 from store_panel import purchase_panel, facts, price
 ROOT=Path(__file__).resolve().parents[1]
+# R01.6 pages are approved static inputs. The LH renderer below targets older catalogs.
+if (ROOT / 'docs/r016/photo-correction/release.json').is_file():
+    from check_release_pages import check_pages
+    check_pages()
+    sys.exit(0)
+
 def read(p): return p.read_bytes().decode('utf8').replace('\r\n', '\n')
 def write(p,s):
     if '--check' in sys.argv:
