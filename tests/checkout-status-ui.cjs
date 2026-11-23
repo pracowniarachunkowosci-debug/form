@@ -25,6 +25,12 @@ function stored(){return new Map([[key,JSON.stringify({id:'12345678-1234-4321-81
   if(state==='paid')assert.equal(nodes.h1.textContent,'Zamówienie opłacone');
   await nodes['[data-order-refresh]'].onclick();await events.pageshow();vm.runInNewContext(js,context);await tick();
   assert.equal(calls,4);if(state==='paid')assert.equal(nodes.h1.textContent,'Zamówienie opłacone');
+  // Change the saved cart after sending the lookup and before consuming its reply.
+  const waiting=nodes['[data-order-refresh]'].onclick();
+  const replacement=JSON.stringify({id:'98765432-1234-4321-8123-123456789abc'});
+  storage.set(key,replacement);await waiting;
+  assert.equal(storage.get(key),replacement);
+  assert.equal(nodes.h1.textContent,'Nie potwierdzono statusu płatności');
  }
  const template=fs.readFileSync('api/result.php','utf8');for(const token of ['data-order-result','data-order-message','data-order-refresh','/winter-payment-result.js'])assert(template.includes(token));
  console.log('PASS actual return/configurator controllers: paid/pending/released/review, reload, history, paused sales, paid race, no second checkout/Stripe request.');
