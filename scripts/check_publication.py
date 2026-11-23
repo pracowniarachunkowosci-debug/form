@@ -43,7 +43,7 @@ html = (ROOT/'winter-26.html').read_text(encoding='utf-8')
 ga = lambda s: next(x for x in re.findall(r'<script>.*?</script>', s, re.S) if 'PF_GA_MEASUREMENT_ID' in x)
 assert ga(html) == ga(baseline('winter-26.html')), 'GA initialization changed'
 # Content changed from four concepts to three sellable models; preserve layout/hero and navigation.
-approved = git_show('6d8e07b:winter-26.html')
+approved = git_show('e73b0a0:winter-26.html')
 outline=lambda page:[attrs.get('id') for tag,attrs in Page(page).tags if tag=='section' and attrs.get('id')]
 assert outline(html)==outline(approved)
 assert re.search(r'<header.*?</header>',html,re.S).group()==re.search(r'<header.*?</header>',approved,re.S).group()
