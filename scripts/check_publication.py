@@ -8,6 +8,21 @@ import re
 import subprocess
 
 ROOT = Path(__file__).resolve().parents[1]
+# FINAL is an immutable publication with its own approved HTML, legal files and routes.
+# Keep the original LH checks for their own build target.
+if __name__ == "__main__":
+    import argparse
+    from check_final_reference import verify_final
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--final-reference", type=Path)
+    parser.add_argument("--manifest", type=Path)
+    args = parser.parse_args()
+    if args.final_reference or args.manifest:
+        if not (args.final_reference and args.manifest):
+            parser.error("Supply both --final-reference and --manifest")
+        verify_final(args.final_reference, args.manifest, ROOT / "winter-26.html")
+        raise SystemExit(0)
+
 BASE = '38e0bd9bc8296b70ac68d92753d63f447d70df3e'
 GIT_DIR = os.environ.get('PF_GIT_DIR')
 

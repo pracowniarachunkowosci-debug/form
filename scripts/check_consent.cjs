@@ -6,6 +6,17 @@ const initializer = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].find(m =
 const source = fs.readFileSync(path.join(root, 'script.js'), 'utf8');
 const code = source.slice(source.indexOf('// Cookie consent + GA4'), source.indexOf('// Interaktywne badanie'));
 const key = 'pf_cookie_consent', disable = 'ga-disable-G-58YFJ2RHNZ';
+const finalStore = process.argv.includes('--final');
+function storedChoice(choice) {
+  return finalStore ? JSON.stringify({version:'pf-consent-20261115-v2', date:new Date().toISOString(),
+    choice, scope:{analytics:choice==='accepted', advertising:false}}) : choice;
+}
+function checkRejection(value) {
+  if (!finalStore) return assert.equal(value,'rejected');
+  const record=JSON.parse(value);
+  assert(Number.isFinite(Date.parse(record.date)));
+  assert.deepEqual(record, {...JSON.parse(storedChoice('rejected')),date:record.date});
+}
 function run(saved, {blocked = false, analytics = true} = {}) {
   const injected = [], storage = new Map(saved ? [[key, saved]] : []), events = {}, deletions = [];
   const jar = new Map([['_ga','old'],['_ga_58YFJ2RHNZ','old'],['_gid','old'],['sib_cuid','keep'],['other','keep']]);
@@ -28,20 +39,20 @@ let s=run(); assert.equal(s.banner.hidden,false); assert.equal(s.injected.length
 s.close.handlers.click(); assert.equal(s.banner.hidden,true); assert.equal(s.storage.size,0);
 s.settings.handlers.click(); assert.equal(s.banner.hidden,false); assert(s.reject.focused);
 s.banner.handlers.keydown({key:'Escape',preventDefault(){}}); assert(s.banner.hidden); assert(s.settings.focused); assert.equal(s.storage.size,0);
-s=run(); s.reject.handlers.click(); assert.equal(s.storage.get(key),'rejected'); assert.equal(s.injected.length,0);
-s=run('rejected'); assert(s.banner.hidden); assert.equal(s.injected.length,0);
+s=run(); s.reject.handlers.click(); checkRejection(s.storage.get(key)); assert.equal(s.injected.length,0);
+s=run(storedChoice('rejected')); assert(s.banner.hidden); assert.equal(s.injected.length,0);
 s.settings.handlers.click(); s.accept.handlers.click(); s.accept.handlers.click(); assert.equal(s.injected.length,1); assert.equal(s.context[disable],false);
 assert.equal(s.injected[0].src,'https://www.googletagmanager.com/gtag/js?id=G-58YFJ2RHNZ');
 assert.equal(s.context.dataLayer.filter(a=>a[0]==='config').length,1);
-s=run('accepted'); assert.equal(s.injected.length,1);
-s.settings.handlers.click(); s.reject.handlers.click(); assert.equal(s.context[disable],true); assert.equal(s.storage.get(key),'rejected');
+s=run(storedChoice('accepted')); assert.equal(s.injected.length,1);
+s.settings.handlers.click(); s.reject.handlers.click(); assert.equal(s.context[disable],true); checkRejection(s.storage.get(key));
 assert.equal(s.context.dataLayer.at(-1)[2].analytics_storage,'denied');
 assert(!s.jar.has('_ga')); assert(!s.jar.has('_ga_58YFJ2RHNZ')); assert(s.jar.has('sib_cuid')); assert(s.jar.has('other'));
 assert(s.deletions.some(v=>v.includes('domain=.pracowniaform.com')));
 let refreshed=run(s.storage.get(key)); assert.equal(refreshed.injected.length,0); assert.equal(refreshed.context[disable],true);
 s.settings.handlers.click(); s.accept.handlers.click(); assert.equal(s.context[disable],false); assert.equal(s.injected.length,1);
-s.storage.set(key,'rejected'); s.events.storage({key}); assert.equal(s.context[disable],true);
-s=run('accepted'); s.storage.clear(); s.events.storage({key:null}); assert.equal(s.context[disable],true);
+s.storage.set(key,storedChoice('rejected')); s.events.storage({key}); assert.equal(s.context[disable],true);
+s=run(storedChoice('accepted')); s.storage.clear(); s.events.storage({key:null}); assert.equal(s.context[disable],true);
 s=run(undefined,{blocked:true}); s.accept.handlers.click(); assert.equal(s.injected.length,0); assert.equal(s.context[disable],true); assert(!s.banner.hidden); assert(s.status.textContent.includes('Nie udało'));
-s=run('accepted',{analytics:false}); assert.equal(s.injected.length,0); s.settings.handlers.click(); s.reject.handlers.click(); assert.equal(s.storage.get(key),'rejected'); assert.equal(s.context[disable],true);
+s=run(storedChoice('accepted'),{analytics:false}); assert.equal(s.injected.length,0); s.settings.handlers.click(); s.reject.handlers.click(); checkRejection(s.storage.get(key)); assert.equal(s.context[disable],true);
 console.log('PASS: absent/accept/reject/withdraw/reload/reaccept, cross-tab revocation, Escape/focus, GA-only cookie cleanup, storage failure, privacy/contact pages; no network.');
